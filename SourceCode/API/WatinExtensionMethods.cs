@@ -10,7 +10,7 @@ namespace FluentAutomation.API
         internal static void FireJavaScriptChange(this WatiN.Core.Element element)
         {
             // Fire change event directly in JavaScript -- adds unfortunate dependency on jQuery, fix this later
-            element.DomContainer.Eval(string.Format("if (jQuery !== undefined) {{ jQuery({0}).change(); }}", element.GetJavascriptElementReference()));
+            element.DomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).change(); }}", element.GetJavascriptElementReference()));
         }
     }
 }

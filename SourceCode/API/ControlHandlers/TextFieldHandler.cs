@@ -43,11 +43,11 @@ namespace FluentAutomation.API.ControlHandlers
 
             if (_quickEnter)
             {
-                element.SetAttributeValue("value", _value);
+                element.Value = _value;
             }
             else
             {
-                element.Value = _value;
+                element.TypeText(_value);
             }
 
             element.FireJavaScriptChange();
