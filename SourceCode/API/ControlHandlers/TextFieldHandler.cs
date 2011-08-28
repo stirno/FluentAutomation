@@ -49,6 +49,8 @@ namespace FluentAutomation.API.ControlHandlers
             {
                 element.Value = _value;
             }
+
+            element.FireJavaScriptChange();
         }
 
         public void In(Func<string, string> fieldSelectorFunc)

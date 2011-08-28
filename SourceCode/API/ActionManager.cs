@@ -71,6 +71,11 @@ namespace FluentAutomation.API
             return new TextFieldHandler(_browser, value);
         }
 
+        public TextFieldHandler Enter(int value)
+        {
+            return new TextFieldHandler(_browser, value.ToString());
+        }
+
         public SelectListHandler Select(string value)
         {
             return new SelectListHandler(_browser, value);

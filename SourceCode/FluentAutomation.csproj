@@ -66,6 +66,7 @@
     <Compile Include="API\ExpectHandlers\ExpectValueHandler.cs" />
     <Compile Include="API\ExpectManager.cs" />
     <Compile Include="API\Point.cs" />
+    <Compile Include="API\WatinExtensionMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="API\TestClass.cs" />
   </ItemGroup>

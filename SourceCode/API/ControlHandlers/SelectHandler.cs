@@ -82,6 +82,8 @@ namespace FluentAutomation.API.ControlHandlers
                     }
                 }
             }
+
+            element.FireJavaScriptChange();
         }
 
         public void From(Func<string, string> fieldSelectorFunc)
