@@ -7,6 +7,7 @@ using FluentAutomation.API.ControlHandlers;
 using System.Windows.Automation;
 using System.Runtime.InteropServices;
 using FluentAutomation.API.Enumerations;
+using System.Drawing;
 
 namespace FluentAutomation.API
 {
@@ -96,12 +97,12 @@ namespace FluentAutomation.API
             return new SelectListHandler(_browser, indices);
         }
 
-        public void Click(double pointX, double pointY)
+        public void Click(int pointX, int pointY)
         {
-            Point actualPoint = GetActualPoint(pointX, pointY);
-            SetCursorPos(actualPoint.X, actualPoint.Y);
-            MouseEvent(MouseEvent_LeftButtonDown, actualPoint.X, actualPoint.Y, 0, 0);
-            MouseEvent(MouseEvent_LeftButtonUp, actualPoint.X, actualPoint.Y, 0, 0);
+            Point actualPoint = MouseControl.GetPointInBrowser(_browser, pointX, pointY);
+            MouseControl.SetCursorPos(actualPoint.X, actualPoint.Y);
+            MouseControl.MouseEvent(MouseControl.MouseEvent_LeftButtonDown, actualPoint.X, actualPoint.Y, 0, 0);
+            MouseControl.MouseEvent(MouseControl.MouseEvent_LeftButtonUp, actualPoint.X, actualPoint.Y, 0, 0);
         }
 
         public void Click(Point point)
@@ -116,10 +117,10 @@ namespace FluentAutomation.API
             element.Click();
         }
 
-        public void Hover(double pointX, double pointY)
+        public void Hover(int pointX, int pointY)
         {
-            Point actualPoint = GetActualPoint(pointX, pointY);
-            SetCursorPos(actualPoint.X, actualPoint.Y);
+            Point actualPoint = MouseControl.GetPointInBrowser(_browser, pointX, pointY);
+            MouseControl.SetCursorPos(actualPoint.X, actualPoint.Y);
         }
 
         public void Hover(Point point)
@@ -131,39 +132,24 @@ namespace FluentAutomation.API
         {
             var element = _browser.Child(Find.BySelector(elementSelector));
             element.MouseEnter();
+            element.NativeElement.GetElementBounds();
+        }
+
+        public DraggedItemHandler Drag(string elementSelector)
+        {
+            var element = _browser.Child(Find.BySelector(elementSelector));
+            System.Drawing.Rectangle bounds = element.NativeElement.GetElementBounds();
+            Point actualPoint = MouseControl.GetPointInBrowser(_browser, bounds.X, bounds.Y);
+            MouseControl.SetCursorPos(actualPoint.X, actualPoint.Y);
+            MouseControl.MouseEvent(MouseControl.MouseEvent_LeftButtonDown, actualPoint.X, actualPoint.Y, 0, 0);
+
+            return new DraggedItemHandler(_browser);
         }
 
         public void Wait(TimeSpan waitTime)
         {
             System.Threading.Thread.Sleep(waitTime);
         }
-
-        private Point GetActualPoint(double pointX, double pointY)
-        {
-            AutomationElement element = null;
-            if (_browser != null)
-            {
-                element = AutomationElement.FromHandle(_browser.NativeBrowser.hWnd);
-
-                double actualX = element.Current.BoundingRectangle.X + pointX;
-                double actualY = element.Current.BoundingRectangle.Y + pointY;
-
-                return new Point { X = actualX, Y = actualY };
-            }
-
-            return null;
-        }
-
-        #region DllImports, ack!
-        private const int MouseEvent_LeftButtonDown = 0x002;
-        private const int MouseEvent_LeftButtonUp = 0x004;
-
-        [DllImport("user32.dll")]
-        private static extern bool SetCursorPos(double x, double y);
-
-        [DllImport("user32.dll", EntryPoint = "mouse_event")]
-        private static extern void MouseEvent(int a, double x, double y, int d, int e);
-        #endregion
 
         public void Finish()
         {
