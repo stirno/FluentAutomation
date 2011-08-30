@@ -5,7 +5,7 @@ require 'albacore'
 #--------------------------------------
 # Debug
 #--------------------------------------
-ENV.each {|key, value| puts "#{key} = #{value}" }
+#ENV.each {|key, value| puts "#{key} = #{value}" }
 #--------------------------------------
 # My environment vars
 #--------------------------------------
@@ -14,8 +14,6 @@ ENV.each {|key, value| puts "#{key} = #{value}" }
 @env_buildversion = ENV['env_buildversion']
 @env_projectfullname = ENV['env_projectfullname']
 @env_buildfolderpath = ENV['env_buildfolderpath']
-@env_unitTestXmlResultsPath = ENV['env_unitTestXmlResultsPath']
-@env_solutionfolderpath = "../Solution/"
 #--------------------------------------
 # Albacore flow controlling tasks
 #--------------------------------------
@@ -27,12 +25,15 @@ task :default => [:copyBinaries, :createZipPackage]
 #--------------------------------------
 desc "Copy binaries to output."
 task :copyBinaries do
+	puts "SourceCode\\bin\\#{@env_buildconfigname}\\*.*"
+	puts "#{@env_buildfolderpath}Binaries\\"
 	FileUtils.cp_r(FileList["SourceCode\\bin\\#{@env_buildconfigname}\\*.*"], "#{@env_buildfolderpath}Binaries\\")
 end
 
 desc "Creates ZIPs package of binaries folder."
 zip :createZipPackage do |zip|
 	puts "#{@env_buildfolderpath}Binaries\\"
+	puts "#{@env_projectfullname}.zip"
 	zip.directories_to_zip "#{@env_buildfolderpath}Binaries\\"
 	zip.output_file = "#{@env_projectfullname}.zip"
 	zip.output_path = @env_buildfolderpath
