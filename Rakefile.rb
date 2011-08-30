@@ -14,11 +14,15 @@ require 'albacore'
 @env_buildversion = ENV['env_buildversion']
 @env_projectfullname = ENV['env_projectfullname']
 @env_buildfolderpath = ENV['env_buildfolderpath'].gsub(%r{\\}) { "/" }
+@env_scpserver = ENV['env_scpserver']
+@env_scpuser = ENV['env_scpuser']
+@env_scppassword = ENV['env_scppassword']
+@env_scppath = ENV['env_scppath']
 #--------------------------------------
 # Albacore flow controlling tasks
 #--------------------------------------
 desc "Creates ZIP and NuGet packages."
-task :default => [:copyBinaries, :createZipPackage]
+task :default => [:copyBinaries, :createZipPackage, :uploadPackage]
 #, :createNuGetPackage]
 #--------------------------------------
 # Albacore tasks
@@ -44,6 +48,15 @@ zip :createZipPackage do |zip|
 	zip.directories_to_zip "#{@env_buildfolderpath}Binaries/"
 	zip.output_file = "#{@env_projectfullname}.zip"
 	zip.output_path = @env_buildfolderpath
+end
+
+desc "Upload Package to build storage via SCP"
+task :uploadPackage do
+	Net::SSH.start(@env_scpserver, @env_scpuser, :password => @env_scppassword) do |ssh|
+		ssh.scp.upload!("#{@env_projectfullname}.zip", "#{@env_scppath}") do |ch, name, sent, total|
+			print "\r#{name}: #{(sent.to_f * 100 / total.to_f).to_i}%"
+		end
+	end
 end
 
 #desc "Creates NuGet package"
