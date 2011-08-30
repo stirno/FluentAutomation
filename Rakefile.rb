@@ -63,6 +63,8 @@ end
 
 desc "Clean up packages on build agent"
 task :cleanUp do
+	FileUtils.rm_rf("#{@env_buildfolderpath}Binaries/")
+	FileUtils.rm_rf(FileList["#{@env_buildfolderpath}*.metaproj*"])
 	FileUtils.rm_rf(FileList["#{@env_buildfolderpath}*.zip"])
 end
 
