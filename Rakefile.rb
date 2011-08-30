@@ -14,6 +14,7 @@ require 'net/scp'
 @env_projectname = ENV['env_projectname']
 @env_buildconfigname = ENV['env_buildconfigname']
 @env_buildversion = ENV['env_buildversion']
+@env_buildnumber = @buildversion.match(/\d+\.\d+\.\d+\.(\d+)/)[4]
 @env_projectfullname = ENV['env_projectfullname']
 @env_buildfolderpath = ENV['env_buildfolderpath'].gsub(%r{\\}) { "/" }
 @env_scpserver = ENV['env_scpserver']
@@ -46,16 +47,16 @@ end
 desc "Creates ZIPs package of binaries folder."
 zip :createZipPackage do |zip|
 	puts "#{@env_buildfolderpath}Binaries/"
-	puts "#{@env_projectfullname}.zip"
+	puts "#{@env_projectfullname}#{@env_buildnumber}.zip"
 	zip.directories_to_zip "#{@env_buildfolderpath}Binaries/"
-	zip.output_file = "#{@env_projectfullname}.zip"
+	zip.output_file = "#{@env_projectfullname}#{@env_buildnumber}.zip"
 	zip.output_path = @env_buildfolderpath
 end
 
 desc "Upload Package to build storage via SCP"
 task :uploadPackage do
 	Net::SSH.start(@env_scpserver, @env_scpuser, :password => @env_scppassword) do |ssh|
-		ssh.scp.upload!("#{@env_projectfullname}.zip", "#{@env_scppath}") do |ch, name, sent, total|
+		ssh.scp.upload!("#{@env_projectfullname}#{@env_buildnumber}.zip", "#{@env_scppath}") do |ch, name, sent, total|
 			print "\r#{name}: #{(sent.to_f * 100 / total.to_f).to_i}%"
 		end
 	end
