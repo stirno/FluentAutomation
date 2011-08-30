@@ -5,7 +5,7 @@ require 'albacore'
 #--------------------------------------
 # Debug
 #--------------------------------------
-#ENV.each {|key, value| puts "#{key} = #{value}" }
+ENV.each {|key, value| puts "#{key} = #{value}" }
 #--------------------------------------
 # My environment vars
 #--------------------------------------
