@@ -27,6 +27,7 @@ desc "Copy binaries to output."
 task :copyBinaries do
 	puts "SourceCode\\bin\\#{@env_buildconfigname}\\*.*"
 	puts "#{@env_buildfolderpath}Binaries\\"
+	FileUtils.mkdir("#{@env_buildfolderpath}Binaries\\")
 	FileUtils.cp_r(FileList["SourceCode\\bin\\#{@env_buildconfigname}\\*.*"], "#{@env_buildfolderpath}Binaries\\")
 end
 
