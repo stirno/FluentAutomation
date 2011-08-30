@@ -14,7 +14,7 @@ require 'net/scp'
 @env_projectname = ENV['env_projectname']
 @env_buildconfigname = ENV['env_buildconfigname']
 @env_buildversion = ENV['env_buildversion']
-@env_buildnumber = @env_buildversion.match(/\d+\.\d+\.\d+\.(\d+)/)[4]
+@env_buildnumber = @env_buildversion.match(/\d+\.\d+\.\d+\.(\d+)/)[1]
 @env_projectfullname = ENV['env_projectfullname']
 @env_buildfolderpath = ENV['env_buildfolderpath'].gsub(%r{\\}) { "/" }
 @env_scpserver = ENV['env_scpserver']
