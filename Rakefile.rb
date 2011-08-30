@@ -24,7 +24,7 @@ require 'net/scp'
 # Albacore flow controlling tasks
 #--------------------------------------
 desc "Creates ZIP and NuGet packages."
-task :default => [:copyBinaries, :createZipPackage, :uploadPackage]
+task :default => [:copyBinaries, :createZipPackage, :uploadPackage, :cleanUp]
 #, :createNuGetPackage]
 #--------------------------------------
 # Albacore tasks
@@ -59,6 +59,11 @@ task :uploadPackage do
 			print "\r#{name}: #{(sent.to_f * 100 / total.to_f).to_i}%"
 		end
 	end
+end
+
+desc "Clean up packages on build agent"
+task :cleanUp do
+	FileUtils.rm_rf(FileList["#{@env_buildfolderpath}*.zip"])
 end
 
 #desc "Creates NuGet package"
