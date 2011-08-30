@@ -27,14 +27,15 @@ task :default => [:createZipPackage]
 #--------------------------------------
 desc "Copy binaries to output."
 task :copyBinaries do
-  FileUtils.cp_r(FileList["SourceCode/bin/#{@env_buildconfigname}/*.*"], "#{@env_buildfolderpath}Binaries/")
+	FileUtils.cp_r(FileList["SourceCode/bin/#{@env_buildconfigname}/*.*"], "#{@env_buildfolderpath}Binaries/")
 end
 
 desc "Creates ZIPs package of binaries folder."
 zip :createZipPackage do |zip|
-     zip.directories_to_zip "#{@env_buildfolderpath}Binaries/"
-     zip.output_file = "#{@env_projectfullname}.zip"
-	 zip.output_path = @env_buildfolderpath
+	puts "#{@env_buildfolderpath}Binaries/"
+	zip.directories_to_zip "#{@env_buildfolderpath}Binaries/"
+	zip.output_file = "#{@env_projectfullname}.zip"
+	zip.output_path = @env_buildfolderpath
 end
 
 #desc "Creates NuGet package"
