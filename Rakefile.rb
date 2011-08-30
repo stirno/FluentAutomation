@@ -20,14 +20,14 @@ ENV.each {|key, value| puts "#{key} = #{value}" }
 # Albacore flow controlling tasks
 #--------------------------------------
 desc "Creates ZIP and NuGet packages."
-task :default => [:createZipPackage]
+task :default => [:copyBinaries, :createZipPackage]
 #, :createNuGetPackage]
 #--------------------------------------
 # Albacore tasks
 #--------------------------------------
 desc "Copy binaries to output."
 task :copyBinaries do
-	FileUtils.cp_r(FileList["SourceCode/bin/#{@env_buildconfigname}/*.*"], "#{@env_buildfolderpath}Binaries/")
+	FileUtils.cp_r(FileList["SourceCode\bin\#{@env_buildconfigname}\*.*"], "#{@env_buildfolderpath}Binaries\")
 end
 
 desc "Creates ZIPs package of binaries folder."
