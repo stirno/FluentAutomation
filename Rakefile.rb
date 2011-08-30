@@ -27,6 +27,13 @@ desc "Copy binaries to output."
 task :copyBinaries do
 	puts "#{@env_buildfolderpath}SourceCode/bin/#{@env_buildconfigname}/*.*"
 	puts "#{@env_buildfolderpath}Binaries/"
+	
+	if File.directory?("#{@env_buildfolderpath}Binaries/")
+		FileUtils.rm_rf(FileList["#{@env_buildfolderpath}Binaries/*.*"])
+	else
+		FileUtils.mkdir("#{@env_buildfolderpath}Binaries/")
+	end
+	
 	FileUtils.cp_r(FileList["#{@env_buildfolderpath}SourceCode/bin/#{@env_buildconfigname}/*.*"], "#{@env_buildfolderpath}Binaries/")
 end
 
