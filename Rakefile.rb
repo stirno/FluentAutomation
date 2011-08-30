@@ -20,7 +20,7 @@ require 'albacore'
 # Albacore flow controlling tasks
 #--------------------------------------
 desc "Creates ZIP and NuGet packages."
-task :packageIt => [:createZipPackage]
+task :default => [:createZipPackage]
 #, :createNuGetPackage]
 #--------------------------------------
 # Albacore tasks
