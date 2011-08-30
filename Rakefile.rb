@@ -13,7 +13,7 @@ require 'albacore'
 @env_buildconfigname = ENV['env_buildconfigname']
 @env_buildversion = ENV['env_buildversion']
 @env_projectfullname = ENV['env_projectfullname']
-@env_buildfolderpath = ENV['env_buildfolderpath']
+@env_buildfolderpath = ENV['env_buildfolderpath'].gsub(%r{\\}) { "/" }
 #--------------------------------------
 # Albacore flow controlling tasks
 #--------------------------------------
@@ -25,16 +25,16 @@ task :default => [:copyBinaries, :createZipPackage]
 #--------------------------------------
 desc "Copy binaries to output."
 task :copyBinaries do
-	puts "#{@env_buildfolderpath}SourceCode\\bin\\#{@env_buildconfigname}\\*.*"
-	puts "#{@env_buildfolderpath}Binaries\\"
-	FileUtils.cp_r("#{@env_buildfolderpath}SourceCode\\bin\\#{@env_buildconfigname}\\*.*", "#{@env_buildfolderpath}Binaries\\")
+	puts "#{@env_buildfolderpath}SourceCode/bin/#{@env_buildconfigname}/*.*"
+	puts "#{@env_buildfolderpath}Binaries/"
+	FileUtils.cp_r(FileList["#{@env_buildfolderpath}SourceCode/bin/#{@env_buildconfigname}/*.*"], "#{@env_buildfolderpath}Binaries/")
 end
 
 desc "Creates ZIPs package of binaries folder."
 zip :createZipPackage do |zip|
-	puts "#{@env_buildfolderpath}Binaries\\"
+	puts "#{@env_buildfolderpath}Binaries/"
 	puts "#{@env_projectfullname}.zip"
-	zip.directories_to_zip "#{@env_buildfolderpath}Binaries\\"
+	zip.directories_to_zip "#{@env_buildfolderpath}Binaries/"
 	zip.output_file = "#{@env_projectfullname}.zip"
 	zip.output_path = @env_buildfolderpath
 end
