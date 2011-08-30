@@ -27,8 +27,7 @@ desc "Copy binaries to output."
 task :copyBinaries do
 	puts "#{@env_buildfolderpath}SourceCode\\bin\\#{@env_buildconfigname}\\*.*"
 	puts "#{@env_buildfolderpath}Binaries\\"
-	FileUtils.mkdir("#{@env_buildfolderpath}Binaries\\")
-	FileUtils.cp_r(FileList["#{@env_buildfolderpath}SourceCode\\bin\\#{@env_buildconfigname}\\*.*"], "#{@env_buildfolderpath}Binaries\\")
+	FileUtils.cp_r("#{@env_buildfolderpath}SourceCode\\bin\\#{@env_buildconfigname}\\*.*", "#{@env_buildfolderpath}Binaries\\")
 end
 
 desc "Creates ZIPs package of binaries folder."
