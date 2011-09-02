@@ -52,14 +52,35 @@ namespace FluentAutomation.API.ExpectHandlers
                 {
                     if (element.Text != null)
                     {
-                        Assert.Fail(string.Format("Null value assertion failed. Element {0} has a value of {1}.", fieldSelector, element.Text));
+                        Assert.Fail(string.Format("Null value assertion failed. Element [{0}] has a value of [{1}].", fieldSelector, element.Text));
                     }
                 }
                 else
                 {
-                    if (element.Text != _value)
+                    if (element is SelectList)
                     {
-                        Assert.Fail(string.Format("Value assertion failed. Expected value of {0} but actual value is {1}.", _value, element.Text));
+                        var selectElement = (SelectList)element;
+                        if (selectElement.SelectedOption != null && 
+                            selectElement.SelectedOption.Value != _value && 
+                            selectElement.SelectedOption.Text != _value)
+                        {
+                            Assert.Fail(string.Format("SelectList value assertion failed. Expected selected value of [{0}] but actual selected value is [{1}].", _value, selectElement.SelectedOption.Value));
+                        }
+                    }
+                    else if (element is TextField)
+                    {
+                        var textFieldElement = (TextField)element;
+                        if (textFieldElement.Value != _value && textFieldElement.Text != _value)
+                        {
+                            Assert.Fail(string.Format("TextField value assertion failed. Expected value of [{0}] but actual value is [{1}].", _value, element.Text));
+                        }
+                    }
+                    else
+                    {
+                        if (element.Text != _value)
+                        {
+                            Assert.Fail(string.Format("Value assertion failed. Expected value of {0} but actual value is {1}.", _value, element.Text));
+                        }
                     }
                 }
             }
@@ -83,14 +104,14 @@ namespace FluentAutomation.API.ExpectHandlers
                 {
                     if (valuesMatching == 0)
                     {
-                        Assert.Fail("Value assertion failed. Expected at least one value matching collection.");
+                        Assert.Fail("SelectList value assertion failed. Expected at least one value matching collection.");
                     }
                 }
                 else if (_expectType == ExpectType.All)
                 {
                     if (valuesMatching < _values.Count())
                     {
-                        Assert.Fail("Value assertion failed. Expected all values to match collection.");
+                        Assert.Fail("SelectList value assertion failed. Expected all values to match collection.");
                     }
                 }
             }
