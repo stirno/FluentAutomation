@@ -11,7 +11,7 @@ using System.Drawing;
 
 namespace FluentAutomation.API
 {
-    public class ActionManager
+    public partial class ActionManager
     {
         private ExpectManager _expect = null;
         private Browser _browser = null;
@@ -20,7 +20,7 @@ namespace FluentAutomation.API
         {
         }
 
-        public void Use(BrowserType browserType)
+        public virtual void Use(BrowserType browserType)
         {
             if (browserType == BrowserType.InternetExplorer)
             {
@@ -32,13 +32,13 @@ namespace FluentAutomation.API
             }
         }
 
-        public void Open(Uri pageUri)
+        public virtual void Open(Uri pageUri)
         {
             _browser.GoTo(pageUri);
             _browser.WaitForComplete();
         }
 
-        public void Open(string pageUrl)
+        public virtual void Open(string pageUrl)
         {
             _browser.GoTo(pageUrl);
             _browser.WaitForComplete();
@@ -62,27 +62,27 @@ namespace FluentAutomation.API
             }
         }
 
-        public TextFieldHandler Enter(Func<string> valueFunc)
+        public virtual TextFieldHandler Enter(Func<string> valueFunc)
         {
             return Enter(valueFunc());
         }
 
-        public TextFieldHandler Enter(string value)
+        public virtual TextFieldHandler Enter(string value)
         {
             return new TextFieldHandler(_browser, value);
         }
 
-        public TextFieldHandler Enter(int value)
+        public virtual TextFieldHandler Enter(int value)
         {
             return new TextFieldHandler(_browser, value.ToString());
         }
 
-        public SelectListHandler Select(string value)
+        public virtual SelectListHandler Select(string value)
         {
             return new SelectListHandler(_browser, value);
         }
 
-        public SelectListHandler Select(params string[] values)
+        public virtual SelectListHandler Select(params string[] values)
         {
             return new SelectListHandler(_browser, values);
         }
@@ -92,12 +92,12 @@ namespace FluentAutomation.API
             return new SelectListHandler(_browser, index);
         }
 
-        public SelectListHandler Select(params int[] indices)
+        public virtual SelectListHandler Select(params int[] indices)
         {
             return new SelectListHandler(_browser, indices);
         }
 
-        public void Click(int pointX, int pointY)
+        public virtual void Click(int pointX, int pointY)
         {
             Point actualPoint = MouseControl.GetPointInBrowser(_browser, pointX, pointY);
             MouseControl.SetCursorPos(actualPoint.X, actualPoint.Y);
@@ -105,37 +105,37 @@ namespace FluentAutomation.API
             MouseControl.MouseEvent(MouseControl.MouseEvent_LeftButtonUp, actualPoint.X, actualPoint.Y, 0, 0);
         }
 
-        public void Click(Point point)
+        public virtual void Click(Point point)
         {
             Click(point.X, point.Y);
         }
 
-        public void Click(string elementSelector)
+        public virtual void Click(string elementSelector)
         {
             var element = _browser.Child(Find.BySelector(elementSelector));
             element.Focus();
             element.Click();
         }
 
-        public void Hover(int pointX, int pointY)
+        public virtual void Hover(int pointX, int pointY)
         {
             Point actualPoint = MouseControl.GetPointInBrowser(_browser, pointX, pointY);
             MouseControl.SetCursorPos(actualPoint.X, actualPoint.Y);
         }
 
-        public void Hover(Point point)
+        public virtual void Hover(Point point)
         {
             Hover(point.X, point.Y);
         }
 
-        public void Hover(string elementSelector)
+        public virtual void Hover(string elementSelector)
         {
             var element = _browser.Child(Find.BySelector(elementSelector));
             element.MouseEnter();
             element.NativeElement.GetElementBounds();
         }
 
-        public DraggedItemHandler Drag(string elementSelector)
+        public virtual DraggedItemHandler Drag(string elementSelector)
         {
             var element = _browser.Child(Find.BySelector(elementSelector));
             System.Drawing.Rectangle bounds = element.NativeElement.GetElementBounds();
@@ -146,12 +146,12 @@ namespace FluentAutomation.API
             return new DraggedItemHandler(_browser);
         }
 
-        public void Wait(TimeSpan waitTime)
+        public virtual void Wait(TimeSpan waitTime)
         {
             System.Threading.Thread.Sleep(waitTime);
         }
 
-        public void Finish()
+        public virtual void Finish()
         {
             _browser.Close();
         }

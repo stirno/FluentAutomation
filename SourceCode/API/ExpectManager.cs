@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FluentAutomation.API
 {
-    public class ExpectManager
+    public partial class ExpectManager
     {
         private Browser _browser = null;
         private ExpectHandlers.ExpectValueHandler _nullHandler = null;
@@ -31,22 +31,22 @@ namespace FluentAutomation.API
             }
         }
 
-        public ExpectHandlers.ExpectValueHandler This(string value)
+        public virtual ExpectHandlers.ExpectValueHandler This(string value)
         {
             return new ExpectHandlers.ExpectValueHandler(_browser, value);
         }
 
-        public ExpectHandlers.ExpectValueHandler All(params string[] values)
+        public virtual ExpectHandlers.ExpectValueHandler All(params string[] values)
         {
             return new ExpectHandlers.ExpectValueHandler(_browser, values, true);
         }
 
-        public ExpectHandlers.ExpectValueHandler Any(params string[] values)
+        public virtual ExpectHandlers.ExpectValueHandler Any(params string[] values)
         {
             return new ExpectHandlers.ExpectValueHandler(_browser, values);
         }
 
-        public void Url(string pageUrl)
+        public virtual void Url(string pageUrl)
         {
             if (_browser.Url != pageUrl)
             {
