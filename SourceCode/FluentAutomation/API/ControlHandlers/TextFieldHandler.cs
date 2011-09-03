@@ -39,7 +39,7 @@ namespace FluentAutomation.API.ControlHandlers
 
         public void In(string fieldSelector)
         {
-            TextField element = _browser.ChildOfType<TextField>(Find.BySelector(fieldSelector));
+            TextField element = _browser.ElementOfType<TextField>(Find.BySelector(fieldSelector));
 
             if (_quickEnter)
             {
@@ -61,7 +61,7 @@ namespace FluentAutomation.API.ControlHandlers
         public void In(Func<string, bool> fieldSelectorFunc)
         {
             string fieldSelector = string.Empty;
-            foreach (var child in _browser.ChildrenOfType<TextField>())
+            foreach (var child in _browser.ElementsOfType<TextField>())
             {
                 bool isMatch = fieldSelectorFunc(child.ClassName);
                 if (!isMatch) isMatch = fieldSelectorFunc(child.Id);

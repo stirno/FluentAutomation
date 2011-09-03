@@ -48,6 +48,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BugTests.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FluentAutomation\FluentAutomation.csproj">
+      <Project>{ACDD2EA5-2671-4B64-AF12-EEE22A817EE1}</Project>
+      <Name>FluentAutomation</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

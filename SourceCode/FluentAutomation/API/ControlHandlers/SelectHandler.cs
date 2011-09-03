@@ -52,7 +52,7 @@ namespace FluentAutomation.API.ControlHandlers
 
         public void From(string fieldSelector)
         {
-            SelectList element = _browser.ChildOfType<SelectList>(Find.BySelector(fieldSelector));
+            SelectList element = _browser.ElementOfType<SelectList>(Find.BySelector(fieldSelector));
 
             if (_actionType == SelectActionType.SingleByValue)
             {
@@ -62,6 +62,7 @@ namespace FluentAutomation.API.ControlHandlers
             {
                 if (element.Multiple)
                 {
+                    element.ClearList();
                     foreach (var value in _selectedValues)
                     {
                         element.Select(value);
@@ -76,6 +77,7 @@ namespace FluentAutomation.API.ControlHandlers
             {
                 if (element.Multiple)
                 {
+                    element.ClearList();
                     foreach (var index in _selectedIndices)
                     {
                         element.Options[index].Select();
