@@ -15,7 +15,7 @@ namespace FluentAutomation.Tests
         {
             I.Use(BrowserType.InternetExplorer);
             I.Open("http://knockoutjs.com/examples/controlTypes.html");
-            I.Expect.Class(".nogutter2").On(".syntaxhighlighter");
+            I.Expect.Class(".nogutter").On(".syntaxhighlighter");
         }
     }
 }
