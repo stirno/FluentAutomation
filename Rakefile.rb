@@ -32,7 +32,7 @@ task :default => [:copyBinaries, :createZipPackage, :uploadPackage, :cleanUp]
 #--------------------------------------
 desc "Copy binaries to output."
 task :copyBinaries do
-	puts "#{@env_buildfolderpath}SourceCode/bin/#{@env_buildconfigname}/*.*"
+	puts "#{@env_buildfolderpath}SourceCode/#{@env_projectname}/bin/#{@env_buildconfigname}/*.*"
 	puts "#{@env_buildfolderpath}Binaries/"
 	
 	if File.directory?("#{@env_buildfolderpath}Binaries/")
@@ -41,7 +41,7 @@ task :copyBinaries do
 		FileUtils.mkdir("#{@env_buildfolderpath}Binaries/")
 	end
 	
-	FileUtils.cp_r(FileList["#{@env_buildfolderpath}SourceCode/bin/#{@env_buildconfigname}/*.*"], "#{@env_buildfolderpath}Binaries/")
+	FileUtils.cp_r(FileList["#{@env_buildfolderpath}SourceCode/#{@env_projectname}/bin/#{@env_buildconfigname}/*.*"], "#{@env_buildfolderpath}Binaries/")
 end
 
 desc "Creates ZIPs package of binaries folder."
