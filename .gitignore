@@ -3,7 +3,6 @@
 *.DS_Store
 
 #Visual Studio files
-*.vsmdi
 *.testsettings
 *.[Oo]bj
 *.user
