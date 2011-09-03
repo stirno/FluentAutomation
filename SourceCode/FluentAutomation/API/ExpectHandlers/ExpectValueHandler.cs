@@ -83,25 +83,6 @@ namespace FluentAutomation.API.ExpectHandlers
             }
         }
 
-        private void In(Func<string, bool> fieldSelectorsFunc)
-        {
-            List<string> fieldSelectors = new List<string>();
-            foreach (var child in _browser.Elements)
-            {
-                bool isMatch = false;
-                if (!string.IsNullOrEmpty(child.ClassName)) fieldSelectorsFunc(child.ClassName);
-                if (!isMatch && !string.IsNullOrEmpty(child.Id)) isMatch = fieldSelectorsFunc(child.Id);
-                if (!isMatch && !string.IsNullOrEmpty(child.Name)) isMatch = fieldSelectorsFunc(child.Name);
-
-                if (isMatch && !string.IsNullOrEmpty(child.IdOrName))
-                {
-                    fieldSelectors.Add(child.IdOrName);
-                }
-            }
-
-            In(fieldSelectors.ToArray());
-        }
-
         private bool handleTextField(QuerySelectorConstraint constraint, Element element)
         {
             if (!(

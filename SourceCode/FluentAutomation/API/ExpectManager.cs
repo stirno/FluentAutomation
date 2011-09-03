@@ -46,6 +46,11 @@ namespace FluentAutomation.API
             return new ExpectHandlers.ExpectValueHandler(_browser, values);
         }
 
+        public virtual ExpectHandlers.ExpectCssClassHandler Class(string value)
+        {
+            return new ExpectHandlers.ExpectCssClassHandler(_browser, value);
+        }
+
         public virtual void Url(string pageUrl)
         {
             if (_browser.Url != pageUrl)
