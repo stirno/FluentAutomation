@@ -44,6 +44,18 @@ namespace FluentAutomation.API
             _browser.WaitForComplete();
         }
 
+        public virtual void Navigate(NavigateDirection direction)
+        {
+            if (direction == NavigateDirection.Back)
+            {
+                _browser.Back();
+            }
+            else
+            {
+                _browser.Forward();
+            }
+        }
+
         public ExpectManager Expect
         {
             get
@@ -114,7 +126,7 @@ namespace FluentAutomation.API
         {
             var element = _browser.Child(Find.BySelector(elementSelector));
             element.Focus();
-            element.Click();
+            element.ClickNoWait();
         }
 
         public virtual void Hover(int pointX, int pointY)

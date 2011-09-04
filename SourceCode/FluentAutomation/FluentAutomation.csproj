@@ -66,6 +66,7 @@
     <Compile Include="API\ControlHandlers\SelectHandler.cs" />
     <Compile Include="API\Enumerations\BrowserType.cs" />
     <Compile Include="API\ControlHandlers\TextFieldHandler.cs" />
+    <Compile Include="API\Enumerations\NavigateDirection.cs" />
     <Compile Include="API\ExpectHandlers\ExpectCssClassHandler.cs" />
     <Compile Include="API\ExpectHandlers\ExpectValueHandler.cs" />
     <Compile Include="API\ExpectManager.cs" />
