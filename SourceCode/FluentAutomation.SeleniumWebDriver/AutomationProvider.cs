@@ -68,6 +68,11 @@ namespace FluentAutomation.SeleniumWebDriver
 
         public override void SetBrowser(API.Enumerations.BrowserType browserType)
         {
+            if (_driver != null)
+            {
+                throw new Exception("Browser Type can't be changed after it has been accessed.");
+            }
+
             _browserType = browserType;
         }
 

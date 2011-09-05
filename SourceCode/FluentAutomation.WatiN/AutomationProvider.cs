@@ -72,6 +72,11 @@ namespace FluentAutomation.WatiN
 
         public override void SetBrowser(API.Enumerations.BrowserType browserType)
         {
+            if (_browser != null)
+            {
+                throw new Exception("Browser Type can't be changed after it has been accessed.");
+            }
+
             _browserType = browserType;
         }
 

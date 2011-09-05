@@ -11,7 +11,8 @@ namespace FluentAutomation.WatiN
         private ActionManager _actionManager = null;
         public override ActionManager I
         {
-            get {
+            get
+            {
                 if (_actionManager == null)
                 {
                     _actionManager = new ActionManager(new AutomationProvider());
