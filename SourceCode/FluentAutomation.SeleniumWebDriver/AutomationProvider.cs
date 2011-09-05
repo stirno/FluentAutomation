@@ -105,6 +105,9 @@ namespace FluentAutomation.SeleniumWebDriver
                 case API.Enumerations.BrowserType.Firefox:
                     driver = new OpenQA.Selenium.Firefox.FirefoxDriver();
                     break;
+                case API.Enumerations.BrowserType.Chrome:
+                    driver = new OpenQA.Selenium.Chrome.ChromeDriver();
+                    break;
             }
 
             return driver;
