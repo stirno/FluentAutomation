@@ -17,6 +17,8 @@ namespace FluentAutomation.API.Providers
 
         public abstract IElement GetElement(string fieldSelector);
 
+        public abstract IntPtr GetBrowserPointer();
+
         public abstract Uri GetUri();
 
         public string GetUrl()

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using FluentAutomation.API.ControlHandlers;
+using FluentAutomation.API.FieldHandlers;
 using System.Windows.Automation;
 using System.Runtime.InteropServices;
 using FluentAutomation.API.Enumerations;
@@ -15,32 +15,31 @@ namespace FluentAutomation.API
     public partial class ActionManager
     {
         private AutomationProvider _automation = null;
+        private ExpectManager _expect = null;
 
         public ActionManager(AutomationProvider automationProvider)
         {
             _automation = automationProvider;
         }
 
-        public void Use(BrowserType browserType)
+        public void Click(string elementSelector)
         {
-            _automation.SetBrowser(browserType);
+            var field = _automation.GetElement(elementSelector);
+            field.Focus();
+            field.Click();
         }
 
-        public void Open(Uri pageUri)
+        public DraggedFieldHandler Drag(string fieldSelector)
         {
-            _automation.Navigate(pageUri);
+            var element = _automation.GetElement(fieldSelector);
+            System.Drawing.Rectangle bounds = element.GetElementBounds();
+            Point actualPoint = MouseControl.GetPointInBrowser(_automation.GetBrowserPointer(), bounds.X, bounds.Y);
+            MouseControl.SetCursorPos(actualPoint.X, actualPoint.Y);
+            MouseControl.MouseEvent(MouseControl.MouseEvent_LeftButtonDown, actualPoint.X, actualPoint.Y, 0, 0);
+
+            return new DraggedFieldHandler(_automation);
         }
 
-        public void Open(string pageUrl)
-        {
-            Open(new Uri(pageUrl, UriKind.Absolute));
-        }
-
-        public void Navigate(NavigateDirection direction)
-        {
-            _automation.Navigate(direction);
-        }
-        
         public TextFieldHandler Enter(string value)
         {
             return new TextFieldHandler(_automation, value);
@@ -49,6 +48,45 @@ namespace FluentAutomation.API
         public TextFieldHandler Enter(int value)
         {
             return Enter(value.ToString());
+        }
+
+        public ExpectManager Expect
+        {
+            get
+            {
+                if (_expect == null)
+                {
+                    _expect = new ExpectManager(_automation);
+                }
+
+                return _expect;
+            }
+        }
+
+        public void Finish()
+        {
+            _automation.Cleanup();
+        }
+
+        public void Hover(string elementSelector)
+        {
+            var field = _automation.GetElement(elementSelector);
+            field.Hover();
+        }
+
+        public void Navigate(NavigateDirection direction)
+        {
+            _automation.Navigate(direction);
+        }
+        
+        public void Open(Uri pageUri)
+        {
+            _automation.Navigate(pageUri);
+        }
+
+        public void Open(string pageUrl)
+        {
+            Open(new Uri(pageUrl, UriKind.Absolute));
         }
 
         public SelectFieldHandler Select(string value)
@@ -71,47 +109,19 @@ namespace FluentAutomation.API
             return new SelectFieldHandler(_automation, indices);
         }
 
-        public void Click(string elementSelector)
+        public void Use(BrowserType browserType)
         {
-            var field = _automation.GetElement(elementSelector);
-            field.Focus();
-            field.Click();
+            _automation.SetBrowser(browserType);
         }
 
-        public void Hover(string elementSelector)
+        public void Wait(int seconds)
         {
-            var field = _automation.GetElement(elementSelector);
-            field.Hover();
+            _automation.Wait(seconds);
         }
 
-        public void Finish()
+        public void Wait(TimeSpan timeSpan)
         {
-            _automation.Cleanup();
+            _automation.Wait(timeSpan);
         }
-
-        private ExpectManager _expect = null;
-        public ExpectManager Expect
-        {
-            get
-            {
-                if (_expect == null)
-                {
-                    _expect = new ExpectManager(_automation);
-                }
-
-                return _expect;
-            }
-        }
-        /*
-        public virtual DraggedItemHandler Drag(string elementSelector)
-        {
-            var element = _browser.Child(Find.BySelector(elementSelector));
-            System.Drawing.Rectangle bounds = element.NativeElement.GetElementBounds();
-            Point actualPoint = MouseControl.GetPointInBrowser(_browser, bounds.X, bounds.Y);
-            MouseControl.SetCursorPos(actualPoint.X, actualPoint.Y);
-            MouseControl.MouseEvent(MouseControl.MouseEvent_LeftButtonDown, actualPoint.X, actualPoint.Y, 0, 0);
-
-            return new DraggedItemHandler(_browser);
-        }*/
     }
 }

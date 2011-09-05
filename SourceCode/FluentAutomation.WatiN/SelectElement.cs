@@ -52,6 +52,7 @@ namespace FluentAutomation.WatiN
         public override void SetValue(string value)
         {
             _element.Select(value);
+            this.OnChange();
         }
 
         public void SetValues(string[] values)
@@ -60,11 +61,14 @@ namespace FluentAutomation.WatiN
             {
                 _element.Select(value);
             }
+
+            this.OnChange();
         }
 
         public void SetSelectedIndex(int selectedIndex)
         {
             _element.Options[selectedIndex].Select();
+            this.OnChange();
         }
 
         public void SetSelectedIndices(int[] selectedIndices)
@@ -73,6 +77,8 @@ namespace FluentAutomation.WatiN
             {
                 _element.Options[selectedIndex].Select();
             }
+
+            this.OnChange();
         }
 
         public void ClearSelectedItems()

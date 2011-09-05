@@ -19,6 +19,7 @@ namespace FluentAutomation.WatiN
         public void SetValueQuickly(string value)
         {
             _element.Value = value;
+            this.OnChange();
         }
 
         public override string GetValue()
@@ -29,6 +30,7 @@ namespace FluentAutomation.WatiN
         public override void SetValue(string value)
         {
             _element.TypeText(value);
+            this.OnChange();
         }
     }
 }

@@ -37,6 +37,11 @@ namespace FluentAutomation.WatiN
             return new TextElement(wElement);
         }
 
+        public override IntPtr GetBrowserPointer()
+        {
+            return _browser.NativeBrowser.hWnd;
+        }
+
         public override Uri GetUri()
         {
             return _browser.Uri;

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FluentAutomation.API.Interfaces;
+using FluentAutomation.API.Providers;
 
-namespace FluentAutomation.API.Providers
+namespace FluentAutomation.API.FieldHandlers
 {
     public class TextFieldHandler
     {

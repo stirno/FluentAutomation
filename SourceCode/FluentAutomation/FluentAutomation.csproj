@@ -55,7 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\ActionManager.cs" />
-    <Compile Include="API\ControlHandlers\DraggedItemHandler.cs" />
+    <Compile Include="API\FieldHandlers\DraggedFieldHandler.cs" />
     <Compile Include="API\Enumerations\BrowserType.cs" />
     <Compile Include="API\Enumerations\NavigateDirection.cs" />
     <Compile Include="API\ExpectHandlers\ExpectCssClassHandler.cs" />
@@ -67,9 +67,8 @@
     <Compile Include="API\MouseControl.cs" />
     <Compile Include="API\Point.cs" />
     <Compile Include="API\Providers\AutomationProvider.cs" />
-    <Compile Include="API\Providers\SelectFieldHandler.cs" />
-    <Compile Include="API\Providers\TextFieldHandler.cs" />
-    <Compile Include="API\WatinExtensionMethods.cs" />
+    <Compile Include="API\FieldHandlers\SelectFieldHandler.cs" />
+    <Compile Include="API\FieldHandlers\TextFieldHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="API\FluentTest.cs" />
   </ItemGroup>
