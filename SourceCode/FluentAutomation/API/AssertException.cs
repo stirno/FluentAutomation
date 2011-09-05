@@ -7,20 +7,11 @@ namespace FluentAutomation.API
     {
         public AssertException(string message, params string[] formatParams) : base(string.Format(message, formatParams)) { }
 
-        public override string Message
-        {
-            get
-            {
-                return base.Message.Replace("FluentAutomation.API.AssertException:", "");
-            }
-        }
-
         public override string StackTrace
         {
             get
             {
-                string Namespace = this.GetType().Namespace;
-                return JoinArrayWithNewLineCharacters(SplitTheStackTraceByEachNewLine().Where(s => !s.TrimStart(' ').StartsWith("at " + Namespace)).ToArray());
+                return JoinArrayWithNewLineCharacters(SplitTheStackTraceByEachNewLine().Where(s => !s.TrimStart(' ').StartsWith("at " + this.GetType().Namespace)).ToArray());
             }
         }
 
