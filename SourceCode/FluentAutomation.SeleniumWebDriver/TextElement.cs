@@ -31,7 +31,7 @@ namespace FluentAutomation.SeleniumWebDriver
         {
             _element.Clear();
             _element.SendKeys(value);
-            _element.SendKeys(Keys.Tab);
+            this.OnChange();
         }
     }
 }
