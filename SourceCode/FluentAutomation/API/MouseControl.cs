@@ -8,18 +8,18 @@ using System.Drawing;
 
 namespace FluentAutomation.API
 {
-    internal static class MouseControl
+    public static class MouseControl
     {
         internal const int MouseEvent_LeftButtonDown = 0x002;
         internal const int MouseEvent_LeftButtonUp = 0x004;
 
         [DllImport("user32.dll")]
-        internal static extern bool SetCursorPos(int x, int y);
+        public static extern bool SetCursorPos(int x, int y);
 
         [DllImport("user32.dll", EntryPoint = "mouse_event")]
-        internal static extern void MouseEvent(int a, int x, int y, int d, int e);
+        public static extern void MouseEvent(int a, int x, int y, int d, int e);
 
-        internal static Point GetPointInBrowser(IntPtr pointer, int pointX, int pointY)
+        public static Point GetPointInBrowser(IntPtr pointer, int pointX, int pointY)
         {
             AutomationElement element = null;
             element = AutomationElement.FromHandle(pointer);

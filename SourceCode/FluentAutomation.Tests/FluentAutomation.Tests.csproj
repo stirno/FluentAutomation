@@ -33,10 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Interop.SHDocVw">
-      <HintPath>..\..\3rdPartyLib\Interop.SHDocVw.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -52,8 +48,13 @@
     <Compile Include="FeatureTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BugTests.cs" />
+    <Compile Include="SeleniumBugTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FluentAutomation.SeleniumWebDriver\FluentAutomation.SeleniumWebDriver.csproj">
+      <Project>{B156C4A8-2C18-4FC4-BB0F-696B63446A83}</Project>
+      <Name>FluentAutomation.SeleniumWebDriver</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FluentAutomation.WatiN\FluentAutomation.WatiN.csproj">
       <Project>{BBAB9B69-CBD0-4EDA-A949-BEA371BC9843}</Project>
       <Name>FluentAutomation.WatiN</Name>

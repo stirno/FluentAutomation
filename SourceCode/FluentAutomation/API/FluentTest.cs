@@ -12,7 +12,11 @@ namespace FluentAutomation.API
 
         public void Dispose()
         {
-            I.Finish();
+            try
+            {
+                I.Finish();
+            }
+            catch (Exception) { }
         }
     }
 }

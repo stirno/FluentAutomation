@@ -27,7 +27,7 @@ namespace FluentAutomation.WatiN
             throw new NotImplementedException("Cannot set value to a generic Element.");
         }
 
-        public virtual string GetAttributeValue(string attributeName)
+        public string GetAttributeValue(string attributeName)
         {
             // WatiN hides class attribute, so handle that scenario
             if (attributeName.Equals("class", StringComparison.InvariantCultureIgnoreCase))
@@ -43,17 +43,17 @@ namespace FluentAutomation.WatiN
             return _element.Text;
         }
 
-        public virtual Rectangle GetElementBounds()
+        public Rectangle GetElementBounds()
         {
             return _element.NativeElement.GetElementBounds();
         }
 
-        public virtual bool IsSelect()
+        public bool IsSelect()
         {
             return _element.TagName.Equals("select", StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public virtual bool IsText()
+        public bool IsText()
         {
             return (_element.TagName.Equals("input", StringComparison.InvariantCultureIgnoreCase) &&
                 (_element.GetAttributeValue("type").Equals("text", StringComparison.InvariantCultureIgnoreCase) ||

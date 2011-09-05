@@ -23,7 +23,6 @@ namespace FluentAutomation.Tests
             I.Open("http://knockoutjs.com/examples/controlTypes.html");
             I.Open("http://knockoutjs.com/examples/betterList.html");
             I.Expect.Url("http://knockoutjs.com/examples/betterList.html");
-            I.Wait(30);
             I.Navigate(NavigateDirection.Back);
             I.Expect.Url("http://knockoutjs.com/examples/controlTypes.html");
         }

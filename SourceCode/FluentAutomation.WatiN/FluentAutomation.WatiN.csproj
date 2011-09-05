@@ -32,14 +32,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Interop.SHDocVw">
-      <HintPath>..\..\3rdPartyLib\Interop.SHDocVw.dll</HintPath>
+      <HintPath>..\..\3rdPartyLib\WatiN\Interop.SHDocVw.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="WatiN.Core, Version=2.1.0.1196, Culture=neutral, PublicKeyToken=db7cfd3acb5ad44e, processorArchitecture=MSIL">
-      <HintPath>..\..\3rdPartyLib\WatiN.Core.dll</HintPath>
+    <Reference Include="WatiN.Core">
+      <HintPath>..\..\3rdPartyLib\WatiN\WatiN.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
