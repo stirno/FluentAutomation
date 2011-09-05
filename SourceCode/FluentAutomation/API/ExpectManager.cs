@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using FluentAutomation.API.Providers;
 
 namespace FluentAutomation.API
@@ -55,7 +51,7 @@ namespace FluentAutomation.API
         {
             if (!_automation.GetUrl().Equals(pageUrl, StringComparison.InvariantCultureIgnoreCase))
             {
-                Assert.Fail("URL Assertion failed. Expected URL {0} but actual URL is {1}.", pageUrl, _automation.GetUrl());
+                throw new AssertException("URL Assertion failed. Expected URL {0} but actual URL is {1}.", pageUrl, _automation.GetUrl());
             }
         }
     }

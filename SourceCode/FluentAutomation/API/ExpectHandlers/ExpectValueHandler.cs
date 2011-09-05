@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using FluentAutomation.API.Providers;
 
 namespace FluentAutomation.API.ExpectHandlers
@@ -54,12 +52,12 @@ namespace FluentAutomation.API.ExpectHandlers
             {
                 if (_value == null && element.GetText() != null && element.GetValue() != null)
                 {
-                    Assert.Fail("Null value assertion failed. Element [{0}] has a value of [{1}].", fieldSelector, element.GetText());
+                    throw new AssertException("Null value assertion failed. Element [{0}] has a value of [{1}].", fieldSelector, element.GetText());
                 }
 
                 if (!element.IsSelect() && (_expectType == ExpectType.Any || _expectType == ExpectType.All))
                 {
-                    Assert.Fail("Value assertion of types Any and All can only be used on SelectList elements.");
+                    throw new AssertException("Value assertion of types Any and All can only be used on SelectList elements.");
                 }
                 else if (element.IsSelect())
                 {
@@ -68,12 +66,12 @@ namespace FluentAutomation.API.ExpectHandlers
                     {
                         if (selectElement.IsMultiple)
                         {
-                            Assert.Fail("Single value assertion cannot be used on a SelectList that potentially has multiple values. Use Any or All instead.");
+                            throw new AssertException("Single value assertion cannot be used on a SelectList that potentially has multiple values. Use Any or All instead.");
                         }
 
                         if (!selectElement.GetValue().Equals(_value, StringComparison.InvariantCultureIgnoreCase))
                         {
-                            Assert.Fail("SelectElement value assertion failed. Expected element [{0}] to have a selected value of [{1}] but actual selected value is [{2}].", fieldSelector, _value, selectElement.GetValue());
+                            throw new AssertException("SelectElement value assertion failed. Expected element [{0}] to have a selected value of [{1}] but actual selected value is [{2}].", fieldSelector, _value, selectElement.GetValue());
                         }
                     }
                     else
@@ -96,14 +94,14 @@ namespace FluentAutomation.API.ExpectHandlers
                         {
                             if (valuesMatching == 0)
                             {
-                                Assert.Fail("SelectElement value assertion failed. Expected element [{0}] to have at least one value matching the collection.", fieldSelector);
+                                throw new AssertException("SelectElement value assertion failed. Expected element [{0}] to have at least one value matching the collection.", fieldSelector);
                             }
                         }
                         else if (_expectType == ExpectType.All)
                         {
                             if (valuesMatching < _values.Count())
                             {
-                                Assert.Fail("SelectElement value assertion failed. Expected element [{0}] to include all values in collection.", fieldSelector);
+                                throw new AssertException("SelectElement value assertion failed. Expected element [{0}] to include all values in collection.", fieldSelector);
                             }
                         }
                     }
@@ -113,14 +111,14 @@ namespace FluentAutomation.API.ExpectHandlers
                     var textElement = _automation.GetTextElement(fieldSelector);
                     if (!textElement.GetValue().Equals(_value, StringComparison.InvariantCultureIgnoreCase))
                     {
-                        Assert.Fail("TextElement value assertion failed. Expected element [{0}] to have a value of [{1}] but actual value is [{2}].", fieldSelector, _value, textElement.GetValue());
+                        throw new AssertException("TextElement value assertion failed. Expected element [{0}] to have a value of [{1}] but actual value is [{2}].", fieldSelector, _value, textElement.GetValue());
                     }
                 }
                 else
                 {
                     if (!element.GetValue().Equals(_value))
                     {
-                        Assert.Fail("Value assertion failed. Expected element [{0}] to have a value of [{1}] but actual value is [{2}].", fieldSelector, _value, element.GetValue());
+                        throw new AssertException("Value assertion failed. Expected element [{0}] to have a value of [{1}] but actual value is [{2}].", fieldSelector, _value, element.GetValue());
                     }
                 }
             }

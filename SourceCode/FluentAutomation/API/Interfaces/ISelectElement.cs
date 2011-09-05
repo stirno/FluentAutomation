@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using FluentAutomation.API.Enumerations;
-
-namespace FluentAutomation.API.Interfaces
+﻿namespace FluentAutomation.API.Interfaces
 {
     public interface ISelectElement : IElement
     {

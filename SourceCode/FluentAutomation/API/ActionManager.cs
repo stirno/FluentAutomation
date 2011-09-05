@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using FluentAutomation.API.FieldHandlers;
-using System.Windows.Automation;
-using System.Runtime.InteropServices;
 using FluentAutomation.API.Enumerations;
-using System.Drawing;
+using FluentAutomation.API.FieldHandlers;
 using FluentAutomation.API.Providers;
-using FluentAutomation.API.Interfaces;
 
 namespace FluentAutomation.API
 {
@@ -75,7 +68,7 @@ namespace FluentAutomation.API
 
         public void Hover(API.Point point)
         {
-
+            _automation.HoverPoint(point);
         }
 
         public void Navigate(NavigateDirection direction)

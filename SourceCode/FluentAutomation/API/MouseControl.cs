@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Runtime.InteropServices;
-using System.Windows.Automation;
-using System.Drawing;
+﻿using System.Runtime.InteropServices;
 
 namespace FluentAutomation.API
 {
@@ -18,17 +12,6 @@ namespace FluentAutomation.API
 
         [DllImport("user32.dll", EntryPoint = "mouse_event")]
         public static extern void MouseEvent(int a, int x, int y, int d, int e);
-
-        public static Point GetPointInBrowser(API.Point point, int pointX, int pointY)
-        {
-            AutomationElement element = null;
-            element = AutomationElement.FromPoint(new System.Windows.Point { X = point.X, Y = point.Y });
-
-            int actualX = (int)element.Current.BoundingRectangle.X + pointX + 10;
-            int actualY = (int)element.Current.BoundingRectangle.Y + pointY + 55;
-
-            return new Point { X = actualX, Y = actualY };
-        }
 
         public static void Click(API.Point point)
         {

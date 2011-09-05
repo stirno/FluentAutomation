@@ -39,14 +39,8 @@
     <AssemblyOriginatorKeyFile>StirnoKey_2011_Build.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Drawing" />
-    <Reference Include="UIAutomationClient" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDependentAssemblyPaths Condition=" '$(VS100COMNTOOLS)' != '' " Include="$(VS100COMNTOOLS)..\IDE\PrivateAssemblies">
@@ -55,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\ActionManager.cs" />
+    <Compile Include="API\AssertException.cs" />
     <Compile Include="API\FieldHandlers\DraggedFieldHandler.cs" />
     <Compile Include="API\Enumerations\BrowserType.cs" />
     <Compile Include="API\Enumerations\NavigateDirection.cs" />
@@ -73,7 +68,6 @@
     <Compile Include="API\FluentTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="StirnoKey_2011_Build.snk" />
   </ItemGroup>
   <ItemGroup />

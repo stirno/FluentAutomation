@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Linq;
 using FluentAutomation.API.Providers;
 
 namespace FluentAutomation.API.ExpectHandlers
@@ -42,14 +38,14 @@ namespace FluentAutomation.API.ExpectHandlers
 
                 if (!hasMatches)
                 {
-                    Assert.Fail("Class name assertion failed. Expected element [{0}] to include a CSS class of [{1}].", fieldSelector, className);
+                    throw new AssertException("Class name assertion failed. Expected element [{0}] to include a CSS class of [{1}].", fieldSelector, className);
                 }
             }
             else
             {
                 if (!elementClassName.Equals(className))
                 {
-                    Assert.Fail("Class name assertion failed. Expected element [{0]] to include a CSS class of [{1}] but current CSS class is [{2}].", fieldSelector, className, elementClassName);
+                    throw new AssertException("Class name assertion failed. Expected element [{0]] to include a CSS class of [{1}] but current CSS class is [{2}].", fieldSelector, className, elementClassName);
                 }
             }
         }
