@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		FluentAutomation.vsmdi = FluentAutomation.vsmdi
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentAutomation.WatiN", "SourceCode\FluentAutomation.WatiN\FluentAutomation.WatiN.csproj", "{BBAB9B69-CBD0-4EDA-A949-BEA371BC9843}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = FluentAutomation.vsmdi
@@ -27,6 +29,10 @@ Global
 		{BC3B541A-02DA-4CAD-BBD0-7C79D2E8554D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC3B541A-02DA-4CAD-BBD0-7C79D2E8554D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC3B541A-02DA-4CAD-BBD0-7C79D2E8554D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBAB9B69-CBD0-4EDA-A949-BEA371BC9843}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBAB9B69-CBD0-4EDA-A949-BEA371BC9843}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBAB9B69-CBD0-4EDA-A949-BEA371BC9843}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBAB9B69-CBD0-4EDA-A949-BEA371BC9843}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

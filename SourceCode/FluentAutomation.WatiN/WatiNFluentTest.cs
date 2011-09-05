@@ -2,28 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using FluentAutomation.API;
 
-namespace FluentAutomation.API
+namespace FluentAutomation.WatiN
 {
-    public class TestClass : IDisposable
+    public class WatiNFluentTest : FluentTest
     {
         private ActionManager _actionManager = null;
-        public ActionManager I
+        public override ActionManager I
         {
-            get
-            {
+            get {
                 if (_actionManager == null)
                 {
-                    _actionManager = new ActionManager();
+                    _actionManager = new ActionManager(new AutomationProvider());
                 }
 
                 return _actionManager;
             }
-        }
-
-        public void Dispose()
-        {
-            I.Finish();
         }
     }
 }

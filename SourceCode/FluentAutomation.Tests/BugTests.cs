@@ -8,16 +8,15 @@ using FluentAutomation.API.Enumerations;
 namespace FluentAutomation.Tests
 {
     [TestClass]
-    public class BugTests : FluentAutomation.API.TestClass
+    public class BugTests : FluentAutomation.WatiN.WatiNFluentTest
     {
         [TestMethod]
         public void Bug_1_CantExpectValueOnSelect()
         {
-            I.Use(BrowserType.InternetExplorer);
             I.Open("http://knockoutjs.com/examples/controlTypes.html");
-            I.Select("Gamma").From("select:eq(0)");
-            I.Expect.This("Gamma").In("select:eq(0)");
-            I.Expect.Any("Alpha", "Gamma").In("select:eq(0)");
+            I.Select("Beta").From("select:eq(0)");
+            I.Expect.This("Beta").In("select:eq(0)");
+            I.Expect.Any("Alpha", "Beta").In("select:eq(0)");
 
             I.Select("Beta", "Gamma").From("select:eq(1)");
             I.Expect.All("Beta", "Gamma").In("select:eq(1)");
@@ -27,7 +26,6 @@ namespace FluentAutomation.Tests
         [TestMethod]
         public void Bug_4_CantExpectValueOnInput()
         {
-            I.Use(BrowserType.InternetExplorer);
             I.Open("http://knockoutjs.com/examples/controlTypes.html");
             I.Enter("Test").In("input:eq(0)");
             I.Expect.This("Test").In("input:eq(0)");

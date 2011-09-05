@@ -39,10 +39,6 @@
     <AssemblyOriginatorKeyFile>StirnoKey_2011_Build.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Interop.SHDocVw, Version=1.1.0.0, Culture=neutral, PublicKeyToken=db7cfd3acb5ad44e, processorArchitecture=MSIL">
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\3rdPartyLib\Interop.SHDocVw.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -50,9 +46,6 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="UIAutomationClient" />
-    <Reference Include="WatiN.Core, Version=2.1.0.1196, Culture=neutral, PublicKeyToken=db7cfd3acb5ad44e, processorArchitecture=MSIL">
-      <HintPath>..\..\3rdPartyLib\WatiN.Core.dll</HintPath>
-    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -63,23 +56,28 @@
   <ItemGroup>
     <Compile Include="API\ActionManager.cs" />
     <Compile Include="API\ControlHandlers\DraggedItemHandler.cs" />
-    <Compile Include="API\ControlHandlers\SelectHandler.cs" />
     <Compile Include="API\Enumerations\BrowserType.cs" />
-    <Compile Include="API\ControlHandlers\TextFieldHandler.cs" />
     <Compile Include="API\Enumerations\NavigateDirection.cs" />
     <Compile Include="API\ExpectHandlers\ExpectCssClassHandler.cs" />
     <Compile Include="API\ExpectHandlers\ExpectValueHandler.cs" />
     <Compile Include="API\ExpectManager.cs" />
+    <Compile Include="API\Interfaces\IElement.cs" />
+    <Compile Include="API\Interfaces\ISelectElement.cs" />
+    <Compile Include="API\Interfaces\ITextElement.cs" />
     <Compile Include="API\MouseControl.cs" />
     <Compile Include="API\Point.cs" />
+    <Compile Include="API\Providers\AutomationProvider.cs" />
+    <Compile Include="API\Providers\SelectFieldHandler.cs" />
+    <Compile Include="API\Providers\TextFieldHandler.cs" />
     <Compile Include="API\WatinExtensionMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="API\TestClass.cs" />
+    <Compile Include="API\FluentTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="StirnoKey_2011_Build.snk" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

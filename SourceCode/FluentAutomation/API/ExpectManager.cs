@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using WatiN.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using FluentAutomation.API.Providers;
 
 namespace FluentAutomation.API
 {
     public partial class ExpectManager
     {
-        private Browser _browser = null;
+        private AutomationProvider _automation = null;
         private ExpectHandlers.ExpectValueHandler _nullHandler = null;
-        
-        public ExpectManager(Browser browser)
+
+        public ExpectManager(AutomationProvider automation)
         {
-            _browser = browser;
+            _automation = automation;
         }
 
         public ExpectHandlers.ExpectValueHandler Null
@@ -24,7 +24,7 @@ namespace FluentAutomation.API
                 if (_nullHandler == null)
                 {
                     string value = null;
-                    _nullHandler = new ExpectHandlers.ExpectValueHandler(_browser, value);
+                    _nullHandler = new ExpectHandlers.ExpectValueHandler(_automation, value);
                 }
 
                 return _nullHandler;
@@ -33,29 +33,29 @@ namespace FluentAutomation.API
 
         public virtual ExpectHandlers.ExpectValueHandler This(string value)
         {
-            return new ExpectHandlers.ExpectValueHandler(_browser, value);
+            return new ExpectHandlers.ExpectValueHandler(_automation, value);
         }
 
         public virtual ExpectHandlers.ExpectValueHandler All(params string[] values)
         {
-            return new ExpectHandlers.ExpectValueHandler(_browser, values, true);
+            return new ExpectHandlers.ExpectValueHandler(_automation, values, true);
         }
 
         public virtual ExpectHandlers.ExpectValueHandler Any(params string[] values)
         {
-            return new ExpectHandlers.ExpectValueHandler(_browser, values);
+            return new ExpectHandlers.ExpectValueHandler(_automation, values);
         }
 
         public virtual ExpectHandlers.ExpectCssClassHandler Class(string value)
         {
-            return new ExpectHandlers.ExpectCssClassHandler(_browser, value);
+            return new ExpectHandlers.ExpectCssClassHandler(_automation, value);
         }
 
         public virtual void Url(string pageUrl)
         {
-            if (_browser.Url != pageUrl)
+            if (!_automation.GetUrl().Equals(pageUrl, StringComparison.InvariantCultureIgnoreCase))
             {
-                Assert.Fail(string.Format("URL Assertion failed. Expected URL {0} but actual URL is {1}.", pageUrl, _browser.Url));
+                Assert.Fail("URL Assertion failed. Expected URL {0} but actual URL is {1}.", pageUrl, _automation.GetUrl());
             }
         }
     }

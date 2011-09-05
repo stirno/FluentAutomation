@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using WatiN.Core;
 
 namespace FluentAutomation.API.ControlHandlers
 {
     public class DraggedItemHandler
     {
-        private Browser _browser = null;
+        /*private Browser _browser = null;
 
         internal DraggedItemHandler(Browser browser)
         {
@@ -32,6 +31,6 @@ namespace FluentAutomation.API.ControlHandlers
         public void To(Point point)
         {
             To(point.X, point.Y);
-        }
+        }*/
     }
 }

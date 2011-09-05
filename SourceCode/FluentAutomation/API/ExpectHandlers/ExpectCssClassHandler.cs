@@ -2,37 +2,38 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using WatiN.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using FluentAutomation.API.Providers;
 
 namespace FluentAutomation.API.ExpectHandlers
 {
     public class ExpectCssClassHandler
     {
-        private Browser _browser = null;
+        private AutomationProvider _automation = null;
         private string _value = string.Empty;
 
-        public ExpectCssClassHandler(Browser browser, string value)
+        public ExpectCssClassHandler(AutomationProvider automation, string value)
         {
-            _browser = browser;
+            _automation = automation;
             _value = value;
         }
 
         public void On(string fieldSelector)
         {
-            var element = _browser.Element(Find.BySelector(fieldSelector));
+            var element = _automation.GetElement(fieldSelector);
             string className = _value.Replace(".", "").Trim();
+            string elementClassName = element.GetAttributeValue("class").Trim();
 
-            if (element.ClassName.Contains(' '))
+            if (elementClassName.Contains(' '))
             {
-                string[] classes = element.ClassName.Split(' ');
+                string[] classes = elementClassName.Split(' ');
                 bool hasMatches = false;
                 foreach (var cssClass in classes)
                 {
                     var cssClassString = cssClass.Trim();
                     if (!string.IsNullOrEmpty(cssClassString))
                     {
-                        if (string.Equals(cssClassString, className, StringComparison.InvariantCultureIgnoreCase))
+                        if (cssClassString.Equals(className))
                         {
                             hasMatches = true;
                         }
@@ -46,9 +47,9 @@ namespace FluentAutomation.API.ExpectHandlers
             }
             else
             {
-                if (!string.Equals(element.ClassName.Trim(), className, StringComparison.InvariantCultureIgnoreCase))
+                if (!elementClassName.Equals(className))
                 {
-                    Assert.Fail("Class name assertion failed. Expected element [{0]] to include a CSS class of [{1}] but current CSS class is [{2}].", fieldSelector, className, element.ClassName.Trim());
+                    Assert.Fail("Class name assertion failed. Expected element [{0]] to include a CSS class of [{1}] but current CSS class is [{2}].", fieldSelector, className, elementClassName);
                 }
             }
         }

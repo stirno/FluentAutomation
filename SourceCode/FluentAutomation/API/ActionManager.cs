@@ -2,151 +2,107 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using WatiN.Core;
 using FluentAutomation.API.ControlHandlers;
 using System.Windows.Automation;
 using System.Runtime.InteropServices;
 using FluentAutomation.API.Enumerations;
 using System.Drawing;
+using FluentAutomation.API.Providers;
+using FluentAutomation.API.Interfaces;
 
 namespace FluentAutomation.API
 {
     public partial class ActionManager
     {
+        private AutomationProvider _automation = null;
+
+        public ActionManager(AutomationProvider automationProvider)
+        {
+            _automation = automationProvider;
+        }
+
+        public void Use(BrowserType browserType)
+        {
+            _automation.SetBrowser(browserType);
+        }
+
+        public void Open(Uri pageUri)
+        {
+            _automation.Navigate(pageUri);
+        }
+
+        public void Open(string pageUrl)
+        {
+            Open(new Uri(pageUrl, UriKind.Absolute));
+        }
+
+        public void Navigate(NavigateDirection direction)
+        {
+            _automation.Navigate(direction);
+        }
+        
+        public TextFieldHandler Enter(string value)
+        {
+            return new TextFieldHandler(_automation, value);
+        }
+
+        public TextFieldHandler Enter(int value)
+        {
+            return Enter(value.ToString());
+        }
+
+        public SelectFieldHandler Select(string value)
+        {
+            return new SelectFieldHandler(_automation, new string[] { value });
+        }
+
+        public SelectFieldHandler Select(int index)
+        {
+            return new SelectFieldHandler(_automation, new int[] { index });
+        }
+
+        public SelectFieldHandler Select(params string[] values)
+        {
+            return new SelectFieldHandler(_automation, values);
+        }
+
+        public SelectFieldHandler Select(params int[] indices)
+        {
+            return new SelectFieldHandler(_automation, indices);
+        }
+
+        public void Click(string elementSelector)
+        {
+            var field = _automation.GetElement(elementSelector);
+            field.Focus();
+            field.Click();
+        }
+
+        public void Hover(string elementSelector)
+        {
+            var field = _automation.GetElement(elementSelector);
+            field.Hover();
+        }
+
+        public void Finish()
+        {
+            _automation.Cleanup();
+        }
+
         private ExpectManager _expect = null;
-        private Browser _browser = null;
-
-        internal ActionManager()
-        {
-        }
-
-        public virtual void Use(BrowserType browserType)
-        {
-            if (browserType == BrowserType.InternetExplorer)
-            {
-                _browser = new WatiN.Core.IE(true);
-            }
-            else if (browserType == BrowserType.Firefox)
-            {
-                _browser = new WatiN.Core.FireFox();
-            }
-        }
-
-        public virtual void Open(Uri pageUri)
-        {
-            _browser.GoTo(pageUri);
-            _browser.WaitForComplete();
-        }
-
-        public virtual void Open(string pageUrl)
-        {
-            _browser.GoTo(pageUrl);
-            _browser.WaitForComplete();
-        }
-
-        public virtual void Navigate(NavigateDirection direction)
-        {
-            if (direction == NavigateDirection.Back)
-            {
-                _browser.Back();
-            }
-            else
-            {
-                _browser.Forward();
-            }
-        }
-
         public ExpectManager Expect
         {
             get
             {
                 if (_expect == null)
                 {
-                    _expect = new ExpectManager(_browser);
+                    _expect = new ExpectManager(_automation);
                 }
 
                 return _expect;
             }
-
-            set
-            {
-                _expect = value;
-            }
         }
-
-        public virtual TextFieldHandler Enter(Func<string> valueFunc)
-        {
-            return Enter(valueFunc());
-        }
-
-        public virtual TextFieldHandler Enter(string value)
-        {
-            return new TextFieldHandler(_browser, value);
-        }
-
-        public virtual TextFieldHandler Enter(int value)
-        {
-            return new TextFieldHandler(_browser, value.ToString());
-        }
-
-        public virtual SelectListHandler Select(string value)
-        {
-            return new SelectListHandler(_browser, value);
-        }
-
-        public virtual SelectListHandler Select(params string[] values)
-        {
-            return new SelectListHandler(_browser, values);
-        }
-
-        public SelectListHandler Select(int index)
-        {
-            return new SelectListHandler(_browser, index);
-        }
-
-        public virtual SelectListHandler Select(params int[] indices)
-        {
-            return new SelectListHandler(_browser, indices);
-        }
-
-        public virtual void Click(int pointX, int pointY)
-        {
-            Point actualPoint = MouseControl.GetPointInBrowser(_browser, pointX, pointY);
-            MouseControl.SetCursorPos(actualPoint.X, actualPoint.Y);
-            MouseControl.MouseEvent(MouseControl.MouseEvent_LeftButtonDown, actualPoint.X, actualPoint.Y, 0, 0);
-            MouseControl.MouseEvent(MouseControl.MouseEvent_LeftButtonUp, actualPoint.X, actualPoint.Y, 0, 0);
-        }
-
-        public virtual void Click(Point point)
-        {
-            Click(point.X, point.Y);
-        }
-
-        public virtual void Click(string elementSelector)
-        {
-            var element = _browser.Child(Find.BySelector(elementSelector));
-            element.Focus();
-            element.ClickNoWait();
-        }
-
-        public virtual void Hover(int pointX, int pointY)
-        {
-            Point actualPoint = MouseControl.GetPointInBrowser(_browser, pointX, pointY);
-            MouseControl.SetCursorPos(actualPoint.X, actualPoint.Y);
-        }
-
-        public virtual void Hover(Point point)
-        {
-            Hover(point.X, point.Y);
-        }
-
-        public virtual void Hover(string elementSelector)
-        {
-            var element = _browser.Child(Find.BySelector(elementSelector));
-            element.MouseEnter();
-            element.NativeElement.GetElementBounds();
-        }
-
+        /*
         public virtual DraggedItemHandler Drag(string elementSelector)
         {
             var element = _browser.Child(Find.BySelector(elementSelector));
@@ -156,16 +112,6 @@ namespace FluentAutomation.API
             MouseControl.MouseEvent(MouseControl.MouseEvent_LeftButtonDown, actualPoint.X, actualPoint.Y, 0, 0);
 
             return new DraggedItemHandler(_browser);
-        }
-
-        public virtual void Wait(TimeSpan waitTime)
-        {
-            System.Threading.Thread.Sleep(waitTime);
-        }
-
-        public virtual void Finish()
-        {
-            _browser.Close();
-        }
+        }*/
     }
 }
