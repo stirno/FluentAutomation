@@ -8,6 +8,8 @@ namespace FluentAutomation.WatiN
 {
     public class WatiNFluentTest : FluentTest
     {
+        public AutomationProvider Provider = null;
+
         private ActionManager _actionManager = null;
         public override ActionManager I
         {
@@ -15,7 +17,8 @@ namespace FluentAutomation.WatiN
             {
                 if (_actionManager == null)
                 {
-                    _actionManager = new ActionManager(new AutomationProvider());
+                    this.Provider = new AutomationProvider();
+                    _actionManager = new ActionManager(this.Provider);
                 }
 
                 return _actionManager;

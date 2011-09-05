@@ -29,15 +29,14 @@ namespace FluentAutomation.API
             field.Click();
         }
 
+        public void Click(API.Point point)
+        {
+            _automation.ClickPoint(point);
+        }
+
         public DraggedFieldHandler Drag(string fieldSelector)
         {
-            var element = _automation.GetElement(fieldSelector);
-            System.Drawing.Rectangle bounds = element.GetElementBounds();
-            Point actualPoint = MouseControl.GetPointInBrowser(_automation.GetBrowserPointer(), bounds.X, bounds.Y);
-            MouseControl.SetCursorPos(actualPoint.X, actualPoint.Y);
-            MouseControl.MouseEvent(MouseControl.MouseEvent_LeftButtonDown, actualPoint.X, actualPoint.Y, 0, 0);
-
-            return new DraggedFieldHandler(_automation);
+            return new DraggedFieldHandler(_automation, fieldSelector);
         }
 
         public TextFieldHandler Enter(string value)
@@ -72,6 +71,11 @@ namespace FluentAutomation.API
         {
             var field = _automation.GetElement(elementSelector);
             field.Hover();
+        }
+
+        public void Hover(API.Point point)
+        {
+
         }
 
         public void Navigate(NavigateDirection direction)

@@ -3,35 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FluentAutomation.API.Providers;
+using FluentAutomation.API.Interfaces;
 
 namespace FluentAutomation.API.FieldHandlers
 {
     public class DraggedFieldHandler
     {
         private AutomationProvider _automation = null;
+        private string _dragFieldSelector = string.Empty;
 
-        internal DraggedFieldHandler(AutomationProvider browser)
+        internal DraggedFieldHandler(AutomationProvider automation, string fieldSelector)
         {
-            _automation = browser;
+            _automation = automation;
+            _dragFieldSelector = fieldSelector;
         }
 
-        public void To(string elementSelector)
+        public void To(string fieldSelector)
         {
-            var element = _automation.GetElement(elementSelector);
-            System.Drawing.Rectangle dropBounds = element.GetElementBounds();
-            To(dropBounds.X, dropBounds.Y);
-        }
-
-        public void To(int x, int y)
-        {
-            Point actualPoint = MouseControl.GetPointInBrowser(_automation.GetBrowserPointer(), x, y);
-            MouseControl.SetCursorPos(actualPoint.X, actualPoint.Y);
-            MouseControl.MouseEvent(MouseControl.MouseEvent_LeftButtonUp, actualPoint.X, actualPoint.Y, 0, 0);
-        }
-
-        public void To(Point point)
-        {
-            To(point.X, point.Y);
+            var element = _automation.GetElement(_dragFieldSelector);
+            element.DragTo(_automation.GetElement(fieldSelector));
         }
     }
 }

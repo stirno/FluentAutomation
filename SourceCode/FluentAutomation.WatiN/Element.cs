@@ -5,6 +5,7 @@ using System.Text;
 using System.Drawing;
 using FluentAutomation.API.Interfaces;
 using Automation = global::WatiN;
+using FluentAutomation.API;
 
 namespace FluentAutomation.WatiN
 {
@@ -46,6 +47,17 @@ namespace FluentAutomation.WatiN
         public Rectangle GetElementBounds()
         {
             return _element.NativeElement.GetElementBounds();
+        }
+
+        public void DragTo(IElement dropElement)
+        {
+            var dragPoint = this.GetElementBounds();
+            MouseControl.SetPosition(new API.Point(dragPoint.X, dragPoint.Y));
+            MouseControl.MouseEvent(MouseControl.MouseEvent_LeftButtonDown, dragPoint.X, dragPoint.Y, 0, 0);
+
+            var dropPoint = dropElement.GetElementBounds();
+            MouseControl.SetPosition(new API.Point(dropPoint.X, dropPoint.Y));
+            MouseControl.MouseEvent(MouseControl.MouseEvent_LeftButtonUp, dropPoint.X, dropPoint.Y, 0, 0);
         }
 
         public bool IsSelect()

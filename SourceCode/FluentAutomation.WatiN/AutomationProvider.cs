@@ -5,6 +5,7 @@ using System.Text;
 using Automation = global::WatiN;
 using System.Threading;
 using FluentAutomation.API.Interfaces;
+using FluentAutomation.API;
 
 namespace FluentAutomation.WatiN
 {
@@ -17,6 +18,11 @@ namespace FluentAutomation.WatiN
         {
             _browser.Close();
             _browser = null;
+        }
+
+        public override void ClickPoint(API.Point point)
+        {
+            MouseControl.Click(point);
         }
 
         public override IElement GetElement(string fieldSelector)
@@ -37,14 +43,14 @@ namespace FluentAutomation.WatiN
             return new TextElement(wElement);
         }
 
-        public override IntPtr GetBrowserPointer()
-        {
-            return _browser.NativeBrowser.hWnd;
-        }
-
         public override Uri GetUri()
         {
             return _browser.Uri;
+        }
+
+        public override void HoverPoint(Point point)
+        {
+            MouseControl.SetPosition(point);
         }
 
         public override void Navigate(Uri pageUri)
@@ -95,9 +101,12 @@ namespace FluentAutomation.WatiN
             switch (_browserType)
             {
                 case API.Enumerations.BrowserType.InternetExplorer:
-                    return new Automation.Core.IE(true);
+                    // TODO: Calculate browser chrome height/width so we don't need fullscreen mode
+                    Automation.Core.IE browser = new Automation.Core.IE(true);
+                    ((SHDocVw.WebBrowser)browser.InternetExplorer).FullScreen = true;
+                    return browser;
                 case API.Enumerations.BrowserType.Firefox:
-                    return new Automation.Core.FireFox();
+                    throw new NotImplementedException("WatiN only supports Firefox with JSSH enabled. JSSH is not supported on versions newer than 4.0 so it has been disabled via this API.");
             }
 
             return null;

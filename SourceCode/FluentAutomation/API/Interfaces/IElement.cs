@@ -19,5 +19,6 @@ namespace FluentAutomation.API.Interfaces
         void Click();
         void Focus();
         void Hover();
+        void DragTo(IElement fieldSelector);
     }
 }

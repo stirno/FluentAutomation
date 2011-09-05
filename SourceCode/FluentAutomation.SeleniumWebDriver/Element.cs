@@ -41,6 +41,16 @@ namespace FluentAutomation.SeleniumWebDriver
             return new Rectangle(_element.Location, _element.Size);
         }
 
+        public IWebElement GetWebElement()
+        {
+            return _element;
+        }
+
+        public void DragTo(IElement element)
+        {
+            (new OpenQA.Selenium.Interactions.Actions(_driver)).DragAndDrop(_element, ((Element)element).GetWebElement()).Perform();
+        }
+
         public bool IsSelect()
         {
             return _element.TagName.Equals("select", StringComparison.InvariantCultureIgnoreCase);
@@ -72,7 +82,7 @@ namespace FluentAutomation.SeleniumWebDriver
 
         public virtual void Hover()
         {
-            FluentAutomation.API.MouseControl.SetCursorPos(_element.Location.X, _element.Location.Y);
+            FluentAutomation.API.MouseControl.SetPosition(new API.Point(_element.Location.X, _element.Location.Y));
         }
 
         public virtual void OnChange()

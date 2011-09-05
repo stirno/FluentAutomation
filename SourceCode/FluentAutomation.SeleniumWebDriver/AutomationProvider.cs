@@ -5,6 +5,7 @@ using System.Text;
 using FluentAutomation.API.Interfaces;
 using System.Threading;
 using OpenQA.Selenium;
+using System.Drawing;
 
 namespace FluentAutomation.SeleniumWebDriver
 {
@@ -15,7 +16,13 @@ namespace FluentAutomation.SeleniumWebDriver
 
         public override void Cleanup()
         {
-            _driver.Close();
+            _driver.Manage().Cookies.DeleteAllCookies();
+            _driver.Quit();
+        }
+
+        public override void ClickPoint(API.Point point)
+        {
+            (new OpenQA.Selenium.Interactions.Actions(_driver)).MoveToElement(_driver.FindElement(By.TagName("body"))).MoveByOffset(point.X, point.Y).Click().Perform();
         }
 
         public override ITextElement GetTextElement(string fieldSelector)
@@ -33,23 +40,23 @@ namespace FluentAutomation.SeleniumWebDriver
             return new Element(_driver, _driver.FindElement(BySizzle.CssSelector(fieldSelector)), fieldSelector);
         }
 
-        public override IntPtr GetBrowserPointer()
-        {
-            throw new NotImplementedException();
-        }
-
         public override Uri GetUri()
         {
             return new Uri(_driver.Url, UriKind.Absolute);
+        }
+
+        public override void HoverPoint(API.Point point)
+        {
+            (new OpenQA.Selenium.Interactions.Actions(_driver)).MoveToElement(_driver.FindElement(By.TagName("body"))).MoveByOffset(point.X, point.Y).Perform();
         }
 
         public override void Navigate(Uri pageUri)
         {
             if (_driver == null)
             {
-                _driver = getCurrentBrowser();
+                _driver = getCurrentDriver();
             }
-
+            
             _driver.Navigate().GoToUrl(pageUri);
         }
 
@@ -86,17 +93,21 @@ namespace FluentAutomation.SeleniumWebDriver
             Thread.Sleep(TimeSpan.FromSeconds(seconds));
         }
 
-        private IWebDriver getCurrentBrowser()
+        private IWebDriver getCurrentDriver()
         {
+            OpenQA.Selenium.Remote.RemoteWebDriver driver = null;
+
             switch (_browserType)
             {
                 case API.Enumerations.BrowserType.InternetExplorer:
-                    return new OpenQA.Selenium.IE.InternetExplorerDriver();
+                    driver = new OpenQA.Selenium.IE.InternetExplorerDriver();
+                    break;
                 case API.Enumerations.BrowserType.Firefox:
-                    return new OpenQA.Selenium.Firefox.FirefoxDriver();
+                    driver = new OpenQA.Selenium.Firefox.FirefoxDriver();
+                    break;
             }
 
-            return null;
+            return driver;
         }
     }
 }
