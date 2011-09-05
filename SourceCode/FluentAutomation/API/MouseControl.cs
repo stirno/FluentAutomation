@@ -10,7 +10,6 @@ namespace FluentAutomation.API
 {
     internal static class MouseControl
     {
-        #region DllImports, ack!
         internal const int MouseEvent_LeftButtonDown = 0x002;
         internal const int MouseEvent_LeftButtonUp = 0x004;
 
@@ -30,6 +29,5 @@ namespace FluentAutomation.API
 
             return new Point { X = actualX, Y = actualY };
         }
-        #endregion
     }
 }
