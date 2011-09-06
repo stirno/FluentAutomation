@@ -8,7 +8,7 @@ using FluentAutomation.API.Enumerations;
 namespace FluentAutomation.Tests
 {
     [TestClass]
-    public class FeatureTests : FluentAutomation.WatiN.WatiNFluentTest
+    public class FeatureTests : FluentAutomation.WatiN.FluentTest
     {
         [TestMethod]
         public void CssClassExpect()

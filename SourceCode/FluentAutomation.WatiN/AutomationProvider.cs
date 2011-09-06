@@ -17,7 +17,6 @@ namespace FluentAutomation.WatiN
         public override void Cleanup()
         {
             _browser.Close();
-            _browser = null;
         }
 
         public override void ClickPoint(API.Point point)
@@ -107,6 +106,8 @@ namespace FluentAutomation.WatiN
                     return browser;
                 case API.Enumerations.BrowserType.Firefox:
                     throw new NotImplementedException("WatiN only supports Firefox with JSSH enabled. JSSH is not supported on versions newer than 4.0 so it has been disabled via this API.");
+                default:
+                    throw new NotImplementedException("WatiN only supports Internet Explorer. Switch to Selenium if you want to target other browsers.");
             }
 
             return null;

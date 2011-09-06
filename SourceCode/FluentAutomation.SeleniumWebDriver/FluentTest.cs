@@ -6,7 +6,7 @@ using FluentAutomation.API;
 
 namespace FluentAutomation.SeleniumWebDriver
 {
-    public class SeleniumWebDriverTest : FluentTest
+    public class FluentTest : FluentAutomation.API.FluentTest
     {
         public AutomationProvider Provider = null;
 
@@ -22,6 +22,11 @@ namespace FluentAutomation.SeleniumWebDriver
                 }
 
                 return _actionManager;
+            }
+
+            set
+            {
+                _actionManager = value;
             }
         }
     }

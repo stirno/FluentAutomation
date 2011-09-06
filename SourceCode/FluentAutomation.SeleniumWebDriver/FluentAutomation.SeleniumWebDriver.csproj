@@ -54,7 +54,7 @@
     <Compile Include="Element.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SelectElement.cs" />
-    <Compile Include="SeleniumWebDriverTest.cs" />
+    <Compile Include="FluentTest.cs" />
     <Compile Include="Sizzle.cs" />
     <Compile Include="TextElement.cs" />
   </ItemGroup>
