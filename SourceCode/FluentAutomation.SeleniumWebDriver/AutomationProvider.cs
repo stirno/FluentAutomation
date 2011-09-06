@@ -106,7 +106,7 @@ namespace FluentAutomation.SeleniumWebDriver
                     driver = new OpenQA.Selenium.Firefox.FirefoxDriver();
                     break;
                 case API.Enumerations.BrowserType.Chrome:
-                    driver = new OpenQA.Selenium.Chrome.ChromeDriver(System.Reflection.Assembly.GetExecutingAssembly().Location);
+                    driver = new OpenQA.Selenium.Chrome.ChromeDriver();
                     break;
             }
 
