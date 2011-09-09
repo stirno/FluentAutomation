@@ -4,9 +4,35 @@
 
 The goal of this project is to create a simplified API to automate testing of web applications using WatiN or Selenium to drive browser interaction.
 
-###Quick examples of using the API
+#### Basic Usage
 
-Apologies for the lack of linebreaks. 
+To use the API, you just need to extend the appropriate FluentTest class. Current options include SeleniumWebDriver.FluentTest and WatiN.FluentTest classes. Any test framework should work.
+
+Quick examples using MSTest:
+
+    [TestClass]
+    public class CartEditor : FluentAutomation.WatiN.FluentTest
+    {
+        [TestMethod]
+        public void CartEditor_AddDelete()
+        {
+            /* Snipped */
+        }
+    }
+	
+or
+
+    [TestClass]
+    public class CartEditor : FluentAutomation.SeleniumWebDriver.FluentTest
+    {
+        [TestMethod]
+        public void CartEditor_AddDelete()
+        {
+            /* Snipped */
+        }
+    }
+
+####Quick examples of using the API
 
 KnockoutJS.com - Cart Editor Example
 
