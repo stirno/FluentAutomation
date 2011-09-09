@@ -41,7 +41,7 @@ task :copyBinaries do
 		FileUtils.mkdir("#{@env_buildfolderpath}Binaries/")
 	end
 	
-	FileUtils.cp_r(FileList["#{@env_buildfolderpath}SourceCode/#{@env_projectname}/bin/#{@env_buildconfigname}/*.*"], "#{@env_buildfolderpath}Binaries/")
+	FileUtils.cp_r(FileList["#{@env_buildfolderpath}SourceCode/#{@env_projectname}/bin/#{@env_buildconfigname}/*.*","#{@env_buildfolderpath}SourceCode/#{@env_projectname}.WatiN/bin/#{@env_buildconfigname}/*.*","#{@env_buildfolderpath}SourceCode/#{@env_projectname}.SeleniumWebDriver/bin/#{@env_buildconfigname}/*.*"], "#{@env_buildfolderpath}Binaries/")
 end
 
 desc "Creates ZIPs package of binaries folder."
