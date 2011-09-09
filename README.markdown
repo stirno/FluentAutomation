@@ -9,7 +9,7 @@ The goal of this project is to create a simplified API to automate testing of we
 Apologies for the lack of linebreaks. GitHubs Markdown syntax doesn't like a linebreak inside a code block.
 
 KnockoutJS.com - Cart Editor Example
-````
+```
 // specify a browser, this is optional - WatiN targets IE and Selenium defaults to Firefox
 I.Use(BrowserType.Chrome);
 I.Open("http://knockoutjs.com/examples/cartEditor.html");
@@ -29,16 +29,16 @@ I.Expect.This("$986.34").In("p.grandTotal span");
 I.Click("#cartEditor a:eq(0)");
 // validate new total
 I.Expect.This("$788.64").In("p.grandTotal span");
-````
+```
 
 Google.com - Simple Search
-````
+```
 I.Open("http://www.google.com");
 I.Enter("knockoutjs").In("#lst-ib");
-````
+```
 
 YUI - Drag and Drop Example
-````
+```
 I.Open("http://developer.yahoo.com/yui/examples/dragdrop/dd-groups.html");
 I.Drag("#pt1").To("#t2");
 I.Drag("#pt2").To("#t1");
@@ -48,4 +48,4 @@ I.Drag("#pboth1").To("#b3");
 I.Drag("#pboth2").To("#b4");
 I.Drag("#pt1").To("#pt2");
 I.Drag("#pboth1").To("#pb2");
-````
+```
