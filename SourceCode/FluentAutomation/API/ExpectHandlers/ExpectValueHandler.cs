@@ -51,12 +51,13 @@ namespace FluentAutomation.API.ExpectHandlers
         public void In(string fieldSelector)
         {
             var element = _automation.GetElement(fieldSelector);
+            var elementValue = element.GetValue() ?? string.Empty;
 
             if (element != null)
             {
-                if (_value == null && element.GetText() != null && element.GetValue() != null)
+                if (_value == null && element.GetText() != null && elementValue != string.Empty)
                 {
-                    throw new AssertException("Null value assertion failed. Element [{0}] has a value of [{1}].", fieldSelector, element.GetText());
+                    throw new AssertException("Null value assertion failed. Element [{0}] has a value of [{1}].", fieldSelector, element.GetText().PrettifyErrorValue());
                 }
 
                 if (!element.IsSelect() && (_expectType == ExpectType.Any || _expectType == ExpectType.All))
@@ -75,7 +76,7 @@ namespace FluentAutomation.API.ExpectHandlers
 
                         if (!selectElement.GetValue().Equals(_value, StringComparison.InvariantCultureIgnoreCase))
                         {
-                            throw new AssertException("SelectElement value assertion failed. Expected element [{0}] to have a selected value of [{1}] but actual selected value is [{2}].", fieldSelector, _value, selectElement.GetValue());
+                            throw new AssertException("SelectElement value assertion failed. Expected element [{0}] to have a selected value of [{1}] but actual selected value is [{2}].", fieldSelector, _value.PrettifyErrorValue(), selectElement.GetValue().PrettifyErrorValue());
                         }
                     }
                     else
@@ -113,16 +114,17 @@ namespace FluentAutomation.API.ExpectHandlers
                 else if (element.IsText())
                 {
                     var textElement = _automation.GetTextElement(fieldSelector);
-                    if (!textElement.GetValue().Equals(_value, StringComparison.InvariantCultureIgnoreCase))
+                    var textElementValue = textElement.GetValue() ?? string.Empty;
+                    if (!textElementValue.Equals(_value ?? string.Empty, StringComparison.InvariantCultureIgnoreCase))
                     {
-                        throw new AssertException("TextElement value assertion failed. Expected element [{0}] to have a value of [{1}] but actual value is [{2}].", fieldSelector, _value, textElement.GetValue());
+                        throw new AssertException("TextElement value assertion failed. Expected element [{0}] to have a value of [{1}] but actual value is [{2}].", fieldSelector, _value.PrettifyErrorValue(), textElementValue.PrettifyErrorValue());
                     }
                 }
                 else
                 {
-                    if (!element.GetValue().Equals(_value))
+                    if (!elementValue.Equals(_value ?? string.Empty))
                     {
-                        throw new AssertException("Value assertion failed. Expected element [{0}] to have a value of [{1}] but actual value is [{2}].", fieldSelector, _value, element.GetValue());
+                        throw new AssertException("Value assertion failed. Expected element [{0}] to have a value of [{1}] but actual value is [{2}].", fieldSelector, _value.PrettifyErrorValue(), elementValue.PrettifyErrorValue());
                     }
                 }
             }

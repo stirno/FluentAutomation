@@ -34,5 +34,13 @@ namespace FluentAutomation.Tests
             I.Enter("Test").In("input:eq(0)");
             I.Expect.This("Test").In("input:eq(0)");
         }
+
+        [TestMethod]
+        public void Bug_14_ExpectEmptyString()
+        {
+            I.Open("http://knockoutjs.com/examples/controlTypes.html");
+            I.Enter(string.Empty).In("input:eq(0)");
+            I.Expect.This(null).In("input:eq(0)");
+        }
     }
 }
