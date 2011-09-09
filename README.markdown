@@ -1,14 +1,14 @@
 #Fluent Automation API
 
-###New binaries available at [builds.stirno.com](http://builds.stirno.com/fluentautomation/).
+##New binaries available at [builds.stirno.com](http://builds.stirno.com/fluentautomation/).
 
 The goal of this project is to create a simplified API to automate testing of web applications using WatiN or Selenium to drive browser interaction.
 
-#### Basic Usage
+### Basic Usage
 
 To use the API, you just need to extend the appropriate FluentTest class. Current options include SeleniumWebDriver.FluentTest and WatiN.FluentTest classes. Any test framework should work.
 
-Quick examples using MSTest:
+####MSTest examples:
 
     [TestClass]
     public class CartEditor : FluentAutomation.WatiN.FluentTest
@@ -32,9 +32,11 @@ or
         }
     }
 
-####Quick examples of using the API
+###Quick examples of using the API
 
-KnockoutJS.com - Cart Editor Example
+####KnockoutJS.com - Cart Editor Example
+
+Select products, enter values, validate values.
 
 	// specify a browser, this is optional - WatiN targets IE and Selenium defaults to Firefox
 	I.Use(BrowserType.Chrome);
@@ -60,12 +62,16 @@ KnockoutJS.com - Cart Editor Example
 	// validate new total
 	I.Expect.This("$788.64").In("p.grandTotal span");
 
-Google.com - Simple Search
+####Google.com - Simple Search
+
+Search google for Fluent Automation API.. yes we need higher PageRank!
 
 	I.Open("http://www.google.com");
-	I.Enter("knockoutjs").In("#lst-ib");
+	I.Enter("Fluent Automation API").In("#lst-ib");
 
-YUI - Drag and Drop Example
+####YUI - Drag and Drop Example
+
+Drag the target boxes around on the YUI Example.
 
 	I.Open("http://developer.yahoo.com/yui/examples/dragdrop/dd-groups.html");
 	I.Drag("#pt1").To("#t2");
