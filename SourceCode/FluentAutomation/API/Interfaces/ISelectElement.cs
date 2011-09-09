@@ -1,4 +1,8 @@
-﻿namespace FluentAutomation.API.Interfaces
+﻿// <copyright file="ISelectElement.cs" author="Brandon Stirnaman">
+//     Copyright (c) 2011 Brandon Stirnaman, All rights reserved.
+// </copyright>
+
+namespace FluentAutomation.API.Interfaces
 {
     public interface ISelectElement : IElement
     {

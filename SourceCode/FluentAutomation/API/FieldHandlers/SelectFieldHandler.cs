@@ -1,4 +1,8 @@
-﻿using System.Linq;
+﻿// <copyright file="SelectFieldHandler.cs" author="Brandon Stirnaman">
+//     Copyright (c) 2011 Brandon Stirnaman, All rights reserved.
+// </copyright>
+
+using System.Linq;
 using FluentAutomation.API.Providers;
 
 namespace FluentAutomation.API.FieldHandlers

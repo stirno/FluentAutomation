@@ -1,4 +1,8 @@
-﻿using System.Runtime.InteropServices;
+﻿// <copyright file="MouseControl.cs" author="Brandon Stirnaman">
+//     Copyright (c) 2011 Brandon Stirnaman, All rights reserved.
+// </copyright>
+
+using System.Runtime.InteropServices;
 
 namespace FluentAutomation.API
 {

@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="AutomationProvider.cs" author="Brandon Stirnaman">
+//     Copyright (c) 2011 Brandon Stirnaman, All rights reserved.
+// </copyright>
+
+using System;
 using FluentAutomation.API.Enumerations;
 using FluentAutomation.API.Interfaces;
 

@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="Sizzle.cs" author="Brandon Stirnaman">
+//     Copyright (c) 2011 Brandon Stirnaman, All rights reserved.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;

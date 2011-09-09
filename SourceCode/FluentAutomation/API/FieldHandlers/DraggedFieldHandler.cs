@@ -1,4 +1,8 @@
-﻿using FluentAutomation.API.Providers;
+﻿// <copyright file="DraggedFieldHandler.cs" author="Brandon Stirnaman">
+//     Copyright (c) 2011 Brandon Stirnaman, All rights reserved.
+// </copyright>
+
+using FluentAutomation.API.Providers;
 
 namespace FluentAutomation.API.FieldHandlers
 {

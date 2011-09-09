@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="FluentTest.cs" author="Brandon Stirnaman">
+//     Copyright (c) 2011 Brandon Stirnaman, All rights reserved.
+// </copyright>
+
+using System;
 
 namespace FluentAutomation.API
 {

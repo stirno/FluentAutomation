@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="BugTests.cs" author="Brandon Stirnaman">
+//     Copyright (c) 2011 Brandon Stirnaman, All rights reserved.
+// </copyright>
+
+using System;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="ExpectValueHandler.cs" author="Brandon Stirnaman">
+//     Copyright (c) 2011 Brandon Stirnaman, All rights reserved.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAutomation.API.Providers;

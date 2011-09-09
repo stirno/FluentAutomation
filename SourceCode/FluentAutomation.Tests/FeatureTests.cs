@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="FeatureTests.cs" author="Brandon Stirnaman">
+//     Copyright (c) 2011 Brandon Stirnaman, All rights reserved.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

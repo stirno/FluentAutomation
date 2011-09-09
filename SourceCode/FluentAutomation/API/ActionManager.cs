@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="ActionManager.cs" author="Brandon Stirnaman">
+//     Copyright (c) 2011 Brandon Stirnaman, All rights reserved.
+// </copyright>
+
+using System;
 using FluentAutomation.API.Enumerations;
 using FluentAutomation.API.FieldHandlers;
 using FluentAutomation.API.Providers;

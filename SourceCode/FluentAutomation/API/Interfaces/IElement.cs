@@ -1,4 +1,8 @@
-﻿using System.Drawing;
+﻿// <copyright file="IElement.cs" author="Brandon Stirnaman">
+//     Copyright (c) 2011 Brandon Stirnaman, All rights reserved.
+// </copyright>
+
+using System.Drawing;
 
 namespace FluentAutomation.API.Interfaces
 {
