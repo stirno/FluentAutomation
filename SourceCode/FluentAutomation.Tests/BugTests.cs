@@ -42,5 +42,12 @@ namespace FluentAutomation.Tests
             I.Enter(string.Empty).In("input:eq(0)");
             I.Expect.This(null).In("input:eq(0)");
         }
+
+        [TestMethod]
+        public void Bug_19_URLAssertion()
+        {
+            I.Open("http://knockoutjs.com/examples/controlTypes.html?returnUrl=http%3a%2f%2fknockoutjs.com%3a80");
+            I.Expect.Url("http://knockoutjs.com/examples/controlTypes.html?returnUrl=http://knockoutjs.com:80");
+        }
     }
 }

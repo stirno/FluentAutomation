@@ -53,10 +53,15 @@ namespace FluentAutomation.API
 
         public virtual void Url(string pageUrl)
         {
-            if (!_automation.GetUrl().Equals(pageUrl, StringComparison.InvariantCultureIgnoreCase))
+            if (!pageUrl.Equals(_automation.GetUrl(), StringComparison.InvariantCultureIgnoreCase))
             {
                 throw new AssertException("URL Assertion failed. Expected URL {0} but actual URL is {1}.", pageUrl, _automation.GetUrl());
             }
+        }
+
+        public virtual void Url(Uri pageUri)
+        {
+            Url(pageUri.ToString());
         }
     }
 }
