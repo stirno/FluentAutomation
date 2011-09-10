@@ -37,7 +37,14 @@ namespace FluentAutomation.SeleniumWebDriver
 
         public virtual string GetValue()
         {
-            return _element.Text;
+            if (_element.TagName.Equals("input", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return _element.GetAttribute("value");
+            }
+            else
+            {
+                return _element.Text;
+            }
         }
 
         public System.Drawing.Rectangle GetElementBounds()

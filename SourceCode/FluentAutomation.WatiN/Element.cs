@@ -24,7 +24,14 @@ namespace FluentAutomation.WatiN
 
         public virtual string GetValue()
         {
-            return _element.Text;
+            if (_element.TagName.Equals("input", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return this.GetAttributeValue("value");
+            }
+            else
+            {
+                return _element.Text;
+            }
         }
 
         public virtual void SetValue(string value)

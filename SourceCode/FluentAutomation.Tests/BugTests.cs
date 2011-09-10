@@ -42,5 +42,12 @@ namespace FluentAutomation.Tests
             I.Enter(string.Empty).In("input:eq(0)");
             I.Expect.This(null).In("input:eq(0)");
         }
+
+        [TestMethod]
+        public void Bug_17_ButtonValue()
+        {
+            I.Open(@"C:\Projects\test pages\Issue17.html");
+            I.Expect.This("Login").In("#login-button");
+        }
     }
 }
