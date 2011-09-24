@@ -6,6 +6,7 @@ using System;
 using FluentAutomation.API.Enumerations;
 using FluentAutomation.API.FieldHandlers;
 using FluentAutomation.API.Providers;
+using System.Linq.Expressions;
 
 namespace FluentAutomation.API
 {
@@ -100,12 +101,21 @@ namespace FluentAutomation.API
             Open(new Uri(pageUrl, UriKind.Absolute));
         }
 
-        public SelectFieldHandler Select(Func<string, bool> optionMatchingFunc)
+        /// <summary>
+        /// Uses Windows.Forms.SendKeys to send key events. See http://msdn.microsoft.com/en-us/library/system.windows.forms.sendkeys.aspx for details.
+        /// </summary>
+        /// <param name="keys"></param>
+        public void Press(string keys)
+        {
+            System.Windows.Forms.SendKeys.SendWait(keys);
+        }
+
+        public SelectFieldHandler Select(Expression<Func<string, bool>> optionMatchingFunc)
         {
             return Select(optionMatchingFunc, SelectMode.Text);
         }
 
-        public SelectFieldHandler Select(Func<string, bool> optionMatchingFunc, SelectMode selectMode)
+        public SelectFieldHandler Select(Expression<Func<string, bool>> optionMatchingFunc, SelectMode selectMode)
         {
             return new SelectFieldHandler(_automation, optionMatchingFunc, selectMode);
         }

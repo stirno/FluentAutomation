@@ -10,6 +10,7 @@ using FluentAutomation.API.Interfaces;
 using OpenQA.Selenium;
 using FluentAutomation.API.Enumerations;
 using FluentAutomation.API;
+using System.Linq.Expressions;
 
 namespace FluentAutomation.SeleniumWebDriver
 {
@@ -130,11 +131,12 @@ namespace FluentAutomation.SeleniumWebDriver
             }
         }
 
-        public void SetValues(Func<string, bool> optionMatchingFunc, SelectMode selectMode)
+        public void SetValues(Expression<Func<string, bool>> optionMatchingExpression, SelectMode selectMode)
         {
+            var compiledFunc = optionMatchingExpression.Compile();
             if (selectMode == SelectMode.Value)
             {
-                var options = _element.Options.Where(x => optionMatchingFunc(x.GetAttribute("value")));
+                var options = _element.Options.Where(x => compiledFunc(x.GetAttribute("value")));
                 foreach (var option in options)
                 {
                     _element.SelectByValue(option.GetAttribute("value"));
@@ -142,12 +144,12 @@ namespace FluentAutomation.SeleniumWebDriver
 
                 if (options.Count() == 0)
                 {
-                    throw new SelectException("Selection failed. No option values matched expression [{0}] on element.", optionMatchingFunc);
+                    throw new SelectException("Selection failed. No option values matched expression [{0}] on element.", optionMatchingExpression.ToExpressionString());
                 }
             }
             else if (selectMode == SelectMode.Text)
             {
-                var options = _element.Options.Where(x => optionMatchingFunc(x.Text));
+                var options = _element.Options.Where(x => compiledFunc(x.Text));
                 foreach (var option in options)
                 {
                     _element.SelectByText(option.Text);
@@ -155,7 +157,7 @@ namespace FluentAutomation.SeleniumWebDriver
 
                 if (options.Count() == 0)
                 {
-                    throw new SelectException("Selection failed. No option text matched expression [{0}] on element.", optionMatchingFunc);
+                    throw new SelectException("Selection failed. No option text matched expression [{0}] on element.", optionMatchingExpression.ToExpressionString());
                 }
             }
 

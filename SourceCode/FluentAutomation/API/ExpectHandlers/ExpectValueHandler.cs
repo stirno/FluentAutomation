@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAutomation.API.Providers;
 using FluentAutomation.API.Enumerations;
+using System.Linq.Expressions;
 
 namespace FluentAutomation.API.ExpectHandlers
 {
@@ -19,6 +20,7 @@ namespace FluentAutomation.API.ExpectHandlers
         private string _value = string.Empty;
         private IEnumerable<string> _values = null;
         private Func<string, bool> _valueFunc = null;
+        private Expression<Func<string, bool>> _valueExpression = null;
 
         private ExpectValueHandler(AutomationProvider automation, ExpectType expectType)
         {
@@ -32,10 +34,11 @@ namespace FluentAutomation.API.ExpectHandlers
             _value = value;
         }
 
-        public ExpectValueHandler(AutomationProvider automation, Func<string, bool> value)
+        public ExpectValueHandler(AutomationProvider automation, Expression<Func<string, bool>> value)
             : this(automation, ExpectType.Single)
         {
-            _valueFunc = value;
+            _valueExpression = value;
+            _valueFunc = _valueExpression.Compile();
         }
 
         public ExpectValueHandler(AutomationProvider automation, IEnumerable<string> values)
@@ -82,9 +85,9 @@ namespace FluentAutomation.API.ExpectHandlers
                         }
 
                         if (_valueFunc != null)
-                        {
+                        {   
                             if (!_valueFunc(selectElement.GetValue()))
-                                throw new AssertException("SelectElement value assertion failed. Expected element [{0}] to match expression [{1}]. Actual value is [{2}].", fieldSelector, _valueFunc.ToString().PrettifyErrorValue(), selectElement.GetValue().PrettifyErrorValue());
+                                throw new AssertException("SelectElement value assertion failed. Expected element [{0}] to match expression [{1}]. Actual value is [{2}].", fieldSelector, _valueExpression.ToExpressionString(), selectElement.GetValue().PrettifyErrorValue());
                         }
                         else 
                         {
@@ -135,7 +138,7 @@ namespace FluentAutomation.API.ExpectHandlers
                     if (_valueFunc != null)
                     {
                         if (!_valueFunc(textElementValue))
-                            throw new AssertException("TextElement value assertion failed. Expected element [{0}] to match expression [{1}]. Actual value is [{2}].", fieldSelector, _valueFunc.ToString().PrettifyErrorValue(), textElementValue.PrettifyErrorValue());
+                            throw new AssertException("TextElement value assertion failed. Expected element [{0}] to match expression [{1}]. Actual value is [{2}].", fieldSelector, _valueExpression.ToExpressionString(), textElementValue.PrettifyErrorValue());
                     }
                     else
                     {
@@ -148,7 +151,7 @@ namespace FluentAutomation.API.ExpectHandlers
                     if (_valueFunc != null)
                     {
                         if (!_valueFunc(elementValue))
-                            throw new AssertException("Value assertion failed. Expected element [{0}] to match expression [{1}]. Actual value is [{2}].", fieldSelector, _valueFunc.ToString().PrettifyErrorValue(), elementValue.PrettifyErrorValue());
+                            throw new AssertException("Value assertion failed. Expected element [{0}] to match expression [{1}]. Actual value is [{2}].", fieldSelector, _valueExpression.ToExpressionString(), elementValue.PrettifyErrorValue());
                     }
                     else
                     {

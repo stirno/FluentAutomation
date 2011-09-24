@@ -4,6 +4,7 @@
 
 using System;
 using FluentAutomation.API.Providers;
+using System.Linq.Expressions;
 
 namespace FluentAutomation.API
 {
@@ -36,7 +37,7 @@ namespace FluentAutomation.API
             return new ExpectHandlers.ExpectTextHandler(_automation, value);
         }
         
-        public virtual ExpectHandlers.ExpectTextHandler Text(Func<string, bool> valueExpression)
+        public virtual ExpectHandlers.ExpectTextHandler Text(Expression<Func<string, bool>> valueExpression)
         {
             return new ExpectHandlers.ExpectTextHandler(_automation, valueExpression);
         }
@@ -48,7 +49,7 @@ namespace FluentAutomation.API
         }
 
         [Obsolete("Use Value() instead of This(). Will be removed eventually.")]
-        public virtual ExpectHandlers.ExpectValueHandler This(Func<string, bool> valueExpression)
+        public virtual ExpectHandlers.ExpectValueHandler This(Expression<Func<string, bool>> valueExpression)
         {
             return Value(valueExpression);
         }
@@ -58,7 +59,7 @@ namespace FluentAutomation.API
             return new ExpectHandlers.ExpectValueHandler(_automation, value);
         }
 
-        public virtual ExpectHandlers.ExpectValueHandler Value(Func<string, bool> valueExpression)
+        public virtual ExpectHandlers.ExpectValueHandler Value(Expression<Func<string, bool>> valueExpression)
         {
             return new ExpectHandlers.ExpectValueHandler(_automation, valueExpression);
         }
@@ -110,11 +111,12 @@ namespace FluentAutomation.API
             }
         }
 
-        public virtual void Url(Func<Uri, bool> valueExpression)
+        public virtual void Url(Expression<Func<Uri, bool>> valueExpression)
         {
-            if (!valueExpression(_automation.GetUri()))
+            var _compiledFunc = valueExpression.Compile();
+            if (!_compiledFunc(_automation.GetUri()))
             {
-                throw new AssertException("URL Assertion failed. Expected URL to match expression [{0}]. Actual URL is [{1}].", valueExpression, _automation.GetUri());
+                throw new AssertException("URL Assertion failed. Expected URL to match expression [{0}]. Actual URL is [{1}].", valueExpression.ToExpressionString(), _automation.GetUri());
             }
         }
     }

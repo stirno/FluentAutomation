@@ -18,9 +18,10 @@ namespace FluentAutomation.Tests
         public void Bug_1_CantExpectValueOnSelect()
         {
             I.Open("http://knockoutjs.com/examples/controlTypes.html");
+            I.Press("%{F4}");
             I.Select(x => x.Contains("Be")).From("select:eq(0)");
             //I.Select("Beta", SelectMode.Value).From("select:eq(0)");
-            I.Expect.Text(x => x.Contains("ta")).In("select:eq(0)", MatchConditions.Visible);
+            I.Expect.Text(x => (x.Contains("tta") && x.Contains("Bte")) || x.ToList().Where(s => s.GetType() == typeof(char)).Count() > 0).In("select:eq(0)", MatchConditions.Visible);
             I.Expect.Text("Beta").In("select:eq(0)", MatchConditions.Visible);
             I.Expect.Any("Alpha", "Beta").In("select:eq(0)");
 

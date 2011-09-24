@@ -10,6 +10,7 @@ using FluentAutomation.API.Interfaces;
 using Automation = global::WatiN;
 using FluentAutomation.API.Enumerations;
 using FluentAutomation.API;
+using System.Linq.Expressions;
 
 namespace FluentAutomation.WatiN
 {
@@ -108,17 +109,18 @@ namespace FluentAutomation.WatiN
             this.OnChange();
         }
 
-        public void SetValues(Func<string, bool> optionMatchingFunc, SelectMode selectMode)
+        public void SetValues(Expression<Func<string, bool>> optionMatchingExpression, SelectMode selectMode)
         {
             IEnumerable<Automation.Core.Option> options = null;
+            var compiledFunc = optionMatchingExpression.Compile();
 
             if (selectMode == SelectMode.Text)
             {
-                options = _element.Options.Where(x => optionMatchingFunc(x.Text));
+                options = _element.Options.Where(x => compiledFunc(x.Text));
             }
             else if (selectMode == SelectMode.Value)
             {
-                options = _element.Options.Where(x => optionMatchingFunc(x.Value));
+                options = _element.Options.Where(x => compiledFunc(x.Value));
             }
 
             if (options != null)
@@ -131,9 +133,9 @@ namespace FluentAutomation.WatiN
                 if (options.Count() == 0)
                 {
                     if (selectMode == SelectMode.Value)
-                        throw new SelectException("Selection failed. No option values matched expression [{0}] on element.", optionMatchingFunc);
+                        throw new SelectException("Selection failed. No option values matched expression [{0}] on element.", optionMatchingExpression.ToExpressionString());
                     else if (selectMode == SelectMode.Text)
-                        throw new SelectException("Selection failed. No option text matched expression [{0}] on element.", optionMatchingFunc);
+                        throw new SelectException("Selection failed. No option text matched expression [{0}] on element.", optionMatchingExpression.ToExpressionString());
                     else if (selectMode == SelectMode.Index)
                         throw new SelectException("Selection failed. No options matched collection of indices provided.");
                 }

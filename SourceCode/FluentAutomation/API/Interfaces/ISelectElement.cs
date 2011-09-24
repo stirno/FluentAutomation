@@ -4,6 +4,7 @@
 
 using FluentAutomation.API.Enumerations;
 using System;
+using System.Linq.Expressions;
 
 namespace FluentAutomation.API.Interfaces
 {
@@ -16,7 +17,7 @@ namespace FluentAutomation.API.Interfaces
         string[] GetOptionValues();
         string[] GetOptionsText();
         void SetValues(string[] values, SelectMode selectMode);
-        void SetValues(Func<string, bool> matchingFunc, SelectMode selectMode);
+        void SetValues(Expression<Func<string, bool>> matchingFunc, SelectMode selectMode);
         void SetValue(string value, SelectMode selectMode);
         void SetSelectedIndex(int selectedIndex);
         void SetSelectedIndices(int[] selectedIndices);

@@ -6,6 +6,7 @@ using System.Linq;
 using FluentAutomation.API.Providers;
 using FluentAutomation.API.Enumerations;
 using System;
+using System.Linq.Expressions;
 
 namespace FluentAutomation.API.FieldHandlers
 {
@@ -15,9 +16,9 @@ namespace FluentAutomation.API.FieldHandlers
         private string[] _values = null;
         private int[] _selectedIndices = null;
         private SelectMode _selectMode = SelectMode.Value;
-        private Func<string, bool> _optionMatchingFunc = null;
+        private Expression<Func<string, bool>> _optionMatchingFunc = null;
 
-        public SelectFieldHandler(AutomationProvider automationProvider, Func<string, bool> optionMatchingFunc, SelectMode selectMode)
+        public SelectFieldHandler(AutomationProvider automationProvider, Expression<Func<string, bool>> optionMatchingFunc, SelectMode selectMode)
         {
             _automation = automationProvider;
             _optionMatchingFunc = optionMatchingFunc;
