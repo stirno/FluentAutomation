@@ -52,7 +52,6 @@
     <Compile Include="API\ActionManager.cs" />
     <Compile Include="API\AssertException.cs" />
     <Compile Include="API\Enumerations\ExpectType.cs" />
-    <Compile Include="API\Enumerations\Keys.cs" />
     <Compile Include="API\Enumerations\MatchConditions.cs" />
     <Compile Include="API\Enumerations\SelectMode.cs" />
     <Compile Include="API\ExpectHandlers\ExpectCountHandler.cs" />

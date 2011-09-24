@@ -18,6 +18,7 @@ namespace FluentAutomation.WatiN
     {
         private Automation.Core.Browser _browser = null;
         private API.Enumerations.BrowserType _browserType = API.Enumerations.BrowserType.InternetExplorer;
+        private Automation.Core.DialogHandlers.AlertDialogHandler _alertDialogHandler = null;
         private List<string> _alertDialogMessages = new List<string>();
 
         public override void Cleanup()
@@ -71,12 +72,18 @@ namespace FluentAutomation.WatiN
             return _browser.Uri;
         }
 
-        public override string HandleAlertDialog()
+        public override void HandleAlertDialog(string expectedMessage)
         {
-            //var alertHandler = new Automation.Core.DialogHandlers.AlertDialogHandler();
-            //alertHandler.HandleDialog(_browser);
-            //alertHandler.OKButton.Click();
-            return "";// alertHandler.Message;
+            using (new Automation.Core.DialogHandlers.UseDialogOnce(_browser.DialogWatcher, _alertDialogHandler))
+            {
+                _alertDialogHandler.WaitUntilExists();
+                _alertDialogHandler.OKButton.Click();
+
+                if (expectedMessage != string.Empty && !_alertDialogHandler.Message.Equals(expectedMessage, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    throw new AssertException("Alert assertion failed. Expected message of [{0}] but actual message was [{1}].", expectedMessage, _alertDialogHandler.Message);
+                }
+            }
         }
 
         public override void HoverPoint(Point point)
@@ -152,16 +159,17 @@ namespace FluentAutomation.WatiN
                 case API.Enumerations.BrowserType.InternetExplorer:
                     // TODO: Calculate browser chrome height/width so we don't need fullscreen mode
                     Automation.Core.IE browser = new Automation.Core.IE(true);
-                    //browser.AddDialogHandler(new AlertDialogHandler());
                     ((SHDocVw.WebBrowser)browser.InternetExplorer).FullScreen = true;
+
+                    // setup handler
+                    _alertDialogHandler = new Automation.Core.DialogHandlers.AlertDialogHandler();
+                    browser.AutoClose = true;
                     return browser;
                 case API.Enumerations.BrowserType.Firefox:
                     throw new NotImplementedException("WatiN only supports Firefox with JSSH enabled. JSSH is not supported on versions newer than 4.0 so it has been disabled via this API.");
                 default:
                     throw new NotImplementedException("WatiN only supports Internet Explorer. Switch to Selenium if you want to target other browsers.");
             }
-
-            return null;
         }
     }
 }

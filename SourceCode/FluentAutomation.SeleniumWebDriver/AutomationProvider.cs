@@ -71,11 +71,16 @@ namespace FluentAutomation.SeleniumWebDriver
             return new Uri(_driver.Url, UriKind.Absolute);
         }
 
-        public override string HandleAlertDialog()
+        public override void HandleAlertDialog(string expectedMessage)
         {
             var alert = _driver.SwitchTo().Alert();
+            var message = alert.Text;
             alert.Accept();
-            return alert.Text;
+
+            if (expectedMessage != string.Empty && !message.Equals(expectedMessage, StringComparison.InvariantCultureIgnoreCase))
+            {
+                throw new AssertException("Alert assertion failed. Expected message of [{0}] but actual message was [{1}].", expectedMessage, message);
+            }
         }
 
         public override void HoverPoint(API.Point point)

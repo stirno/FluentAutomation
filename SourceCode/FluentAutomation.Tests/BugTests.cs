@@ -12,7 +12,7 @@ using FluentAutomation.API.Enumerations;
 namespace FluentAutomation.Tests
 {
     [TestClass]
-    public class BugTests : FluentAutomation.WatiN.FluentTest
+    public class BugTests : FluentAutomation.SeleniumWebDriver.FluentTest
     {
         [TestMethod]
         public void Bug_1_CantExpectValueOnSelect()
@@ -59,9 +59,10 @@ namespace FluentAutomation.Tests
         [TestMethod]
         public void Bug_AlertDialog()
         {
+            I.Use(BrowserType.Chrome);
             I.Open("http://www.quackit.com/javascript/javascript_alert_box.cfm");
             I.Click("input[type='button']:eq(0)");
-            //I.Expect.Alert("Thanks... I feel much better now!");
+            I.Expect.Alert("Thanks... I feel much better now!");
         }
     }
 }

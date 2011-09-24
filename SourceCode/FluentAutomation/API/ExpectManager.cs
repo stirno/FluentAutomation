@@ -91,11 +91,7 @@ namespace FluentAutomation.API
 
         public virtual void Alert(string alertMessage)
         {
-            var message = _automation.HandleAlertDialog();
-            if (!alertMessage.Equals(message, StringComparison.InvariantCultureIgnoreCase))
-            {
-                throw new AssertException("Alert assertion failed. Expected message of [{0}] but actual message was [{1}].", alertMessage, message);
-            }
+            _automation.HandleAlertDialog(alertMessage);
         }
 
         public virtual void Url(string pageUrl)

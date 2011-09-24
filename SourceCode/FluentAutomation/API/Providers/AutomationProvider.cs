@@ -29,7 +29,12 @@ namespace FluentAutomation.API.Providers
             return GetUri().ToString();
         }
 
-        public abstract string HandleAlertDialog();
+        public void HandleAlertDialog()
+        {
+            HandleAlertDialog(string.Empty);
+        }
+
+        public abstract void HandleAlertDialog(string expectedMessage);
 
         public abstract void HoverPoint(API.Point point);
 
