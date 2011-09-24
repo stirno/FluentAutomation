@@ -107,7 +107,25 @@ namespace FluentAutomation.API
         /// <param name="keys"></param>
         public void Press(string keys)
         {
+            ActionManager.SendKeys(keys);
+        }
+
+        public void Type(string value)
+        {
+            ActionManager.SendString(value);
+        }
+
+        public static void SendKeys(string keys)
+        {
             System.Windows.Forms.SendKeys.SendWait(keys);
+        }
+
+        public static void SendString(string keys)
+        {
+            foreach (var chr in keys)
+            {
+                System.Windows.Forms.SendKeys.SendWait(chr.ToString());
+            }
         }
 
         public SelectFieldHandler Select(Expression<Func<string, bool>> optionMatchingFunc)
@@ -148,6 +166,16 @@ namespace FluentAutomation.API
         public SelectFieldHandler Select(params int[] indices)
         {
             return new SelectFieldHandler(_automation, indices, SelectMode.Index);
+        }
+
+        public void Upload(string fileName, string fieldSelector)
+        {
+            Upload(fileName, fieldSelector, MatchConditions.Visible);
+        }
+
+        public void Upload(string fileName, string fieldSelector, MatchConditions conditions)
+        {
+            _automation.Upload(fileName, fieldSelector, conditions);
         }
 
         public void Use(BrowserType browserType)

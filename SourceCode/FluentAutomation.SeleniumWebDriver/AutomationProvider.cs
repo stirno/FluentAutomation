@@ -121,6 +121,18 @@ namespace FluentAutomation.SeleniumWebDriver
             _browserType = browserType;
         }
 
+        public override void Upload(string fileName, string fieldSelector, MatchConditions conditions)
+        {
+            var element = _driver.FindElement(BySizzle.CssSelector(fieldSelector));
+            System.Threading.Tasks.Task.Factory.StartNew(() =>
+            {
+                // Dirty I know.. Need to guarantee the dialog opens before we start sending key events.
+                Thread.Sleep(500);
+                ActionManager.SendString(fileName + "~");
+            });
+            element.Click();
+        }
+
         public override void Wait(TimeSpan waitTime)
         {
             Thread.Sleep(waitTime);

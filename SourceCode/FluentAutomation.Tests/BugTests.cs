@@ -63,5 +63,12 @@ namespace FluentAutomation.Tests
             I.Click("input[type='button']:eq(0)");
             I.Expect.Alert();
         }
+
+        [TestMethod]
+        public void Bug_FileUpload()
+        {
+            I.Open("http://encodable.com/uploaddemo/");
+            I.Upload(@"C:\Users\Public\Pictures\Sample Pictures\Chrysanthemum.jpg", "input[type='file']");
+        }
     }
 }

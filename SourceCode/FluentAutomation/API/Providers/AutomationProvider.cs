@@ -49,6 +49,8 @@ namespace FluentAutomation.API.Providers
 
         public abstract void SetBrowser(BrowserType browserType);
 
+        public abstract void Upload(string fileName, string fieldSelector, MatchConditions conditions);
+
         public abstract void Wait(TimeSpan waitTime);
 
         public abstract void Wait(int seconds);

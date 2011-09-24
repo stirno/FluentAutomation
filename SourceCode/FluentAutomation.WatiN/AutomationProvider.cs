@@ -124,6 +124,16 @@ namespace FluentAutomation.WatiN
             _browserType = browserType;
         }
 
+        public override void Upload(string fileName, string fieldSelector, MatchConditions conditions)
+        {
+            var handler = new Automation.Core.DialogHandlers.FileUploadDialogHandler(fileName);
+            using (new Automation.Core.DialogHandlers.UseDialogOnce(_browser.DialogWatcher, handler))
+            {
+                IElement element = GetElement(fieldSelector, conditions);
+                element.Click();
+            }
+        }
+        
         public override void Wait(TimeSpan waitTime)
         {
             Thread.Sleep(waitTime);
