@@ -193,6 +193,8 @@ namespace FluentAutomation.SeleniumWebDriver
                     break;
             }
 
+            driver.Manage().Cookies.DeleteAllCookies();
+
             return driver;
         }
     }
