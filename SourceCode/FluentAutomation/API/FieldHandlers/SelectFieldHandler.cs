@@ -4,6 +4,8 @@
 
 using System.Linq;
 using FluentAutomation.API.Providers;
+using FluentAutomation.API.Enumerations;
+using System;
 
 namespace FluentAutomation.API.FieldHandlers
 {
@@ -12,36 +14,59 @@ namespace FluentAutomation.API.FieldHandlers
         private AutomationProvider _automation = null;
         private string[] _values = null;
         private int[] _selectedIndices = null;
+        private SelectMode _selectMode = SelectMode.Value;
+        private Func<string, bool> _optionMatchingFunc = null;
 
-        public SelectFieldHandler(AutomationProvider automationProvider, string[] values)
+        public SelectFieldHandler(AutomationProvider automationProvider, Func<string, bool> optionMatchingFunc, SelectMode selectMode)
+        {
+            _automation = automationProvider;
+            _optionMatchingFunc = optionMatchingFunc;
+            _selectMode = selectMode;
+        }
+
+        public SelectFieldHandler(AutomationProvider automationProvider, string[] values, SelectMode selectMode)
         {
             _automation = automationProvider;
             _values = values;
+            _selectMode = selectMode;
         }
 
-        public SelectFieldHandler(AutomationProvider automationProvider, int[] selectedIndices)
+        public SelectFieldHandler(AutomationProvider automationProvider, int[] selectedIndices, SelectMode selectMode)
         {
             _automation = automationProvider;
             _selectedIndices = selectedIndices;
+            _selectMode = selectMode;
         }
 
         public void From(string fieldSelector)
         {
-            var field = _automation.GetSelectElement(fieldSelector);
+            From(fieldSelector, MatchConditions.None);
+        }
+
+        public void From(string fieldSelector, MatchConditions conditions)
+        {
+            var field = _automation.GetSelectElement(fieldSelector, conditions);
             field.ClearSelectedItems();
 
-            if (_selectedIndices == null)
+            if (_selectMode == SelectMode.Value || _selectMode == SelectMode.Text)
             {
-                if (_values.Length == 1)
+                if (_optionMatchingFunc == null)
                 {
-                    field.SetValue(_values.First());
+                    if (_values.Length == 1)
+                    {
+                        field.SetValue(_values.First(), _selectMode);
+                    }
+                    else if (_values.Length > 1)
+                    {
+                        field.SetValues(_values, _selectMode);
+                    }
                 }
-                else if (_values.Length > 1)
+                else
                 {
-                    field.SetValues(_values);
+                    field.SetValues(_optionMatchingFunc, _selectMode);
                 }
             }
-            else
+            else if (_selectMode == SelectMode.Index)
             {
                 if (_selectedIndices.Length == 1)
                 {

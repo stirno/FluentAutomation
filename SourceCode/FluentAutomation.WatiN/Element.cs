@@ -87,7 +87,7 @@ namespace FluentAutomation.WatiN
 
         public virtual void Click()
         {
-            _element.Click();
+            _element.ClickNoWait();
         }
 
         public virtual void Focus()

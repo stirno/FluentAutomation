@@ -3,6 +3,7 @@
 // </copyright>
 
 using FluentAutomation.API.Providers;
+using FluentAutomation.API.Enumerations;
 
 namespace FluentAutomation.API.FieldHandlers
 {
@@ -19,8 +20,8 @@ namespace FluentAutomation.API.FieldHandlers
 
         public void To(string fieldSelector)
         {
-            var element = _automation.GetElement(_dragFieldSelector);
-            element.DragTo(_automation.GetElement(fieldSelector));
+            var element = _automation.GetElement(_dragFieldSelector, MatchConditions.None);
+            element.DragTo(_automation.GetElement(fieldSelector, MatchConditions.None));
         }
     }
 }

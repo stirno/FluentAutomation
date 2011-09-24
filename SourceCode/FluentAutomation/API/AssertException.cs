@@ -10,7 +10,7 @@ namespace FluentAutomation.API
     // Credit to MvcContrib.TestHelper.AssertionException
     public class AssertException : System.Exception
     {
-        public AssertException(string message, params string[] formatParams) : base(string.Format(message, formatParams)) { }
+        public AssertException(string message, params object[] formatParams) : base(string.Format(message, formatParams)) { }
 
         public override string StackTrace
         {

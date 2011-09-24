@@ -12,7 +12,7 @@ using FluentAutomation.API.Enumerations;
 namespace FluentAutomation.Tests
 {
     [TestClass]
-    public class FeatureTests : FluentAutomation.WatiN.FluentTest
+    public class FeatureTests : FluentAutomation.SeleniumWebDriver.FluentTest
     {
         [TestMethod]
         public void CssClassExpect()
@@ -43,6 +43,27 @@ namespace FluentAutomation.Tests
             I.Drag("#pboth2").To("#b4");
             I.Drag("#pt1").To("#pt2");
             I.Drag("#pboth1").To("#pb2");
+        }
+
+        [TestMethod]
+        public void Test_FuncExpects()
+        {
+            I.Open("http://knockoutjs.com/examples/controlTypes.html");
+            I.Expect.Url(x => x.AbsoluteUri.Contains("controlTypes3.html"));
+        }
+
+        [TestMethod]
+        public void Test_CountExpect()
+        {
+            I.Open("http://knockoutjs.com/examples/controlTypes.html");
+            I.Expect.Count(2).Of(".syntaxhighlighter");
+        }
+
+        [TestMethod]
+        public void Test_SelectFuncWithMode()
+        {
+            I.Open("http://www.htmlcodetutorial.com/linking/linking_famsupp_114.html");
+            I.Select(x => x.Contains("Guide"), SelectMode.Value).From("select:eq(0)");
         }
     }
 }

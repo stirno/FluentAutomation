@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using FluentAutomation.API.Interfaces;
 using OpenQA.Selenium;
+using FluentAutomation.API.Enumerations;
+using FluentAutomation.API;
 
 namespace FluentAutomation.SeleniumWebDriver
 {
@@ -34,6 +36,16 @@ namespace FluentAutomation.SeleniumWebDriver
             return _element.SelectedOption.GetAttribute("value") ?? _element.SelectedOption.Text;
         }
 
+        public override string GetText()
+        {
+            return _element.SelectedOption.Text;
+        }
+
+        public string GetOptionText()
+        {
+            return _element.SelectedOption.Text;
+        }
+
         public string[] GetValues()
         {
             return _element.AllSelectedOptions.Select(o => o.GetAttribute("value") ?? o.Text).ToArray();
@@ -42,6 +54,11 @@ namespace FluentAutomation.SeleniumWebDriver
         public string[] GetOptionValues()
         {
             return _element.Options.Select(o => o.GetAttribute("value") ?? o.Text).ToArray();
+        }
+
+        public string[] GetOptionsText()
+        {
+            return _element.Options.Select(o => o.Text).ToArray();
         }
 
         public int GetSelectedIndex()
@@ -54,30 +71,9 @@ namespace FluentAutomation.SeleniumWebDriver
             return _element.AllSelectedOptions.Select(o => _element.Options.IndexOf(o)).ToArray();
         }
 
-        public override void SetValue(string value)
+        public void SetValue(string value, SelectMode selectMode)
         {
-            try
-            {
-                _element.SelectByValue(value);
-            }
-            catch (NoSuchElementException)
-            {
-                try
-                {
-                    _element.SelectByText(value);
-                }
-                catch (NoSuchElementException)
-                {
-                    throw new NoSuchElementException("Cannot locate option with value or text: " + value);
-                }
-            }
-
-            this.OnChange();
-        }
-
-        public void SetValues(string[] values)
-        {
-            foreach (var value in values)
+            if (selectMode == SelectMode.Value)
             {
                 try
                 {
@@ -85,14 +81,81 @@ namespace FluentAutomation.SeleniumWebDriver
                 }
                 catch (NoSuchElementException)
                 {
-                    try
-                    {
-                        _element.SelectByText(value);
-                    }
-                    catch (NoSuchElementException)
-                    {
-                        throw new NoSuchElementException("Cannot locate option with value or text: " + value);
-                    }
+                }
+            }
+            else if (selectMode == SelectMode.Text)
+            {
+                try
+                {
+                    _element.SelectByText(value);
+                }
+                catch (NoSuchElementException)
+                {
+                    throw new NoSuchElementException("Cannot locate option with text: " + value);
+                }
+            }
+            else if (selectMode == SelectMode.Index)
+            {
+                try
+                {
+                    _element.SelectByIndex(Int32.Parse(value));
+                }
+                catch (NoSuchElementException)
+                {
+                    throw new NoSuchElementException("Cannot location option at index: " + value);
+                }
+            }
+
+            this.OnChange();
+        }
+
+        public override void SetValue(string value)
+        {
+            SetValue(value, SelectMode.Value);
+        }
+
+        public void SetValues(string[] values, SelectMode selectMode)
+        {
+            foreach (var value in values)
+            {
+                SetValue(value, selectMode);
+            }
+
+            if (_element.AllSelectedOptions.Count == 0)
+            {
+                if (selectMode == SelectMode.Value)
+                    throw new SelectException("Selection failed. No option values matched collection provided.");
+                else if (selectMode == SelectMode.Text)
+                    throw new SelectException("Selection failed. No options text matched collection provided.");
+            }
+        }
+
+        public void SetValues(Func<string, bool> optionMatchingFunc, SelectMode selectMode)
+        {
+            if (selectMode == SelectMode.Value)
+            {
+                var options = _element.Options.Where(x => optionMatchingFunc(x.GetAttribute("value")));
+                foreach (var option in options)
+                {
+                    _element.SelectByValue(option.GetAttribute("value"));
+                }
+
+                if (options.Count() == 0)
+                {
+                    throw new SelectException("Selection failed. No option values matched expression [{0}] on element.", optionMatchingFunc);
+                }
+            }
+            else if (selectMode == SelectMode.Text)
+            {
+                var options = _element.Options.Where(x => optionMatchingFunc(x.Text));
+                foreach (var option in options)
+                {
+                    _element.SelectByText(option.Text);
+                }
+
+                if (options.Count() == 0)
+                {
+                    throw new SelectException("Selection failed. No option text matched expression [{0}] on element.", optionMatchingFunc);
                 }
             }
 
@@ -101,18 +164,20 @@ namespace FluentAutomation.SeleniumWebDriver
 
         public void SetSelectedIndex(int selectedIndex)
         {
-            _element.SelectByIndex(selectedIndex);
-            this.OnChange();
+            SetValue(selectedIndex.ToString(), SelectMode.Index);
         }
 
         public void SetSelectedIndices(int[] selectedIndices)
         {
             foreach (var selectedIndex in selectedIndices)
             {
-                _element.SelectByIndex(selectedIndex);
+                SetValue(selectedIndex.ToString(), SelectMode.Index);
             }
 
-            this.OnChange();
+            if (_element.AllSelectedOptions.Count == 0)
+            {
+                throw new SelectException("Selection failed. No options matched collection of indices provided.");
+            }
         }
 
         public void ClearSelectedItems()

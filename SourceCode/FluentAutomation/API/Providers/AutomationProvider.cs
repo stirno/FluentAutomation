@@ -14,11 +14,13 @@ namespace FluentAutomation.API.Providers
 
         public abstract void ClickPoint(API.Point point);
 
-        public abstract ITextElement GetTextElement(string fieldSelector);
+        public abstract ITextElement GetTextElement(string fieldSelector, MatchConditions conditions);
 
-        public abstract ISelectElement GetSelectElement(string fieldSelector);
+        public abstract ISelectElement GetSelectElement(string fieldSelector, MatchConditions conditions);
 
-        public abstract IElement GetElement(string fieldSelector);
+        public abstract IElement GetElement(string fieldSelector, MatchConditions conditions);
+
+        public abstract IElement[] GetElements(string fieldSelector, MatchConditions conditions);
 
         public abstract Uri GetUri();
 
@@ -26,6 +28,8 @@ namespace FluentAutomation.API.Providers
         {
             return GetUri().ToString();
         }
+
+        public abstract string HandleAlertDialog();
 
         public abstract void HoverPoint(API.Point point);
 

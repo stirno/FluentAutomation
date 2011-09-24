@@ -31,9 +31,36 @@ namespace FluentAutomation.API
             }
         }
 
+        public virtual ExpectHandlers.ExpectTextHandler Text(string value)
+        {
+            return new ExpectHandlers.ExpectTextHandler(_automation, value);
+        }
+        
+        public virtual ExpectHandlers.ExpectTextHandler Text(Func<string, bool> valueExpression)
+        {
+            return new ExpectHandlers.ExpectTextHandler(_automation, valueExpression);
+        }
+
+        [Obsolete("Use Value() instead of This(). Will be removed eventually.")]
         public virtual ExpectHandlers.ExpectValueHandler This(string value)
         {
+            return Value(value);
+        }
+
+        [Obsolete("Use Value() instead of This(). Will be removed eventually.")]
+        public virtual ExpectHandlers.ExpectValueHandler This(Func<string, bool> valueExpression)
+        {
+            return Value(valueExpression);
+        }
+
+        public virtual ExpectHandlers.ExpectValueHandler Value(string value)
+        {
             return new ExpectHandlers.ExpectValueHandler(_automation, value);
+        }
+
+        public virtual ExpectHandlers.ExpectValueHandler Value(Func<string, bool> valueExpression)
+        {
+            return new ExpectHandlers.ExpectValueHandler(_automation, valueExpression);
         }
 
         public virtual ExpectHandlers.ExpectValueHandler All(params string[] values)
@@ -51,17 +78,44 @@ namespace FluentAutomation.API
             return new ExpectHandlers.ExpectCssClassHandler(_automation, value);
         }
 
+        public virtual ExpectHandlers.ExpectCountHandler Count(int value)
+        {
+            return new ExpectHandlers.ExpectCountHandler(_automation, value);
+        }
+        
+        public virtual void Alert()
+        {
+            _automation.HandleAlertDialog();
+        }
+
+        public virtual void Alert(string alertMessage)
+        {
+            var message = _automation.HandleAlertDialog();
+            if (!alertMessage.Equals(message, StringComparison.InvariantCultureIgnoreCase))
+            {
+                throw new AssertException("Alert assertion failed. Expected message of [{0}] but actual message was [{1}].", alertMessage, message);
+            }
+        }
+
         public virtual void Url(string pageUrl)
         {
-            if (!pageUrl.Equals(_automation.GetUrl(), StringComparison.InvariantCultureIgnoreCase))
-            {
-                throw new AssertException("URL Assertion failed. Expected URL {0} but actual URL is {1}.", pageUrl, _automation.GetUrl());
-            }
+            Url(new Uri(pageUrl, UriKind.Absolute));
         }
 
         public virtual void Url(Uri pageUri)
         {
-            Url(pageUri.ToString());
+            if (!pageUri.ToString().Equals(_automation.GetUri().ToString(), StringComparison.InvariantCultureIgnoreCase))
+            {
+                throw new AssertException("URL Assertion failed. Expected URL [{0}] but actual URL is [{1}].", pageUri, _automation.GetUri());
+            }
+        }
+
+        public virtual void Url(Func<Uri, bool> valueExpression)
+        {
+            if (!valueExpression(_automation.GetUri()))
+            {
+                throw new AssertException("URL Assertion failed. Expected URL to match expression [{0}]. Actual URL is [{1}].", valueExpression, _automation.GetUri());
+            }
         }
     }
 }

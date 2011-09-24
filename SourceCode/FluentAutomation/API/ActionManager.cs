@@ -21,7 +21,12 @@ namespace FluentAutomation.API
 
         public void Click(string elementSelector)
         {
-            var field = _automation.GetElement(elementSelector);
+            Click(elementSelector, MatchConditions.None);
+        }
+
+        public void Click(string elementSelector, MatchConditions conditions)
+        {
+            var field = _automation.GetElement(elementSelector, conditions);
             field.Focus();
             field.Click();
         }
@@ -66,7 +71,12 @@ namespace FluentAutomation.API
 
         public void Hover(string elementSelector)
         {
-            var field = _automation.GetElement(elementSelector);
+            Hover(elementSelector, MatchConditions.None);
+        }
+
+        public void Hover(string elementSelector, MatchConditions conditions)
+        {
+            var field = _automation.GetElement(elementSelector, conditions);
             field.Hover();
         }
 
@@ -90,24 +100,44 @@ namespace FluentAutomation.API
             Open(new Uri(pageUrl, UriKind.Absolute));
         }
 
-        public SelectFieldHandler Select(string value)
+        public SelectFieldHandler Select(Func<string, bool> optionMatchingFunc)
         {
-            return new SelectFieldHandler(_automation, new string[] { value });
+            return Select(optionMatchingFunc, SelectMode.Text);
         }
 
-        public SelectFieldHandler Select(int index)
+        public SelectFieldHandler Select(Func<string, bool> optionMatchingFunc, SelectMode selectMode)
         {
-            return new SelectFieldHandler(_automation, new int[] { index });
+            return new SelectFieldHandler(_automation, optionMatchingFunc, selectMode);
+        }
+
+        public SelectFieldHandler Select(string value)
+        {
+            return Select(value, SelectMode.Value);
+        }
+
+        public SelectFieldHandler Select(string value, SelectMode selectMode)
+        {
+            return new SelectFieldHandler(_automation, new string[] { value }, selectMode);
         }
 
         public SelectFieldHandler Select(params string[] values)
         {
-            return new SelectFieldHandler(_automation, values);
+            return Select(SelectMode.Value, values);
+        }
+
+        public SelectFieldHandler Select(SelectMode selectMode, params string[] values)
+        {
+            return new SelectFieldHandler(_automation, values, selectMode);
+        }
+
+        public SelectFieldHandler Select(int index)
+        {
+            return new SelectFieldHandler(_automation, new int[] { index }, SelectMode.Index);
         }
 
         public SelectFieldHandler Select(params int[] indices)
         {
-            return new SelectFieldHandler(_automation, indices);
+            return new SelectFieldHandler(_automation, indices, SelectMode.Index);
         }
 
         public void Use(BrowserType browserType)

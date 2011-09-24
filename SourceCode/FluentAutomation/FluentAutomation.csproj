@@ -50,6 +50,11 @@
   <ItemGroup>
     <Compile Include="API\ActionManager.cs" />
     <Compile Include="API\AssertException.cs" />
+    <Compile Include="API\Enumerations\ExpectType.cs" />
+    <Compile Include="API\Enumerations\MatchConditions.cs" />
+    <Compile Include="API\Enumerations\SelectMode.cs" />
+    <Compile Include="API\ExpectHandlers\ExpectCountHandler.cs" />
+    <Compile Include="API\ExpectHandlers\ExpectTextHandler.cs" />
     <Compile Include="API\FieldHandlers\DraggedFieldHandler.cs" />
     <Compile Include="API\Enumerations\BrowserType.cs" />
     <Compile Include="API\Enumerations\NavigateDirection.cs" />
@@ -59,11 +64,13 @@
     <Compile Include="API\Interfaces\IElement.cs" />
     <Compile Include="API\Interfaces\ISelectElement.cs" />
     <Compile Include="API\Interfaces\ITextElement.cs" />
+    <Compile Include="API\MatchConditionException.cs" />
     <Compile Include="API\MouseControl.cs" />
     <Compile Include="API\Point.cs" />
     <Compile Include="API\Providers\AutomationProvider.cs" />
     <Compile Include="API\FieldHandlers\SelectFieldHandler.cs" />
     <Compile Include="API\FieldHandlers\TextFieldHandler.cs" />
+    <Compile Include="API\SelectException.cs" />
     <Compile Include="API\StringExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="API\FluentTest.cs" />

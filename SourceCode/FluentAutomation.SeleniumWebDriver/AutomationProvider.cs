@@ -10,6 +10,8 @@ using FluentAutomation.API.Interfaces;
 using System.Threading;
 using OpenQA.Selenium;
 using System.Drawing;
+using FluentAutomation.API.Enumerations;
+using FluentAutomation.API;
 
 namespace FluentAutomation.SeleniumWebDriver
 {
@@ -29,24 +31,51 @@ namespace FluentAutomation.SeleniumWebDriver
             (new OpenQA.Selenium.Interactions.Actions(_driver)).MoveToElement(_driver.FindElement(By.TagName("body"))).MoveByOffset(point.X, point.Y).Click().Perform();
         }
 
-        public override ITextElement GetTextElement(string fieldSelector)
+        public override ITextElement GetTextElement(string fieldSelector, MatchConditions conditions)
         {
-            return new TextElement(_driver, _driver.FindElement(BySizzle.CssSelector(fieldSelector)), fieldSelector);
+            var element = _driver.FindElement(BySizzle.CssSelector(fieldSelector));
+            ValidateElement(element, fieldSelector, conditions);
+
+            return new TextElement(_driver, element, fieldSelector);
         }
 
-        public override ISelectElement GetSelectElement(string fieldSelector)
+        public override ISelectElement GetSelectElement(string fieldSelector, MatchConditions conditions)
         {
-            return new SelectElement(_driver, _driver.FindElement(BySizzle.CssSelector(fieldSelector)), fieldSelector);
+            var element = _driver.FindElement(BySizzle.CssSelector(fieldSelector));
+            ValidateElement(element, fieldSelector, conditions);
+
+            return new SelectElement(_driver, element, fieldSelector);
         }
 
-        public override IElement GetElement(string fieldSelector)
+        public override IElement GetElement(string fieldSelector, MatchConditions conditions)
         {
-            return new Element(_driver, _driver.FindElement(BySizzle.CssSelector(fieldSelector)), fieldSelector);
+            var element = _driver.FindElement(BySizzle.CssSelector(fieldSelector));
+            ValidateElement(element, fieldSelector, conditions);
+
+            return new Element(_driver, element, fieldSelector);
+        }
+
+        public override IElement[] GetElements(string fieldSelector, MatchConditions conditions)
+        {
+            var elements = _driver.FindElements(BySizzle.CssSelector(fieldSelector));
+            foreach (var element in elements)
+            {
+                ValidateElement(element, fieldSelector, conditions);
+            }
+
+            return elements.Select(e => new Element(_driver, e, fieldSelector)).ToArray();
         }
 
         public override Uri GetUri()
         {
             return new Uri(_driver.Url, UriKind.Absolute);
+        }
+
+        public override string HandleAlertDialog()
+        {
+            var alert = _driver.SwitchTo().Alert();
+            alert.Accept();
+            return alert.Text;
         }
 
         public override void HoverPoint(API.Point point)
@@ -95,6 +124,24 @@ namespace FluentAutomation.SeleniumWebDriver
         public override void Wait(int seconds)
         {
             Thread.Sleep(TimeSpan.FromSeconds(seconds));
+        }
+
+        private void ValidateElement(IWebElement element, string fieldSelector, MatchConditions conditions)
+        {
+            if (conditions.HasFlag(MatchConditions.Visible))
+            {
+                if (!element.Displayed)
+                {
+                    throw new MatchConditionException(fieldSelector, MatchConditions.Visible);
+                }
+            }
+            else if (conditions.HasFlag(MatchConditions.Hidden))
+            {
+                if (element.Displayed)
+                {
+                    throw new MatchConditionException(fieldSelector, MatchConditions.Hidden);
+                }
+            }
         }
 
         private IWebDriver getCurrentDriver()

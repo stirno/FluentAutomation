@@ -4,6 +4,7 @@
 
 using System.Linq;
 using FluentAutomation.API.Providers;
+using FluentAutomation.API.Enumerations;
 
 namespace FluentAutomation.API.ExpectHandlers
 {
@@ -20,7 +21,12 @@ namespace FluentAutomation.API.ExpectHandlers
 
         public void On(string fieldSelector)
         {
-            var element = _automation.GetElement(fieldSelector);
+            On(fieldSelector, MatchConditions.None);
+        }
+
+        public void On(string fieldSelector, MatchConditions conditions)
+        {
+            var element = _automation.GetElement(fieldSelector, conditions);
             string className = _value.Replace(".", "").Trim();
             string elementClassName = element.GetAttributeValue("class").Trim();
 

@@ -4,6 +4,7 @@
 
 using System;
 using FluentAutomation.API.Providers;
+using FluentAutomation.API.Enumerations;
 
 namespace FluentAutomation.API.FieldHandlers
 {
@@ -30,7 +31,12 @@ namespace FluentAutomation.API.FieldHandlers
 
         public void In(string fieldSelector)
         {
-            var field = _automation.GetTextElement(fieldSelector);
+            In(fieldSelector, MatchConditions.None);
+        }
+
+        public void In(string fieldSelector, MatchConditions conditions)
+        {
+            var field = _automation.GetTextElement(fieldSelector, conditions);
 
             if (_quickEntry)
             {
@@ -44,7 +50,12 @@ namespace FluentAutomation.API.FieldHandlers
 
         public void In(Func<string, string> fieldSelectorFunc)
         {
-            In(fieldSelectorFunc(_value));
+            In(fieldSelectorFunc, MatchConditions.None);
+        }
+
+        public void In(Func<string, string> fieldSelectorFunc, MatchConditions conditions)
+        {
+            In(fieldSelectorFunc(_value), conditions);
         }
     }
 }
