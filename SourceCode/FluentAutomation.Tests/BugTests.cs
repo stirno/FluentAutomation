@@ -12,7 +12,7 @@ using FluentAutomation.API.Enumerations;
 namespace FluentAutomation.Tests
 {
     [TestClass]
-    public class BugTests : FluentAutomation.WatiN.FluentTest
+    public class BugTests : FluentAutomation.SeleniumWebDriver.FluentTest
     {
         [TestMethod]
         public void Bug_1_CantExpectValueOnSelect()
@@ -67,8 +67,10 @@ namespace FluentAutomation.Tests
         [TestMethod]
         public void Bug_FileUpload()
         {
+            I.Use(BrowserType.InternetExplorer);
             I.Open("http://encodable.com/uploaddemo/");
             I.Upload(@"C:\Users\Public\Pictures\Sample Pictures\Chrysanthemum.jpg", "input[type='file']");
+            I.Wait(5);
         }
     }
 }

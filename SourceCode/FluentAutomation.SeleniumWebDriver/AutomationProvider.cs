@@ -123,14 +123,29 @@ namespace FluentAutomation.SeleniumWebDriver
 
         public override void Upload(string fileName, string fieldSelector, MatchConditions conditions)
         {
+            if (_browserType == BrowserType.InternetExplorer) throw new FeatureNotImplementedException("SeleniumWebDriver+InternetExplorer File Upload");
+
             var element = _driver.FindElement(BySizzle.CssSelector(fieldSelector));
-            System.Threading.Tasks.Task.Factory.StartNew(() =>
+            var t = System.Threading.Tasks.Task.Factory.StartNew(() =>
             {
                 // Dirty I know.. Need to guarantee the dialog opens before we start sending key events.
-                Thread.Sleep(500);
+                int sleepTime = 0;
+                switch (_browserType)
+                {
+                    case BrowserType.Firefox:
+                        sleepTime = 500;
+                        break;
+                    case BrowserType.Chrome:
+                        sleepTime = 1500;
+                        break;
+                }
+
+                Thread.Sleep(sleepTime);
                 ActionManager.SendString(fileName + "~");
-            });
+            }, System.Threading.Tasks.TaskCreationOptions.LongRunning);
+
             element.Click();
+            t.Wait();
         }
 
         public override void Wait(TimeSpan waitTime)
