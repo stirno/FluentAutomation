@@ -6,14 +6,14 @@ using System.Linq;
 using FluentAutomation.API.Providers;
 using FluentAutomation.API.Enumerations;
 
-namespace FluentAutomation.API.ExpectHandlers
+namespace FluentAutomation.API.ExpectCommands
 {
-    public class ExpectCssClassHandler
+    public class CssClass
     {
         private AutomationProvider _automation = null;
         private string _value = string.Empty;
 
-        public ExpectCssClassHandler(AutomationProvider automation, string value)
+        public CssClass(AutomationProvider automation, string value)
         {
             _automation = automation;
             _value = value;

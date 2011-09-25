@@ -9,9 +9,9 @@ using FluentAutomation.API.Providers;
 using FluentAutomation.API.Enumerations;
 using System.Linq.Expressions;
 
-namespace FluentAutomation.API.ExpectHandlers
+namespace FluentAutomation.API.ExpectCommands
 {
-    public class ExpectValueHandler
+    public class Value
     {
         private AutomationProvider _automation = null;
         private MatchConditions _matchConditions = MatchConditions.None;
@@ -22,32 +22,32 @@ namespace FluentAutomation.API.ExpectHandlers
         private Func<string, bool> _valueFunc = null;
         private Expression<Func<string, bool>> _valueExpression = null;
 
-        private ExpectValueHandler(AutomationProvider automation, ExpectType expectType)
+        private Value(AutomationProvider automation, ExpectType expectType)
         {
             _automation = automation;
             _expectType = expectType;
         }
 
-        public ExpectValueHandler(AutomationProvider automation, string value)
+        public Value(AutomationProvider automation, string value)
             : this(automation, ExpectType.Single)
         {
             _value = value;
         }
 
-        public ExpectValueHandler(AutomationProvider automation, Expression<Func<string, bool>> value)
+        public Value(AutomationProvider automation, Expression<Func<string, bool>> value)
             : this(automation, ExpectType.Single)
         {
             _valueExpression = value;
             _valueFunc = _valueExpression.Compile();
         }
 
-        public ExpectValueHandler(AutomationProvider automation, IEnumerable<string> values)
+        public Value(AutomationProvider automation, IEnumerable<string> values)
             : this(automation, ExpectType.Any)
         {
             _values = values;
         }
 
-        public ExpectValueHandler(AutomationProvider automation, IEnumerable<string> values, bool requireAll)
+        public Value(AutomationProvider automation, IEnumerable<string> values, bool requireAll)
             : this(automation, ExpectType.All)
         {
             _values = values;

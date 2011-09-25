@@ -4,13 +4,13 @@
 
 using System;
 using FluentAutomation.API.Enumerations;
-using FluentAutomation.API.FieldHandlers;
+using FluentAutomation.API.FieldCommands;
 using FluentAutomation.API.Providers;
 using System.Linq.Expressions;
 
 namespace FluentAutomation.API
 {
-    public partial class ActionManager
+    public class ActionManager
     {
         private AutomationProvider _automation = null;
         private ExpectManager _expect = null;
@@ -37,17 +37,17 @@ namespace FluentAutomation.API
             _automation.ClickPoint(point);
         }
 
-        public DraggedFieldHandler Drag(string fieldSelector)
+        public FieldCommands.DragDrop Drag(string fieldSelector)
         {
-            return new DraggedFieldHandler(_automation, fieldSelector);
+            return new FieldCommands.DragDrop(_automation, fieldSelector);
         }
 
-        public TextFieldHandler Enter(string value)
+        public FieldCommands.Text Enter(string value)
         {
-            return new TextFieldHandler(_automation, value);
+            return new FieldCommands.Text(_automation, value);
         }
 
-        public TextFieldHandler Enter(int value)
+        public FieldCommands.Text Enter(int value)
         {
             return Enter(value.ToString());
         }
@@ -128,44 +128,44 @@ namespace FluentAutomation.API
             }
         }
 
-        public SelectFieldHandler Select(Expression<Func<string, bool>> optionMatchingFunc)
+        public FieldCommands.Select Select(Expression<Func<string, bool>> optionMatchingFunc)
         {
             return Select(optionMatchingFunc, SelectMode.Text);
         }
 
-        public SelectFieldHandler Select(Expression<Func<string, bool>> optionMatchingFunc, SelectMode selectMode)
+        public FieldCommands.Select Select(Expression<Func<string, bool>> optionMatchingFunc, SelectMode selectMode)
         {
-            return new SelectFieldHandler(_automation, optionMatchingFunc, selectMode);
+            return new FieldCommands.Select(_automation, optionMatchingFunc, selectMode);
         }
 
-        public SelectFieldHandler Select(string value)
+        public FieldCommands.Select Select(string value)
         {
             return Select(value, SelectMode.Value);
         }
 
-        public SelectFieldHandler Select(string value, SelectMode selectMode)
+        public FieldCommands.Select Select(string value, SelectMode selectMode)
         {
-            return new SelectFieldHandler(_automation, new string[] { value }, selectMode);
+            return new FieldCommands.Select(_automation, new string[] { value }, selectMode);
         }
 
-        public SelectFieldHandler Select(params string[] values)
+        public FieldCommands.Select Select(params string[] values)
         {
             return Select(SelectMode.Value, values);
         }
 
-        public SelectFieldHandler Select(SelectMode selectMode, params string[] values)
+        public FieldCommands.Select Select(SelectMode selectMode, params string[] values)
         {
-            return new SelectFieldHandler(_automation, values, selectMode);
+            return new FieldCommands.Select(_automation, values, selectMode);
         }
 
-        public SelectFieldHandler Select(int index)
+        public FieldCommands.Select Select(int index)
         {
-            return new SelectFieldHandler(_automation, new int[] { index }, SelectMode.Index);
+            return new FieldCommands.Select(_automation, new int[] { index }, SelectMode.Index);
         }
 
-        public SelectFieldHandler Select(params int[] indices)
+        public FieldCommands.Select Select(params int[] indices)
         {
-            return new SelectFieldHandler(_automation, indices, SelectMode.Index);
+            return new FieldCommands.Select(_automation, indices, SelectMode.Index);
         }
 
         public void Upload(string fileName, string fieldSelector)

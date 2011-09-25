@@ -8,9 +8,9 @@ using FluentAutomation.API.Enumerations;
 using System;
 using System.Linq.Expressions;
 
-namespace FluentAutomation.API.FieldHandlers
+namespace FluentAutomation.API.FieldCommands
 {
-    public class SelectFieldHandler
+    public class Select
     {
         private AutomationProvider _automation = null;
         private string[] _values = null;
@@ -18,21 +18,21 @@ namespace FluentAutomation.API.FieldHandlers
         private SelectMode _selectMode = SelectMode.Value;
         private Expression<Func<string, bool>> _optionMatchingFunc = null;
 
-        public SelectFieldHandler(AutomationProvider automationProvider, Expression<Func<string, bool>> optionMatchingFunc, SelectMode selectMode)
+        public Select(AutomationProvider automationProvider, Expression<Func<string, bool>> optionMatchingFunc, SelectMode selectMode)
         {
             _automation = automationProvider;
             _optionMatchingFunc = optionMatchingFunc;
             _selectMode = selectMode;
         }
 
-        public SelectFieldHandler(AutomationProvider automationProvider, string[] values, SelectMode selectMode)
+        public Select(AutomationProvider automationProvider, string[] values, SelectMode selectMode)
         {
             _automation = automationProvider;
             _values = values;
             _selectMode = selectMode;
         }
 
-        public SelectFieldHandler(AutomationProvider automationProvider, int[] selectedIndices, SelectMode selectMode)
+        public Select(AutomationProvider automationProvider, int[] selectedIndices, SelectMode selectMode)
         {
             _automation = automationProvider;
             _selectedIndices = selectedIndices;

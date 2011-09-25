@@ -5,14 +5,14 @@ using System.Text;
 using FluentAutomation.API.Providers;
 using FluentAutomation.API.Enumerations;
 
-namespace FluentAutomation.API.ExpectHandlers
+namespace FluentAutomation.API.ExpectCommands
 {
-    public class ExpectCountHandler
+    public class Count
     {
         private AutomationProvider _automation = null;
         private int _count = int.MinValue;
 
-        public ExpectCountHandler(AutomationProvider automation, int count)
+        public Count(AutomationProvider automation, int count)
         {
             _automation = automation;
             _count = count;

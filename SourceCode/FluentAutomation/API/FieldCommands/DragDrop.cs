@@ -5,14 +5,14 @@
 using FluentAutomation.API.Providers;
 using FluentAutomation.API.Enumerations;
 
-namespace FluentAutomation.API.FieldHandlers
+namespace FluentAutomation.API.FieldCommands
 {
-    public class DraggedFieldHandler
+    public class DragDrop
     {
         private AutomationProvider _automation = null;
         private string _dragFieldSelector = string.Empty;
 
-        internal DraggedFieldHandler(AutomationProvider automation, string fieldSelector)
+        internal DragDrop(AutomationProvider automation, string fieldSelector)
         {
             _automation = automation;
             _dragFieldSelector = fieldSelector;

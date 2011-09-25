@@ -6,21 +6,21 @@ using System;
 using FluentAutomation.API.Providers;
 using FluentAutomation.API.Enumerations;
 
-namespace FluentAutomation.API.FieldHandlers
+namespace FluentAutomation.API.FieldCommands
 {
-    public class TextFieldHandler
+    public class Text
     {
         private AutomationProvider _automation = null;
         private string _value = string.Empty;
         private bool _quickEntry = false;
 
-        public TextFieldHandler(AutomationProvider automationProvider, string value)
+        public Text(AutomationProvider automationProvider, string value)
         {
             _automation = automationProvider;
             _value = value;
         }
 
-        public TextFieldHandler Quickly
+        public Text Quickly
         {
             get
             {

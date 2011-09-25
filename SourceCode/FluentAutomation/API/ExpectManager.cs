@@ -8,80 +8,80 @@ using System.Linq.Expressions;
 
 namespace FluentAutomation.API
 {
-    public partial class ExpectManager
+    public class ExpectManager
     {
         private AutomationProvider _automation = null;
-        private ExpectHandlers.ExpectValueHandler _nullHandler = null;
+        private ExpectCommands.Value _nullHandler = null;
 
         public ExpectManager(AutomationProvider automation)
         {
             _automation = automation;
         }
 
-        public ExpectHandlers.ExpectValueHandler Null
+        public ExpectCommands.Value Null
         {
             get
             {
                 if (_nullHandler == null)
                 {
                     string value = null;
-                    _nullHandler = new ExpectHandlers.ExpectValueHandler(_automation, value);
+                    _nullHandler = new ExpectCommands.Value(_automation, value);
                 }
 
                 return _nullHandler;
             }
         }
 
-        public virtual ExpectHandlers.ExpectTextHandler Text(string value)
+        public virtual ExpectCommands.Text Text(string value)
         {
-            return new ExpectHandlers.ExpectTextHandler(_automation, value);
+            return new ExpectCommands.Text(_automation, value);
         }
         
-        public virtual ExpectHandlers.ExpectTextHandler Text(Expression<Func<string, bool>> valueExpression)
+        public virtual ExpectCommands.Text Text(Expression<Func<string, bool>> valueExpression)
         {
-            return new ExpectHandlers.ExpectTextHandler(_automation, valueExpression);
+            return new ExpectCommands.Text(_automation, valueExpression);
         }
 
         [Obsolete("Use Value() instead of This(). Will be removed eventually.")]
-        public virtual ExpectHandlers.ExpectValueHandler This(string value)
+        public virtual ExpectCommands.Value This(string value)
         {
             return Value(value);
         }
 
         [Obsolete("Use Value() instead of This(). Will be removed eventually.")]
-        public virtual ExpectHandlers.ExpectValueHandler This(Expression<Func<string, bool>> valueExpression)
+        public virtual ExpectCommands.Value This(Expression<Func<string, bool>> valueExpression)
         {
             return Value(valueExpression);
         }
 
-        public virtual ExpectHandlers.ExpectValueHandler Value(string value)
+        public virtual ExpectCommands.Value Value(string value)
         {
-            return new ExpectHandlers.ExpectValueHandler(_automation, value);
+            return new ExpectCommands.Value(_automation, value);
         }
 
-        public virtual ExpectHandlers.ExpectValueHandler Value(Expression<Func<string, bool>> valueExpression)
+        public virtual ExpectCommands.Value Value(Expression<Func<string, bool>> valueExpression)
         {
-            return new ExpectHandlers.ExpectValueHandler(_automation, valueExpression);
+            return new ExpectCommands.Value(_automation, valueExpression);
         }
 
-        public virtual ExpectHandlers.ExpectValueHandler All(params string[] values)
+        public virtual ExpectCommands.Value All(params string[] values)
         {
-            return new ExpectHandlers.ExpectValueHandler(_automation, values, true);
+            return new ExpectCommands.Value(_automation, values, true);
         }
 
-        public virtual ExpectHandlers.ExpectValueHandler Any(params string[] values)
+        public virtual ExpectCommands.Value Any(params string[] values)
         {
-            return new ExpectHandlers.ExpectValueHandler(_automation, values);
+            return new ExpectCommands.Value(_automation, values);
         }
 
-        public virtual ExpectHandlers.ExpectCssClassHandler Class(string value)
+        public virtual ExpectCommands.CssClass Class(string value)
         {
-            return new ExpectHandlers.ExpectCssClassHandler(_automation, value);
+            return new ExpectCommands.CssClass(_automation, value);
         }
 
-        public virtual ExpectHandlers.ExpectCountHandler Count(int value)
+        public virtual ExpectCommands.Count Count(int value)
         {
-            return new ExpectHandlers.ExpectCountHandler(_automation, value);
+            return new ExpectCommands.Count(_automation, value);
         }
         
         public virtual void Alert()

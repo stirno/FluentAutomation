@@ -6,9 +6,9 @@ using FluentAutomation.API.Providers;
 using FluentAutomation.API.Enumerations;
 using System.Linq.Expressions;
 
-namespace FluentAutomation.API.ExpectHandlers
+namespace FluentAutomation.API.ExpectCommands
 {
-    public class ExpectTextHandler
+    public class Text
     {
         private AutomationProvider _automation = null;
         private MatchConditions _matchConditions = MatchConditions.None;
@@ -19,32 +19,32 @@ namespace FluentAutomation.API.ExpectHandlers
         private Func<string, bool> _expectedTextFunc = null;
         private Expression<Func<string, bool>> _expectedTextExpression = null;
 
-        private ExpectTextHandler(AutomationProvider automation, ExpectType expectType)
+        private Text(AutomationProvider automation, ExpectType expectType)
         {
             _automation = automation;
             _expectType = expectType;
         }
 
-        public ExpectTextHandler(AutomationProvider automation, string text)
+        public Text(AutomationProvider automation, string text)
             : this(automation, ExpectType.Single)
         {
             _expectedText = text;
         }
 
-        public ExpectTextHandler(AutomationProvider automation, Expression<Func<string, bool>> expression)
+        public Text(AutomationProvider automation, Expression<Func<string, bool>> expression)
             : this(automation, ExpectType.Single)
         {
             _expectedTextExpression = expression;
             _expectedTextFunc = _expectedTextExpression.Compile();
         }
 
-        public ExpectTextHandler(AutomationProvider automation, IEnumerable<string> strings)
+        public Text(AutomationProvider automation, IEnumerable<string> strings)
             : this(automation, ExpectType.Any)
         {
             _expectedStrings = strings;
         }
 
-        public ExpectTextHandler(AutomationProvider automation, IEnumerable<string> strings, bool requireAll)
+        public Text(AutomationProvider automation, IEnumerable<string> strings, bool requireAll)
             : this(automation, ExpectType.All)
         {
             _expectedStrings = strings;
