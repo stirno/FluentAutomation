@@ -1,8 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// <copyright file="ExtensionMethods.cs" author="Brandon Stirnaman">
+//     Copyright (c) 2011 Brandon Stirnaman, All rights reserved.
+// </copyright>
+
 using System.Linq;
-using System.Text;
 using System.Linq.Expressions;
+using System.Text;
 
 namespace FluentAutomation.API
 {

@@ -2,10 +2,6 @@
 //     Copyright (c) 2011 Brandon Stirnaman, All rights reserved.
 // </copyright>
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using FluentAutomation.API;
 
 namespace FluentAutomation.SeleniumWebDriver

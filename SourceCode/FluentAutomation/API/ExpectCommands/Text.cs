@@ -1,10 +1,14 @@
-﻿using System;
+﻿// <copyright file="Text.cs" author="Brandon Stirnaman">
+//     Copyright (c) 2011 Brandon Stirnaman, All rights reserved.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using FluentAutomation.API.Providers;
-using FluentAutomation.API.Enumerations;
 using System.Linq.Expressions;
+using FluentAutomation.API.Enumerations;
+using FluentAutomation.API.Exceptions;
+using FluentAutomation.API.Providers;
 
 namespace FluentAutomation.API.ExpectCommands
 {

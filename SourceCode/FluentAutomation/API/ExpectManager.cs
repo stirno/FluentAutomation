@@ -3,8 +3,9 @@
 // </copyright>
 
 using System;
-using FluentAutomation.API.Providers;
 using System.Linq.Expressions;
+using FluentAutomation.API.Exceptions;
+using FluentAutomation.API.Providers;
 
 namespace FluentAutomation.API
 {

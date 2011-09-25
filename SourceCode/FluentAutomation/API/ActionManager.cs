@@ -3,10 +3,9 @@
 // </copyright>
 
 using System;
-using FluentAutomation.API.Enumerations;
-using FluentAutomation.API.FieldCommands;
-using FluentAutomation.API.Providers;
 using System.Linq.Expressions;
+using FluentAutomation.API.Enumerations;
+using FluentAutomation.API.Providers;
 
 namespace FluentAutomation.API
 {

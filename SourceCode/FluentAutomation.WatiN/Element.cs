@@ -3,13 +3,10 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Drawing;
+using FluentAutomation.API;
 using FluentAutomation.API.Interfaces;
 using Automation = global::WatiN;
-using FluentAutomation.API;
 
 namespace FluentAutomation.WatiN
 {

@@ -1,12 +1,12 @@
-﻿// <copyright file="SelectFieldHandler.cs" author="Brandon Stirnaman">
+﻿// <copyright file="Select.cs" author="Brandon Stirnaman">
 //     Copyright (c) 2011 Brandon Stirnaman, All rights reserved.
 // </copyright>
 
-using System.Linq;
-using FluentAutomation.API.Providers;
-using FluentAutomation.API.Enumerations;
 using System;
+using System.Linq;
 using System.Linq.Expressions;
+using FluentAutomation.API.Enumerations;
+using FluentAutomation.API.Providers;
 
 namespace FluentAutomation.API.FieldCommands
 {

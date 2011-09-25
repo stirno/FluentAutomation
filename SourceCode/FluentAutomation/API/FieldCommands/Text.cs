@@ -1,10 +1,10 @@
-﻿// <copyright file="TextFieldHandler.cs" author="Brandon Stirnaman">
+﻿// <copyright file="Text.cs" author="Brandon Stirnaman">
 //     Copyright (c) 2011 Brandon Stirnaman, All rights reserved.
 // </copyright>
 
 using System;
-using FluentAutomation.API.Providers;
 using FluentAutomation.API.Enumerations;
+using FluentAutomation.API.Providers;
 
 namespace FluentAutomation.API.FieldCommands
 {

@@ -5,12 +5,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Linq.Expressions;
+using FluentAutomation.API;
+using FluentAutomation.API.Enumerations;
+using FluentAutomation.API.Exceptions;
 using FluentAutomation.API.Interfaces;
 using Automation = global::WatiN;
-using FluentAutomation.API.Enumerations;
-using FluentAutomation.API;
-using System.Linq.Expressions;
 
 namespace FluentAutomation.WatiN
 {

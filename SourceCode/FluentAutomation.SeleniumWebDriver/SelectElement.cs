@@ -3,14 +3,13 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Linq.Expressions;
+using FluentAutomation.API;
+using FluentAutomation.API.Enumerations;
+using FluentAutomation.API.Exceptions;
 using FluentAutomation.API.Interfaces;
 using OpenQA.Selenium;
-using FluentAutomation.API.Enumerations;
-using FluentAutomation.API;
-using System.Linq.Expressions;
 
 namespace FluentAutomation.SeleniumWebDriver
 {
