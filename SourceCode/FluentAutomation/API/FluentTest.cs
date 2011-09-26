@@ -6,6 +6,9 @@ using System;
 
 namespace FluentAutomation.API
 {
+    /// <summary>
+    /// Fluent Test base class
+    /// </summary>
     public abstract class FluentTest : IDisposable
     {
         public abstract ActionManager I { get; set; }

@@ -4,6 +4,9 @@
 
 namespace FluentAutomation.API.Enumerations
 {
+    /// <summary>
+    /// Direction to navigate the browser
+    /// </summary>
     public enum NavigateDirection
     {
         Back = 1,

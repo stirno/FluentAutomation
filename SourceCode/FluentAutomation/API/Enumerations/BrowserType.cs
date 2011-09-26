@@ -4,6 +4,9 @@
 
 namespace FluentAutomation.API.Enumerations
 {
+    /// <summary>
+    /// Browser Type to use for test
+    /// </summary>
     public enum BrowserType
     {
         InternetExplorer = 1,

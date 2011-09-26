@@ -36,7 +36,7 @@ namespace FluentAutomation.WatiN
             return _element.SelectedOption.Value;
         }
 
-        public string GetOptionText()
+        public string GetSelectedOptionText()
         {
             return _element.SelectedOption.Text;
         }

@@ -8,8 +8,16 @@ using System.Text;
 
 namespace FluentAutomation.API
 {
+    /// <summary>
+    /// Extension methods
+    /// </summary>
     public static class ExtensionMethods
     {
+        /// <summary>
+        /// Cleans up exception messages to provide better data.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
         public static string PrettifyErrorValue(this string value)
         {
             if (value == string.Empty)
@@ -26,6 +34,11 @@ namespace FluentAutomation.API
             }
         }
 
+        /// <summary>
+        /// Builds a string from expression used in exception messages.
+        /// </summary>
+        /// <param name="expression">The expression.</param>
+        /// <returns></returns>
         public static string ToExpressionString(this LambdaExpression expression)
         {
             StringBuilder sbExpression = new StringBuilder();

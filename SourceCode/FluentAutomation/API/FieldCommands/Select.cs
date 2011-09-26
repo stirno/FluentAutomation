@@ -10,6 +10,9 @@ using FluentAutomation.API.Providers;
 
 namespace FluentAutomation.API.FieldCommands
 {
+    /// <summary>
+    /// Select Commands
+    /// </summary>
     public class Select
     {
         private AutomationProvider _automation = null;
@@ -18,6 +21,12 @@ namespace FluentAutomation.API.FieldCommands
         private SelectMode _selectMode = SelectMode.Value;
         private Expression<Func<string, bool>> _optionMatchingFunc = null;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Select"/> class.
+        /// </summary>
+        /// <param name="automationProvider">The automation provider.</param>
+        /// <param name="optionMatchingFunc">The option matching func.</param>
+        /// <param name="selectMode">The select mode.</param>
         public Select(AutomationProvider automationProvider, Expression<Func<string, bool>> optionMatchingFunc, SelectMode selectMode)
         {
             _automation = automationProvider;
@@ -25,6 +34,12 @@ namespace FluentAutomation.API.FieldCommands
             _selectMode = selectMode;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Select"/> class.
+        /// </summary>
+        /// <param name="automationProvider">The automation provider.</param>
+        /// <param name="values">The values.</param>
+        /// <param name="selectMode">The select mode.</param>
         public Select(AutomationProvider automationProvider, string[] values, SelectMode selectMode)
         {
             _automation = automationProvider;
@@ -32,6 +47,12 @@ namespace FluentAutomation.API.FieldCommands
             _selectMode = selectMode;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Select"/> class.
+        /// </summary>
+        /// <param name="automationProvider">The automation provider.</param>
+        /// <param name="selectedIndices">The selected indices.</param>
+        /// <param name="selectMode">The select mode.</param>
         public Select(AutomationProvider automationProvider, int[] selectedIndices, SelectMode selectMode)
         {
             _automation = automationProvider;
@@ -39,11 +60,20 @@ namespace FluentAutomation.API.FieldCommands
             _selectMode = selectMode;
         }
 
+        /// <summary>
+        /// Selects values/text/indices from the specified field selector.
+        /// </summary>
+        /// <param name="fieldSelector">The field selector.</param>
         public void From(string fieldSelector)
         {
             From(fieldSelector, MatchConditions.None);
         }
 
+        /// <summary>
+        /// Selects values/text/indices from the specified field selector.
+        /// </summary>
+        /// <param name="fieldSelector">The field selector.</param>
+        /// <param name="conditions">The conditions.</param>
         public void From(string fieldSelector, MatchConditions conditions)
         {
             var field = _automation.GetSelectElement(fieldSelector, conditions);

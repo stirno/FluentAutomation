@@ -41,7 +41,7 @@ namespace FluentAutomation.SeleniumWebDriver
             return _element.SelectedOption.Text;
         }
 
-        public string GetOptionText()
+        public string GetSelectedOptionText()
         {
             return _element.SelectedOption.Text;
         }

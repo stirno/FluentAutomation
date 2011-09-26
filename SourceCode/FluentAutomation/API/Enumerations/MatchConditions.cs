@@ -6,6 +6,9 @@ using System;
 
 namespace FluentAutomation.API.Enumerations
 {
+    /// <summary>
+    /// Conditions to match on
+    /// </summary>
     [Flags]
     public enum MatchConditions
     {

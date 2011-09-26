@@ -4,6 +4,9 @@
 
 namespace FluentAutomation.API.Enumerations
 {
+    /// <summary>
+    /// Type of Expect to perform
+    /// </summary>
     public enum ExpectType
     {
         Single = 1,

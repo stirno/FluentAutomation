@@ -12,6 +12,9 @@ using FluentAutomation.API.Providers;
 
 namespace FluentAutomation.API.ExpectCommands
 {
+    /// <summary>
+    /// Value Expect Commands
+    /// </summary>
     public class Value
     {
         private AutomationProvider _automation = null;
@@ -23,18 +26,33 @@ namespace FluentAutomation.API.ExpectCommands
         private Func<string, bool> _valueFunc = null;
         private Expression<Func<string, bool>> _valueExpression = null;
 
+        /// <summary>
+        /// Prevents a default instance of the <see cref="Value"/> class from being created.
+        /// </summary>
+        /// <param name="automation">The automation.</param>
+        /// <param name="expectType">Type of the expect.</param>
         private Value(AutomationProvider automation, ExpectType expectType)
         {
             _automation = automation;
             _expectType = expectType;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Value"/> class.
+        /// </summary>
+        /// <param name="automation">The automation.</param>
+        /// <param name="value">The value.</param>
         public Value(AutomationProvider automation, string value)
             : this(automation, ExpectType.Single)
         {
             _value = value;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Value"/> class.
+        /// </summary>
+        /// <param name="automation">The automation.</param>
+        /// <param name="value">The value.</param>
         public Value(AutomationProvider automation, Expression<Func<string, bool>> value)
             : this(automation, ExpectType.Single)
         {
@@ -42,23 +60,43 @@ namespace FluentAutomation.API.ExpectCommands
             _valueFunc = _valueExpression.Compile();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Value"/> class.
+        /// </summary>
+        /// <param name="automation">The automation.</param>
+        /// <param name="values">The values.</param>
         public Value(AutomationProvider automation, IEnumerable<string> values)
             : this(automation, ExpectType.Any)
         {
             _values = values;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Value"/> class.
+        /// </summary>
+        /// <param name="automation">The automation.</param>
+        /// <param name="values">The values.</param>
+        /// <param name="requireAll">if set to <c>true</c> [require all].</param>
         public Value(AutomationProvider automation, IEnumerable<string> values, bool requireAll)
             : this(automation, ExpectType.All)
         {
             _values = values;
         }
 
+        /// <summary>
+        /// Expects that the specified field's value matches.
+        /// </summary>
+        /// <param name="fieldSelector">The field selector.</param>
         public void In(string fieldSelector)
         {
             In(fieldSelector, MatchConditions.None);
         }
 
+        /// <summary>
+        /// Expects that the specified field's value matches.
+        /// </summary>
+        /// <param name="fieldSelector">The field selector.</param>
+        /// <param name="conditions">The conditions.</param>
         public void In(string fieldSelector, MatchConditions conditions)
         {
             var element = _automation.GetElement(fieldSelector, conditions);
@@ -163,12 +201,21 @@ namespace FluentAutomation.API.ExpectCommands
             }
         }
 
+        /// <summary>
+        /// Expects that the specified fields' value matches.
+        /// </summary>
+        /// <param name="conditions">The conditions.</param>
+        /// <param name="fieldSelectors">The field selectors.</param>
         public void In(MatchConditions conditions, params string[] fieldSelectors)
         {
             _matchConditions = conditions;
             In(fieldSelectors);
         }
 
+        /// <summary>
+        /// Expects that the specified fields' value matches.
+        /// </summary>
+        /// <param name="fieldSelectors">The field selectors.</param>
         public void In(params string[] fieldSelectors)
         {
             foreach (var fieldSelector in fieldSelectors)

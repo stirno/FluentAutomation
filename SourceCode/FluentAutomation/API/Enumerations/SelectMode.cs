@@ -4,6 +4,9 @@
 
 namespace FluentAutomation.API.Enumerations
 {
+    /// <summary>
+    /// Mode of selection to use
+    /// </summary>
     public enum SelectMode
     {
         Value,

@@ -12,6 +12,9 @@ using FluentAutomation.API.Providers;
 
 namespace FluentAutomation.API.ExpectCommands
 {
+    /// <summary>
+    /// Text Expect Commands
+    /// </summary>
     public class Text
     {
         private AutomationProvider _automation = null;
@@ -23,18 +26,33 @@ namespace FluentAutomation.API.ExpectCommands
         private Func<string, bool> _expectedTextFunc = null;
         private Expression<Func<string, bool>> _expectedTextExpression = null;
 
+        /// <summary>
+        /// Prevents a default instance of the <see cref="Text"/> class from being created.
+        /// </summary>
+        /// <param name="automation">The automation.</param>
+        /// <param name="expectType">Type of the expect.</param>
         private Text(AutomationProvider automation, ExpectType expectType)
         {
             _automation = automation;
             _expectType = expectType;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Text"/> class.
+        /// </summary>
+        /// <param name="automation">The automation.</param>
+        /// <param name="text">The text.</param>
         public Text(AutomationProvider automation, string text)
             : this(automation, ExpectType.Single)
         {
             _expectedText = text;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Text"/> class.
+        /// </summary>
+        /// <param name="automation">The automation.</param>
+        /// <param name="expression">The expression.</param>
         public Text(AutomationProvider automation, Expression<Func<string, bool>> expression)
             : this(automation, ExpectType.Single)
         {
@@ -42,23 +60,43 @@ namespace FluentAutomation.API.ExpectCommands
             _expectedTextFunc = _expectedTextExpression.Compile();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Text"/> class.
+        /// </summary>
+        /// <param name="automation">The automation.</param>
+        /// <param name="strings">The strings.</param>
         public Text(AutomationProvider automation, IEnumerable<string> strings)
             : this(automation, ExpectType.Any)
         {
             _expectedStrings = strings;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Text"/> class.
+        /// </summary>
+        /// <param name="automation">The automation.</param>
+        /// <param name="strings">The strings.</param>
+        /// <param name="requireAll">if set to <c>true</c> [require all].</param>
         public Text(AutomationProvider automation, IEnumerable<string> strings, bool requireAll)
             : this(automation, ExpectType.All)
         {
             _expectedStrings = strings;
         }
 
+        /// <summary>
+        /// Expects that the specified field's text matches.
+        /// </summary>
+        /// <param name="fieldSelector">The field selector.</param>
         public void In(string fieldSelector)
         {
             In(fieldSelector, MatchConditions.None);
         }
 
+        /// <summary>
+        /// Expects that the specified field's text matches.
+        /// </summary>
+        /// <param name="fieldSelector">The field selector.</param>
+        /// <param name="conditions">The conditions.</param>
         public void In(string fieldSelector, MatchConditions conditions)
         {
             var element = _automation.GetElement(fieldSelector, conditions);
@@ -78,13 +116,13 @@ namespace FluentAutomation.API.ExpectCommands
 
                         if (_expectedTextFunc != null)
                         {
-                            if (!_expectedTextFunc(selectElement.GetOptionText()))
-                                throw new AssertException("SelectElement text assertion failed. Expected element [{0}] to match expression [{1}]. Actual text is [{2}].", fieldSelector, _expectedTextExpression.ToExpressionString(), selectElement.GetOptionText().PrettifyErrorValue());
+                            if (!_expectedTextFunc(selectElement.GetSelectedOptionText()))
+                                throw new AssertException("SelectElement text assertion failed. Expected element [{0}] to match expression [{1}]. Actual text is [{2}].", fieldSelector, _expectedTextExpression.ToExpressionString(), selectElement.GetSelectedOptionText().PrettifyErrorValue());
                         }
                         else
                         {
-                            if (!selectElement.GetOptionText().Equals(_expectedText, StringComparison.InvariantCultureIgnoreCase))
-                                throw new AssertException("SelectElement text assertion failed. Expected element [{0}] to have selected text of [{1}] but actual selected text is [{2}].", fieldSelector, _expectedText.PrettifyErrorValue(), selectElement.GetOptionText().PrettifyErrorValue());
+                            if (!selectElement.GetSelectedOptionText().Equals(_expectedText, StringComparison.InvariantCultureIgnoreCase))
+                                throw new AssertException("SelectElement text assertion failed. Expected element [{0}] to have selected text of [{1}] but actual selected text is [{2}].", fieldSelector, _expectedText.PrettifyErrorValue(), selectElement.GetSelectedOptionText().PrettifyErrorValue());
                         }
                     }
                     else
@@ -156,12 +194,21 @@ namespace FluentAutomation.API.ExpectCommands
             }
         }
 
+        /// <summary>
+        /// Expects that the specified field's text matches.
+        /// </summary>
+        /// <param name="conditions">The conditions.</param>
+        /// <param name="fieldSelectors">The field selectors.</param>
         public void In(MatchConditions conditions, params string[] fieldSelectors)
         {
             _matchConditions = conditions;
             In(fieldSelectors);
         }
 
+        /// <summary>
+        /// Expects that the specified fields' text matches.
+        /// </summary>
+        /// <param name="fieldSelectors">The field selectors.</param>
         public void In(params string[] fieldSelectors)
         {
             foreach (var fieldSelector in fieldSelectors)

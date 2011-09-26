@@ -9,22 +9,39 @@ using FluentAutomation.API.Providers;
 
 namespace FluentAutomation.API.ExpectCommands
 {
+    /// <summary>
+    /// CssClass Expect Commands
+    /// </summary>
     public class CssClass
     {
         private AutomationProvider _automation = null;
         private string _value = string.Empty;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CssClass"/> class.
+        /// </summary>
+        /// <param name="automation">The automation.</param>
+        /// <param name="value">The value.</param>
         public CssClass(AutomationProvider automation, string value)
         {
             _automation = automation;
             _value = value;
         }
 
+        /// <summary>
+        /// Expects the specified field has a specific class.
+        /// </summary>
+        /// <param name="fieldSelector">The field selector.</param>
         public void On(string fieldSelector)
         {
             On(fieldSelector, MatchConditions.None);
         }
 
+        /// <summary>
+        /// Expects the specified field has a specific class.
+        /// </summary>
+        /// <param name="fieldSelector">The field selector.</param>
+        /// <param name="conditions">The conditions.</param>
         public void On(string fieldSelector, MatchConditions conditions)
         {
             var element = _automation.GetElement(fieldSelector, conditions);
@@ -61,6 +78,10 @@ namespace FluentAutomation.API.ExpectCommands
             }
         }
 
+        /// <summary>
+        /// Expects the specified fields have a specific class.
+        /// </summary>
+        /// <param name="fieldSelectors">The field selectors.</param>
         public void On(params string[] fieldSelectors)
         {
             foreach (var fieldSelector in fieldSelectors)
