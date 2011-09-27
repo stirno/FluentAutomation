@@ -12,19 +12,18 @@ namespace FluentAutomation.API.ExpectCommands
     /// <summary>
     /// CssClass Expect Commands
     /// </summary>
-    public class CssClass
+    public class CssClass : CommandBase
     {
-        private AutomationProvider _automation = null;
         private string _value = string.Empty;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CssClass"/> class.
         /// </summary>
-        /// <param name="automation">The automation.</param>
+        /// <param name="provider">The provider.</param>
+        /// <param name="manager">The manager.</param>
         /// <param name="value">The value.</param>
-        public CssClass(AutomationProvider automation, string value)
+        public CssClass(AutomationProvider provider, CommandManager manager, string value) : base(provider, manager)
         {
-            _automation = automation;
             _value = value;
         }
 
@@ -44,38 +43,41 @@ namespace FluentAutomation.API.ExpectCommands
         /// <param name="conditions">The conditions.</param>
         public void On(string fieldSelector, MatchConditions conditions)
         {
-            var element = _automation.GetElement(fieldSelector, conditions);
-            string className = _value.Replace(".", "").Trim();
-            string elementClassName = element.GetAttributeValue("class").Trim();
-
-            if (elementClassName.Contains(' '))
+            Manager.CurrentActionBucket.Add(() =>
             {
-                string[] classes = elementClassName.Split(' ');
-                bool hasMatches = false;
-                foreach (var cssClass in classes)
+                var element = Provider.GetElement(fieldSelector, conditions);
+                string className = _value.Replace(".", "").Trim();
+                string elementClassName = element.GetAttributeValue("class").Trim();
+
+                if (elementClassName.Contains(' '))
                 {
-                    var cssClassString = cssClass.Trim();
-                    if (!string.IsNullOrEmpty(cssClassString))
+                    string[] classes = elementClassName.Split(' ');
+                    bool hasMatches = false;
+                    foreach (var cssClass in classes)
                     {
-                        if (cssClassString.Equals(className))
+                        var cssClassString = cssClass.Trim();
+                        if (!string.IsNullOrEmpty(cssClassString))
                         {
-                            hasMatches = true;
+                            if (cssClassString.Equals(className))
+                            {
+                                hasMatches = true;
+                            }
                         }
                     }
-                }
 
-                if (!hasMatches)
-                {
-                    throw new AssertException("Class name assertion failed. Expected element [{0}] to include a CSS class of [{1}].", fieldSelector, className);
+                    if (!hasMatches)
+                    {
+                        throw new AssertException("Class name assertion failed. Expected element [{0}] to include a CSS class of [{1}].", fieldSelector, className);
+                    }
                 }
-            }
-            else
-            {
-                if (!elementClassName.Equals(className))
+                else
                 {
-                    throw new AssertException("Class name assertion failed. Expected element [{0]] to include a CSS class of [{1}] but current CSS class is [{2}].", fieldSelector, className, elementClassName);
+                    if (!elementClassName.Equals(className))
+                    {
+                        throw new AssertException("Class name assertion failed. Expected element [{0]] to include a CSS class of [{1}] but current CSS class is [{2}].", fieldSelector, className, elementClassName);
+                    }
                 }
-            }
+            });
         }
 
         /// <summary>

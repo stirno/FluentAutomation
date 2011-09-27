@@ -22,6 +22,7 @@ namespace FluentAutomation.SeleniumWebDriver
         {
             _driver.Manage().Cookies.DeleteAllCookies();
             _driver.Quit();
+            _driver = null;
         }
 
         public override void ClickPoint(API.Point point)
@@ -139,7 +140,7 @@ namespace FluentAutomation.SeleniumWebDriver
                 }
 
                 Thread.Sleep(sleepTime);
-                ActionManager.SendString(fileName + "~");
+                CommandManager.SendString(fileName + "~");
             }, System.Threading.Tasks.TaskCreationOptions.LongRunning);
 
             element.Click();

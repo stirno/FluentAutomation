@@ -50,7 +50,9 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\ActionBucket.cs" />
     <Compile Include="API\ActionManager.cs" />
+    <Compile Include="API\CommandBase.cs" />
     <Compile Include="API\Exceptions\AssertException.cs" />
     <Compile Include="API\Enumerations\ExpectType.cs" />
     <Compile Include="API\Enumerations\MatchConditions.cs" />

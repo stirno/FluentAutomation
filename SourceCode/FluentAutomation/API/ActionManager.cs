@@ -3,6 +3,7 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using FluentAutomation.API.Enumerations;
 using FluentAutomation.API.Providers;
@@ -12,18 +13,81 @@ namespace FluentAutomation.API
     /// <summary>
     /// The "I" in I.Click, the primary interaction class
     /// </summary>
-    public class ActionManager
+    public class CommandManager
     {
         private AutomationProvider _automation = null;
         private ExpectManager _expect = null;
+        private int _bucketIndex = -1;
+        private List<ActionBucket> _actionBuckets = new List<ActionBucket>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ActionManager"/> class.
+        /// Gets or sets the action bucket.
+        /// </summary>
+        /// <value>
+        /// The action bucket.
+        /// </value>
+        public ActionBucket CurrentActionBucket
+        {
+            get
+            {
+                return _actionBuckets[_bucketIndex > -1 ? _bucketIndex : 0];
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is record replay.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is record replay; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsRecordReplay
+        {
+            get
+            {
+                return _bucketIndex > -1;
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CommandManager"/> class.
         /// </summary>
         /// <param name="automationProvider">The automation provider.</param>
-        public ActionManager(AutomationProvider automationProvider)
+        public CommandManager(AutomationProvider automationProvider)
         {
             _automation = automationProvider;
+            _actionBuckets.Add(new ActionBucket(this));
+        }
+
+        /// <summary>
+        /// Records this instance.
+        /// </summary>
+        public void Record()
+        {
+            if (_bucketIndex > -1) _actionBuckets.Add(new ActionBucket(this));
+            _bucketIndex++;
+        }
+
+        /// <summary>
+        /// Plays the stored actions with the appropriate bucket.
+        /// </summary>
+        public void PlayWith(params BrowserType[] browserTypes)
+        {
+            var bucket = CurrentActionBucket;
+
+            // cleanup bucket
+            _actionBuckets.RemoveAt(_bucketIndex);
+            _bucketIndex--;
+
+            // execute bucket
+            foreach (var browser in browserTypes)
+            {
+                _automation.SetBrowser(browser);
+                foreach (var action in bucket)
+                {
+                    action.Invoke();
+                }
+                _automation.Cleanup();
+            }
         }
 
         /// <summary>
@@ -42,9 +106,12 @@ namespace FluentAutomation.API
         /// <param name="conditions">The conditions.</param>
         public void Click(string elementSelector, MatchConditions conditions)
         {
-            var field = _automation.GetElement(elementSelector, conditions);
-            field.Focus();
-            field.Click();
+            CurrentActionBucket.Add(() =>
+            {
+                var field = _automation.GetElement(elementSelector, conditions);
+                field.Focus();
+                field.Click();
+            });
         }
 
         /// <summary>
@@ -53,7 +120,10 @@ namespace FluentAutomation.API
         /// <param name="point">The point.</param>
         public void Click(API.Point point)
         {
-            _automation.ClickPoint(point);
+            CurrentActionBucket.Add(() =>
+            {
+                _automation.ClickPoint(point);
+            });
         }
 
         /// <summary>
@@ -63,7 +133,7 @@ namespace FluentAutomation.API
         /// <returns></returns>
         public FieldCommands.DragDrop Drag(string fieldSelector)
         {
-            return new FieldCommands.DragDrop(_automation, fieldSelector);
+            return new FieldCommands.DragDrop(_automation, this, fieldSelector);
         }
 
         /// <summary>
@@ -73,7 +143,7 @@ namespace FluentAutomation.API
         /// <returns></returns>
         public FieldCommands.Text Enter(string value)
         {
-            return new FieldCommands.Text(_automation, value);
+            return new FieldCommands.Text(_automation, this, value);
         }
 
         /// <summary>
@@ -95,7 +165,7 @@ namespace FluentAutomation.API
             {
                 if (_expect == null)
                 {
-                    _expect = new ExpectManager(_automation);
+                    _expect = new ExpectManager(_automation, this);
                 }
 
                 return _expect;
@@ -126,8 +196,11 @@ namespace FluentAutomation.API
         /// <param name="conditions">The conditions.</param>
         public void Hover(string elementSelector, MatchConditions conditions)
         {
-            var field = _automation.GetElement(elementSelector, conditions);
-            field.Hover();
+            CurrentActionBucket.Add(() =>
+            {
+                var field = _automation.GetElement(elementSelector, conditions);
+                field.Hover();
+            });
         }
 
         /// <summary>
@@ -136,7 +209,10 @@ namespace FluentAutomation.API
         /// <param name="point">The point.</param>
         public void Hover(API.Point point)
         {
-            _automation.HoverPoint(point);
+            CurrentActionBucket.Add(() =>
+            {
+                _automation.HoverPoint(point);
+            });
         }
 
         /// <summary>
@@ -145,7 +221,10 @@ namespace FluentAutomation.API
         /// <param name="direction">The direction.</param>
         public void Navigate(NavigateDirection direction)
         {
-            _automation.Navigate(direction);
+            CurrentActionBucket.Add(() =>
+            {
+                _automation.Navigate(direction);
+            });
         }
 
         /// <summary>
@@ -154,7 +233,10 @@ namespace FluentAutomation.API
         /// <param name="pageUri">The page URI.</param>
         public void Open(Uri pageUri)
         {
-            _automation.Navigate(pageUri);
+            CurrentActionBucket.Add(() =>
+            {
+                _automation.Navigate(pageUri);
+            });
         }
 
         /// <summary>
@@ -172,7 +254,10 @@ namespace FluentAutomation.API
         /// <param name="keys">The keys.</param>
         public void Press(string keys)
         {
-            ActionManager.SendKeys(keys);
+            CurrentActionBucket.Add(() =>
+            {
+                CommandManager.SendKeys(keys);
+            });
         }
 
         /// <summary>
@@ -181,7 +266,10 @@ namespace FluentAutomation.API
         /// <param name="value">The value.</param>
         public void Type(string value)
         {
-            ActionManager.SendString(value);
+            CurrentActionBucket.Add(() =>
+            {
+                CommandManager.SendString(value);
+            });
         }
 
         /// <summary>
@@ -223,7 +311,7 @@ namespace FluentAutomation.API
         /// <returns></returns>
         public FieldCommands.Select Select(Expression<Func<string, bool>> optionExpression, SelectMode selectMode)
         {
-            return new FieldCommands.Select(_automation, optionExpression, selectMode);
+            return new FieldCommands.Select(_automation, this, optionExpression, selectMode);
         }
 
         /// <summary>
@@ -244,7 +332,7 @@ namespace FluentAutomation.API
         /// <returns></returns>
         public FieldCommands.Select Select(string value, SelectMode selectMode)
         {
-            return new FieldCommands.Select(_automation, new string[] { value }, selectMode);
+            return new FieldCommands.Select(_automation, this, new string[] { value }, selectMode);
         }
 
         /// <summary>
@@ -265,7 +353,7 @@ namespace FluentAutomation.API
         /// <returns></returns>
         public FieldCommands.Select Select(SelectMode selectMode, params string[] values)
         {
-            return new FieldCommands.Select(_automation, values, selectMode);
+            return new FieldCommands.Select(_automation, this, values, selectMode);
         }
 
         /// <summary>
@@ -275,7 +363,7 @@ namespace FluentAutomation.API
         /// <returns></returns>
         public FieldCommands.Select Select(int index)
         {
-            return new FieldCommands.Select(_automation, new int[] { index }, SelectMode.Index);
+            return new FieldCommands.Select(_automation, this, new int[] { index }, SelectMode.Index);
         }
 
         /// <summary>
@@ -285,7 +373,7 @@ namespace FluentAutomation.API
         /// <returns></returns>
         public FieldCommands.Select Select(params int[] indices)
         {
-            return new FieldCommands.Select(_automation, indices, SelectMode.Index);
+            return new FieldCommands.Select(_automation, this, indices, SelectMode.Index);
         }
 
         /// <summary>
@@ -306,7 +394,10 @@ namespace FluentAutomation.API
         /// <param name="conditions">The conditions.</param>
         public void Upload(string fileName, string fieldSelector, MatchConditions conditions)
         {
-            _automation.Upload(fileName, fieldSelector, conditions);
+            CurrentActionBucket.Add(() =>
+            {
+                _automation.Upload(fileName, fieldSelector, conditions);
+            });
         }
 
         /// <summary>
@@ -324,7 +415,7 @@ namespace FluentAutomation.API
         /// <param name="seconds">The seconds.</param>
         public void Wait(int seconds)
         {
-            _automation.Wait(seconds);
+            Wait(TimeSpan.FromSeconds(seconds));
         }
 
         /// <summary>
@@ -333,7 +424,10 @@ namespace FluentAutomation.API
         /// <param name="timeSpan">The time span.</param>
         public void Wait(TimeSpan timeSpan)
         {
-            _automation.Wait(timeSpan);
+            CurrentActionBucket.Add(() =>
+            {
+                _automation.Wait(timeSpan);
+            });
         }
     }
 }

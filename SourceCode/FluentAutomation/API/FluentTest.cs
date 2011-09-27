@@ -11,8 +11,11 @@ namespace FluentAutomation.API
     /// </summary>
     public abstract class FluentTest : IDisposable
     {
-        public abstract ActionManager I { get; set; }
+        public abstract CommandManager I { get; set; }
 
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
         public void Dispose()
         {
             try

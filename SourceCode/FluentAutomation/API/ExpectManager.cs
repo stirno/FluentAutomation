@@ -14,6 +14,7 @@ namespace FluentAutomation.API
     /// </summary>
     public class ExpectManager
     {
+        private CommandManager _manager = null;
         private AutomationProvider _automation = null;
         private ExpectCommands.Value _nullHandler = null;
 
@@ -21,9 +22,10 @@ namespace FluentAutomation.API
         /// Initializes a new instance of the <see cref="ExpectManager"/> class.
         /// </summary>
         /// <param name="automation">The automation.</param>
-        public ExpectManager(AutomationProvider automation)
+        public ExpectManager(AutomationProvider automation, CommandManager manager)
         {
             _automation = automation;
+            _manager = manager;
         }
 
         /// <summary>
@@ -36,7 +38,7 @@ namespace FluentAutomation.API
                 if (_nullHandler == null)
                 {
                     string value = null;
-                    _nullHandler = new ExpectCommands.Value(_automation, value);
+                    _nullHandler = new ExpectCommands.Value(_automation, _manager, value);
                 }
 
                 return _nullHandler;
@@ -50,7 +52,7 @@ namespace FluentAutomation.API
         /// <returns></returns>
         public virtual ExpectCommands.Text Text(string value)
         {
-            return new ExpectCommands.Text(_automation, value);
+            return new ExpectCommands.Text(_automation, _manager, value);
         }
 
         /// <summary>
@@ -60,7 +62,7 @@ namespace FluentAutomation.API
         /// <returns></returns>
         public virtual ExpectCommands.Text Text(Expression<Func<string, bool>> valueExpression)
         {
-            return new ExpectCommands.Text(_automation, valueExpression);
+            return new ExpectCommands.Text(_automation, _manager, valueExpression);
         }
 
         /// <summary>
@@ -92,7 +94,7 @@ namespace FluentAutomation.API
         /// <returns></returns>
         public virtual ExpectCommands.Value Value(string value)
         {
-            return new ExpectCommands.Value(_automation, value);
+            return new ExpectCommands.Value(_automation, _manager, value);
         }
 
         /// <summary>
@@ -102,7 +104,7 @@ namespace FluentAutomation.API
         /// <returns></returns>
         public virtual ExpectCommands.Value Value(Expression<Func<string, bool>> valueExpression)
         {
-            return new ExpectCommands.Value(_automation, valueExpression);
+            return new ExpectCommands.Value(_automation, _manager, valueExpression);
         }
 
         /// <summary>
@@ -112,7 +114,7 @@ namespace FluentAutomation.API
         /// <returns></returns>
         public virtual ExpectCommands.Value All(params string[] values)
         {
-            return new ExpectCommands.Value(_automation, values, true);
+            return new ExpectCommands.Value(_automation, _manager, values, true);
         }
 
         /// <summary>
@@ -122,7 +124,7 @@ namespace FluentAutomation.API
         /// <returns></returns>
         public virtual ExpectCommands.Value Any(params string[] values)
         {
-            return new ExpectCommands.Value(_automation, values);
+            return new ExpectCommands.Value(_automation, _manager, values);
         }
 
         /// <summary>
@@ -132,7 +134,7 @@ namespace FluentAutomation.API
         /// <returns></returns>
         public virtual ExpectCommands.CssClass Class(string value)
         {
-            return new ExpectCommands.CssClass(_automation, value);
+            return new ExpectCommands.CssClass(_automation, _manager, value);
         }
 
         /// <summary>
@@ -142,7 +144,7 @@ namespace FluentAutomation.API
         /// <returns></returns>
         public virtual ExpectCommands.Count Count(int value)
         {
-            return new ExpectCommands.Count(_automation, value);
+            return new ExpectCommands.Count(_automation, _manager, value);
         }
 
         /// <summary>

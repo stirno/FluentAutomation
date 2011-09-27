@@ -12,20 +12,20 @@ namespace FluentAutomation.API.FieldCommands
     /// <summary>
     /// Text Commands
     /// </summary>
-    public class Text
+    public class Text : CommandBase
     {
-        private AutomationProvider _automation = null;
         private string _value = string.Empty;
         private bool _quickEntry = false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Text"/> class.
         /// </summary>
-        /// <param name="automationProvider">The automation provider.</param>
+        /// <param name="provider">The provider.</param>
+        /// <param name="manager">The manager.</param>
         /// <param name="value">The value.</param>
-        public Text(AutomationProvider automationProvider, string value)
+        public Text(AutomationProvider provider, CommandManager manager, string value)
+            : base(provider, manager)
         {
-            _automation = automationProvider;
             _value = value;
         }
 
@@ -57,16 +57,19 @@ namespace FluentAutomation.API.FieldCommands
         /// <param name="conditions">The conditions.</param>
         public void In(string fieldSelector, MatchConditions conditions)
         {
-            var field = _automation.GetTextElement(fieldSelector, conditions);
+            Manager.CurrentActionBucket.Add(() =>
+            {
+                var field = Provider.GetTextElement(fieldSelector, conditions);
 
-            if (_quickEntry)
-            {
-                field.SetValueQuickly(_value);
-            }
-            else
-            {
-                field.SetValue(_value);
-            }
+                if (_quickEntry)
+                {
+                    field.SetValueQuickly(_value);
+                }
+                else
+                {
+                    field.SetValue(_value);
+                }
+            });
         }
 
         /// <summary>

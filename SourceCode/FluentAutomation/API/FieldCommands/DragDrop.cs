@@ -10,19 +10,18 @@ namespace FluentAutomation.API.FieldCommands
     /// <summary>
     /// DragDrop Commands
     /// </summary>
-    public class DragDrop
+    public class DragDrop : CommandBase
     {
-        private AutomationProvider _automation = null;
         private string _dragFieldSelector = string.Empty;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DragDrop"/> class.
         /// </summary>
-        /// <param name="automation">The automation.</param>
+        /// <param name="provider">The provider.</param>
+        /// <param name="manager">The manager.</param>
         /// <param name="fieldSelector">The field selector.</param>
-        internal DragDrop(AutomationProvider automation, string fieldSelector)
+        public DragDrop(AutomationProvider provider, CommandManager manager, string fieldSelector) : base(provider, manager)
         {
-            _automation = automation;
             _dragFieldSelector = fieldSelector;
         }
 
@@ -32,8 +31,11 @@ namespace FluentAutomation.API.FieldCommands
         /// <param name="fieldSelector">The field selector.</param>
         public void To(string fieldSelector)
         {
-            var element = _automation.GetElement(_dragFieldSelector, MatchConditions.None);
-            element.DragTo(_automation.GetElement(fieldSelector, MatchConditions.None));
+            Manager.CurrentActionBucket.Add(() =>
+            {
+                var element = Provider.GetElement(_dragFieldSelector, MatchConditions.None);
+                element.DragTo(Provider.GetElement(fieldSelector, MatchConditions.None));
+            });
         }
     }
 }

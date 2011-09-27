@@ -12,23 +12,24 @@ using FluentAutomation.API.Enumerations;
 namespace FluentAutomation.Tests
 {
     [TestClass]
-    public class BugTests : FluentAutomation.WatiN.FluentTest
+    public class BugTests : FluentAutomation.SeleniumWebDriver.FluentTest
     {
         [TestMethod]
         public void Bug_1_CantExpectValueOnSelect()
         {
+            I.Use(BrowserType.Chrome);
             I.Open("http://knockoutjs.com/examples/controlTypes.html");
-            I.Press("%{F4}");
             I.Select(x => x.Contains("Be")).From("select:eq(0)");
             //I.Select("Beta", SelectMode.Value).From("select:eq(0)");
-            I.Expect.Text(x => (x.Contains("tta") && x.Contains("Bte")) || x.ToList().Where(s => s.GetType() == typeof(char)).Count() > 0).In("select:eq(0)", MatchConditions.Visible);
+            I.Expect.Text(x => (x.Contains("ta") && x.Contains("Be"))).In("select:eq(0)", MatchConditions.Visible);
             I.Expect.Text("Beta").In("select:eq(0)", MatchConditions.Visible);
             I.Expect.Any("Alpha", "Beta").In("select:eq(0)");
 
-            I.Select(x => x.Length > 4).From("select:eq(1)");
-            //I.Select("Beta", "Gamma").From("select:eq(1)");
+            //I.Select(x => x.Length > 4).From("select:eq(1)");
+            I.Select("Beta", "Gamma").From("select:eq(1)");
             I.Expect.All("Alpha", "Gamma").In("select:eq(1)");
             I.Expect.Any("Alpha").In("select:eq(1)");
+            //I.PlayWith(BrowserType.InternetExplorer, BrowserType.Chrome);
         }
 
         [TestMethod]
@@ -36,7 +37,7 @@ namespace FluentAutomation.Tests
         {
             I.Open("http://knockoutjs.com/examples/controlTypes.html");
             I.Enter("Test").In("input:eq(0)");
-            I.Expect.Value("Test").In("input:eq(0)");
+            I.Expect.Value("Test21").In("input:eq(0)");
         }
 
         [TestMethod]
