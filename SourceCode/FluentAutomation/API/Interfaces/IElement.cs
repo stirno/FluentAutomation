@@ -3,6 +3,7 @@
 // </copyright>
 
 using System.Drawing;
+using FluentAutomation.API.Enumerations;
 
 namespace FluentAutomation.API.Interfaces
 {
@@ -15,7 +16,7 @@ namespace FluentAutomation.API.Interfaces
         bool IsSelect();
         bool IsText();
         void SetValue(string value);
-        void Click();
+        void Click(ClickMode clickMode);
         void Focus();
         void Hover();
         void DragTo(IElement fieldSelector);

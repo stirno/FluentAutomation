@@ -35,7 +35,7 @@ namespace FluentAutomation.API
             sbExpression.Append(" => ");
 
             var exprBody = expression.Body.ToString();
-            exprBody = exprBody.Substring(1, exprBody.Length - 2);
+            exprBody = exprBody.Substring(1, exprBody.Length - 1);
             exprBody = exprBody.Replace("OrElse", "||").Replace("AndAlso", "&&");
 
             sbExpression.Append(exprBody);

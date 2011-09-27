@@ -28,7 +28,7 @@ namespace FluentAutomation.SeleniumWebDriver
 
         public override string GetValue()
         {
-            return _element.Text;
+            return string.IsNullOrEmpty(_element.Text) ? _element.GetAttribute("value") : _element.Text;
         }
 
         public override void SetValue(string value)

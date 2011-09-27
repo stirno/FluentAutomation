@@ -136,10 +136,12 @@ namespace FluentAutomation.SeleniumWebDriver
             var compiledFunc = optionMatchingExpression.Compile();
             if (selectMode == SelectMode.Value)
             {
-                var options = _element.Options.Where(x => compiledFunc(x.GetAttribute("value")));
-                foreach (var option in options)
+                var options = _element.Options.Where(x => compiledFunc(x.GetAttribute("value"))).Select<IWebElement, string>(x => x.GetAttribute("value")).ToList();
+                foreach (var optionValue in options)
                 {
-                    _element.SelectByValue(option.GetAttribute("value"));
+                    // dirty hack is dirty!
+                    OpenQA.Selenium.Support.UI.SelectElement element = new OpenQA.Selenium.Support.UI.SelectElement(this.GetWebElement(true));
+                    element.SelectByValue(optionValue);
                 }
 
                 if (options.Count() == 0)
@@ -149,10 +151,12 @@ namespace FluentAutomation.SeleniumWebDriver
             }
             else if (selectMode == SelectMode.Text)
             {
-                var options = _element.Options.Where(x => compiledFunc(x.Text));
-                foreach (var option in options)
+                var options = _element.Options.Where(x => compiledFunc(x.Text)).Select<IWebElement, string>(x => x.Text).ToList();
+                foreach (var optionText in options)
                 {
-                    _element.SelectByText(option.Text);
+                    // dirty hack is dirty!
+                    OpenQA.Selenium.Support.UI.SelectElement element = new OpenQA.Selenium.Support.UI.SelectElement(this.GetWebElement(true));
+                    element.SelectByText(optionText);
                 }
 
                 if (options.Count() == 0)

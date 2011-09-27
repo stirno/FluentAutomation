@@ -9,6 +9,7 @@ using System.Text;
 using FluentAutomation.API.Interfaces;
 using OpenQA.Selenium;
 using System.Drawing;
+using FluentAutomation.API.Enumerations;
 
 namespace FluentAutomation.SeleniumWebDriver
 {
@@ -54,7 +55,15 @@ namespace FluentAutomation.SeleniumWebDriver
 
         public IWebElement GetWebElement()
         {
-            return _element;
+            return GetWebElement(false);
+        }
+
+        public IWebElement GetWebElement(bool fetchNew)
+        {
+            if (fetchNew)
+                return _driver.FindElement(BySizzle.CssSelector(_fieldSelector));
+            else
+                return _element;
         }
 
         public void DragTo(IElement element)
@@ -84,6 +93,12 @@ namespace FluentAutomation.SeleniumWebDriver
         public virtual void Click()
         {
             _element.Click();
+        }
+
+        public virtual void Click(ClickMode clickMode)
+        {
+            // Selenium implements all clicks as NoWait events
+            Click();
         }
 
         public virtual void Focus()

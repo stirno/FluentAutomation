@@ -22,14 +22,19 @@ namespace FluentAutomation.API
 
         public void Click(string elementSelector)
         {
-            Click(elementSelector, MatchConditions.None);
+            Click(elementSelector, ClickMode.Default);
         }
 
-        public void Click(string elementSelector, MatchConditions conditions)
+        public void Click(string elementSelector, ClickMode clickMode)
+        {
+            Click(elementSelector, clickMode, MatchConditions.None);
+        }
+
+        public void Click(string elementSelector, ClickMode clickMode, MatchConditions conditions)
         {
             var field = _automation.GetElement(elementSelector, conditions);
             field.Focus();
-            field.Click();
+            field.Click(clickMode);
         }
 
         public void Click(API.Point point)

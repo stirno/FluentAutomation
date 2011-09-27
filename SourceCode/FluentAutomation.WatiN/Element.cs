@@ -10,6 +10,7 @@ using System.Drawing;
 using FluentAutomation.API.Interfaces;
 using Automation = global::WatiN;
 using FluentAutomation.API;
+using FluentAutomation.API.Enumerations;
 
 namespace FluentAutomation.WatiN
 {
@@ -87,7 +88,19 @@ namespace FluentAutomation.WatiN
 
         public virtual void Click()
         {
-            _element.ClickNoWait();
+            Click(ClickMode.Default);
+        }
+
+        public virtual void Click(ClickMode clickMode)
+        {
+            if (clickMode == ClickMode.NoWait)
+            {
+                _element.ClickNoWait();
+            }
+            else
+            {
+                _element.Click();
+            }
         }
 
         public virtual void Focus()
