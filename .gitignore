@@ -1,6 +1,7 @@
 #OS junk files
 [Tt]humbs.db
 *.DS_Store
+*.orig
 
 #Visual Studio files
 *.testsettings
