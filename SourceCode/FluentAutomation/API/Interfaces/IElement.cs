@@ -3,6 +3,7 @@
 // </copyright>
 
 using System.Drawing;
+using FluentAutomation.API.Enumerations;
 
 namespace FluentAutomation.API.Interfaces
 {
@@ -59,9 +60,9 @@ namespace FluentAutomation.API.Interfaces
         void SetValue(string value);
 
         /// <summary>
-        /// Clicks this instance.
+        /// Focuses this instance.
         /// </summary>
-        void Click();
+        void Click(ClickMode clickMode);
 
         /// <summary>
         /// Focuses this instance.

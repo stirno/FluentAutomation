@@ -130,7 +130,7 @@ namespace FluentAutomation.WatiN
             using (new Automation.Core.DialogHandlers.UseDialogOnce(_browser.DialogWatcher, handler))
             {
                 IElement element = GetElement(fieldSelector, conditions);
-                element.Click();
+                element.Click(ClickMode.Default);
             }
         }
         

@@ -18,10 +18,9 @@ namespace FluentAutomation.Tests
         public void Bug_1_CantExpectValueOnSelect()
         {
             I.Open("http://knockoutjs.com/examples/controlTypes.html");
-            I.Press("%{F4}");
             I.Select(x => x.Contains("Be")).From("select:eq(0)");
-            //I.Select("Beta", SelectMode.Value).From("select:eq(0)");
-            I.Expect.Text(x => (x.Contains("tta") && x.Contains("Bte")) || x.ToList().Where(s => s.GetType() == typeof(char)).Count() > 0).In("select:eq(0)", MatchConditions.Visible);
+            I.Select("Beta", SelectMode.Value).From("select:eq(0)");
+            I.Expect.Text(x => (x.Contains("ta") || x.Contains("Bte")) && x.ToList().Where(s => s.GetType() == typeof(char)).Count() > 0).In("select:eq(0)", MatchConditions.Visible);
             I.Expect.Text("Beta").In("select:eq(0)", MatchConditions.Visible);
             I.Expect.Any("Alpha", "Beta").In("select:eq(0)");
 
@@ -60,8 +59,8 @@ namespace FluentAutomation.Tests
         public void Bug_AlertDialog()
         {
             I.Open("http://www.quackit.com/javascript/javascript_alert_box.cfm");
-            I.Click("input[type='button']:eq(0)");
-            I.Expect.Alert();
+            I.Click("input[type='button']:eq(0)", ClickMode.NoWait);
+            I.Expect.Alert("Not the message");
         }
 
         [TestMethod]
@@ -69,7 +68,6 @@ namespace FluentAutomation.Tests
         {
             I.Open("http://encodable.com/uploaddemo/");
             I.Upload(@"C:\Users\Public\Pictures\Sample Pictures\Chrysanthemum.jpg", "input[type='file']");
-            I.Wait(5);
         }
     }
 }
