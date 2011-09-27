@@ -51,11 +51,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\ActionManager.cs" />
-    <Compile Include="API\AssertException.cs" />
     <Compile Include="API\Enumerations\ClickMode.cs" />
     <Compile Include="API\Enumerations\ExpectType.cs" />
     <Compile Include="API\Enumerations\MatchConditions.cs" />
     <Compile Include="API\Enumerations\SelectMode.cs" />
+    <Compile Include="API\Exceptions\AssertException.cs" />
     <Compile Include="API\ExpectCommands\Count.cs" />
     <Compile Include="API\ExpectCommands\Text.cs" />
     <Compile Include="API\Exceptions\FeatureNotImplementedException.cs" />
