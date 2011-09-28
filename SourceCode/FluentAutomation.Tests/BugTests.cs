@@ -65,6 +65,7 @@ namespace FluentAutomation.Tests
         {
             I.Open("http://www.quackit.com/javascript/javascript_alert_box.cfm");
             I.Click("input[type='button']:eq(0)", ClickMode.NoWait);
+            I.TakeScreenshot("Dialog.jpg");
             I.Expect.Alert("Not the message");
         }
 

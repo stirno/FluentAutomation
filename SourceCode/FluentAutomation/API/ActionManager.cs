@@ -176,6 +176,15 @@ namespace FluentAutomation.API
         }
 
         /// <summary>
+        /// Takes a screenshot of the current page.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        public void TakeScreenshot(string fileName)
+        {
+            _automation.TakeScreenshot(System.IO.Path.Combine(_automation.ScreenshotPath, fileName));
+        }
+
+        /// <summary>
         /// Types the specified value using ActionManager.SendString()
         /// </summary>
         /// <param name="value">The value.</param>
