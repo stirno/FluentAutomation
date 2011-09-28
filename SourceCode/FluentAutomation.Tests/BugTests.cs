@@ -12,13 +12,14 @@ using FluentAutomation.API.Enumerations;
 namespace FluentAutomation.Tests
 {
     [TestClass]
-    public class BugTests : FluentAutomation.WatiN.FluentTest
+    public class BugTests : FluentAutomation.SeleniumWebDriver.FluentTest
     {
         public override void Setup()
         {
+            this.ScreenshotOnAssertException = false;
             this.ScreenshotPath = @"C:\Users\stirno\Pictures\TestScreenshots";
         }
-
+        
         [TestMethod]
         public void Bug_1_CantExpectValueOnSelect()
         {

@@ -20,6 +20,7 @@ namespace FluentAutomation.WatiN
                     this.Setup();
                     this.Provider = new AutomationProvider()
                     {
+                        ScreenshotOnAssertException = this.ScreenshotOnAssertException,
                         ScreenshotPath = this.ScreenshotPath
                     };
                     _actionManager = new ActionManager(this.Provider);

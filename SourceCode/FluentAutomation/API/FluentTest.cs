@@ -13,10 +13,12 @@ namespace FluentAutomation.API
     {
         public abstract ActionManager I { get; set; }
 
+        public bool ScreenshotOnAssertException { get; set; }
         public string ScreenshotPath { get; set; }
 
         public virtual void Setup()
         {
+            this.ScreenshotOnAssertException = false;
             this.ScreenshotPath = Environment.CurrentDirectory;
         }
 

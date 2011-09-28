@@ -111,7 +111,7 @@ namespace FluentAutomation.API.ExpectCommands
                     {
                         if (selectElement.IsMultiple)
                         {
-                            _automation.TakeScreenshot();
+                            _automation.TakeAssertExceptionScreenshot();
                             throw new AssertException("Single value assertion cannot be used on a SelectList that potentially has multiple values. Use Any or All instead.");
                         }
 
@@ -119,7 +119,7 @@ namespace FluentAutomation.API.ExpectCommands
                         {
                             if (!_expectedTextFunc(selectElement.GetSelectedOptionText()))
                             {
-                                _automation.TakeScreenshot();
+                                _automation.TakeAssertExceptionScreenshot();
                                 throw new AssertException("SelectElement text assertion failed. Expected element [{0}] to match expression [{1}]. Actual text is [{2}].", fieldSelector, _expectedTextExpression.ToExpressionString(), selectElement.GetSelectedOptionText().PrettifyErrorValue());
                             }
                         }
@@ -127,7 +127,7 @@ namespace FluentAutomation.API.ExpectCommands
                         {
                             if (!selectElement.GetSelectedOptionText().Equals(_expectedText, StringComparison.InvariantCultureIgnoreCase))
                             {
-                                _automation.TakeScreenshot();
+                                _automation.TakeAssertExceptionScreenshot();
                                 throw new AssertException("SelectElement text assertion failed. Expected element [{0}] to have selected text of [{1}] but actual selected text is [{2}].", fieldSelector, _expectedText.PrettifyErrorValue(), selectElement.GetSelectedOptionText().PrettifyErrorValue());
                             }
                         }
@@ -156,7 +156,7 @@ namespace FluentAutomation.API.ExpectCommands
                             {
                                 if (textMatching == 0)
                                 {
-                                    _automation.TakeScreenshot();
+                                    _automation.TakeAssertExceptionScreenshot();
                                     throw new AssertException("SelectElement text assertion failed. Expected element [{0}] to have at least one option with text matching the collection.", fieldSelector);
                                 }
                             }
@@ -164,7 +164,7 @@ namespace FluentAutomation.API.ExpectCommands
                             {
                                 if (textMatching < _expectedStrings.Count())
                                 {
-                                    _automation.TakeScreenshot();
+                                    _automation.TakeAssertExceptionScreenshot();
                                     throw new AssertException("SelectElement text assertion failed. Expected element [{0}] to include all options text to match the collection.", fieldSelector);
                                 }
                             }
@@ -180,7 +180,7 @@ namespace FluentAutomation.API.ExpectCommands
                     {
                         if (!_expectedTextFunc(textElementText))
                         {
-                            _automation.TakeScreenshot();
+                            _automation.TakeAssertExceptionScreenshot();
                             throw new AssertException("TextElement text assertion failed. Expected element [{0}] to match expression [{1}]. Actual value is [{2}].", fieldSelector, _expectedTextExpression.ToExpressionString(), textElementText.PrettifyErrorValue());
                         }
                     }
@@ -188,7 +188,7 @@ namespace FluentAutomation.API.ExpectCommands
                     {
                         if (!textElementText.Equals(_expectedText ?? string.Empty, StringComparison.InvariantCultureIgnoreCase))
                         {
-                            _automation.TakeScreenshot();
+                            _automation.TakeAssertExceptionScreenshot();
                             throw new AssertException("TextElement text assertion failed. Expected element [{0}] to have a value of [{1}] but actual value is [{2}].", fieldSelector, _expectedText.PrettifyErrorValue(), textElementText.PrettifyErrorValue());
                         }
                     }
@@ -199,7 +199,7 @@ namespace FluentAutomation.API.ExpectCommands
                     {
                         if (!_expectedTextFunc(elementText))
                         {
-                            _automation.TakeScreenshot();
+                            _automation.TakeAssertExceptionScreenshot();
                             throw new AssertException("Value assertion failed. Expected element [{0}] to match expression [{1}]. Actual value is [{2}].", fieldSelector, _expectedTextExpression.ToExpressionString(), elementText.PrettifyErrorValue());
                         }
                     }
@@ -207,7 +207,7 @@ namespace FluentAutomation.API.ExpectCommands
                     {
                         if (!elementText.Equals(_expectedText ?? string.Empty))
                         {
-                            _automation.TakeScreenshot();
+                            _automation.TakeAssertExceptionScreenshot();
                             throw new AssertException("Value assertion failed. Expected element [{0}] to have a value of [{1}] but actual value is [{2}].", fieldSelector, _expectedText.PrettifyErrorValue(), elementText.PrettifyErrorValue());
                         }
                     }

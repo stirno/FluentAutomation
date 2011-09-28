@@ -106,13 +106,13 @@ namespace FluentAutomation.API.ExpectCommands
             {
                 if (_value == null && element.GetText() != null && elementValue != string.Empty)
                 {
-                    _automation.TakeScreenshot();
+                    _automation.TakeAssertExceptionScreenshot();
                     throw new AssertException("Null value assertion failed. Element [{0}] has a value of [{1}].", fieldSelector, element.GetText().PrettifyErrorValue());
                 }
 
                 if (!element.IsSelect() && (_expectType == ExpectType.Any || _expectType == ExpectType.All))
                 {
-                    _automation.TakeScreenshot();
+                    _automation.TakeAssertExceptionScreenshot();
                     throw new AssertException("Value assertion of types Any and All can only be used on SelectList elements.");
                 }
                 else if (element.IsSelect())
@@ -122,7 +122,7 @@ namespace FluentAutomation.API.ExpectCommands
                     {
                         if (selectElement.IsMultiple)
                         {
-                            _automation.TakeScreenshot();
+                            _automation.TakeAssertExceptionScreenshot();
                             throw new AssertException("Single value assertion cannot be used on a SelectList that potentially has multiple values. Use Any or All instead.");
                         }
 
@@ -130,7 +130,7 @@ namespace FluentAutomation.API.ExpectCommands
                         {
                             if (!_valueFunc(selectElement.GetValue()))
                             {
-                                _automation.TakeScreenshot();
+                                _automation.TakeAssertExceptionScreenshot();
                                 throw new AssertException("SelectElement value assertion failed. Expected element [{0}] to match expression [{1}]. Actual value is [{2}].", fieldSelector, _valueExpression.ToExpressionString(), selectElement.GetValue().PrettifyErrorValue());
                             }
                         }
@@ -138,7 +138,7 @@ namespace FluentAutomation.API.ExpectCommands
                         {
                             if (!selectElement.GetValue().Equals(_value, StringComparison.InvariantCultureIgnoreCase))
                             {
-                                _automation.TakeScreenshot();
+                                _automation.TakeAssertExceptionScreenshot();
                                 throw new AssertException("SelectElement value assertion failed. Expected element [{0}] to have a selected value of [{1}] but actual selected value is [{2}].", fieldSelector, _value.PrettifyErrorValue(), selectElement.GetValue().PrettifyErrorValue());
                             }
                         }
@@ -167,7 +167,7 @@ namespace FluentAutomation.API.ExpectCommands
                         {
                             if (valuesMatching == 0)
                             {
-                                _automation.TakeScreenshot();
+                                _automation.TakeAssertExceptionScreenshot();
                                 throw new AssertException("SelectElement value assertion failed. Expected element [{0}] to have at least one value matching the collection.", fieldSelector);
                             }
                         }
@@ -175,7 +175,7 @@ namespace FluentAutomation.API.ExpectCommands
                         {
                             if (valuesMatching < _values.Count())
                             {
-                                _automation.TakeScreenshot();
+                                _automation.TakeAssertExceptionScreenshot();
                                 throw new AssertException("SelectElement value assertion failed. Expected element [{0}] to include all values in collection.", fieldSelector);
                             }
                         }
@@ -189,7 +189,7 @@ namespace FluentAutomation.API.ExpectCommands
                     {
                         if (!_valueFunc(textElementValue))
                         {
-                            _automation.TakeScreenshot();
+                            _automation.TakeAssertExceptionScreenshot();
                             throw new AssertException("TextElement value assertion failed. Expected element [{0}] to match expression [{1}]. Actual value is [{2}].", fieldSelector, _valueExpression.ToExpressionString(), textElementValue.PrettifyErrorValue());
                         }
                     }
@@ -197,7 +197,7 @@ namespace FluentAutomation.API.ExpectCommands
                     {
                         if (!textElementValue.Equals(_value ?? string.Empty, StringComparison.InvariantCultureIgnoreCase))
                         {
-                            _automation.TakeScreenshot();
+                            _automation.TakeAssertExceptionScreenshot();
                             throw new AssertException("TextElement value assertion failed. Expected element [{0}] to have a value of [{1}] but actual value is [{2}].", fieldSelector, _value.PrettifyErrorValue(), textElementValue.PrettifyErrorValue());
                         }
                     }
@@ -208,7 +208,7 @@ namespace FluentAutomation.API.ExpectCommands
                     {
                         if (!_valueFunc(elementValue))
                         {
-                            _automation.TakeScreenshot();
+                            _automation.TakeAssertExceptionScreenshot();
                             throw new AssertException("Value assertion failed. Expected element [{0}] to match expression [{1}]. Actual value is [{2}].", fieldSelector, _valueExpression.ToExpressionString(), elementValue.PrettifyErrorValue());
                         }
                     }
@@ -216,7 +216,7 @@ namespace FluentAutomation.API.ExpectCommands
                     {
                         if (!elementValue.Equals(_value ?? string.Empty))
                         {
-                            _automation.TakeScreenshot();
+                            _automation.TakeAssertExceptionScreenshot();
                             throw new AssertException("Value assertion failed. Expected element [{0}] to have a value of [{1}] but actual value is [{2}].", fieldSelector, _value.PrettifyErrorValue(), elementValue.PrettifyErrorValue());
                         }
                     }

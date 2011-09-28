@@ -181,7 +181,14 @@ namespace FluentAutomation.API
         /// <param name="fileName">Name of the file.</param>
         public void TakeScreenshot(string fileName)
         {
-            _automation.TakeScreenshot(System.IO.Path.Combine(_automation.ScreenshotPath, fileName));
+            if (!string.IsNullOrEmpty(_automation.ScreenshotPath))
+            {
+                _automation.TakeScreenshot(System.IO.Path.Combine(_automation.ScreenshotPath, fileName));
+            }
+            else
+            {
+                _automation.TakeScreenshot(fileName);
+            }
         }
 
         /// <summary>

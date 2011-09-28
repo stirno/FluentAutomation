@@ -14,6 +14,14 @@ namespace FluentAutomation.API.Providers
     public abstract class AutomationProvider
     {
         /// <summary>
+        /// Gets or sets a value indicating whether [screenshot on assert exception].
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if [screenshot on assert exception]; otherwise, <c>false</c>.
+        /// </value>
+        public bool ScreenshotOnAssertException { get; set; }
+
+        /// <summary>
         /// Gets or sets the screenshot path.
         /// </summary>
         /// <value>
@@ -129,9 +137,10 @@ namespace FluentAutomation.API.Providers
         /// <summary>
         /// Takes the screenshot.
         /// </summary>
-        public void TakeScreenshot()
+        public void TakeAssertExceptionScreenshot()
         {
-            TakeScreenshot(string.Format("{0}\\Exception-{1}.jpg", this.ScreenshotPath, DateTime.Now.ToString("yyyy.MM.dd-HH.mm.ss")));
+            if (!string.IsNullOrEmpty(this.ScreenshotPath) && this.ScreenshotOnAssertException)
+                TakeScreenshot(string.Format("{0}\\AssertException-{1}.jpg", this.ScreenshotPath, DateTime.Now.ToString("yyyy.MM.dd-HH.mm.ss")));
         }
 
         /// <summary>
