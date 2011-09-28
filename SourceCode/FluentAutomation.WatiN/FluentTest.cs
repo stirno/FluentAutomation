@@ -17,7 +17,11 @@ namespace FluentAutomation.WatiN
             {
                 if (_actionManager == null)
                 {
-                    this.Provider = new AutomationProvider();
+                    this.Setup();
+                    this.Provider = new AutomationProvider()
+                    {
+                        ScreenshotPath = this.ScreenshotPath
+                    };
                     _actionManager = new ActionManager(this.Provider);
                 }
 

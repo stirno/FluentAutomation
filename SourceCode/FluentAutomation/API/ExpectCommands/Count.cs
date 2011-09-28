@@ -48,6 +48,7 @@ namespace FluentAutomation.API.ExpectCommands
 
             if (elements.Count() != _count)
             {
+                _automation.TakeScreenshot();
                 throw new AssertException("Count assertion failed. Expected there to be [{0}] elements matching [{1}]. Actual count is [{2}]", _count, fieldSelector, elements.Count());
             }
         }

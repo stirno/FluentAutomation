@@ -66,6 +66,7 @@ namespace FluentAutomation.API.ExpectCommands
 
                 if (!hasMatches)
                 {
+                    _automation.TakeScreenshot();
                     throw new AssertException("Class name assertion failed. Expected element [{0}] to include a CSS class of [{1}].", fieldSelector, className);
                 }
             }
@@ -73,6 +74,7 @@ namespace FluentAutomation.API.ExpectCommands
             {
                 if (!elementClassName.Equals(className))
                 {
+                    _automation.TakeScreenshot();
                     throw new AssertException("Class name assertion failed. Expected element [{0]] to include a CSS class of [{1}] but current CSS class is [{2}].", fieldSelector, className, elementClassName);
                 }
             }

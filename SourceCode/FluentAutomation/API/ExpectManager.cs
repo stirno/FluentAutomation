@@ -179,6 +179,7 @@ namespace FluentAutomation.API
         {
             if (!pageUri.ToString().Equals(_automation.GetUri().ToString(), StringComparison.InvariantCultureIgnoreCase))
             {
+                _automation.TakeScreenshot();
                 throw new AssertException("URL Assertion failed. Expected URL [{0}] but actual URL is [{1}].", pageUri, _automation.GetUri());
             }
         }
@@ -192,6 +193,7 @@ namespace FluentAutomation.API
             var _compiledFunc = valueExpression.Compile();
             if (!_compiledFunc(_automation.GetUri()))
             {
+                _automation.TakeScreenshot();
                 throw new AssertException("URL Assertion failed. Expected URL to match expression [{0}]. Actual URL is [{1}].", valueExpression.ToExpressionString(), _automation.GetUri());
             }
         }

@@ -14,13 +14,18 @@ namespace FluentAutomation.Tests
     [TestClass]
     public class BugTests : FluentAutomation.WatiN.FluentTest
     {
+        public override void Setup()
+        {
+            this.ScreenshotPath = @"C:\Users\stirno\Pictures\TestScreenshots";
+        }
+
         [TestMethod]
         public void Bug_1_CantExpectValueOnSelect()
         {
             I.Open("http://knockoutjs.com/examples/controlTypes.html");
             I.Select(x => x.Contains("Be")).From("select:eq(0)");
             I.Select("Beta", SelectMode.Value).From("select:eq(0)");
-            I.Expect.Text(x => (x.Contains("ta") || x.Contains("Bte")) && x.ToList().Where(s => s.GetType() == typeof(char)).Count() > 0).In("select:eq(0)", MatchConditions.Visible);
+            I.Expect.Text(x => (x.Contains("ta") && x.Contains("Bte")) && x.ToList().Where(s => s.GetType() == typeof(char)).Count() > 0).In("select:eq(0)", MatchConditions.Visible);
             I.Expect.Text("Beta").In("select:eq(0)", MatchConditions.Visible);
             I.Expect.Any("Alpha", "Beta").In("select:eq(0)");
 

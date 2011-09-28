@@ -124,6 +124,11 @@ namespace FluentAutomation.WatiN
             _browserType = browserType;
         }
 
+        public override void TakeScreenshot(string fileName)
+        {
+            _browser.CaptureWebPageToFile(fileName);
+        }
+        
         public override void Upload(string fileName, string fieldSelector, MatchConditions conditions)
         {
             var handler = new Automation.Core.DialogHandlers.FileUploadDialogHandler(fileName);

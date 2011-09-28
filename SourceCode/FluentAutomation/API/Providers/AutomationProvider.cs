@@ -14,6 +14,14 @@ namespace FluentAutomation.API.Providers
     public abstract class AutomationProvider
     {
         /// <summary>
+        /// Gets or sets the screenshot path.
+        /// </summary>
+        /// <value>
+        /// The screenshot path.
+        /// </value>
+        public string ScreenshotPath { get; set; }
+
+        /// <summary>
         /// Provider cleanup.
         /// </summary>
         public abstract void Cleanup();
@@ -117,6 +125,20 @@ namespace FluentAutomation.API.Providers
         /// </summary>
         /// <param name="browserType">Type of the browser.</param>
         public abstract void SetBrowser(BrowserType browserType);
+
+        /// <summary>
+        /// Takes the screenshot.
+        /// </summary>
+        public void TakeScreenshot()
+        {
+            TakeScreenshot(string.Format("{0}\\Exception-{1}.jpg", this.ScreenshotPath, DateTime.Now.ToString("yyyy.MM.dd-HH.mm.ss")));
+        }
+
+        /// <summary>
+        /// Takes screenshot of the browser.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        public abstract void TakeScreenshot(string fileName);
 
         /// <summary>
         /// Uploads the specified file name with the field specified.

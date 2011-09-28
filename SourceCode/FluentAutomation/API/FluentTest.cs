@@ -13,6 +13,13 @@ namespace FluentAutomation.API
     {
         public abstract ActionManager I { get; set; }
 
+        public string ScreenshotPath { get; set; }
+
+        public virtual void Setup()
+        {
+            this.ScreenshotPath = Environment.CurrentDirectory;
+        }
+
         public void Dispose()
         {
             try

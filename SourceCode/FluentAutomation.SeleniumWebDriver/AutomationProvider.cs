@@ -119,6 +119,12 @@ namespace FluentAutomation.SeleniumWebDriver
             _browserType = browserType;
         }
 
+        public override void TakeScreenshot(string fileName)
+        {
+            var image = ((ITakesScreenshot)_driver).GetScreenshot();
+            image.SaveAsFile(fileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+        }
+
         public override void Upload(string fileName, string fieldSelector, MatchConditions conditions)
         {
             if (_browserType == BrowserType.InternetExplorer) throw new FeatureNotImplementedException("SeleniumWebDriver+InternetExplorer File Upload");
