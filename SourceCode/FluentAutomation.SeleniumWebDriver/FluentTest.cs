@@ -10,8 +10,8 @@ namespace FluentAutomation.SeleniumWebDriver
     {
         public AutomationProvider Provider = null;
 
-        private ActionManager _actionManager = null;
-        public override ActionManager I
+        private CommandManager _actionManager = null;
+        public override CommandManager I
         {
             get
             {
@@ -23,7 +23,7 @@ namespace FluentAutomation.SeleniumWebDriver
                         ScreenshotOnAssertException = this.ScreenshotOnAssertException,
                         ScreenshotPath = this.ScreenshotPath
                     };
-                    _actionManager = new ActionManager(this.Provider);
+                    _actionManager = new CommandManager(this.Provider);
                 }
 
                 return _actionManager;

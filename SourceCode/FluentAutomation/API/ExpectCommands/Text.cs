@@ -15,9 +15,8 @@ namespace FluentAutomation.API.ExpectCommands
     /// <summary>
     /// Text Expect Commands
     /// </summary>
-    public class Text
+    public class Text : CommandBase
     {
-        private AutomationProvider _automation = null;
         private MatchConditions _matchConditions = MatchConditions.None;
         private ExpectType _expectType = ExpectType.Single;
 
@@ -29,21 +28,22 @@ namespace FluentAutomation.API.ExpectCommands
         /// <summary>
         /// Prevents a default instance of the <see cref="Text"/> class from being created.
         /// </summary>
-        /// <param name="automation">The automation.</param>
+        /// <param name="provider">The provider.</param>
+        /// <param name="manager">The manager.</param>
         /// <param name="expectType">Type of the expect.</param>
-        private Text(AutomationProvider automation, ExpectType expectType)
+        private Text(AutomationProvider provider, CommandManager manager, ExpectType expectType) : base(provider, manager)
         {
-            _automation = automation;
             _expectType = expectType;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Text"/> class.
         /// </summary>
-        /// <param name="automation">The automation.</param>
+        /// <param name="provider">The provider.</param>
+        /// <param name="manager">The manager.</param>
         /// <param name="text">The text.</param>
-        public Text(AutomationProvider automation, string text)
-            : this(automation, ExpectType.Single)
+        public Text(AutomationProvider provider, CommandManager manager, string text)
+            : this(provider, manager, ExpectType.Single)
         {
             _expectedText = text;
         }
@@ -51,10 +51,11 @@ namespace FluentAutomation.API.ExpectCommands
         /// <summary>
         /// Initializes a new instance of the <see cref="Text"/> class.
         /// </summary>
-        /// <param name="automation">The automation.</param>
+        /// <param name="provider">The provider.</param>
+        /// <param name="manager">The manager.</param>
         /// <param name="expression">The expression.</param>
-        public Text(AutomationProvider automation, Expression<Func<string, bool>> expression)
-            : this(automation, ExpectType.Single)
+        public Text(AutomationProvider provider, CommandManager manager, Expression<Func<string, bool>> expression)
+            : this(provider, manager, ExpectType.Single)
         {
             _expectedTextExpression = expression;
             _expectedTextFunc = _expectedTextExpression.Compile();
@@ -63,10 +64,11 @@ namespace FluentAutomation.API.ExpectCommands
         /// <summary>
         /// Initializes a new instance of the <see cref="Text"/> class.
         /// </summary>
-        /// <param name="automation">The automation.</param>
+        /// <param name="provider">The provider.</param>
+        /// <param name="manager">The manager.</param>
         /// <param name="strings">The strings.</param>
-        public Text(AutomationProvider automation, IEnumerable<string> strings)
-            : this(automation, ExpectType.Any)
+        public Text(AutomationProvider provider, CommandManager manager, IEnumerable<string> strings)
+            : this(provider, manager, ExpectType.Any)
         {
             _expectedStrings = strings;
         }
@@ -74,11 +76,12 @@ namespace FluentAutomation.API.ExpectCommands
         /// <summary>
         /// Initializes a new instance of the <see cref="Text"/> class.
         /// </summary>
-        /// <param name="automation">The automation.</param>
+        /// <param name="provider">The provider.</param>
+        /// <param name="manager">The manager.</param>
         /// <param name="strings">The strings.</param>
         /// <param name="requireAll">if set to <c>true</c> [require all].</param>
-        public Text(AutomationProvider automation, IEnumerable<string> strings, bool requireAll)
-            : this(automation, ExpectType.All)
+        public Text(AutomationProvider provider, CommandManager manager, IEnumerable<string> strings, bool requireAll)
+            : this(provider, manager, ExpectType.All)
         {
             _expectedStrings = strings;
         }
@@ -99,120 +102,102 @@ namespace FluentAutomation.API.ExpectCommands
         /// <param name="conditions">The conditions.</param>
         public void In(string fieldSelector, MatchConditions conditions)
         {
-            var element = _automation.GetElement(fieldSelector, conditions);
-            var elementText = element.GetText() ?? string.Empty;
-
-            if (element != null)
+            Manager.CurrentActionBucket.Add(() =>
             {
-                if (element.IsSelect())
-                {
-                    var selectElement = _automation.GetSelectElement(fieldSelector, conditions);
-                    if (_expectType == ExpectType.Single)
-                    {
-                        if (selectElement.IsMultiple)
-                        {
-                            _automation.TakeAssertExceptionScreenshot();
-                            throw new AssertException("Single value assertion cannot be used on a SelectList that potentially has multiple values. Use Any or All instead.");
-                        }
+                var element = Provider.GetElement(fieldSelector, conditions);
+                var elementText = element.GetText() ?? string.Empty;
 
-                        if (_expectedTextFunc != null)
+                if (element != null)
+                {
+                    if (element.IsSelect())
+                    {
+                        var selectElement = Provider.GetSelectElement(fieldSelector, conditions);
+                        if (_expectType == ExpectType.Single)
                         {
-                            if (!_expectedTextFunc(selectElement.GetSelectedOptionText()))
+                            if (selectElement.IsMultiple)
                             {
-                                _automation.TakeAssertExceptionScreenshot();
-                                throw new AssertException("SelectElement text assertion failed. Expected element [{0}] to match expression [{1}]. Actual text is [{2}].", fieldSelector, _expectedTextExpression.ToExpressionString(), selectElement.GetSelectedOptionText().PrettifyErrorValue());
+                                throw new AssertException("Single value assertion cannot be used on a SelectList that potentially has multiple values. Use Any or All instead.");
+                            }
+
+                            if (_expectedTextFunc != null)
+                            {
+                                if (!_expectedTextFunc(selectElement.GetSelectedOptionText()))
+                                    throw new AssertException("SelectElement text assertion failed. Expected element [{0}] to match expression [{1}]. Actual text is [{2}].", fieldSelector, _expectedTextExpression.ToExpressionString(), selectElement.GetSelectedOptionText().PrettifyErrorValue());
+                            }
+                            else
+                            {
+                                if (!selectElement.GetSelectedOptionText().Equals(_expectedText, StringComparison.InvariantCultureIgnoreCase))
+                                    throw new AssertException("SelectElement text assertion failed. Expected element [{0}] to have selected text of [{1}] but actual selected text is [{2}].", fieldSelector, _expectedText.PrettifyErrorValue(), selectElement.GetSelectedOptionText().PrettifyErrorValue());
                             }
                         }
                         else
                         {
-                            if (!selectElement.GetSelectedOptionText().Equals(_expectedText, StringComparison.InvariantCultureIgnoreCase))
-                            {
-                                _automation.TakeAssertExceptionScreenshot();
-                                throw new AssertException("SelectElement text assertion failed. Expected element [{0}] to have selected text of [{1}] but actual selected text is [{2}].", fieldSelector, _expectedText.PrettifyErrorValue(), selectElement.GetSelectedOptionText().PrettifyErrorValue());
-                            }
-                        }
-                    }
-                    else
-                    {
-                        int textMatching = 0;
-                        string[] selectedText = selectElement.GetOptionsText();
+                            int textMatching = 0;
+                            string[] selectedText = selectElement.GetOptionsText();
 
-                        if (selectedText.Length > 0)
-                        {
-                            foreach (var selectedString in selectedText)
+                            if (selectedText.Length > 0)
                             {
-                                foreach (var text in _expectedStrings)
+                                foreach (var selectedString in selectedText)
                                 {
-                                    if ((_expectedTextFunc != null && !_expectedTextFunc(text)) || 
-                                        (!selectedString.Equals(text, StringComparison.InvariantCultureIgnoreCase)))
+                                    foreach (var text in _expectedStrings)
                                     {
-                                        textMatching++;
+                                        if ((_expectedTextFunc != null && !_expectedTextFunc(text)) ||
+                                            (!selectedString.Equals(text, StringComparison.InvariantCultureIgnoreCase)))
+                                        {
+                                            textMatching++;
+                                        }
+                                    }
+
+                                }
+
+                                if (_expectType == ExpectType.Any)
+                                {
+                                    if (textMatching == 0)
+                                    {
+                                        throw new AssertException("SelectElement text assertion failed. Expected element [{0}] to have at least one option with text matching the collection.", fieldSelector);
                                     }
                                 }
-
-                            }
-
-                            if (_expectType == ExpectType.Any)
-                            {
-                                if (textMatching == 0)
+                                else if (_expectType == ExpectType.All)
                                 {
-                                    _automation.TakeAssertExceptionScreenshot();
-                                    throw new AssertException("SelectElement text assertion failed. Expected element [{0}] to have at least one option with text matching the collection.", fieldSelector);
-                                }
-                            }
-                            else if (_expectType == ExpectType.All)
-                            {
-                                if (textMatching < _expectedStrings.Count())
-                                {
-                                    _automation.TakeAssertExceptionScreenshot();
-                                    throw new AssertException("SelectElement text assertion failed. Expected element [{0}] to include all options text to match the collection.", fieldSelector);
+                                    if (textMatching < _expectedStrings.Count())
+                                    {
+                                        throw new AssertException("SelectElement text assertion failed. Expected element [{0}] to include all options text to match the collection.", fieldSelector);
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                else if (element.IsText())
-                {
-                    var textElement = _automation.GetTextElement(fieldSelector, conditions);
-                    var textElementText = textElement.GetText() ?? string.Empty;
-
-                    if (_expectedTextFunc != null)
+                    else if (element.IsText())
                     {
-                        if (!_expectedTextFunc(textElementText))
+                        var textElement = Provider.GetTextElement(fieldSelector, conditions);
+                        var textElementText = textElement.GetText() ?? string.Empty;
+
+                        if (_expectedTextFunc != null)
                         {
-                            _automation.TakeAssertExceptionScreenshot();
-                            throw new AssertException("TextElement text assertion failed. Expected element [{0}] to match expression [{1}]. Actual value is [{2}].", fieldSelector, _expectedTextExpression.ToExpressionString(), textElementText.PrettifyErrorValue());
+                            if (!_expectedTextFunc(textElementText))
+                                throw new AssertException("TextElement text assertion failed. Expected element [{0}] to match expression [{1}]. Actual value is [{2}].", fieldSelector, _expectedTextExpression.ToExpressionString(), textElementText.PrettifyErrorValue());
+                        }
+                        else
+                        {
+                            if (!textElementText.Equals(_expectedText ?? string.Empty, StringComparison.InvariantCultureIgnoreCase))
+                                throw new AssertException("TextElement text assertion failed. Expected element [{0}] to have a value of [{1}] but actual value is [{2}].", fieldSelector, _expectedText.PrettifyErrorValue(), textElementText.PrettifyErrorValue());
                         }
                     }
                     else
                     {
-                        if (!textElementText.Equals(_expectedText ?? string.Empty, StringComparison.InvariantCultureIgnoreCase))
+                        if (_expectedTextFunc != null)
                         {
-                            _automation.TakeAssertExceptionScreenshot();
-                            throw new AssertException("TextElement text assertion failed. Expected element [{0}] to have a value of [{1}] but actual value is [{2}].", fieldSelector, _expectedText.PrettifyErrorValue(), textElementText.PrettifyErrorValue());
+                            if (!_expectedTextFunc(elementText))
+                                throw new AssertException("Value assertion failed. Expected element [{0}] to match expression [{1}]. Actual value is [{2}].", fieldSelector, _expectedTextExpression.ToExpressionString(), elementText.PrettifyErrorValue());
+                        }
+                        else
+                        {
+                            if (!elementText.Equals(_expectedText ?? string.Empty))
+                                throw new AssertException("Value assertion failed. Expected element [{0}] to have a value of [{1}] but actual value is [{2}].", fieldSelector, _expectedText.PrettifyErrorValue(), elementText.PrettifyErrorValue());
                         }
                     }
                 }
-                else
-                {
-                    if (_expectedTextFunc != null)
-                    {
-                        if (!_expectedTextFunc(elementText))
-                        {
-                            _automation.TakeAssertExceptionScreenshot();
-                            throw new AssertException("Value assertion failed. Expected element [{0}] to match expression [{1}]. Actual value is [{2}].", fieldSelector, _expectedTextExpression.ToExpressionString(), elementText.PrettifyErrorValue());
-                        }
-                    }
-                    else 
-                    {
-                        if (!elementText.Equals(_expectedText ?? string.Empty))
-                        {
-                            _automation.TakeAssertExceptionScreenshot();
-                            throw new AssertException("Value assertion failed. Expected element [{0}] to have a value of [{1}] but actual value is [{2}].", fieldSelector, _expectedText.PrettifyErrorValue(), elementText.PrettifyErrorValue());
-                        }
-                    }
-                }
-            }
+            });
         }
 
         /// <summary>

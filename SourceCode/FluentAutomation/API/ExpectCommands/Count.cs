@@ -12,19 +12,18 @@ namespace FluentAutomation.API.ExpectCommands
     /// <summary>
     /// Count Expect Commands
     /// </summary>
-    public class Count
+    public class Count : CommandBase
     {
-        private AutomationProvider _automation = null;
         private int _count = int.MinValue;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Count"/> class.
         /// </summary>
-        /// <param name="automation">The automation.</param>
+        /// <param name="provider">The provider.</param>
+        /// <param name="manager">The manager.</param>
         /// <param name="count">The count.</param>
-        public Count(AutomationProvider automation, int count)
+        public Count(AutomationProvider provider, CommandManager manager, int count) : base(provider, manager)
         {
-            _automation = automation;
             _count = count;
         }
 
@@ -44,13 +43,16 @@ namespace FluentAutomation.API.ExpectCommands
         /// <param name="conditions">The conditions.</param>
         public void Of(string fieldSelector, MatchConditions conditions)
         {
-            var elements = _automation.GetElements(fieldSelector, conditions);
-
-            if (elements.Count() != _count)
+            Manager.CurrentActionBucket.Add(() =>
             {
-                _automation.TakeAssertExceptionScreenshot();
-                throw new AssertException("Count assertion failed. Expected there to be [{0}] elements matching [{1}]. Actual count is [{2}]", _count, fieldSelector, elements.Count());
-            }
+                var elements = Provider.GetElements(fieldSelector, conditions);
+
+                if (elements.Count() != _count)
+                {
+                	_automation.TakeAssertExceptionScreenshot();
+                    throw new AssertException("Count assertion failed. Expected there to be [{0}] elements matching [{1}]. Actual count is [{2}]", _count, fieldSelector, elements.Count());
+                }
+            });
         }
     }
 }

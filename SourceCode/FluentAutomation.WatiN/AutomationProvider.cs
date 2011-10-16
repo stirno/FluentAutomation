@@ -24,6 +24,7 @@ namespace FluentAutomation.WatiN
         public override void Cleanup()
         {
             _browser.Close();
+            _browser = null;
         }
 
         public override void ClickPoint(API.Point point)

@@ -15,9 +15,8 @@ namespace FluentAutomation.API.ExpectCommands
     /// <summary>
     /// Value Expect Commands
     /// </summary>
-    public class Value
+    public class Value : CommandBase
     {
-        private AutomationProvider _automation = null;
         private MatchConditions _matchConditions = MatchConditions.None;
         private ExpectType _expectType = ExpectType.Single;
 
@@ -29,21 +28,22 @@ namespace FluentAutomation.API.ExpectCommands
         /// <summary>
         /// Prevents a default instance of the <see cref="Value"/> class from being created.
         /// </summary>
-        /// <param name="automation">The automation.</param>
+        /// <param name="provider">The provider.</param>
+        /// <param name="manager">The manager.</param>
         /// <param name="expectType">Type of the expect.</param>
-        private Value(AutomationProvider automation, ExpectType expectType)
+        private Value(AutomationProvider provider, CommandManager manager, ExpectType expectType) : base(provider, manager)
         {
-            _automation = automation;
             _expectType = expectType;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Value"/> class.
         /// </summary>
-        /// <param name="automation">The automation.</param>
+        /// <param name="provider">The provider.</param>
+        /// <param name="manager">The manager.</param>
         /// <param name="value">The value.</param>
-        public Value(AutomationProvider automation, string value)
-            : this(automation, ExpectType.Single)
+        public Value(AutomationProvider provider, CommandManager manager, string value)
+            : this(provider, manager, ExpectType.Single)
         {
             _value = value;
         }
@@ -51,10 +51,11 @@ namespace FluentAutomation.API.ExpectCommands
         /// <summary>
         /// Initializes a new instance of the <see cref="Value"/> class.
         /// </summary>
-        /// <param name="automation">The automation.</param>
+        /// <param name="provider">The provider.</param>
+        /// <param name="manager">The manager.</param>
         /// <param name="value">The value.</param>
-        public Value(AutomationProvider automation, Expression<Func<string, bool>> value)
-            : this(automation, ExpectType.Single)
+        public Value(AutomationProvider provider, CommandManager manager, Expression<Func<string, bool>> value)
+            : this(provider, manager, ExpectType.Single)
         {
             _valueExpression = value;
             _valueFunc = _valueExpression.Compile();
@@ -63,10 +64,11 @@ namespace FluentAutomation.API.ExpectCommands
         /// <summary>
         /// Initializes a new instance of the <see cref="Value"/> class.
         /// </summary>
-        /// <param name="automation">The automation.</param>
+        /// <param name="provider">The provider.</param>
+        /// <param name="manager">The manager.</param>
         /// <param name="values">The values.</param>
-        public Value(AutomationProvider automation, IEnumerable<string> values)
-            : this(automation, ExpectType.Any)
+        public Value(AutomationProvider provider, CommandManager manager, IEnumerable<string> values)
+            : this(provider, manager, ExpectType.Any)
         {
             _values = values;
         }
@@ -74,11 +76,12 @@ namespace FluentAutomation.API.ExpectCommands
         /// <summary>
         /// Initializes a new instance of the <see cref="Value"/> class.
         /// </summary>
-        /// <param name="automation">The automation.</param>
+        /// <param name="provider">The provider.</param>
+        /// <param name="manager">The manager.</param>
         /// <param name="values">The values.</param>
         /// <param name="requireAll">if set to <c>true</c> [require all].</param>
-        public Value(AutomationProvider automation, IEnumerable<string> values, bool requireAll)
-            : this(automation, ExpectType.All)
+        public Value(AutomationProvider provider, CommandManager manager, IEnumerable<string> values, bool requireAll)
+            : this(provider, manager, ExpectType.All)
         {
             _values = values;
         }
@@ -99,129 +102,109 @@ namespace FluentAutomation.API.ExpectCommands
         /// <param name="conditions">The conditions.</param>
         public void In(string fieldSelector, MatchConditions conditions)
         {
-            var element = _automation.GetElement(fieldSelector, conditions);
-            var elementValue = element.GetValue() ?? string.Empty;
-
-            if (element != null)
+            Manager.CurrentActionBucket.Add(() =>
             {
-                if (_value == null && element.GetText() != null && elementValue != string.Empty)
-                {
-                    _automation.TakeAssertExceptionScreenshot();
-                    throw new AssertException("Null value assertion failed. Element [{0}] has a value of [{1}].", fieldSelector, element.GetText().PrettifyErrorValue());
-                }
+                var element = Provider.GetElement(fieldSelector, conditions);
+                var elementValue = element.GetValue() ?? string.Empty;
 
-                if (!element.IsSelect() && (_expectType == ExpectType.Any || _expectType == ExpectType.All))
+                if (element != null)
                 {
-                    _automation.TakeAssertExceptionScreenshot();
-                    throw new AssertException("Value assertion of types Any and All can only be used on SelectList elements.");
-                }
-                else if (element.IsSelect())
-                {
-                    var selectElement = _automation.GetSelectElement(fieldSelector, conditions);
-                    if (_expectType == ExpectType.Single)
+                    if (_value == null && element.GetText() != null && elementValue != string.Empty)
                     {
-                        if (selectElement.IsMultiple)
-                        {
-                            _automation.TakeAssertExceptionScreenshot();
-                            throw new AssertException("Single value assertion cannot be used on a SelectList that potentially has multiple values. Use Any or All instead.");
-                        }
-
-                        if (_valueFunc != null)
-                        {
-                            if (!_valueFunc(selectElement.GetValue()))
-                            {
-                                _automation.TakeAssertExceptionScreenshot();
-                                throw new AssertException("SelectElement value assertion failed. Expected element [{0}] to match expression [{1}]. Actual value is [{2}].", fieldSelector, _valueExpression.ToExpressionString(), selectElement.GetValue().PrettifyErrorValue());
-                            }
-                        }
-                        else 
-                        {
-                            if (!selectElement.GetValue().Equals(_value, StringComparison.InvariantCultureIgnoreCase))
-                            {
-                                _automation.TakeAssertExceptionScreenshot();
-                                throw new AssertException("SelectElement value assertion failed. Expected element [{0}] to have a selected value of [{1}] but actual selected value is [{2}].", fieldSelector, _value.PrettifyErrorValue(), selectElement.GetValue().PrettifyErrorValue());
-                            }
-                        }
+                        throw new AssertException("Null value assertion failed. Element [{0}] has a value of [{1}].", fieldSelector, element.GetText().PrettifyErrorValue());
                     }
-                    else
-                    {
-                        int valuesMatching = 0;
-                        string[] selectedValues = selectElement.GetValues();
 
-                        if (selectedValues.Length > 0)
+                    if (!element.IsSelect() && (_expectType == ExpectType.Any || _expectType == ExpectType.All))
+                    {
+                        throw new AssertException("Value assertion of types Any and All can only be used on SelectList elements.");
+                    }
+                    else if (element.IsSelect())
+                    {
+                        var selectElement = Provider.GetSelectElement(fieldSelector, conditions);
+                        if (_expectType == ExpectType.Single)
                         {
-                            foreach (var selectedValue in selectedValues)
+                            if (selectElement.IsMultiple)
                             {
-                                foreach (var value in _values)
+                                throw new AssertException("Single value assertion cannot be used on a SelectList that potentially has multiple values. Use Any or All instead.");
+                            }
+
+                            if (_valueFunc != null)
+                            {
+                                if (!_valueFunc(selectElement.GetValue()))
+                                    throw new AssertException("SelectElement value assertion failed. Expected element [{0}] to match expression [{1}]. Actual value is [{2}].", fieldSelector, _valueExpression.ToExpressionString(), selectElement.GetValue().PrettifyErrorValue());
+                            }
+                            else
+                            {
+                                if (!selectElement.GetValue().Equals(_value, StringComparison.InvariantCultureIgnoreCase))
+                                    throw new AssertException("SelectElement value assertion failed. Expected element [{0}] to have a selected value of [{1}] but actual selected value is [{2}].", fieldSelector, _value.PrettifyErrorValue(), selectElement.GetValue().PrettifyErrorValue());
+                            }
+                        }
+                        else
+                        {
+                            int valuesMatching = 0;
+                            string[] selectedValues = selectElement.GetValues();
+
+                            if (selectedValues.Length > 0)
+                            {
+                                foreach (var selectedValue in selectedValues)
                                 {
-                                    if ((_valueFunc != null && !_valueFunc(selectedValue)) || 
-                                        (selectedValue.Equals(value, StringComparison.InvariantCultureIgnoreCase)))
+                                    foreach (var value in _values)
                                     {
-                                        valuesMatching++;
+                                        if ((_valueFunc != null && !_valueFunc(selectedValue)) ||
+                                            (selectedValue.Equals(value, StringComparison.InvariantCultureIgnoreCase)))
+                                        {
+                                            valuesMatching++;
+                                        }
                                     }
                                 }
                             }
-                        }
 
-                        if (_expectType == ExpectType.Any)
-                        {
-                            if (valuesMatching == 0)
+                            if (_expectType == ExpectType.Any)
                             {
-                                _automation.TakeAssertExceptionScreenshot();
-                                throw new AssertException("SelectElement value assertion failed. Expected element [{0}] to have at least one value matching the collection.", fieldSelector);
+                                if (valuesMatching == 0)
+                                {
+                                    throw new AssertException("SelectElement value assertion failed. Expected element [{0}] to have at least one value matching the collection.", fieldSelector);
+                                }
                             }
-                        }
-                        else if (_expectType == ExpectType.All)
-                        {
-                            if (valuesMatching < _values.Count())
+                            else if (_expectType == ExpectType.All)
                             {
-                                _automation.TakeAssertExceptionScreenshot();
-                                throw new AssertException("SelectElement value assertion failed. Expected element [{0}] to include all values in collection.", fieldSelector);
+                                if (valuesMatching < _values.Count())
+                                {
+                                    throw new AssertException("SelectElement value assertion failed. Expected element [{0}] to include all values in collection.", fieldSelector);
+                                }
                             }
                         }
                     }
-                }
-                else if (element.IsText())
-                {
-                    var textElement = _automation.GetTextElement(fieldSelector, conditions);
-                    var textElementValue = textElement.GetValue() ?? string.Empty;
-                    if (_valueFunc != null)
+                    else if (element.IsText())
                     {
-                        if (!_valueFunc(textElementValue))
+                        var textElement = Provider.GetTextElement(fieldSelector, conditions);
+                        var textElementValue = textElement.GetValue() ?? string.Empty;
+                        if (_valueFunc != null)
                         {
-                            _automation.TakeAssertExceptionScreenshot();
-                            throw new AssertException("TextElement value assertion failed. Expected element [{0}] to match expression [{1}]. Actual value is [{2}].", fieldSelector, _valueExpression.ToExpressionString(), textElementValue.PrettifyErrorValue());
+                            if (!_valueFunc(textElementValue))
+                                throw new AssertException("TextElement value assertion failed. Expected element [{0}] to match expression [{1}]. Actual value is [{2}].", fieldSelector, _valueExpression.ToExpressionString(), textElementValue.PrettifyErrorValue());
+                        }
+                        else
+                        {
+                            if (!textElementValue.Equals(_value ?? string.Empty, StringComparison.InvariantCultureIgnoreCase))
+                                throw new AssertException("TextElement value assertion failed. Expected element [{0}] to have a value of [{1}] but actual value is [{2}].", fieldSelector, _value.PrettifyErrorValue(), textElementValue.PrettifyErrorValue());
                         }
                     }
                     else
                     {
-                        if (!textElementValue.Equals(_value ?? string.Empty, StringComparison.InvariantCultureIgnoreCase))
+                        if (_valueFunc != null)
                         {
-                            _automation.TakeAssertExceptionScreenshot();
-                            throw new AssertException("TextElement value assertion failed. Expected element [{0}] to have a value of [{1}] but actual value is [{2}].", fieldSelector, _value.PrettifyErrorValue(), textElementValue.PrettifyErrorValue());
+                            if (!_valueFunc(elementValue))
+                                throw new AssertException("Value assertion failed. Expected element [{0}] to match expression [{1}]. Actual value is [{2}].", fieldSelector, _valueExpression.ToExpressionString(), elementValue.PrettifyErrorValue());
+                        }
+                        else
+                        {
+                            if (!elementValue.Equals(_value ?? string.Empty))
+                                throw new AssertException("Value assertion failed. Expected element [{0}] to have a value of [{1}] but actual value is [{2}].", fieldSelector, _value.PrettifyErrorValue(), elementValue.PrettifyErrorValue());
                         }
                     }
                 }
-                else
-                {
-                    if (_valueFunc != null)
-                    {
-                        if (!_valueFunc(elementValue))
-                        {
-                            _automation.TakeAssertExceptionScreenshot();
-                            throw new AssertException("Value assertion failed. Expected element [{0}] to match expression [{1}]. Actual value is [{2}].", fieldSelector, _valueExpression.ToExpressionString(), elementValue.PrettifyErrorValue());
-                        }
-                    }
-                    else
-                    {
-                        if (!elementValue.Equals(_value ?? string.Empty))
-                        {
-                            _automation.TakeAssertExceptionScreenshot();
-                            throw new AssertException("Value assertion failed. Expected element [{0}] to have a value of [{1}] but actual value is [{2}].", fieldSelector, _value.PrettifyErrorValue(), elementValue.PrettifyErrorValue());
-                        }
-                    }
-                }
-            }
+            });
         }
 
         /// <summary>
