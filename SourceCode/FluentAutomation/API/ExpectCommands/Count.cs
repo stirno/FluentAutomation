@@ -43,13 +43,13 @@ namespace FluentAutomation.API.ExpectCommands
         /// <param name="conditions">The conditions.</param>
         public void Of(string fieldSelector, MatchConditions conditions)
         {
-            Manager.CurrentActionBucket.Add(() =>
+            CommandManager.CurrentActionBucket.Add(() =>
             {
                 var elements = Provider.GetElements(fieldSelector, conditions);
 
                 if (elements.Count() != _count)
                 {
-                	_automation.TakeAssertExceptionScreenshot();
+                	Provider.TakeAssertExceptionScreenshot();
                     throw new AssertException("Count assertion failed. Expected there to be [{0}] elements matching [{1}]. Actual count is [{2}]", _count, fieldSelector, elements.Count());
                 }
             });

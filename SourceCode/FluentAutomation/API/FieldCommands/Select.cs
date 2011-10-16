@@ -78,7 +78,7 @@ namespace FluentAutomation.API.FieldCommands
         /// <param name="conditions">The conditions.</param>
         public void From(string fieldSelector, MatchConditions conditions)
         {
-            Manager.CurrentActionBucket.Add(() =>
+            CommandManager.CurrentActionBucket.Add(() =>
             {
                 var field = Provider.GetSelectElement(fieldSelector, conditions);
                 field.ClearSelectedItems();

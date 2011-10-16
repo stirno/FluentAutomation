@@ -56,6 +56,11 @@ namespace FluentAutomation.WatiN
             return _element.Options.Select(o => o.Text).ToArray();
         }
 
+        public string[] GetSelectedOptionsText()
+        {
+            return _element.Options.Where(o => o.Selected).Select(o => o.Text).ToArray();
+        }
+
         public int GetSelectedIndex()
         {
             return _element.SelectedOption.Index;
@@ -75,7 +80,14 @@ namespace FluentAutomation.WatiN
         {
             if (selectMode == SelectMode.Value)
             {
-                _element.SelectByValue(value);
+                if (_element.Options.Any(o => o.Value.Equals(value, StringComparison.InvariantCultureIgnoreCase)))
+                {
+                    _element.SelectByValue(value);
+                }
+                else
+                {
+                    _element.Select(value);
+                }
             }
             else if (selectMode == SelectMode.Text)
             {

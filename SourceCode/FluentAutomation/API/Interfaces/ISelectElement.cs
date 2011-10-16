@@ -20,6 +20,12 @@ namespace FluentAutomation.API.Interfaces
         string GetSelectedOptionText();
 
         /// <summary>
+        /// Gets the selected options text.
+        /// </summary>
+        /// <returns></returns>
+        string[] GetSelectedOptionsText();
+
+        /// <summary>
         /// Gets the selected values.
         /// </summary>
         /// <returns></returns>

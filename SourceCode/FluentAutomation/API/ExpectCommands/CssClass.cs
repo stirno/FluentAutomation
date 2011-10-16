@@ -43,7 +43,7 @@ namespace FluentAutomation.API.ExpectCommands
         /// <param name="conditions">The conditions.</param>
         public void On(string fieldSelector, MatchConditions conditions)
         {
-            Manager.CurrentActionBucket.Add(() =>
+            CommandManager.CurrentActionBucket.Add(() =>
             {
                 var element = Provider.GetElement(fieldSelector, conditions);
                 string className = _value.Replace(".", "").Trim();
@@ -67,7 +67,7 @@ namespace FluentAutomation.API.ExpectCommands
 
                     if (!hasMatches)
                     {
-						_automation.TakeAssertExceptionScreenshot();
+						Provider.TakeAssertExceptionScreenshot();
                         throw new AssertException("Class name assertion failed. Expected element [{0}] to include a CSS class of [{1}].", fieldSelector, className);
                     }
                 }
@@ -75,7 +75,7 @@ namespace FluentAutomation.API.ExpectCommands
                 {
                     if (!elementClassName.Equals(className))
                     {
-						_automation.TakeAssertExceptionScreenshot();
+						Provider.TakeAssertExceptionScreenshot();
                         throw new AssertException("Class name assertion failed. Expected element [{0]] to include a CSS class of [{1}] but current CSS class is [{2}].", fieldSelector, className, elementClassName);
                     }
                 }

@@ -46,6 +46,11 @@ namespace FluentAutomation.SeleniumWebDriver
             return _element.SelectedOption.Text;
         }
 
+        public string[] GetSelectedOptionsText()
+        {
+            return _element.AllSelectedOptions.Select(o => o.Text).ToArray();
+        }
+
         public string[] GetValues()
         {
             return _element.AllSelectedOptions.Select(o => o.GetAttribute("value") ?? o.Text).ToArray();
@@ -81,6 +86,13 @@ namespace FluentAutomation.SeleniumWebDriver
                 }
                 catch (NoSuchElementException)
                 {
+                    try
+                    {
+                        _element.SelectByText(value);
+                    }
+                    catch (NoSuchElementException)
+                    {
+                    }
                 }
             }
             else if (selectMode == SelectMode.Text)

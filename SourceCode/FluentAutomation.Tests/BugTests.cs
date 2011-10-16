@@ -23,7 +23,8 @@ namespace FluentAutomation.Tests
         [TestMethod]
         public void Bug_1_CantExpectValueOnSelect()
         {
-            I.Use(BrowserType.Chrome);
+            //I.Use(BrowserType.Chrome);
+            //I.Record();
             I.Open("http://knockoutjs.com/examples/controlTypes.html");
             I.Select(x => x.Contains("Be")).From("select:eq(0)");
             //I.Select("Beta", SelectMode.Value).From("select:eq(0)");
@@ -32,10 +33,10 @@ namespace FluentAutomation.Tests
             I.Expect.Any("Alpha", "Beta").In("select:eq(0)");
 
             //I.Select(x => x.Length > 4).From("select:eq(1)");
-            I.Select("Beta", "Gamma").From("select:eq(1)");
-            I.Expect.All("Alpha", "Gamma").In("select:eq(1)");
-            I.Expect.Any("Alpha").In("select:eq(1)");
-            //I.PlayWith(BrowserType.InternetExplorer, BrowserType.Chrome);
+            I.Select("Alpha", "Gamma").From("select:eq(1)");
+            I.Expect.All(SelectMode.Value, "Alpha", "Gamma").In("select:eq(1)");
+            I.Expect.Any(SelectMode.Text, "Alp3ha", "Alpha").In("select:eq(1)");
+            //I.PlayWith(BrowserType.InternetExplorer);
         }
 
         [TestMethod]

@@ -31,7 +31,7 @@ namespace FluentAutomation.API.FieldCommands
         /// <param name="fieldSelector">The field selector.</param>
         public void To(string fieldSelector)
         {
-            Manager.CurrentActionBucket.Add(() =>
+            CommandManager.CurrentActionBucket.Add(() =>
             {
                 var element = Provider.GetElement(_dragFieldSelector, MatchConditions.None);
                 element.DragTo(Provider.GetElement(fieldSelector, MatchConditions.None));

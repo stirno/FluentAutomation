@@ -57,7 +57,7 @@ namespace FluentAutomation.API.FieldCommands
         /// <param name="conditions">The conditions.</param>
         public void In(string fieldSelector, MatchConditions conditions)
         {
-            Manager.CurrentActionBucket.Add(() =>
+            CommandManager.CurrentActionBucket.Add(() =>
             {
                 var field = Provider.GetTextElement(fieldSelector, conditions);
 

@@ -58,7 +58,6 @@
     <Compile Include="API\Enumerations\ExpectType.cs" />
     <Compile Include="API\Enumerations\MatchConditions.cs" />
     <Compile Include="API\Enumerations\SelectMode.cs" />
-    <Compile Include="API\Exceptions\AssertException.cs" />
     <Compile Include="API\ExpectCommands\Count.cs" />
     <Compile Include="API\ExpectCommands\Text.cs" />
     <Compile Include="API\Exceptions\FeatureNotImplementedException.cs" />
@@ -72,6 +71,7 @@
     <Compile Include="API\Interfaces\ISelectElement.cs" />
     <Compile Include="API\Interfaces\ITextElement.cs" />
     <Compile Include="API\Exceptions\MatchConditionException.cs" />
+    <Compile Include="API\Interfaces\IValueTextCommand.cs" />
     <Compile Include="API\MouseControl.cs" />
     <Compile Include="API\Point.cs" />
     <Compile Include="API\Providers\AutomationProvider.cs" />

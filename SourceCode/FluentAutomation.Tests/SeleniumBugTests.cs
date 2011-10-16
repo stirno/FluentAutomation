@@ -12,7 +12,7 @@ using FluentAutomation.API.Enumerations;
 namespace FluentAutomation.Tests
 {
     [TestClass]
-    public class SeleniumBugTests : FluentAutomation.SeleniumWebDriver.FluentTest
+    public class SeleniumBugTests : FluentAutomation.WatiN.FluentTest
     {
         [TestMethod]
         public void TestSelenium()
@@ -22,7 +22,7 @@ namespace FluentAutomation.Tests
             I.Select("1957 Vespa GS150").From("#cartEditor tr select:eq(1)");
             I.Enter(6).Quickly.In("#cartEditor td.quantity input");
 
-            I.Expect.This("$197.70").In("#cartEditor tr span:eq(1)");
+            I.Expect.Text("$197.70").In("#cartEditor tr span:eq(1)");
         }
 
         [TestMethod]

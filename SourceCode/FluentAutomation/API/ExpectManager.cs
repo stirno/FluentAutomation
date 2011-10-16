@@ -6,6 +6,8 @@ using System;
 using System.Linq.Expressions;
 using FluentAutomation.API.Exceptions;
 using FluentAutomation.API.Providers;
+using FluentAutomation.API.Enumerations;
+using FluentAutomation.API.Interfaces;
 
 namespace FluentAutomation.API
 {
@@ -14,9 +16,10 @@ namespace FluentAutomation.API
     /// </summary>
     public class ExpectManager
     {
-        private CommandManager _manager = null;
-        private AutomationProvider _automation = null;
         private ExpectCommands.Value _nullHandler = null;
+
+        protected CommandManager Manager = null;
+        protected AutomationProvider Provider { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExpectManager"/> class.
@@ -24,8 +27,8 @@ namespace FluentAutomation.API
         /// <param name="automation">The automation.</param>
         public ExpectManager(AutomationProvider automation, CommandManager manager)
         {
-            _automation = automation;
-            _manager = manager;
+            Provider = automation;
+            Manager = manager;
         }
 
         /// <summary>
@@ -38,7 +41,7 @@ namespace FluentAutomation.API
                 if (_nullHandler == null)
                 {
                     string value = null;
-                    _nullHandler = new ExpectCommands.Value(_automation, _manager, value);
+                    _nullHandler = new ExpectCommands.Value(Provider, Manager, value);
                 }
 
                 return _nullHandler;
@@ -52,7 +55,7 @@ namespace FluentAutomation.API
         /// <returns></returns>
         public virtual ExpectCommands.Text Text(string value)
         {
-            return new ExpectCommands.Text(_automation, _manager, value);
+            return new ExpectCommands.Text(Provider, Manager, value);
         }
 
         /// <summary>
@@ -62,7 +65,7 @@ namespace FluentAutomation.API
         /// <returns></returns>
         public virtual ExpectCommands.Text Text(Expression<Func<string, bool>> valueExpression)
         {
-            return new ExpectCommands.Text(_automation, _manager, valueExpression);
+            return new ExpectCommands.Text(Provider, Manager, valueExpression);
         }
 
         /// <summary>
@@ -94,7 +97,7 @@ namespace FluentAutomation.API
         /// <returns></returns>
         public virtual ExpectCommands.Value Value(string value)
         {
-            return new ExpectCommands.Value(_automation, _manager, value);
+            return new ExpectCommands.Value(Provider, Manager, value);
         }
 
         /// <summary>
@@ -104,7 +107,26 @@ namespace FluentAutomation.API
         /// <returns></returns>
         public virtual ExpectCommands.Value Value(Expression<Func<string, bool>> valueExpression)
         {
-            return new ExpectCommands.Value(_automation, _manager, valueExpression);
+            return new ExpectCommands.Value(Provider, Manager, valueExpression);
+        }
+
+        /// <summary>
+        /// Alls the specified select mode.
+        /// </summary>
+        /// <param name="selectMode">The select mode.</param>
+        /// <param name="values">The values.</param>
+        /// <returns></returns>
+        public virtual IValueTextCommand All(SelectMode selectMode, params string[] values)
+        {
+            switch (selectMode)
+            {
+                case SelectMode.Value:
+                    return new ExpectCommands.Value(Provider, Manager, values, true);
+                case SelectMode.Text:
+                    return new ExpectCommands.Text(Provider, Manager, values, true);
+                default:
+                    throw new Exception("Only Value and Text select modes are supported by this method.");
+            }
         }
 
         /// <summary>
@@ -114,7 +136,26 @@ namespace FluentAutomation.API
         /// <returns></returns>
         public virtual ExpectCommands.Value All(params string[] values)
         {
-            return new ExpectCommands.Value(_automation, _manager, values, true);
+            return new ExpectCommands.Value(Provider, Manager, values, true);
+        }
+
+        /// <summary>
+        /// Anies the specified select mode.
+        /// </summary>
+        /// <param name="selectMode">The select mode.</param>
+        /// <param name="values">The values.</param>
+        /// <returns></returns>
+        public virtual IValueTextCommand Any(SelectMode selectMode, params string[] values)
+        {
+            switch (selectMode)
+            {
+                case SelectMode.Value:
+                    return new ExpectCommands.Value(Provider, Manager, values);
+                case SelectMode.Text:
+                    return new ExpectCommands.Text(Provider, Manager, values);
+                default:
+                    throw new Exception("Only Value and Text select modes are supported by this method.");
+            }
         }
 
         /// <summary>
@@ -124,7 +165,7 @@ namespace FluentAutomation.API
         /// <returns></returns>
         public virtual ExpectCommands.Value Any(params string[] values)
         {
-            return new ExpectCommands.Value(_automation, _manager, values);
+            return new ExpectCommands.Value(Provider, Manager, values);
         }
 
         /// <summary>
@@ -134,7 +175,7 @@ namespace FluentAutomation.API
         /// <returns></returns>
         public virtual ExpectCommands.CssClass Class(string value)
         {
-            return new ExpectCommands.CssClass(_automation, _manager, value);
+            return new ExpectCommands.CssClass(Provider, Manager, value);
         }
 
         /// <summary>
@@ -144,7 +185,7 @@ namespace FluentAutomation.API
         /// <returns></returns>
         public virtual ExpectCommands.Count Count(int value)
         {
-            return new ExpectCommands.Count(_automation, _manager, value);
+            return new ExpectCommands.Count(Provider, Manager, value);
         }
 
         /// <summary>
@@ -152,7 +193,7 @@ namespace FluentAutomation.API
         /// </summary>
         public virtual void Alert()
         {
-            _automation.HandleAlertDialog();
+            Provider.HandleAlertDialog();
         }
 
         /// <summary>
@@ -161,7 +202,7 @@ namespace FluentAutomation.API
         /// <param name="alertMessage">The alert message.</param>
         public virtual void Alert(string alertMessage)
         {
-            _automation.HandleAlertDialog(alertMessage);
+            Provider.HandleAlertDialog(alertMessage);
         }
 
         /// <summary>
@@ -179,10 +220,10 @@ namespace FluentAutomation.API
         /// <param name="pageUri">The page URI.</param>
         public virtual void Url(Uri pageUri)
         {
-            if (!pageUri.ToString().Equals(_automation.GetUri().ToString(), StringComparison.InvariantCultureIgnoreCase))
+            if (!pageUri.ToString().Equals(Provider.GetUri().ToString(), StringComparison.InvariantCultureIgnoreCase))
             {
-                _automation.TakeAssertExceptionScreenshot();
-                throw new AssertException("URL Assertion failed. Expected URL [{0}] but actual URL is [{1}].", pageUri, _automation.GetUri());
+                Provider.TakeAssertExceptionScreenshot();
+                throw new AssertException("URL Assertion failed. Expected URL [{0}] but actual URL is [{1}].", pageUri, Provider.GetUri());
             }
         }
 
@@ -193,10 +234,10 @@ namespace FluentAutomation.API
         public virtual void Url(Expression<Func<Uri, bool>> valueExpression)
         {
             var _compiledFunc = valueExpression.Compile();
-            if (!_compiledFunc(_automation.GetUri()))
+            if (!_compiledFunc(Provider.GetUri()))
             {
-                _automation.TakeAssertExceptionScreenshot();
-                throw new AssertException("URL Assertion failed. Expected URL to match expression [{0}]. Actual URL is [{1}].", valueExpression.ToExpressionString(), _automation.GetUri());
+                Provider.TakeAssertExceptionScreenshot();
+                throw new AssertException("URL Assertion failed. Expected URL to match expression [{0}]. Actual URL is [{1}].", valueExpression.ToExpressionString(), Provider.GetUri());
             }
         }
     }

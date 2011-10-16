@@ -49,7 +49,7 @@ namespace FluentAutomation.Tests
         public void Test_FuncExpects()
         {
             I.Open("http://knockoutjs.com/examples/controlTypes.html");
-            I.Expect.Url(x => x.AbsoluteUri.Contains("controlTypes3.html"));
+            I.Expect.Url(x => x.AbsoluteUri.Contains("controlTypes.html"));
         }
 
         [TestMethod]
@@ -63,7 +63,7 @@ namespace FluentAutomation.Tests
         public void Test_SelectFuncWithMode()
         {
             I.Open("http://www.htmlcodetutorial.com/linking/linking_famsupp_114.html");
-            I.Select(x => x.Contains("Guide"), SelectMode.Value).From("select:eq(0)");
+            I.Select(x => x.Contains("Guide"), SelectMode.Text).From("select:eq(0)");
         }
     }
 }

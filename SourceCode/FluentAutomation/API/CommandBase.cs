@@ -9,12 +9,12 @@ namespace FluentAutomation.API
     public class CommandBase
     {
         protected AutomationProvider Provider { get; set; }
-        protected CommandManager Manager { get; set; }
+        protected CommandManager CommandManager { get; set; }
 
         public CommandBase(AutomationProvider provider, CommandManager manager)
         {
             Provider = provider;
-            Manager = manager;
+            CommandManager = manager;
         }
     }
 }
