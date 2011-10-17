@@ -330,7 +330,7 @@ namespace FluentAutomation.API
 			foreach (var chr in keys)
 			{
 				System.Windows.Forms.SendKeys.SendWait(chr.ToString());
-                System.Threading.Thread.Sleep(5);
+                System.Threading.Thread.Sleep(20);
 			}
 		}
 

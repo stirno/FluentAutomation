@@ -71,7 +71,7 @@ namespace FluentAutomation.Tests
         {
             I.Open("http://www.uploadify.com/demos/");
             I.Upload(@"C:\Users\Public\Pictures\Sample Pictures\Chrysanthemum.jpg", "#basic-demo", new API.Point { X = 2, Y = 90 });
-            I.Expect.Text(x => x.Contains("Error")).In("#file_uploadQueue .percentage");
+            I.Expect.Text(x => x.Contains("Err2or")).In("#file_uploadQueue .percentage");
             //I.ClickWithin("#basic-demo", new API.Point { X = 2, Y = -100 });
             //I.Click("#basic-demo", new API.Point { X = 2, Y = 90 });
         }
