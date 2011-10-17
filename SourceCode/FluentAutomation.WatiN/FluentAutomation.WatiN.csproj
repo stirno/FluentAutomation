@@ -34,7 +34,7 @@
     <Reference Include="Interop.SHDocVw">
       <HintPath>..\..\3rdPartyLib\WatiN\Interop.SHDocVw.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
