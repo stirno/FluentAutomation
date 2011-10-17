@@ -15,6 +15,13 @@ namespace FluentAutomation.API
         /// <summary>
         /// Initializes a new instance of the <see cref="Point"/> class.
         /// </summary>
+        public Point()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Point"/> class.
+        /// </summary>
         /// <param name="x">The x.</param>
         /// <param name="y">The y.</param>
         public Point(int x, int y)
@@ -24,7 +31,7 @@ namespace FluentAutomation.API
         }
 
         /// <summary>
-        /// Gets or sets the X-axis value.
+        /// Gets the X-axis value.
         /// </summary>
         /// <value>
         /// X-axis value.
@@ -43,7 +50,7 @@ namespace FluentAutomation.API
         }
 
         /// <summary>
-        /// Gets or sets the Y-axis value.
+        /// Gets the Y-axis value.
         /// </summary>
         /// <value>
         /// Y-axis value.

@@ -41,6 +41,13 @@ namespace FluentAutomation.API.Providers
         public abstract void ClickPoint(API.Point point);
 
         /// <summary>
+        /// Clicks the within.
+        /// </summary>
+        /// <param name="selector">The selector.</param>
+        /// <param name="point">The point.</param>
+        public abstract void ClickWithin(string selector, API.Point point);
+
+        /// <summary>
         /// Gets the text element matching the field selector and conditions.
         /// </summary>
         /// <param name="fieldSelector">The field selector.</param>
@@ -102,6 +109,13 @@ namespace FluentAutomation.API.Providers
         public abstract void HandleAlertDialog(string expectedMessage);
 
         /// <summary>
+        /// Hovers the within.
+        /// </summary>
+        /// <param name="selector">The selector.</param>
+        /// <param name="point">The point.</param>
+        public abstract void HoverWithin(string selector, API.Point point);
+
+        /// <summary>
         /// Hovers over the point (X, Y coordinates).
         /// </summary>
         /// <param name="point">The point.</param>
@@ -155,7 +169,7 @@ namespace FluentAutomation.API.Providers
         /// <param name="fileName">Name of the file.</param>
         /// <param name="fieldSelector">The field selector.</param>
         /// <param name="conditions">The conditions.</param>
-        public abstract void Upload(string fileName, string fieldSelector, MatchConditions conditions);
+        public abstract void Upload(string fileName, string fieldSelector, API.Point offset, MatchConditions conditions);
 
         /// <summary>
         /// Waits the specified time.

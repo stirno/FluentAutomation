@@ -47,6 +47,7 @@ namespace FluentAutomation.API
         /// <param name="point">The point.</param>
         public static void Click(API.Point point)
         {
+            SetPosition(point);
             MouseEvent(MouseEvent_LeftButtonDown, point.X, point.Y, 0, 0);
             MouseEvent(MouseEvent_LeftButtonUp, point.X, point.Y, 0, 0);
         }

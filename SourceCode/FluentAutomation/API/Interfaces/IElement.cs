@@ -13,6 +13,16 @@ namespace FluentAutomation.API.Interfaces
     public interface IElement
     {
         /// <summary>
+        /// Gets the position.
+        /// </summary>
+        API.Point Position { get; }
+
+        /// <summary>
+        /// Gets the size.
+        /// </summary>
+        API.Size Size { get; }
+
+        /// <summary>
         /// Gets the attribute value.
         /// </summary>
         /// <param name="attributeName">Name of the attribute.</param>
@@ -30,12 +40,6 @@ namespace FluentAutomation.API.Interfaces
         /// </summary>
         /// <returns></returns>
         string GetValue();
-
-        /// <summary>
-        /// Gets the element bounds.
-        /// </summary>
-        /// <returns></returns>
-        Rectangle GetElementBounds();
 
         /// <summary>
         /// Determines whether this instance is select.

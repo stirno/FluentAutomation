@@ -18,8 +18,8 @@ namespace FluentAutomation.API
 		private int _bucketIndex = -1;
 		private List<ActionBucket> _actionBuckets = new List<ActionBucket>();
 
-        protected AutomationProvider Provider { get; set; }
-        protected ExpectManager ExpectManager { get; set; }
+		protected AutomationProvider Provider { get; set; }
+		protected ExpectManager ExpectManager { get; set; }
 
 		/// <summary>
 		/// Gets or sets the action bucket.
@@ -100,11 +100,22 @@ namespace FluentAutomation.API
 			Click(elementSelector, ClickMode.Default);
 		}
 
+		/// <summary>
+		/// Clicks the specified element selector.
+		/// </summary>
+		/// <param name="elementSelector">The element selector.</param>
+		/// <param name="clickMode">The click mode.</param>
 		public void Click(string elementSelector, ClickMode clickMode)
 		{
 			Click(elementSelector, clickMode, MatchConditions.None);
 		}
 
+		/// <summary>
+		/// Clicks the specified element selector.
+		/// </summary>
+		/// <param name="elementSelector">The element selector.</param>
+		/// <param name="clickMode">The click mode.</param>
+		/// <param name="conditions">The conditions.</param>
 		public void Click(string elementSelector, ClickMode clickMode, MatchConditions conditions)
 		{
 			CurrentActionBucket.Add(() =>
@@ -123,6 +134,19 @@ namespace FluentAutomation.API
 			CurrentActionBucket.Add(() =>
 			{
 				Provider.ClickPoint(point);
+			});
+		}
+
+		/// <summary>
+		/// Clicks a point relative to the position of the container from the top left. Useful when pages are centered or oddly positioned.
+		/// </summary>
+		/// <param name="containerSelector">The container selector.</param>
+		/// <param name="point">The point.</param>
+		public void Click(string containerSelector, API.Point point)
+		{
+			CurrentActionBucket.Add(() =>
+			{
+                Provider.ClickWithin(containerSelector, point);
 			});
 		}
 
@@ -306,6 +330,7 @@ namespace FluentAutomation.API
 			foreach (var chr in keys)
 			{
 				System.Windows.Forms.SendKeys.SendWait(chr.ToString());
+                System.Threading.Thread.Sleep(5);
 			}
 		}
 
@@ -392,6 +417,17 @@ namespace FluentAutomation.API
 			return new FieldCommands.Select(Provider, this, indices, SelectMode.Index);
 		}
 
+        /// <summary>
+        /// Uploads the specified file name.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="fieldSelector">The field selector.</param>
+        /// <param name="offset">The offset.</param>
+        public void Upload(string fileName, string fieldSelector, API.Point offset)
+        {
+            Upload(fileName, fieldSelector, offset, MatchConditions.Visible);
+        }
+
 		/// <summary>
 		/// Uploads the specified file name with the field specified.
 		/// </summary>
@@ -399,22 +435,23 @@ namespace FluentAutomation.API
 		/// <param name="fieldSelector">The field selector.</param>
 		public void Upload(string fileName, string fieldSelector)
 		{
-			Upload(fileName, fieldSelector, MatchConditions.Visible);
+			Upload(fileName, fieldSelector, null, MatchConditions.Visible);
 		}
 
-		/// <summary>
-		/// Uploads the specified file name with the field specified.
-		/// </summary>
-		/// <param name="fileName">Name of the file.</param>
-		/// <param name="fieldSelector">The field selector.</param>
-		/// <param name="conditions">The conditions.</param>
-		public void Upload(string fileName, string fieldSelector, MatchConditions conditions)
-		{
-			CurrentActionBucket.Add(() =>
-			{
-				Provider.Upload(fileName, fieldSelector, conditions);
-			});
-		}
+        /// <summary>
+        /// Uploads the specified file name.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="fieldSelector">The field selector.</param>
+        /// <param name="offset">The offset.</param>
+        /// <param name="conditions">The conditions.</param>
+        public void Upload(string fileName, string fieldSelector, API.Point offset, MatchConditions conditions)
+        {
+            CurrentActionBucket.Add(() =>
+            {
+                Provider.Upload(fileName, fieldSelector, offset, conditions);
+            });
+        }
 
 		/// <summary>
 		/// Uses the specified browser type.
