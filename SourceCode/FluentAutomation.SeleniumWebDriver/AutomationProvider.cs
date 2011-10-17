@@ -25,9 +25,20 @@ namespace FluentAutomation.SeleniumWebDriver
             _driver = null;
         }
 
+        public override void ClickWithin(string selector, Point point)
+        {
+            var container = _driver.FindElement(BySizzle.CssSelector(selector));
+
+            (new OpenQA.Selenium.Interactions.Actions(_driver))
+                .MoveToElement(container, point.X, point.Y)
+                .Click()
+                .Build()
+                .Perform();
+        }
+
         public override void ClickPoint(API.Point point)
         {
-            (new OpenQA.Selenium.Interactions.Actions(_driver)).MoveToElement(_driver.FindElement(By.TagName("body"))).MoveByOffset(point.X, point.Y).Click().Perform();
+            this.ClickWithin("body", point);
         }
 
         public override ITextElement GetTextElement(string fieldSelector, MatchConditions conditions)
@@ -82,9 +93,17 @@ namespace FluentAutomation.SeleniumWebDriver
             }
         }
 
+        public override void HoverWithin(string selector, Point point)
+        {
+            (new OpenQA.Selenium.Interactions.Actions(_driver))
+                .MoveToElement(_driver.FindElement(By.TagName(selector)), point.X, point.Y)
+                .Build()
+                .Perform();
+        }
+
         public override void HoverPoint(API.Point point)
         {
-            (new OpenQA.Selenium.Interactions.Actions(_driver)).MoveToElement(_driver.FindElement(By.TagName("body"))).MoveByOffset(point.X, point.Y).Perform();
+            this.HoverWithin("body", point);
         }
 
         public override void Navigate(Uri pageUri)
@@ -126,7 +145,7 @@ namespace FluentAutomation.SeleniumWebDriver
             image.SaveAsFile(fileName, System.Drawing.Imaging.ImageFormat.Jpeg);
         }
 
-        public override void Upload(string fileName, string fieldSelector, MatchConditions conditions)
+        public override void Upload(string fileName, string fieldSelector, API.Point offset, MatchConditions conditions)
         {
             if (_browserType == BrowserType.InternetExplorer) throw new FeatureNotImplementedException("SeleniumWebDriver+InternetExplorer File Upload");
 
@@ -138,7 +157,7 @@ namespace FluentAutomation.SeleniumWebDriver
                 switch (_browserType)
                 {
                     case BrowserType.Firefox:
-                        sleepTime = 500;
+                        sleepTime = 1000;
                         break;
                     case BrowserType.Chrome:
                         sleepTime = 1500;
@@ -149,7 +168,15 @@ namespace FluentAutomation.SeleniumWebDriver
                 CommandManager.SendString(fileName + "~");
             }, System.Threading.Tasks.TaskCreationOptions.LongRunning);
 
-            element.Click();
+            if (offset == null)
+            {
+                element.Click();
+            }
+            else
+            {
+                this.ClickWithin(fieldSelector, offset);
+            }
+
             t.Wait();
         }
 

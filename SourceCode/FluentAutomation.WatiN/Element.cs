@@ -20,6 +20,24 @@ namespace FluentAutomation.WatiN
             _element = element;
         }
 
+        public API.Point Position
+        {
+            get
+            {
+                var bounds = this._element.NativeElement.GetElementBounds();
+                return new API.Point(bounds.Left, bounds.Top);
+            }
+        }
+
+        public API.Size Size
+        {
+            get
+            {
+                var bounds = this._element.NativeElement.GetElementBounds();
+                return new API.Size(bounds.Size.Width, bounds.Size.Height);
+            }
+        }
+
         public virtual string GetValue()
         {
             if (_element.TagName.Equals("input", StringComparison.InvariantCultureIgnoreCase))
@@ -53,20 +71,13 @@ namespace FluentAutomation.WatiN
             return _element.Text;
         }
 
-        public Rectangle GetElementBounds()
-        {
-            return _element.NativeElement.GetElementBounds();
-        }
-
         public void DragTo(IElement dropElement)
         {
-            var dragPoint = this.GetElementBounds();
-            MouseControl.SetPosition(new API.Point(dragPoint.X, dragPoint.Y));
-            MouseControl.MouseEvent(MouseControl.MouseEvent_LeftButtonDown, dragPoint.X, dragPoint.Y, 0, 0);
+            MouseControl.SetPosition(this.Position);
+            MouseControl.MouseEvent(MouseControl.MouseEvent_LeftButtonDown, this.Position.X, this.Position.Y, 0, 0);
 
-            var dropPoint = dropElement.GetElementBounds();
-            MouseControl.SetPosition(new API.Point(dropPoint.X, dropPoint.Y));
-            MouseControl.MouseEvent(MouseControl.MouseEvent_LeftButtonUp, dropPoint.X, dropPoint.Y, 0, 0);
+            MouseControl.SetPosition(dropElement.Position);
+            MouseControl.MouseEvent(MouseControl.MouseEvent_LeftButtonUp, dropElement.Position.X, dropElement.Position.Y, 0, 0);
         }
 
         public bool IsSelect()

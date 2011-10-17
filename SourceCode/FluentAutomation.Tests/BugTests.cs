@@ -12,7 +12,7 @@ using FluentAutomation.API.Enumerations;
 namespace FluentAutomation.Tests
 {
     [TestClass]
-    public class BugTests : FluentAutomation.SeleniumWebDriver.FluentTest
+    public class BugTests : FluentAutomation.WatiN.FluentTest
     {
         public override void Setup()
         {

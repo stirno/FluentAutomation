@@ -27,6 +27,15 @@ namespace FluentAutomation.WatiN
             _browser = null;
         }
 
+        public override void ClickWithin(string selector, Point point)
+        {
+            var element = this.GetElement(selector, MatchConditions.None);
+            int clickPointX = element.Position.X + point.X;
+            int clickPointY = element.Position.Y + point.Y;
+
+            this.ClickPoint(new API.Point(clickPointX, clickPointY));
+        }
+
         public override void ClickPoint(API.Point point)
         {
             MouseControl.Click(point);
@@ -87,9 +96,18 @@ namespace FluentAutomation.WatiN
             }
         }
 
+        public override void HoverWithin(string selector, Point point)
+        {
+            var element = this.GetElement(selector, MatchConditions.None);
+            int clickPointX = element.Position.X + point.X;
+            int clickPointY = element.Position.Y + point.Y;
+
+            MouseControl.SetPosition(new API.Point { X = clickPointX, Y = clickPointY });
+        }
+
         public override void HoverPoint(Point point)
         {
-            MouseControl.SetPosition(point);
+            this.HoverWithin("body", point);
         }
 
         public override void Navigate(Uri pageUri)
@@ -129,14 +147,23 @@ namespace FluentAutomation.WatiN
         {
             _browser.CaptureWebPageToFile(fileName);
         }
-        
-        public override void Upload(string fileName, string fieldSelector, MatchConditions conditions)
+
+        public override void Upload(string fileName, string fieldSelector, API.Point offset, MatchConditions conditions)
         {
-            var handler = new Automation.Core.DialogHandlers.FileUploadDialogHandler(fileName);
-            using (new Automation.Core.DialogHandlers.UseDialogOnce(_browser.DialogWatcher, handler))
+            if (offset == null)
             {
-                IElement element = GetElement(fieldSelector, conditions);
-                element.Click(ClickMode.Default);
+                var handler = new Automation.Core.DialogHandlers.FileUploadDialogHandler(fileName);
+                using (new Automation.Core.DialogHandlers.UseDialogOnce(_browser.DialogWatcher, handler))
+                {
+                    IElement element = GetElement(fieldSelector, conditions);
+                    element.Click(ClickMode.Default);
+                }
+            }
+            else
+            {
+                this.ClickWithin(fieldSelector, offset);
+                this.Wait(TimeSpan.FromMilliseconds(1000));
+                CommandManager.SendString(fileName + "~");
             }
         }
         

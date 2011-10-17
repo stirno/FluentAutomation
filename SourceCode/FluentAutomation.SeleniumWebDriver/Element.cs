@@ -23,6 +23,22 @@ namespace FluentAutomation.SeleniumWebDriver
             _fieldSelector = fieldSelector;
         }
 
+        public API.Point Position
+        {
+            get
+            {
+                return new API.Point(_element.Location.X, _element.Location.Y);
+            }
+        }
+
+        public API.Size Size
+        {
+            get
+            {
+                return new API.Size(_element.Size.Width, _element.Size.Height);
+            }
+        }
+
         public string GetAttributeValue(string attributeName)
         {
             return _element.GetAttribute(attributeName);
@@ -43,11 +59,6 @@ namespace FluentAutomation.SeleniumWebDriver
             {
                 return _element.Text;
             }
-        }
-
-        public System.Drawing.Rectangle GetElementBounds()
-        {
-            return new Rectangle(_element.Location, _element.Size);
         }
 
         public IWebElement GetWebElement()
@@ -100,7 +111,6 @@ namespace FluentAutomation.SeleniumWebDriver
 
         public virtual void Focus()
         {
-            
         }
 
         public virtual void Hover()
