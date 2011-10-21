@@ -445,7 +445,7 @@ namespace FluentAutomation.API
         /// <param name="fieldSelector">The field selector.</param>
         /// <param name="offset">The offset.</param>
         /// <param name="conditions">The conditions.</param>
-        public void Upload(string fileName, string fieldSelector, API.Point offset, MatchConditions conditions)
+        protected void Upload(string fileName, string fieldSelector, API.Point offset, MatchConditions conditions)
         {
             CurrentActionBucket.Add(() =>
             {

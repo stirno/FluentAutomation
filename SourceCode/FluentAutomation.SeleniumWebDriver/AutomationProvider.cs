@@ -20,9 +20,13 @@ namespace FluentAutomation.SeleniumWebDriver
 
         public override void Cleanup()
         {
-            _driver.Manage().Cookies.DeleteAllCookies();
-            _driver.Quit();
-            _driver = null;
+            try
+            {
+                _driver.Manage().Cookies.DeleteAllCookies();
+                _driver.Quit();
+                _driver = null;
+            }
+            catch (Exception) { }
         }
 
         public override void ClickWithin(string selector, Point point)
