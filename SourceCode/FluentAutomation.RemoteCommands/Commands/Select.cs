@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FluentAutomation.API.Enumerations;
+using System.Linq.Expressions;
 
 namespace FluentAutomation.RemoteCommands.Commands
 {
@@ -35,6 +36,10 @@ namespace FluentAutomation.RemoteCommands.Commands
                 {
                     selectCommand = manager.Select(args.Indices);
                 }
+                else if (args.ValueExpression != null)
+                {
+                    selectCommand = manager.Select(args.ValueExpression, args.SelectMode.Value);
+                }
                 else
                 {
                     throw new InvalidCommandException<Select>();
@@ -57,6 +62,10 @@ namespace FluentAutomation.RemoteCommands.Commands
                 else if (args.Indices != null)
                 {
                     selectCommand = manager.Select(args.Indices);
+                }
+                else if (args.ValueExpression != null)
+                {
+                    selectCommand = manager.Select(args.ValueExpression);
                 }
                 else
                 {
@@ -83,6 +92,7 @@ namespace FluentAutomation.RemoteCommands.Commands
         public int? Index { get; set; }
         public int[] Indices { get; set; }
 
+        public Expression<Func<string, bool>> ValueExpression { get; set; }
         public SelectMode? SelectMode { get; set; }
         public MatchConditions? MatchConditions { get; set; }
     }
