@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FluentAutomation.API.Enumerations;
+using System.Linq.Expressions;
 
 namespace FluentAutomation.RemoteCommands.Commands
 {
@@ -13,10 +14,18 @@ namespace FluentAutomation.RemoteCommands.Commands
         {
             var args = (ExpectTextArguments)arguments;
 
-            Guard.ArgumentNotNullForCommand<ExpectText>(args.Value);
+            Guard.ArgumentNotNullForCommand<ExpectText>(args.Value, args.ValueExpression);
             Guard.ArgumentNotNullForCommand<ExpectText>(args.Selector);
 
-            var textExpect = manager.Expect.Text(args.Value);
+            API.ExpectCommands.Text textExpect = null;
+            if (args.Value != null)
+            {
+                textExpect = manager.Expect.Text(args.Value);
+            }
+            else if (args.ValueExpression != null)
+            {
+                textExpect = manager.Expect.Text(args.ValueExpression);
+            }
 
             if (args.MatchConditions.HasValue)
             {
@@ -59,5 +68,6 @@ namespace FluentAutomation.RemoteCommands.Commands
         public string[] Selectors { get; set; }
         public string Selector { get; set; }
         public MatchConditions? MatchConditions { get; set; }
+        public Expression<Func<string, bool>> ValueExpression { get; set; }
     }
 }

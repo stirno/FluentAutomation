@@ -7,6 +7,7 @@ using FluentAutomation.API;
 using System.Reflection;
 using System.Linq.Expressions;
 using FluentAutomation.API.Enumerations;
+using FluentAutomation.RemoteCommands.Contrib;
 
 namespace FluentAutomation.RemoteCommands
 {
@@ -115,7 +116,7 @@ namespace FluentAutomation.RemoteCommands
                             property.SetValue(result, Enum.Parse(args.First(), value), null);
                         }
                         // Nullable<int>
-                        if (args.First().Name == typeof(Int32).Name)
+                        if (args.First() == typeof(Int32))
                         {
                             property.SetValue(result, Int32.Parse(value), null);
                         }
@@ -126,18 +127,20 @@ namespace FluentAutomation.RemoteCommands
                         var args = property.PropertyType.GetGenericArguments();
                         var firstArg = args.First();
 
-                        // Expression<Func<>>
-                        if (firstArg.IsGenericType && firstArg.GetGenericTypeDefinition() == typeof(Func<>))
+                        // Expression<Func<,>>
+                        if (firstArg.IsGenericType && firstArg.GetGenericTypeDefinition() == typeof(Func<,>))
                         {
                             var argArgs = firstArg.GetGenericArguments();
 
-                            // Expression<Func<string, bool>>
-                            if (argArgs.Length == 2 &&
-                                argArgs[0].GetType() == typeof(string) &&
-                                argArgs[1].GetType() == typeof(bool))
-                            {
-                                // figure out how to dynamically parse expressions here... VS2008 DynamicExpressions.. Flee.. something.
-                            }
+                            var expr = DynamicExpressionBuilder.ParseLambda(
+                                new[] {
+                                    Expression.Parameter(argArgs[0], "x")
+                                },
+                                argArgs[1],
+                                value
+                            );
+
+                            property.SetValue(result, expr, null);
                         }
                     }
                     // Handle normal enumerations

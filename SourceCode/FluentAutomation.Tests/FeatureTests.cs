@@ -12,7 +12,7 @@ using FluentAutomation.API.Enumerations;
 namespace FluentAutomation.Tests
 {
     [TestClass]
-    public class FeatureTests : FluentAutomation.WatiN.FluentTest
+    public class FeatureTests : FluentAutomation.SeleniumWebDriver.FluentTest
     {
         [TestMethod]
         public void CssClassExpect()
@@ -43,6 +43,34 @@ namespace FluentAutomation.Tests
             I.Drag("#pboth2").To("#b4");
             I.Drag("#pt1").To("#pt2");
             I.Drag("#pboth1").To("#pb2");
+        }
+
+        [TestMethod]
+        public void TestFromGitHub()
+        {
+            // specify a browser, this is optional - WatiN targets IE and Selenium defaults to Firefox
+            I.Use(BrowserType.Chrome);
+            I.Open("http://knockoutjs.com/examples/cartEditor.html");
+            I.Select("Motorcycles").From("#cartEditor tr select:eq(0)"); // Select by value/text
+            I.Select(2).From("#cartEditor tr select:eq(1)"); // Select by index
+            I.Enter(6).In("#cartEditor td.quantity input:eq(0)");
+            I.Expect.This("$197.70").In("#cartEditor tr span:eq(1)");
+
+            // add second product
+            I.Click("#cartEditor button:eq(0)");
+            I.Select(1).From("#cartEditor tr select:eq(2)");
+            I.Select(4).From("#cartEditor tr select:eq(3)");
+            I.Enter(8).In("#cartEditor td.quantity input:eq(1)");
+            I.Expect.This("$788.64").In("#cartEditor tr span:eq(3)");
+
+            // validate totals
+            I.Expect.This("$986.34").In("p.grandTotal span");
+
+            // remove first product
+            I.Click("#cartEditor a:eq(0)");
+
+            // validate new total
+            I.Expect.This("$788.70").In("p.grandTotal span");
         }
 
         [TestMethod]

@@ -14,16 +14,26 @@ namespace FluentAutomation.RemoteCommands.Commands
         {
             var args = (ExpectValueArguments)arguments;
 
-            Guard.ArgumentNotNullForCommand<ExpectValue>(args.Value);
+            Guard.ArgumentNotNullForCommand<ExpectValue>(args.Value, args.ValueExpression);
             Guard.ArgumentNotNullForCommand<ExpectValue>(args.Selector);
 
-            if (args.MatchConditions.HasValue)
+            API.ExpectCommands.Value valueExpect = null;
+            if (args.Value != null)
             {
-                manager.Expect.Value(args.Value).In(args.Selector, args.MatchConditions.Value);
+                valueExpect = manager.Expect.Value(args.Value);
             }
             else
             {
-                manager.Expect.Value(args.Value).In(args.Selector);
+                valueExpect = manager.Expect.Value(args.ValueExpression);
+            }
+
+            if (args.MatchConditions.HasValue)
+            {
+                valueExpect.In(args.Selector, args.MatchConditions.Value);
+            }
+            else
+            {
+                valueExpect.In(args.Selector);
             }
         }
     }
@@ -33,5 +43,6 @@ namespace FluentAutomation.RemoteCommands.Commands
         public string Value { get; set; }
         public string Selector { get; set; }
         public MatchConditions? MatchConditions { get; set; }
+        public Expression<Func<string, bool>> ValueExpression { get; set; }
     }
 }

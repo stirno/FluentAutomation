@@ -1,11 +1,15 @@
-﻿using System.Collections.Generic;
+﻿//Copyright (C) Microsoft Corporation.  All rights reserved.
+
+using System;
+using System.Collections.Generic;
 using System.Text;
-using System.Reflection.Emit;
-using System.Reflection;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
+using System.Reflection.Emit;
 using System.Threading;
 
-namespace System.Linq.Dynamic
+namespace FluentAutomation.RemoteCommands.Contrib
 {
     public static class DynamicQueryable
     {
@@ -48,7 +52,7 @@ namespace System.Linq.Dynamic
             if (source == null) throw new ArgumentNullException("source");
             if (ordering == null) throw new ArgumentNullException("ordering");
             ParameterExpression[] parameters = new ParameterExpression[] {
-            Expression.Parameter(source.ElementType, "") };
+                Expression.Parameter(source.ElementType, "") };
             ExpressionParser parser = new ExpressionParser(parameters, ordering, values);
             IEnumerable<DynamicOrdering> orderings = parser.ParseOrdering();
             Expression queryExpr = source.Expression;
@@ -256,7 +260,7 @@ namespace System.Linq.Dynamic
             AssemblyName name = new AssemblyName("DynamicClasses");
             AssemblyBuilder assembly = AppDomain.CurrentDomain.DefineDynamicAssembly(name, AssemblyBuilderAccess.Run);
 #if ENABLE_LINQ_PARTIAL_TRUST
-        new ReflectionPermission(PermissionState.Unrestricted).Assert();
+            new ReflectionPermission(PermissionState.Unrestricted).Assert();
 #endif
             try
             {
@@ -265,7 +269,7 @@ namespace System.Linq.Dynamic
             finally
             {
 #if ENABLE_LINQ_PARTIAL_TRUST
-            PermissionSet.RevertAssert();
+                PermissionSet.RevertAssert();
 #endif
             }
             classes = new Dictionary<Signature, Type>();
@@ -299,7 +303,7 @@ namespace System.Linq.Dynamic
             {
                 string typeName = "DynamicClass" + (classCount + 1);
 #if ENABLE_LINQ_PARTIAL_TRUST
-            new ReflectionPermission(PermissionState.Unrestricted).Assert();
+                new ReflectionPermission(PermissionState.Unrestricted).Assert();
 #endif
                 try
                 {
@@ -315,7 +319,7 @@ namespace System.Linq.Dynamic
                 finally
                 {
 #if ENABLE_LINQ_PARTIAL_TRUST
-                PermissionSet.RevertAssert();
+                    PermissionSet.RevertAssert();
 #endif
                 }
             }
@@ -588,27 +592,27 @@ namespace System.Linq.Dynamic
         }
 
         static readonly Type[] predefinedTypes = {
-        typeof(Object),
-        typeof(Boolean),
-        typeof(Char),
-        typeof(String),
-        typeof(SByte),
-        typeof(Byte),
-        typeof(Int16),
-        typeof(UInt16),
-        typeof(Int32),
-        typeof(UInt32),
-        typeof(Int64),
-        typeof(UInt64),
-        typeof(Single),
-        typeof(Double),
-        typeof(Decimal),
-        typeof(DateTime),
-        typeof(TimeSpan),
-        typeof(Guid),
-        typeof(Math),
-        typeof(Convert)
-    };
+            typeof(Object),
+            typeof(Boolean),
+            typeof(Char),
+            typeof(String),
+            typeof(SByte),
+            typeof(Byte),
+            typeof(Int16),
+            typeof(UInt16),
+            typeof(Int32),
+            typeof(UInt32),
+            typeof(Int64),
+            typeof(UInt64),
+            typeof(Single),
+            typeof(Double),
+            typeof(Decimal),
+            typeof(DateTime),
+            typeof(TimeSpan),
+            typeof(Guid),
+            typeof(Math),
+            typeof(Convert)
+        };
 
         static readonly Expression trueLiteral = Expression.Constant(true);
         static readonly Expression falseLiteral = Expression.Constant(false);

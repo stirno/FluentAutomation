@@ -128,7 +128,7 @@ namespace FluentAutomation.Tests
                 Name = "ExpectText",
                 Arguments = new Dictionary<string, string>()
                 {
-                    { "Value", "$197.70" },
+                    { "ValueExpression", "x.Contains(\"197.73\")" },
                     { "Selector", "#cartEditor tr span:eq(1)" }
                 }
             });
