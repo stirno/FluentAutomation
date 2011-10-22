@@ -7,6 +7,11 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using FluentAutomation.API.Enumerations;
 using FluentAutomation.API.Providers;
+using System.Net;
+using System.IO;
+using Newtonsoft.Json;
+using FluentAutomation.RemoteConsole;
+using FluentAutomation.API.Exceptions;
 
 namespace FluentAutomation.API
 {
@@ -61,38 +66,91 @@ namespace FluentAutomation.API
 		{
 			Provider = automationProvider;
 			_actionBuckets.Add(new ActionBucket(this));
+            this.RemoteCommands = new List<RemoteCommands.RemoteCommand>();
 		}
 
 		/// <summary>
 		/// Records this instance.
 		/// </summary>
-		public void Record()
+		public void Record(bool remote = false)
 		{
+            if (remote)
+            {
+                this.EnableRemoteExecution = true;
+            }
+
 			if (_bucketIndex > -1) _actionBuckets.Add(new ActionBucket(this));
 			_bucketIndex++;
 		}
 
+        /// <summary>
+        /// Executes the stored actions targetting the specified service endpoint URI. (RemoteCommand API)
+        /// </summary>
+        /// <param name="serviceEndpointUri">The service endpoint URI.</param>
+        public void Execute(Uri serviceEndpointUri)
+        {
+            if (this.EnableRemoteExecution)
+            {
+                string jsonCommands = JsonConvert.SerializeObject(this.RemoteCommands);
+
+                WebRequest request = WebRequest.Create(serviceEndpointUri);
+                request.Method = "POST";
+                request.ContentLength = jsonCommands.Length;
+                request.ContentType = "application/x-fluent-service";
+
+                StreamWriter requestWriter = new StreamWriter(request.GetRequestStream());
+                requestWriter.Write(jsonCommands);
+                requestWriter.Close();
+
+                WebResponse response = request.GetResponse();
+
+                StreamReader responseReader = new StreamReader(response.GetResponseStream());
+                string responseText = responseReader.ReadToEnd();
+                responseReader.Close();
+
+                response.Close();
+
+                // parse response
+                ServiceResponse svcResponse = JsonConvert.DeserializeObject<ServiceResponse>(responseText);
+
+                if (svcResponse.Status == "Error")
+                {
+                    throw new RemoteException(svcResponse.Message);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Executes the stored actions targetting the specified service endpoint URI using the appropriate browser(s). (RemoteCommand API)
+        /// </summary>
+        /// <param name="serviceEndpointUri">The service endpoint URI.</param>
+        /// <param name="browserTypes">The browser types.</param>
+        public void Execute(Uri serviceEndpointUri, params BrowserType[] browserTypes)
+        {
+            Execute(serviceEndpointUri);
+        }
+
 		/// <summary>
-		/// Plays the stored actions with the appropriate bucket.
+        /// Executes the stored actions using the appropriate browser(s). (LOCAL EXECUTION ONLY)
 		/// </summary>
-		public void PlayWith(params BrowserType[] browserTypes)
+		public void Execute(params BrowserType[] browserTypes)
 		{
-			var bucket = CurrentActionBucket;
+            var bucket = CurrentActionBucket;
 
-			// cleanup bucket
-			_actionBuckets.RemoveAt(_bucketIndex);
-			_bucketIndex--;
+            // cleanup bucket
+            _actionBuckets.RemoveAt(_bucketIndex);
+            _bucketIndex--;
 
-			// execute bucket
-			foreach (var browser in browserTypes)
-			{
-				Provider.SetBrowser(browser);
-				foreach (var action in bucket)
-				{
-					action.Invoke();
-				}
-				Provider.Cleanup();
-			}
+            // execute bucket
+            foreach (var browser in browserTypes)
+            {
+                Provider.SetBrowser(browser);
+                foreach (var action in bucket)
+                {
+                    action.Invoke();
+                }
+                Provider.Cleanup();
+            }
 		}
 
 		/// <summary>

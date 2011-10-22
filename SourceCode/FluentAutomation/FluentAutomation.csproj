@@ -40,6 +40,9 @@
     <AssemblyOriginatorKeyFile>StirnoKey_2011_Build.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\3rdPartyLib\SeleniumWebDriver\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -58,6 +61,7 @@
     <Compile Include="API\Enumerations\ExpectType.cs" />
     <Compile Include="API\Enumerations\MatchConditions.cs" />
     <Compile Include="API\Enumerations\SelectMode.cs" />
+    <Compile Include="API\Exceptions\RemoteException.cs" />
     <Compile Include="API\ExpectCommands\Count.cs" />
     <Compile Include="API\ExpectCommands\Text.cs" />
     <Compile Include="API\Exceptions\FeatureNotImplementedException.cs" />
@@ -83,6 +87,7 @@
     <Compile Include="API\Size.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="API\FluentTest.cs" />
+    <Compile Include="API\ServiceResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="StirnoKey_2011_Build.snk" />

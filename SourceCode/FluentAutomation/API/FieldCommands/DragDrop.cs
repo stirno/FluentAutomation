@@ -4,6 +4,7 @@
 
 using FluentAutomation.API.Enumerations;
 using FluentAutomation.API.Providers;
+using System.Collections.Generic;
 
 namespace FluentAutomation.API.FieldCommands
 {
@@ -31,11 +32,26 @@ namespace FluentAutomation.API.FieldCommands
         /// <param name="fieldSelector">The field selector.</param>
         public void To(string fieldSelector)
         {
-            CommandManager.CurrentActionBucket.Add(() =>
+            if (CommandManager.EnableRemoteExecution)
             {
-                var element = Provider.GetElement(_dragFieldSelector, MatchConditions.None);
-                element.DragTo(Provider.GetElement(fieldSelector, MatchConditions.None));
-            });
+                CommandManager.RemoteCommands.Add(new RemoteCommands.RemoteCommand()
+                {
+                    Name = "Drag",
+                    Arguments = new Dictionary<string, dynamic>()
+                    {
+                        { "from", _dragFieldSelector },
+                        { "to", fieldSelector }
+                    }
+                });
+            }
+            else
+            {
+                CommandManager.CurrentActionBucket.Add(() =>
+                {
+                    var element = Provider.GetElement(_dragFieldSelector, MatchConditions.None);
+                    element.DragTo(Provider.GetElement(fieldSelector, MatchConditions.None));
+                });
+            }
         }
     }
 }

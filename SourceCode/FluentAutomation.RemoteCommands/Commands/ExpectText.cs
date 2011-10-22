@@ -65,8 +65,8 @@ namespace FluentAutomation.RemoteCommands.Commands
     public class ExpectTextArguments : ICommandArguments
     {
         public string Value { get; set; }
-        public string[] Selectors { get; set; }
         public string Selector { get; set; }
+        public string[] Selectors { get; set; }
         public MatchConditions? MatchConditions { get; set; }
         public Expression<Func<string, bool>> ValueExpression { get; set; }
     }

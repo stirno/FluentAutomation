@@ -26,7 +26,7 @@ namespace FluentAutomation.RemoteCommands.Commands
                 }
                 else if (args.Values != null)
                 {
-                    selectCommand = manager.Select(args.SelectMode.Value, args.Values);
+                    selectCommand = manager.Select(args.SelectMode.Value, args.Values.ToArray());
                 }
                 else if (args.Index != null)
                 {
@@ -34,7 +34,7 @@ namespace FluentAutomation.RemoteCommands.Commands
                 }
                 else if (args.Indices != null)
                 {
-                    selectCommand = manager.Select(args.Indices);
+                    selectCommand = manager.Select(args.Indices.ToArray());
                 }
                 else if (args.ValueExpression != null)
                 {
@@ -53,7 +53,7 @@ namespace FluentAutomation.RemoteCommands.Commands
                 }
                 else if (args.Values != null)
                 {
-                    selectCommand = manager.Select(args.Values);
+                    selectCommand = manager.Select(args.Values.ToArray());
                 }
                 else if (args.Index != null)
                 {
@@ -61,7 +61,7 @@ namespace FluentAutomation.RemoteCommands.Commands
                 }
                 else if (args.Indices != null)
                 {
-                    selectCommand = manager.Select(args.Indices);
+                    selectCommand = manager.Select(args.Indices.ToArray());
                 }
                 else if (args.ValueExpression != null)
                 {
@@ -88,9 +88,9 @@ namespace FluentAutomation.RemoteCommands.Commands
     {
         public string Selector { get; set; }
         public string Value { get; set; }
-        public string[] Values { get; set; }
+        public List<string> Values { get; set; }
         public int? Index { get; set; }
-        public int[] Indices { get; set; }
+        public List<int> Indices { get; set; }
 
         public Expression<Func<string, bool>> ValueExpression { get; set; }
         public SelectMode? SelectMode { get; set; }

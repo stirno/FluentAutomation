@@ -21,6 +21,8 @@ namespace FluentAutomation.RemoteCommands
 
             try
             {
+                // force remote execution to false, don't want loops of RemoteCommands!
+                manager.EnableRemoteExecution = false;
                 manager.Record();
 
                 var browserList = new List<BrowserType>();
@@ -72,7 +74,7 @@ namespace FluentAutomation.RemoteCommands
                     browserList.Add(BrowserType.Chrome);
                 }
 
-                manager.PlayWith(browserList.ToArray());
+                manager.Execute(browserList.ToArray());
             }
             catch (FluentAutomation.API.Exceptions.AssertException)
             {
@@ -131,14 +133,31 @@ namespace FluentAutomation.RemoteCommands
                         // Expression<Func<,>>
                         if (firstArg.IsGenericType && firstArg.GetGenericTypeDefinition() == typeof(Func<,>))
                         {
-                            var argArgs = firstArg.GetGenericArguments();
+                            var paramArgs = firstArg.GetGenericArguments();
+
+                            // parse parameters from expression
+                            var variablesSection = value.Substring(0, value.IndexOf("=>")).Trim(' ', '(', ')').Replace(" ", "");
+                            string[] variables = variablesSection.Split(',');
+                            var exprString = value.Substring(value.IndexOf("=>") + 2).Trim();
+
+                            int i = 0;
+                            List<ParameterExpression> parameters = new List<ParameterExpression>();
+                            foreach (var paramArg in paramArgs)
+                            {
+                                // last arg is return type
+                                if (paramArg == paramArgs.Last()) break;
+
+                                parameters.Add(Expression.Parameter(paramArg, variables[i]));
+                                if (variables.Length < i)
+                                {
+                                    i++;
+                                }
+                            }
 
                             var expr = DynamicExpressionBuilder.ParseLambda(
-                                new[] {
-                                    Expression.Parameter(argArgs[0], "x")
-                                },
-                                argArgs[1],
-                                value
+                                parameters.ToArray(),
+                                paramArgs.Last(),
+                                exprString
                             );
 
                             property.SetValue(result, expr, null);
@@ -177,13 +196,23 @@ namespace FluentAutomation.RemoteCommands
                         property.SetValue(result, value, null);
                     }
                     // List<string> (deserializes as JArray)
-                    else if (property.PropertyType.IsGenericType && typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
+                    else if (property.PropertyType.IsGenericType && property.PropertyType.GetGenericArguments().First() == typeof(string) && typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
                     {
-                        dynamic listInstance = Activator.CreateInstance(property.PropertyType);
-
+                        List<string> listInstance = new List<string>();
                         foreach (var item in value)
                         {
                             listInstance.Add(item.ToString());
+                        }
+
+                        property.SetValue(result, listInstance, null);
+                    }
+                    // List<int> (deserializes as JArray)
+                    else if (property.PropertyType.IsGenericType && property.PropertyType.GetGenericArguments().First() == typeof(Int32) && typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
+                    {
+                        List<int> listInstance = new List<int>();
+                        foreach (var item in value)
+                        {
+                            listInstance.Add(Int32.Parse(item.ToString()));
                         }
 
                         property.SetValue(result, listInstance, null);
