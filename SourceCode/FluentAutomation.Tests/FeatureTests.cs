@@ -48,8 +48,9 @@ namespace FluentAutomation.Tests
         [TestMethod]
         public void TestFromGitHub()
         {
+            I.Record(true);
             // specify a browser, this is optional - WatiN targets IE and Selenium defaults to Firefox
-            I.Use(BrowserType.Chrome);
+            I.Use(BrowserType.Firefox);
             I.Open("http://knockoutjs.com/examples/cartEditor.html");
             I.Select("Motorcycles").From("#cartEditor tr select:eq(0)"); // Select by value/text
             I.Select(2).From("#cartEditor tr select:eq(1)"); // Select by index
@@ -70,9 +71,9 @@ namespace FluentAutomation.Tests
             I.Click("#cartEditor a:eq(0)");
 
             // validate new total
-            I.Expect.This("$788.64").In("p.grandTotal span");
+            I.Expect.This("$788.74").In("p.grandTotal span");
 
-            I.Execute(new Uri("http://localhost:10001/runtest", UriKind.Absolute));
+            I.Execute(new Uri("http://68.48.79.114:10001/runtest", UriKind.Absolute));
         }
 
         [TestMethod]
@@ -88,7 +89,7 @@ namespace FluentAutomation.Tests
             I.Record(true);
             I.Open("http://knockoutjs.com/examples/controlTypes.html");
             I.Expect.Count(2).Of(".syntaxhighlighter");
-            I.Execute(new Uri("http://localhost:10001/runtest", UriKind.Absolute));
+            I.Execute(new Uri("http://68.48.79.114:10001/runtest", UriKind.Absolute));
         }
 
         [TestMethod]

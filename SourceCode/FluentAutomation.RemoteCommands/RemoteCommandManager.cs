@@ -217,6 +217,17 @@ namespace FluentAutomation.RemoteCommands
 
                         property.SetValue(result, listInstance, null);
                     }
+                    // List<Enum>
+                    else if (property.PropertyType.IsGenericType && property.PropertyType.GetGenericArguments().First().IsEnum && typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
+                    {
+                        dynamic listInstance = Activator.CreateInstance(property.PropertyType);
+                        foreach (var item in value)
+                        {
+                            listInstance.Add(Enum.Parse(property.PropertyType.GetGenericArguments().First(), item.ToString()));
+                        }
+
+                        property.SetValue(result, listInstance, null);
+                    }
                     // Handle IConvertible types
                     else
                     {

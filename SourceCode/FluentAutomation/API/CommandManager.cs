@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using FluentAutomation.API.Enumerations;
 using FluentAutomation.API.Providers;
@@ -40,6 +41,8 @@ namespace FluentAutomation.API
 			}
 		}
 
+        public List<BrowserType> RemoteBrowsers { get; set; }
+
         public List<RemoteCommands.RemoteCommand> RemoteCommands { get; set; }
 
         public bool EnableRemoteExecution { get; set; }
@@ -67,6 +70,7 @@ namespace FluentAutomation.API
 			Provider = automationProvider;
 			_actionBuckets.Add(new ActionBucket(this));
             this.RemoteCommands = new List<RemoteCommands.RemoteCommand>();
+            this.RemoteBrowsers = new List<BrowserType>();
 		}
 
 		/// <summary>
@@ -91,6 +95,19 @@ namespace FluentAutomation.API
         {
             if (this.EnableRemoteExecution)
             {
+                // add remote browsers
+                if (this.RemoteBrowsers.Count > 0)
+                {
+                    this.RemoteCommands.Insert(0, new RemoteCommands.RemoteCommand()
+                    {
+                        Name = "Use",
+                        Arguments = new Dictionary<string, dynamic>()
+                        {
+                            { "browserType", this.RemoteBrowsers }
+                        }
+                    });
+                }
+
                 string jsonCommands = JsonConvert.SerializeObject(this.RemoteCommands);
 
                 WebRequest request = WebRequest.Create(serviceEndpointUri);
@@ -127,6 +144,12 @@ namespace FluentAutomation.API
         /// <param name="browserTypes">The browser types.</param>
         public void Execute(Uri serviceEndpointUri, params BrowserType[] browserTypes)
         {
+            var newBrowsers = browserTypes.Where(x => !this.RemoteBrowsers.Contains(x));
+            if (newBrowsers.Count() > 0)
+            {
+                this.RemoteBrowsers.AddRange(newBrowsers);
+            }
+
             Execute(serviceEndpointUri);
         }
 
@@ -685,7 +708,14 @@ namespace FluentAutomation.API
 		/// <param name="browserType">Type of the browser.</param>
 		public void Use(BrowserType browserType)
 		{
-			Provider.SetBrowser(browserType);
+            if (this.EnableRemoteExecution)
+            {
+                this.RemoteBrowsers.Add(browserType);
+            }
+            else
+            {
+                Provider.SetBrowser(browserType);
+            }
 		}
 
 		/// <summary>
