@@ -8,6 +8,6 @@ namespace FluentAutomation.RemoteCommands
     public class RemoteCommand
     {
         public string Name { get; set; }
-        public Dictionary<string, string> Arguments { get; set; }
+        public Dictionary<string, dynamic> Arguments { get; set; }
     }
 }

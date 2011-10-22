@@ -27,7 +27,7 @@ namespace FluentAutomation.Tests
             commands.Add(new RemoteCommand()
             {
                 Name = "Open",
-                Arguments = new Dictionary<string, string>() {
+                Arguments = new Dictionary<string, dynamic>() {
                     { "url", "http://www.quackit.com/javascript/javascript_alert_box.cfm" }
                 }
             });
@@ -35,7 +35,7 @@ namespace FluentAutomation.Tests
             commands.Add(new RemoteCommand()
             {
                 Name = "Click",
-                Arguments = new Dictionary<string, string>() {
+                Arguments = new Dictionary<string, dynamic>() {
                     { "Selector",  "input[type='button']:eq(0)" },
                     { "ClickMode", "NoWait" }
                 }
@@ -53,14 +53,14 @@ namespace FluentAutomation.Tests
             commands.Add(new RemoteCommand()
             {
                 Name = "Open",
-                Arguments = new Dictionary<string, string>() {
+                Arguments = new Dictionary<string, dynamic>() {
                     { "url", "http://knockoutjs.com/examples/helloWorld.html" }
                 }
             });
             commands.Add(new RemoteCommand()
             {
                 Name = "Enter",
-                Arguments = new Dictionary<string, string>() {
+                Arguments = new Dictionary<string, dynamic>() {
                     { "Value", "Fuck Salt" },
                     { "Selector", "input:eq(0)" }
                 }
@@ -68,7 +68,7 @@ namespace FluentAutomation.Tests
             commands.Add(new RemoteCommand()
             {
                 Name = "ExpectValue",
-                Arguments = new Dictionary<string, string>() {
+                Arguments = new Dictionary<string, dynamic>() {
                     { "Value", "Fuck Salt" },                    
                     { "Selector", "input:eq(0)" }
                 }
@@ -91,7 +91,7 @@ namespace FluentAutomation.Tests
             commands.Add(new RemoteCommand()
             {
                 Name = "Open",
-                Arguments = new Dictionary<string, string>()
+                Arguments = new Dictionary<string, dynamic>()
                 {
                     { "URL", "http://knockoutjs.com/examples/cartEditor.html" }
                 }
@@ -99,7 +99,7 @@ namespace FluentAutomation.Tests
             commands.Add(new RemoteCommand()
             {
                 Name = "Select",
-                Arguments = new Dictionary<string, string>()
+                Arguments = new Dictionary<string, dynamic>()
                 {
                     { "Selector", "#cartEditor tr select:eq(0)" },
                     { "Value", "Motorcycles" }
@@ -108,7 +108,7 @@ namespace FluentAutomation.Tests
             commands.Add(new RemoteCommand()
             {
                 Name = "Select",
-                Arguments = new Dictionary<string, string>()
+                Arguments = new Dictionary<string, dynamic>()
                 {
                     { "Selector", "#cartEditor tr select:eq(1)" },
                     { "Index", "2" }
@@ -117,7 +117,7 @@ namespace FluentAutomation.Tests
             commands.Add(new RemoteCommand()
             {
                 Name = "Enter",
-                Arguments = new Dictionary<string, string>()
+                Arguments = new Dictionary<string, dynamic>()
                 {
                     { "Selector", "#cartEditor td.quantity input:eq(0)" },
                     { "Value", "6" }
@@ -126,7 +126,7 @@ namespace FluentAutomation.Tests
             commands.Add(new RemoteCommand()
             {
                 Name = "ExpectText",
-                Arguments = new Dictionary<string, string>()
+                Arguments = new Dictionary<string, dynamic>()
                 {
                     { "ValueExpression", "x.Contains(\"197.73\")" },
                     { "Selector", "#cartEditor tr span:eq(1)" }
@@ -139,7 +139,7 @@ namespace FluentAutomation.Tests
         [TestMethod]
         public void TestConversion()
         {
-            var dictionary = new Dictionary<string, string>() {
+            var dictionary = new Dictionary<string, dynamic>() {
                 { "selector",  "input[type='button']:eq(0)" },
                 { "clickmode", "NoWait" },
                 { "point", "10,21" }

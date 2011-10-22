@@ -72,7 +72,6 @@
     <Compile Include="ICommandArguments.cs" />
     <Compile Include="InvalidCommandException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RemoteCommand.cs" />
     <Compile Include="RemoteCommandManager.cs" />
   </ItemGroup>
   <ItemGroup>

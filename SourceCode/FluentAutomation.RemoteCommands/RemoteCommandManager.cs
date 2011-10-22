@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Linq.Expressions;
 using FluentAutomation.API.Enumerations;
 using FluentAutomation.RemoteCommands.Contrib;
+using System.Collections;
 
 namespace FluentAutomation.RemoteCommands
 {
@@ -91,7 +92,7 @@ namespace FluentAutomation.RemoteCommands
             }
         }
 
-        public static dynamic DeserializeArguments(Type type, Dictionary<string, string> arguments)
+        public static dynamic DeserializeArguments(Type type, Dictionary<string, dynamic> arguments)
         {
             var result = Activator.CreateInstance(type);
 
@@ -169,6 +170,23 @@ namespace FluentAutomation.RemoteCommands
                         };
 
                         property.SetValue(result, size, null);
+                    }
+                    // Arrays
+                    else if (property.PropertyType.IsArray)
+                    {
+                        property.SetValue(result, value, null);
+                    }
+                    // List<string> (deserializes as JArray)
+                    else if (property.PropertyType.IsGenericType && typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
+                    {
+                        dynamic listInstance = Activator.CreateInstance(property.PropertyType);
+
+                        foreach (var item in value)
+                        {
+                            listInstance.Add(item.ToString());
+                        }
+
+                        property.SetValue(result, listInstance, null);
                     }
                     // Handle IConvertible types
                     else
