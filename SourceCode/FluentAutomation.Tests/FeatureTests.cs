@@ -45,12 +45,22 @@ namespace FluentAutomation.Tests
             I.Drag("#pboth1").To("#pb2");
         }
 
+        [TestInitialize]
+        public void Setup()
+        {
+            I.Record(true);
+        }
+
+        [TestCleanup]
+        public void Execute()
+        {
+            I.Execute(new Uri("http://localhost:10001/runtest", UriKind.Absolute));
+        }
+
         [TestMethod]
         public void TestFromGitHub()
         {
-            I.Record(true);
             // specify a browser, this is optional - WatiN targets IE and Selenium defaults to Firefox
-            I.Use(BrowserType.Firefox);
             I.Open("http://knockoutjs.com/examples/cartEditor.html");
             I.Select("Motorcycles").From("#cartEditor tr select:eq(0)"); // Select by value/text
             I.Select(2).From("#cartEditor tr select:eq(1)"); // Select by index
@@ -71,9 +81,7 @@ namespace FluentAutomation.Tests
             I.Click("#cartEditor a:eq(0)");
 
             // validate new total
-            I.Expect.This("$788.74").In("p.grandTotal span");
-
-            I.Execute(new Uri("http://68.48.79.114:10001/runtest", UriKind.Absolute));
+            I.Expect.This("$788.62").In("p.grandTotal span");
         }
 
         [TestMethod]
@@ -86,19 +94,15 @@ namespace FluentAutomation.Tests
         [TestMethod]
         public void Test_CountExpect()
         {
-            I.Record(true);
             I.Open("http://knockoutjs.com/examples/controlTypes.html");
             I.Expect.Count(2).Of(".syntaxhighlighter");
-            I.Execute(new Uri("http://68.48.79.114:10001/runtest", UriKind.Absolute));
         }
 
         [TestMethod]
         public void Test_SelectFuncWithMode()
         {
-            I.Record(true);
             I.Open("http://www.htmlcodetutorial.com/linking/linking_famsupp_114.html");
             I.Select(x => x.Contains("Guide"), SelectMode.Text).From("select:eq(0)");
-            I.Execute(new Uri("http://localhost:10001/runtest", UriKind.Absolute));
         }
 
         [TestMethod]
@@ -117,11 +121,9 @@ namespace FluentAutomation.Tests
         [TestMethod]
         public void Test_RelativeClick()
         {
-            I.Record(true);
             I.Open("http://www.uploadify.com/demos/");
             I.Upload(@"C:\Users\Public\Pictures\Sample Pictures\Chrysanthemum.jpg", "#basic-demo", new API.Point { X = 2, Y = 90 });
             I.Expect.Text(x => x.Contains("Err2or")).In("#file_uploadQueue .percentage");
-            I.Execute(new Uri("http://localhost:10001/runtest", UriKind.Absolute));
             //I.ClickWithin("#basic-demo", new API.Point { X = 2, Y = -100 });
             //I.Click("#basic-demo", new API.Point { X = 2, Y = 90 });
         }
