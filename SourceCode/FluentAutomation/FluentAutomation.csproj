@@ -63,6 +63,7 @@
     <Compile Include="API\Enumerations\SelectMode.cs" />
     <Compile Include="API\Exceptions\RemoteException.cs" />
     <Compile Include="API\ExpectCommands\Count.cs" />
+    <Compile Include="API\ExpectCommands\Element.cs" />
     <Compile Include="API\ExpectCommands\Text.cs" />
     <Compile Include="API\Exceptions\FeatureNotImplementedException.cs" />
     <Compile Include="API\FieldCommands\DragDrop.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="API\ExpectCommands\Value.cs" />
     <Compile Include="API\ExpectManager.cs" />
     <Compile Include="API\Interfaces\IElement.cs" />
+    <Compile Include="API\Interfaces\IElementDetails.cs" />
     <Compile Include="API\Interfaces\ISelectElement.cs" />
     <Compile Include="API\Interfaces\ITextElement.cs" />
     <Compile Include="API\Exceptions\MatchConditionException.cs" />

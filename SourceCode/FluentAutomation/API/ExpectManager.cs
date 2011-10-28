@@ -189,6 +189,16 @@ namespace FluentAutomation.API
         }
 
         /// <summary>
+        /// Elements the specified element expression.
+        /// </summary>
+        /// <param name="elementExpression">The element expression.</param>
+        /// <returns></returns>
+        public virtual ExpectCommands.Element Element(Expression<Func<IElementDetails, bool>> elementExpression)
+        {
+            return new ExpectCommands.Element(Provider, Manager, elementExpression);
+        }
+
+        /// <summary>
         /// Expect Alert dialog.
         /// </summary>
         public virtual void Alert()

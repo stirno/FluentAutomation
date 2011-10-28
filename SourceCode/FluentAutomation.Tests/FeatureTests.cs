@@ -127,5 +127,12 @@ namespace FluentAutomation.Tests
             //I.ClickWithin("#basic-demo", new API.Point { X = 2, Y = -100 });
             //I.Click("#basic-demo", new API.Point { X = 2, Y = 90 });
         }
+
+        [TestMethod]
+        public void Test_ElementExpression()
+        {
+            I.Open("http://knockoutjs.com/");
+            I.Expect.Element(x => x.GetAttributeValue("src") == "http://knockoutjs.com/img/feature-icons/declarative-bindings.png").In("li img:eq(0)");
+        }
     }
 }
