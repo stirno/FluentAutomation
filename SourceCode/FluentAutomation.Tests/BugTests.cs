@@ -79,5 +79,12 @@ namespace FluentAutomation.Tests
             I.Open("http://encodable.com/uploaddemo/");
             I.Upload(@"C:\Users\Public\Pictures\Sample Pictures\Chrysanthemum.jpg", "input[type='file']");
         }
+
+        [TestMethod]
+        public void Bug_HTTPAUTH()
+        {
+            I.Open("http://datinix.net/test/");
+            I.Expect.BasicAuthenticationDialog("test", "test");
+        }
     }
 }

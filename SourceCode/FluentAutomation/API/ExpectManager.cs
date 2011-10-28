@@ -216,6 +216,16 @@ namespace FluentAutomation.API
         }
 
         /// <summary>
+        /// Expect an HTTP Basic Authentication dialog and handle it.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <param name="password">The password.</param>
+        /*public virtual void BasicAuthenticationDialog(string username, string password)
+        {
+            Provider.Authenticate(username, password);
+        }*/
+
+        /// <summary>
         /// Expect page URL matches specified URL.
         /// </summary>
         /// <param name="pageUrl">The page URL.</param>

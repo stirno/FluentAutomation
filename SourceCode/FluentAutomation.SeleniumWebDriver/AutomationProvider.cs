@@ -18,6 +18,11 @@ namespace FluentAutomation.SeleniumWebDriver
         private IWebDriver _driver = null;
         private API.Enumerations.BrowserType _browserType = API.Enumerations.BrowserType.Firefox;
 
+        public override void Authenticate(string username, string password)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Cleanup()
         {
             try
