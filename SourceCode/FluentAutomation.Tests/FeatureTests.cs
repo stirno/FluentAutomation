@@ -12,7 +12,7 @@ using FluentAutomation.API.Enumerations;
 namespace FluentAutomation.Tests
 {
     [TestClass]
-    public class FeatureTests : FluentAutomation.WatiN.FluentTest
+    public class FeatureTests : FluentAutomation.SeleniumWebDriver.FluentTest
     {
         [TestMethod]
         public void CssClassExpect()
@@ -74,6 +74,13 @@ namespace FluentAutomation.Tests
             I.Expect.Text(x => x.Contains("Err2or")).In("#file_uploadQueue .percentage");
             //I.ClickWithin("#basic-demo", new API.Point { X = 2, Y = -100 });
             //I.Click("#basic-demo", new API.Point { X = 2, Y = 90 });
+        }
+
+        [TestMethod]
+        public void Test_ElementExpression()
+        {
+            I.Open("http://knockoutjs.com/");
+            I.Expect.Element(x => x.GetAttributeValue("src") == "http://knockoutjs.com/img/feature-icons/declarative-bindings.png").In("li img:eq(0)");
         }
     }
 }
