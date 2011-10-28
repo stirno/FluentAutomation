@@ -52,6 +52,7 @@
     <Compile Include="Commands\ExpectAny.cs" />
     <Compile Include="Commands\ExpectClass.cs" />
     <Compile Include="Commands\ExpectCount.cs" />
+    <Compile Include="Commands\ExpectElement.cs" />
     <Compile Include="Commands\ExpectNull.cs" />
     <Compile Include="Commands\ExpectText.cs" />
     <Compile Include="Commands\ExpectUrl.cs" />
