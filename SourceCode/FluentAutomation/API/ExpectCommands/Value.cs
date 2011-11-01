@@ -208,6 +208,27 @@ namespace FluentAutomation.API.ExpectCommands
                             }
                         }
                     }
+                    else if (element.IsCheckBox())
+                    {
+                        var cbxElement = Provider.GetCheckBoxElement(fieldSelector, conditions);
+						var checkedvalue = cbxElement.Checked;
+                        if (_valueFunc != null)
+                        {
+							if (!_valueFunc(checkedvalue.ToString()))
+                            {
+                                Provider.TakeAssertExceptionScreenshot();
+								throw new AssertException("CheckBoxElement value assertion failed. Expected element [{0}] to match expression [{1}]. Actual value is [{2}].", fieldSelector, _valueExpression.ToExpressionString(), checkedvalue);
+                            }
+                        }
+                        else
+                        {
+							if (!checkedvalue.ToString().Equals(_value ?? string.Empty, StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                Provider.TakeAssertExceptionScreenshot();
+								throw new AssertException("CheckBoxElement value assertion failed. Expected element [{0}] to have a value of [{1}] but actual value is [{2}].", fieldSelector, _value.PrettifyErrorValue(), checkedvalue);
+                            }
+                        }
+                    }
                     else
                     {
                         if (_valueFunc != null)

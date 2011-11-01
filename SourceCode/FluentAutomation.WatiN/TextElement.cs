@@ -7,7 +7,7 @@ using Automation = global::WatiN;
 
 namespace FluentAutomation.WatiN
 {
-    public class TextElement : Element, ITextElement
+	public class TextElement : Element, ITextElement
     {
         private Automation.Core.TextField _element = null;
 

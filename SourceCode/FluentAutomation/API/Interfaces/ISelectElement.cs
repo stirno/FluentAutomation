@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 
 namespace FluentAutomation.API.Interfaces
 {
-    /// <summary>
+	/// <summary>
     /// Interface for <select />
     /// </summary>
     public interface ISelectElement : IElement

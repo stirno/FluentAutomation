@@ -68,6 +68,7 @@
     <Compile Include="API\ExpectCommands\CssClass.cs" />
     <Compile Include="API\ExpectCommands\Value.cs" />
     <Compile Include="API\ExpectManager.cs" />
+    <Compile Include="API\Interfaces\ICheckBoxElement.cs" />
     <Compile Include="API\Interfaces\IElement.cs" />
     <Compile Include="API\Interfaces\IElementDetails.cs" />
     <Compile Include="API\Interfaces\ISelectElement.cs" />
