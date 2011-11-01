@@ -77,6 +77,14 @@ namespace FluentAutomation.WatiN
             return new TextElement(wElement);
         }
 
+		public override ICheckBoxElement GetCheckBoxElement(string fieldSelector, MatchConditions conditions)
+        {
+            var wElement = _browser.ElementOfType<Automation.Core.CheckBox>(Automation.Core.Find.BySelector(fieldSelector));
+            ValidateElement(wElement, fieldSelector, conditions);
+
+			return new CheckBoxElement(wElement);
+        }
+
         public override Uri GetUri()
         {
             return _browser.Uri;

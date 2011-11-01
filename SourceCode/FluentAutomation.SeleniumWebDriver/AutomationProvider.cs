@@ -57,6 +57,14 @@ namespace FluentAutomation.SeleniumWebDriver
             return new SelectElement(_driver, element, fieldSelector);
         }
 
+        public override ICheckBoxElement GetCheckBoxElement(string fieldSelector, MatchConditions conditions)
+        {
+            var element = _driver.FindElement(BySizzle.CssSelector(fieldSelector));
+            ValidateElement(element, fieldSelector, conditions);
+
+			return new CheckBoxElement(_driver, element, fieldSelector);
+        }
+
         public override IElement GetElement(string fieldSelector, MatchConditions conditions)
         {
             var element = _driver.FindElement(BySizzle.CssSelector(fieldSelector));

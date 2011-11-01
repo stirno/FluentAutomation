@@ -94,6 +94,12 @@ namespace FluentAutomation.WatiN
                 _element.TagName.Equals("textarea", StringComparison.InvariantCultureIgnoreCase));
         }
 
+		public bool IsCheckBox()
+        {
+            return (_element.TagName.Equals("input", StringComparison.InvariantCultureIgnoreCase) &&
+                (_element.GetAttributeValue("type").Equals("checkbox", StringComparison.InvariantCultureIgnoreCase)));
+        }
+
         public virtual void Click()
         {
             Click(ClickMode.Default);

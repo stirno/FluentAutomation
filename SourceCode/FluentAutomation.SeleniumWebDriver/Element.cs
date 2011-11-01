@@ -93,6 +93,12 @@ namespace FluentAutomation.SeleniumWebDriver
                 _element.TagName.Equals("textarea", StringComparison.InvariantCultureIgnoreCase));
         }
 
+		public bool IsCheckBox()
+        {
+            return (_element.TagName.Equals("input", StringComparison.InvariantCultureIgnoreCase) &&
+                (_element.GetAttribute("type").Equals("checkobx", StringComparison.InvariantCultureIgnoreCase)));
+        }
+
         public virtual void SetValue(string value)
         {
             throw new NotImplementedException("Cannot set value to a generic Element.");

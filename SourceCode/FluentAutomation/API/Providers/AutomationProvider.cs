@@ -64,6 +64,14 @@ namespace FluentAutomation.API.Providers
         public abstract ISelectElement GetSelectElement(string fieldSelector, MatchConditions conditions);
 
         /// <summary>
+        /// Gets the checkbox element matching the field selector and conditions.
+        /// </summary>
+        /// <param name="fieldSelector">The field selector.</param>
+        /// <param name="conditions">The conditions.</param>
+        /// <returns></returns>
+		public abstract ICheckBoxElement GetCheckBoxElement(string fieldSelector, MatchConditions conditions);
+
+        /// <summary>
         /// Gets the element matching the field selector and conditions.
         /// </summary>
         /// <param name="fieldSelector">The field selector.</param>

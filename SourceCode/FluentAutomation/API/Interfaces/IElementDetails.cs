@@ -54,5 +54,13 @@ namespace FluentAutomation.API.Interfaces
         ///   <c>true</c> if this instance is text; otherwise, <c>false</c>.
         /// </returns>
         bool IsText();
+
+        /// <summary>
+        /// Determines whether this instance is text.
+        /// </summary>
+        /// <returns>
+        ///   <c>true</c> if this instance is text; otherwise, <c>false</c>.
+        /// </returns>
+        bool IsCheckBox();
     }
 }
