@@ -6,9 +6,9 @@ using System.Text;
 namespace FluentAutomation.RemoteCommands.Commands
 {
     [CommandArgumentsType(typeof(ScreenshotArguments))]
-    public class Screenshot : ICommand
+    public class Screenshot : IRemoteCommand
     {
-        public void Execute(API.CommandManager manager, ICommandArguments arguments)
+        public void Execute(API.CommandManager manager, IRemoteCommandArguments arguments)
         {
             var args = (ScreenshotArguments)arguments;
 
@@ -19,7 +19,7 @@ namespace FluentAutomation.RemoteCommands.Commands
         }
     }
 
-    public class ScreenshotArguments : ICommandArguments
+    public class ScreenshotArguments : IRemoteCommandArguments
     {
         public string FileName { get; set; }
     }

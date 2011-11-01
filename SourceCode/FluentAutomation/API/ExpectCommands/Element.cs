@@ -55,7 +55,7 @@ namespace FluentAutomation.API.ExpectCommands
                 arguments.Add("selector", fieldSelector);
                 if (_elementExpression != null) arguments.Add("expression", _elementExpression.ToExpressionString());
 
-                CommandManager.RemoteCommands.Add(new RemoteCommands.RemoteCommand()
+                CommandManager.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
                 {
                     Name = "ExpectElement",
                     Arguments = arguments

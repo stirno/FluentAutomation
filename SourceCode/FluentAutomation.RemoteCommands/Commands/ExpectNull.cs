@@ -7,9 +7,9 @@ using FluentAutomation.API.Enumerations;
 namespace FluentAutomation.RemoteCommands.Commands
 {
     [CommandArgumentsType(typeof(ExpectNullArguments))]
-    public class ExpectNull : ICommand
+    public class ExpectNull : IRemoteCommand
     {
-        public void Execute(API.CommandManager manager, ICommandArguments arguments)
+        public void Execute(API.CommandManager manager, IRemoteCommandArguments arguments)
         {
             var args = (ExpectNullArguments)arguments;
 
@@ -27,7 +27,7 @@ namespace FluentAutomation.RemoteCommands.Commands
         }
     }
 
-    public class ExpectNullArguments : ICommandArguments
+    public class ExpectNullArguments : IRemoteCommandArguments
     {
         public string Selector { get; set; }
         public MatchConditions? MatchConditions { get; set; }

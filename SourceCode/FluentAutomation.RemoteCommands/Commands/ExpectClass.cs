@@ -7,9 +7,9 @@ using FluentAutomation.API.Enumerations;
 namespace FluentAutomation.RemoteCommands.Commands
 {
     [CommandArgumentsType(typeof(ExpectClassArguments))]
-    public class ExpectClass : ICommand
+    public class ExpectClass : IRemoteCommand
     {
-        public void Execute(API.CommandManager manager, ICommandArguments arguments)
+        public void Execute(API.CommandManager manager, IRemoteCommandArguments arguments)
         {
             var args = (ExpectClassArguments)arguments;
 
@@ -58,7 +58,7 @@ namespace FluentAutomation.RemoteCommands.Commands
         }
     }
 
-    public class ExpectClassArguments : ICommandArguments
+    public class ExpectClassArguments : IRemoteCommandArguments
     {
         public string Value { get; set; }
         public string Selector { get; set; }

@@ -8,9 +8,9 @@ using System.Linq.Expressions;
 namespace FluentAutomation.RemoteCommands.Commands
 {
     [CommandArgumentsType(typeof(EnterArguments))]
-    public class Enter : ICommand
+    public class Enter : IRemoteCommand
     {
-        public void Execute(API.CommandManager manager, ICommandArguments arguments)
+        public void Execute(API.CommandManager manager, IRemoteCommandArguments arguments)
         {
             var args = (EnterArguments)arguments;
 
@@ -42,7 +42,7 @@ namespace FluentAutomation.RemoteCommands.Commands
         }
     }
 
-    public class EnterArguments : ICommandArguments
+    public class EnterArguments : IRemoteCommandArguments
     {
         public string Value { get; set; }
         public bool Quickly { get; set; }

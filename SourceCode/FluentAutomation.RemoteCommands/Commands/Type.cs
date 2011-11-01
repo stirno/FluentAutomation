@@ -6,9 +6,9 @@ using System.Text;
 namespace FluentAutomation.RemoteCommands.Commands
 {
     [CommandArgumentsType(typeof(TypeArguments))]
-    public class Type : ICommand
+    public class Type : IRemoteCommand
     {
-        public void Execute(API.CommandManager manager, ICommandArguments arguments)
+        public void Execute(API.CommandManager manager, IRemoteCommandArguments arguments)
         {
             var args = (TypeArguments)arguments;
 
@@ -18,7 +18,7 @@ namespace FluentAutomation.RemoteCommands.Commands
         }
     }
 
-    public class TypeArguments : ICommandArguments
+    public class TypeArguments : IRemoteCommandArguments
     {
         public string Value { get; set; }
     }

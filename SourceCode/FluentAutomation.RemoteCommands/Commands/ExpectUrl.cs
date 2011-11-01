@@ -7,9 +7,9 @@ using System.Linq.Expressions;
 namespace FluentAutomation.RemoteCommands.Commands
 {
     [CommandArgumentsType(typeof(ExpectUrlArguments))]
-    public class ExpectUrl : ICommand
+    public class ExpectUrl : IRemoteCommand
     {
-        public void Execute(API.CommandManager manager, ICommandArguments arguments)
+        public void Execute(API.CommandManager manager, IRemoteCommandArguments arguments)
         {
             var args = (ExpectUrlArguments)arguments;
 
@@ -26,7 +26,7 @@ namespace FluentAutomation.RemoteCommands.Commands
         }
     }
 
-    public class ExpectUrlArguments : ICommandArguments
+    public class ExpectUrlArguments : IRemoteCommandArguments
     {
         public string URL { get; set; }
         public Expression<Func<Uri, bool>> URLExpression { get; set; }

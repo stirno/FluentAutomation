@@ -60,7 +60,7 @@ namespace FluentAutomation.API.FieldCommands
         {
             if (CommandManager.EnableRemoteExecution)
             {
-                CommandManager.RemoteCommands.Add(new RemoteCommands.RemoteCommand()
+                CommandManager.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
                 {
                     Name = "Enter",
                     Arguments = new Dictionary<string, dynamic>()

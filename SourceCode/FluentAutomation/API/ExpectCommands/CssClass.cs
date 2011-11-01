@@ -46,7 +46,7 @@ namespace FluentAutomation.API.ExpectCommands
         {
             if (CommandManager.EnableRemoteExecution)
             {
-                CommandManager.RemoteCommands.Add(new RemoteCommands.RemoteCommand()
+                CommandManager.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
                 {
                     Name = "ExpectClass",
                     Arguments = new Dictionary<string, dynamic>()

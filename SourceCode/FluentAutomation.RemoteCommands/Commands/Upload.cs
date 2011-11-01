@@ -7,9 +7,9 @@ using FluentAutomation.API.Enumerations;
 namespace FluentAutomation.RemoteCommands.Commands
 {
     [CommandArgumentsType(typeof(UploadArguments))]
-    public class Upload : ICommand
+    public class Upload : IRemoteCommand
     {
-        public void Execute(API.CommandManager manager, ICommandArguments arguments)
+        public void Execute(API.CommandManager manager, IRemoteCommandArguments arguments)
         {
             var args = (UploadArguments)arguments;
 
@@ -27,7 +27,7 @@ namespace FluentAutomation.RemoteCommands.Commands
         }
     }
 
-    public class UploadArguments : ICommandArguments
+    public class UploadArguments : IRemoteCommandArguments
     {
         public string FileName { get; set; }
         public string Selector { get; set; }

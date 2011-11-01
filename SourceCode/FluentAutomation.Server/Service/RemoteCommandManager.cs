@@ -1,20 +1,89 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using FluentAutomation.API.Providers;
-using FluentAutomation.API;
-using System.Reflection;
 using System.Linq.Expressions;
+using System.Reflection;
+using System.Text;
+using FluentAutomation.API;
 using FluentAutomation.API.Enumerations;
+using FluentAutomation.API.Providers;
 using FluentAutomation.RemoteCommands.Contrib;
-using System.Collections;
+using FluentAutomation.Server.Model;
 
 namespace FluentAutomation.RemoteCommands
 {
     public class RemoteCommandManager
     {
-        public void Execute(AutomationProvider provider, IEnumerable<RemoteCommand> commands)
+        public static TestDetails GetRemoteCommands(IEnumerable<RemoteCommandDetails> commands)
+        {
+            TestDetails testDetails = new TestDetails();
+            Assembly asm = typeof(IRemoteCommand).Assembly;
+
+            try
+            {
+                foreach (var command in commands)
+                {
+                    // attempt to locate mapper
+                    // TODO: Get rid of the 'magic string' Commands part, make this work with loaded assemblies
+                    var type = asm.GetType(string.Format("{0}.{1}.{2}", typeof(RemoteCommandManager).Namespace, "Commands", command.Name));
+                    if (type == null)
+                    {
+                        throw new ArgumentException(string.Format("Unable to locate available command: {0}", command.Name));
+                    }
+
+                    CommandArgumentsTypeAttribute commandArgs = (CommandArgumentsTypeAttribute)type.GetCustomAttributes(typeof(CommandArgumentsTypeAttribute), false).FirstOrDefault();
+                    if (commandArgs == null)
+                    {
+                        throw new ArgumentException(string.Format("Unable to locate command arguments handler for command: {0}", command.Name));
+                    }
+
+                    IRemoteCommand cmd = (IRemoteCommand)Activator.CreateInstance(type);
+                    IRemoteCommandArguments args = null;
+                    try
+                    {
+                        args = DeserializeArguments(commandArgs.ArgsType, command.Arguments);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new ArgumentException(string.Format("An error occurred while processing the arguments provided for command: {0}", command.Name), ex);
+                    }
+
+                    if (cmd.GetType() == typeof(Commands.Use))
+                    {
+                        var useArgs = (Commands.UseArguments)args;
+                        Guard.ArgumentExpressionTrueForCommand<Commands.Use>(() => useArgs.BrowserType.Count > 0);
+
+                        testDetails.Browsers.AddRange(useArgs.BrowserType);
+                    }
+                    else
+                    {
+                        testDetails.RemoteCommands.Add(cmd, args);
+                    }
+                }
+
+                if (testDetails.Browsers.Count == 0)
+                {
+                    testDetails.Browsers.Add(BrowserType.Chrome);
+                }
+            }
+            catch (FluentAutomation.API.Exceptions.AssertException)
+            {
+                throw;
+            }
+            catch (ArgumentException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while executing the specified commands.", ex);
+            }
+
+            return testDetails;
+        }
+
+        public void Execute(AutomationProvider provider, IEnumerable<RemoteCommandDetails> commands)
         {
             CommandManager manager = new CommandManager(provider);
             Assembly asm = typeof(RemoteCommandManager).Assembly;
@@ -44,9 +113,9 @@ namespace FluentAutomation.RemoteCommands
                         throw new ArgumentException(string.Format("Unable to locate command arguments handler for command: {0}", command.Name));
                     }
 
-                    ICommand cmd = (ICommand)Activator.CreateInstance(type);
+                    IRemoteCommand cmd = (IRemoteCommand)Activator.CreateInstance(type);
 
-                    ICommandArguments args = null;
+                    IRemoteCommandArguments args = null;
                     try
                     {
                         args = DeserializeArguments(commandArgs.ArgsType, command.Arguments);

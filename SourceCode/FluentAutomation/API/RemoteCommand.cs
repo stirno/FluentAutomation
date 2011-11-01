@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FluentAutomation.RemoteCommands
 {
-    public class RemoteCommand
+    public class RemoteCommandDetails
     {
         public string Name { get; set; }
         public Dictionary<string, dynamic> Arguments { get; set; }

@@ -6,9 +6,9 @@ using System.Text;
 namespace FluentAutomation.RemoteCommands.Commands
 {
     [CommandArgumentsType(typeof(ExpectAlertArguments))]
-    public class ExpectAlert : ICommand
+    public class ExpectAlert : IRemoteCommand
     {
-        public void Execute(API.CommandManager manager, ICommandArguments arguments)
+        public void Execute(API.CommandManager manager, IRemoteCommandArguments arguments)
         {
             var args = (ExpectAlertArguments)arguments;
 
@@ -23,7 +23,7 @@ namespace FluentAutomation.RemoteCommands.Commands
         }
     }
 
-    public class ExpectAlertArguments : ICommandArguments
+    public class ExpectAlertArguments : IRemoteCommandArguments
     {
         public string Text { get; set; }
     }

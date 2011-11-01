@@ -7,9 +7,9 @@ using FluentAutomation.API;
 namespace FluentAutomation.RemoteCommands.Commands
 {
     [CommandArgumentsType(typeof(OpenArguments))]
-    public class Open : ICommand
+    public class Open : IRemoteCommand
     {
-        public void Execute(CommandManager manager, ICommandArguments arguments)
+        public void Execute(CommandManager manager, IRemoteCommandArguments arguments)
         {
             var args = (OpenArguments)arguments;
             Guard.ArgumentNotNullForCommand<ExpectValue>(args.Url);
@@ -18,7 +18,7 @@ namespace FluentAutomation.RemoteCommands.Commands
         }
     }
 
-    public class OpenArguments : ICommandArguments
+    public class OpenArguments : IRemoteCommandArguments
     {
         public string Url { get; set; }
     }

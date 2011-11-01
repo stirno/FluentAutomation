@@ -69,11 +69,10 @@
     <Compile Include="Commands\Wait.cs" />
     <Compile Include="DynamicLinq.cs" />
     <Compile Include="Guard.cs" />
-    <Compile Include="ICommand.cs" />
-    <Compile Include="ICommandArguments.cs" />
+    <Compile Include="IRemoteCommand.cs" />
+    <Compile Include="IRemoteCommandArguments.cs" />
     <Compile Include="InvalidCommandException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RemoteCommandManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FluentAutomation\FluentAutomation.csproj">

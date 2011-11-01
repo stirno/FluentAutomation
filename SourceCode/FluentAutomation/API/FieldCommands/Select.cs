@@ -90,7 +90,7 @@ namespace FluentAutomation.API.FieldCommands
                 if (_optionMatchingFunc != null) arguments.Add("valueExpression", _optionMatchingFunc.ToExpressionString());
                 if (_selectedIndices != null) arguments.Add("indices", _selectedIndices);
 
-                CommandManager.RemoteCommands.Add(new RemoteCommands.RemoteCommand()
+                CommandManager.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
                 {
                     Name = "Select",
                     Arguments = arguments

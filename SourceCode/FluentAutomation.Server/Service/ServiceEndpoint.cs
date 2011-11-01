@@ -8,6 +8,8 @@ using System.ServiceModel.Activation;
 using System.IO;
 using Newtonsoft.Json;
 using FluentAutomation.RemoteConsole;
+using GalaSoft.MvvmLight.Messaging;
+using FluentAutomation.Server.Model;
 
 namespace FluentAutomation.RemoteCommands
 {
@@ -18,7 +20,7 @@ namespace FluentAutomation.RemoteCommands
             StreamReader reader = new StreamReader(requestBody);
             var contents = reader.ReadToEnd();
 
-            var commands = JsonConvert.DeserializeObject<List<RemoteCommand>>(contents, new JsonSerializerSettings()
+            var commands = JsonConvert.DeserializeObject<List<RemoteCommandDetails>>(contents, new JsonSerializerSettings()
             {
                 TypeNameHandling = TypeNameHandling.All
             });
@@ -27,7 +29,10 @@ namespace FluentAutomation.RemoteCommands
 
             try
             {
-                processor.Execute(new FluentAutomation.SeleniumWebDriver.AutomationProvider(), commands);
+                var testDetails = RemoteCommandManager.GetRemoteCommands(commands);
+                Messenger.Default.Send<GenericMessage<TestDetails>>(new GenericMessage<TestDetails>(testDetails));
+                
+                //processor.Execute(new FluentAutomation.SeleniumWebDriver.AutomationProvider(), commands);
             }
             catch (Exception ex)
             {

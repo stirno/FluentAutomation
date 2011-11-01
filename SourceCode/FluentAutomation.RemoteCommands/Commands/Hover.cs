@@ -7,9 +7,9 @@ using FluentAutomation.API.Enumerations;
 namespace FluentAutomation.RemoteCommands.Commands
 {
     [CommandArgumentsType(typeof(HoverArguments))]
-    public class Hover : ICommand
+    public class Hover : IRemoteCommand
     {
-        public void Execute(API.CommandManager manager, ICommandArguments arguments)
+        public void Execute(API.CommandManager manager, IRemoteCommandArguments arguments)
         {
             var args = (HoverArguments)arguments;
 
@@ -33,7 +33,7 @@ namespace FluentAutomation.RemoteCommands.Commands
         }
     }
 
-    public class HoverArguments : ICommandArguments
+    public class HoverArguments : IRemoteCommandArguments
     {
         public string Selector { get; set; }
         public MatchConditions? MatchConditions { get; set; }

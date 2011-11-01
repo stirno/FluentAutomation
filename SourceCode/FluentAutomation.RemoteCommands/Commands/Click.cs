@@ -8,9 +8,9 @@ using FluentAutomation.API.Enumerations;
 namespace FluentAutomation.RemoteCommands.Commands
 {
     [CommandArgumentsType(typeof(ClickArguments))]
-    public class Click : ICommand
+    public class Click : IRemoteCommand
     {
-        public void Execute(CommandManager manager, ICommandArguments arguments)
+        public void Execute(CommandManager manager, IRemoteCommandArguments arguments)
         {
             var args = (ClickArguments)arguments;
 
@@ -41,7 +41,7 @@ namespace FluentAutomation.RemoteCommands.Commands
         }
     }
 
-    public class ClickArguments : ICommandArguments
+    public class ClickArguments : IRemoteCommandArguments
     {
         public string Selector { get; set; }
         public API.Point Point { get; set; }

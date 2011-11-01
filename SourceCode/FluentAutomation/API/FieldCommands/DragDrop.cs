@@ -34,7 +34,7 @@ namespace FluentAutomation.API.FieldCommands
         {
             if (CommandManager.EnableRemoteExecution)
             {
-                CommandManager.RemoteCommands.Add(new RemoteCommands.RemoteCommand()
+                CommandManager.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
                 {
                     Name = "Drag",
                     Arguments = new Dictionary<string, dynamic>()

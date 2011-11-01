@@ -8,9 +8,9 @@ using FluentAutomation.API.Interfaces;
 namespace FluentAutomation.RemoteCommands.Commands
 {
     [CommandArgumentsType(typeof(ExpectAllArguments))]
-    public class ExpectAll : ICommand
+    public class ExpectAll : IRemoteCommand
     {
-        public void Execute(API.CommandManager manager, ICommandArguments arguments)
+        public void Execute(API.CommandManager manager, IRemoteCommandArguments arguments)
         {
             var args = (ExpectAllArguments)arguments;
 
@@ -62,7 +62,7 @@ namespace FluentAutomation.RemoteCommands.Commands
         }
     }
 
-    public class ExpectAllArguments : ICommandArguments
+    public class ExpectAllArguments : IRemoteCommandArguments
     {
         public string[] Values { get; set; }
         public string Selector { get; set; }

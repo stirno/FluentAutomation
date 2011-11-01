@@ -6,9 +6,9 @@ using System.Text;
 namespace FluentAutomation.RemoteCommands.Commands
 {
     [CommandArgumentsType(typeof(DragArguments))]
-    public class Drag : ICommand
+    public class Drag : IRemoteCommand
     {
-        public void Execute(API.CommandManager manager, ICommandArguments arguments)
+        public void Execute(API.CommandManager manager, IRemoteCommandArguments arguments)
         {
             var args = (DragArguments)arguments;
 
@@ -19,7 +19,7 @@ namespace FluentAutomation.RemoteCommands.Commands
         }
     }
 
-    public class DragArguments : ICommandArguments
+    public class DragArguments : IRemoteCommandArguments
     {
         public string From { get; set; }
         public string To { get; set; }

@@ -6,9 +6,9 @@ using System.Text;
 namespace FluentAutomation.RemoteCommands.Commands
 {
     [CommandArgumentsType(typeof(WaitArguments))]
-    public class Wait : ICommand
+    public class Wait : IRemoteCommand
     {
-        public void Execute(API.CommandManager manager, ICommandArguments arguments)
+        public void Execute(API.CommandManager manager, IRemoteCommandArguments arguments)
         {
             var args = (WaitArguments)arguments;
 
@@ -27,7 +27,7 @@ namespace FluentAutomation.RemoteCommands.Commands
         }
     }
 
-    public class WaitArguments : ICommandArguments
+    public class WaitArguments : IRemoteCommandArguments
     {
         public int Seconds { get; set; }
         public int Milliseconds { get; set; }

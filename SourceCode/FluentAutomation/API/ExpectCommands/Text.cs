@@ -112,7 +112,7 @@ namespace FluentAutomation.API.ExpectCommands
                 arguments.Add("matchConditions", conditions.ToString());
                 if (_expectedTextExpression != null) arguments.Add("valueExpression", _expectedTextExpression.ToExpressionString());
 
-                CommandManager.RemoteCommands.Add(new RemoteCommands.RemoteCommand()
+                CommandManager.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
                 {
                     Name = "ExpectText",
                     Arguments = arguments

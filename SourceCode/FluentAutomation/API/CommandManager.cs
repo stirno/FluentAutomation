@@ -43,7 +43,7 @@ namespace FluentAutomation.API
 
         public List<BrowserType> RemoteBrowsers { get; set; }
 
-        public List<RemoteCommands.RemoteCommand> RemoteCommands { get; set; }
+        public List<RemoteCommands.RemoteCommandDetails> RemoteCommands { get; set; }
 
         public bool EnableRemoteExecution { get; set; }
 
@@ -69,7 +69,7 @@ namespace FluentAutomation.API
 		{
 			Provider = automationProvider;
 			_actionBuckets.Add(new ActionBucket(this));
-            this.RemoteCommands = new List<RemoteCommands.RemoteCommand>();
+            this.RemoteCommands = new List<RemoteCommands.RemoteCommandDetails>();
             this.RemoteBrowsers = new List<BrowserType>();
 		}
 
@@ -98,7 +98,7 @@ namespace FluentAutomation.API
                 // add remote browsers
                 if (this.RemoteBrowsers.Count > 0)
                 {
-                    this.RemoteCommands.Insert(0, new RemoteCommands.RemoteCommand()
+                    this.RemoteCommands.Insert(0, new RemoteCommands.RemoteCommandDetails()
                     {
                         Name = "Use",
                         Arguments = new Dictionary<string, dynamic>()
@@ -205,7 +205,7 @@ namespace FluentAutomation.API
 		{
             if (this.EnableRemoteExecution)
             {
-                this.RemoteCommands.Add(new RemoteCommands.RemoteCommand()
+                this.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
                 {
                     Name = "Click",
                     Arguments = new Dictionary<string, dynamic>()
@@ -234,7 +234,7 @@ namespace FluentAutomation.API
         {
             if (this.EnableRemoteExecution)
             {
-                this.RemoteCommands.Add(new RemoteCommands.RemoteCommand()
+                this.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
                 {
                     Name = "Click",
                     Arguments = new Dictionary<string, dynamic>()
@@ -261,7 +261,7 @@ namespace FluentAutomation.API
         {
             if (this.EnableRemoteExecution)
             {
-                this.RemoteCommands.Add(new RemoteCommands.RemoteCommand()
+                this.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
                 {
                     Name = "Click",
                     Arguments = new Dictionary<string, dynamic>()
@@ -352,7 +352,7 @@ namespace FluentAutomation.API
 		{
             if (this.EnableRemoteExecution)
             {
-                this.RemoteCommands.Add(new RemoteCommands.RemoteCommand()
+                this.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
                 {
                     Name = "Hover",
                     Arguments = new Dictionary<string, dynamic>()
@@ -380,7 +380,7 @@ namespace FluentAutomation.API
         {
             if (this.EnableRemoteExecution)
             {
-                this.RemoteCommands.Add(new RemoteCommands.RemoteCommand()
+                this.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
                 {
                     Name = "Hover",
                     Arguments = new Dictionary<string, dynamic>()
@@ -406,7 +406,7 @@ namespace FluentAutomation.API
         {
             if (this.EnableRemoteExecution)
             {
-                this.RemoteCommands.Add(new RemoteCommands.RemoteCommand()
+                this.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
                 {
                     Name = "Navigate",
                     Arguments = new Dictionary<string, dynamic>()
@@ -432,7 +432,7 @@ namespace FluentAutomation.API
         {
             if (this.EnableRemoteExecution)
             {
-                this.RemoteCommands.Add(new RemoteCommands.RemoteCommand()
+                this.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
                 {
                     Name = "Open",
                     Arguments = new Dictionary<string, dynamic>()
@@ -467,7 +467,7 @@ namespace FluentAutomation.API
         {
             if (this.EnableRemoteExecution)
             {
-                this.RemoteCommands.Add(new RemoteCommands.RemoteCommand()
+                this.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
                 {
                     Name = "Press",
                     Arguments = new Dictionary<string, dynamic>()
@@ -493,7 +493,7 @@ namespace FluentAutomation.API
 		{
             if (this.EnableRemoteExecution)
             {
-                this.RemoteCommands.Add(new RemoteCommands.RemoteCommand()
+                this.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
                 {
                     Name = "Screenshot",
                     Arguments = new Dictionary<string, dynamic>()
@@ -526,7 +526,7 @@ namespace FluentAutomation.API
         {
             if (this.EnableRemoteExecution)
             {
-                this.RemoteCommands.Add(new RemoteCommands.RemoteCommand()
+                this.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
                 {
                     Name = "Type",
                     Arguments = new Dictionary<string, dynamic>()
@@ -681,7 +681,7 @@ namespace FluentAutomation.API
         {
             if (this.EnableRemoteExecution)
             {
-                this.RemoteCommands.Add(new RemoteCommands.RemoteCommand()
+                this.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
                 {
                     Name = "Upload",
                     Arguments = new Dictionary<string, dynamic>()
@@ -735,7 +735,7 @@ namespace FluentAutomation.API
 		{
             if (this.EnableRemoteExecution)
             {
-                this.RemoteCommands.Add(new RemoteCommands.RemoteCommand()
+                this.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
                 {
                     Name = "Wait",
                     Arguments = new Dictionary<string, dynamic>()

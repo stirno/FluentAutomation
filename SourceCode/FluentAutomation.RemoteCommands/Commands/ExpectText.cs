@@ -8,9 +8,9 @@ using System.Linq.Expressions;
 namespace FluentAutomation.RemoteCommands.Commands
 {
     [CommandArgumentsType(typeof(ExpectTextArguments))]
-    public class ExpectText : ICommand
+    public class ExpectText : IRemoteCommand
     {
-        public void Execute(API.CommandManager manager, ICommandArguments arguments)
+        public void Execute(API.CommandManager manager, IRemoteCommandArguments arguments)
         {
             var args = (ExpectTextArguments)arguments;
 
@@ -62,7 +62,7 @@ namespace FluentAutomation.RemoteCommands.Commands
         }
     }
 
-    public class ExpectTextArguments : ICommandArguments
+    public class ExpectTextArguments : IRemoteCommandArguments
     {
         public string Value { get; set; }
         public string Selector { get; set; }
