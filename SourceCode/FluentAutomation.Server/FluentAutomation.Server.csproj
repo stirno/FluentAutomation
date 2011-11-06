@@ -78,6 +78,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="FluentTest.cs" />
     <Compile Include="Model\TestDetails.cs" />
     <Compile Include="Service\RemoteCommandManager.cs" />
     <Compile Include="Service\ServiceEndpoint.cs" />

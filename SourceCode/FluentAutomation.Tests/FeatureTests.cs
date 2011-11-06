@@ -48,7 +48,7 @@ namespace FluentAutomation.Tests
         [TestInitialize]
         public void Setup()
         {
-            I.Record(true);
+            I.EnableRemoteExecution = true;
         }
 
         [TestCleanup]
@@ -61,6 +61,7 @@ namespace FluentAutomation.Tests
         public void TestFromGitHub()
         {
             // specify a browser, this is optional - WatiN targets IE and Selenium defaults to Firefox
+            I.Use(BrowserType.InternetExplorer);
             I.Open("http://knockoutjs.com/examples/cartEditor.html");
             I.Select("Motorcycles").From("#cartEditor tr select:eq(0)"); // Select by value/text
             I.Select(2).From("#cartEditor tr select:eq(1)"); // Select by index

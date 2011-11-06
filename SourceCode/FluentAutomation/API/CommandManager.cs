@@ -23,6 +23,7 @@ namespace FluentAutomation.API
 	{
 		private int _bucketIndex = -1;
 		private List<ActionBucket> _actionBuckets = new List<ActionBucket>();
+        private bool _enableRemoteExecution = false;
 
 		protected AutomationProvider Provider { get; set; }
 		protected ExpectManager ExpectManager { get; set; }
@@ -45,7 +46,28 @@ namespace FluentAutomation.API
 
         public List<RemoteCommands.RemoteCommandDetails> RemoteCommands { get; set; }
 
-        public bool EnableRemoteExecution { get; set; }
+        /// <summary>
+        /// Gets or sets Remote Execution status. When set to true, Record is called.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if [enable remote execution]; otherwise, <c>false</c>.
+        /// </value>
+        public bool EnableRemoteExecution
+        {
+            get
+            {
+                return _enableRemoteExecution;
+            }
+            set
+            {
+                if (value == true && _bucketIndex == -1)
+                {
+                    this.Record();
+                }
+
+                _enableRemoteExecution = value;
+            }
+        }
 
 		/// <summary>
 		/// Gets a value indicating whether this instance is record replay.
@@ -76,13 +98,8 @@ namespace FluentAutomation.API
 		/// <summary>
 		/// Records this instance.
 		/// </summary>
-		public void Record(bool remote = false)
+		public void Record()
 		{
-            if (remote)
-            {
-                this.EnableRemoteExecution = true;
-            }
-
 			if (_bucketIndex > -1) _actionBuckets.Add(new ActionBucket(this));
 			_bucketIndex++;
 		}
