@@ -150,6 +150,29 @@ namespace FluentAutomation.API
 			});
 		}
 
+        /// <summary>
+        /// Focuses the specified element selector.
+        /// </summary>
+        /// <param name="elementSelector">The element selector.</param>
+        public void Focus(string elementSelector)
+        {
+            Focus(elementSelector, MatchConditions.None);
+        }
+
+        /// <summary>
+        /// Focuses the specified element selector.
+        /// </summary>
+        /// <param name="elementSelector">The element selector.</param>
+        /// <param name="conditions">The conditions.</param>
+        public void Focus(string elementSelector, MatchConditions conditions)
+        {
+            CurrentActionBucket.Add(() =>
+            {
+                var field = Provider.GetElement(elementSelector, conditions);
+                field.Focus();
+            });
+        }
+
 		/// <summary>
 		/// Drags the specified field selector.
 		/// </summary>
