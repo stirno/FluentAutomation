@@ -14,5 +14,15 @@ namespace FluentAutomation.Tests
         {
             I.Open("http://www.google.com/");
         }
+
+        [TestMethod]
+        public void Test1()
+        {
+            I.Open("http://knockoutjs.com/examples/controlTypes.html");
+            I.Repeat(i =>
+            {
+                I.Enter("Test" + i).In("input:eq(0)");
+            }, 10);
+        }
     }
 }

@@ -567,6 +567,32 @@ namespace FluentAutomation.API
             }
 		}
 
+        /// <summary>
+        /// Repeats the specified action a number of times
+        /// </summary>
+        /// <param name="action">The action to execute.</param>
+        /// <param name="count">The numer of times to execute.</param>
+        public void Repeat(Action<int> action, int count)
+        {
+            for (int i = 0; i <= count; i++)
+            {
+                action(i);
+            }
+        }
+
+        /// <summary>
+        /// Repeats the specified action a number of times
+        /// </summary>
+        /// <param name="action">The action to execute.</param>
+        /// <param name="count">The numer of times to execute.</param>
+        public void Repeat(Action action, int count)
+        {
+            for (int i = 0; i <= count; i++)
+            {
+                action();
+            }
+        }
+
 		/// <summary>
 		/// Windows.Forms.SendKeys wrapper. See http://msdn.microsoft.com/en-us/library/system.windows.forms.sendkeys.aspx for details.
 		/// </summary>
