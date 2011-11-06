@@ -12,7 +12,7 @@ using FluentAutomation.API.Enumerations;
 namespace FluentAutomation.Tests
 {
     [TestClass]
-    public class BugTests : FluentAutomation.WatiN.FluentTest
+    public class BugTests : FluentAutomation.SeleniumWebDriver.FluentTest
     {
         public override void Setup()
         {
@@ -67,10 +67,10 @@ namespace FluentAutomation.Tests
         [TestMethod]
         public void Bug_AlertDialog()
         {
+            I.Use(BrowserType.InternetExplorer);
             I.Open("http://www.quackit.com/javascript/javascript_alert_box.cfm");
-            I.Click("input[type='button']:eq(0)", ClickMode.NoWait);
-            I.TakeScreenshot("Dialog.jpg");
-            I.Expect.Alert("Not the message");
+            I.Click("input[type='button']:eq(0)");
+            I.Expect.Alert();
         }
 
         [TestMethod]

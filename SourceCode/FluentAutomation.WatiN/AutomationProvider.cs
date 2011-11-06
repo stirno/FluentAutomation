@@ -18,7 +18,6 @@ namespace FluentAutomation.WatiN
     {
         private Automation.Core.Browser _browser = null;
         private API.Enumerations.BrowserType _browserType = API.Enumerations.BrowserType.InternetExplorer;
-        private Automation.Core.DialogHandlers.AlertDialogHandler _alertDialogHandler = null;
         private List<string> _alertDialogMessages = new List<string>();
 
         public override void Cleanup()
@@ -81,17 +80,22 @@ namespace FluentAutomation.WatiN
         {
             return _browser.Uri;
         }
-
+        
         public override void HandleAlertDialog(string expectedMessage)
         {
-            using (new Automation.Core.DialogHandlers.UseDialogOnce(_browser.DialogWatcher, _alertDialogHandler))
+            if (_alertDialogMessages.Count == 0)
             {
-                _alertDialogHandler.WaitUntilExists();
-                _alertDialogHandler.OKButton.Click();
+                throw new AssertException("Alert assertion failed. Expected alert.");
+            }
+            else
+            {
+                // Alerts are FIFO
+                var lastMessage = _alertDialogMessages.First();
+                _alertDialogMessages.RemoveAt(0);
 
-                if (expectedMessage != string.Empty && !_alertDialogHandler.Message.Equals(expectedMessage, StringComparison.InvariantCultureIgnoreCase))
+                if (expectedMessage != string.Empty && !lastMessage.Equals(expectedMessage, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    throw new AssertException("Alert assertion failed. Expected message of [{0}] but actual message was [{1}].", expectedMessage, _alertDialogHandler.Message);
+                    throw new AssertException("Alert assertion failed. Expected message of [{0}] but actual message was [{1}].", expectedMessage, lastMessage);
                 }
             }
         }
@@ -205,8 +209,10 @@ namespace FluentAutomation.WatiN
                     ((SHDocVw.WebBrowser)browser.InternetExplorer).FullScreen = true;
 
                     // setup handler
-                    _alertDialogHandler = new Automation.Core.DialogHandlers.AlertDialogHandler();
+                    browser.AddDialogHandler(new JavaScriptAlertDialogHandler(s => this._alertDialogMessages.Add(s)));
+                    browser.DialogWatcher.CloseUnhandledDialogs = true;
                     browser.AutoClose = true;
+
                     return browser;
                 case API.Enumerations.BrowserType.Firefox:
                     throw new NotImplementedException("WatiN only supports Firefox with JSSH enabled. JSSH is not supported on versions newer than 4.0 so it has been disabled via this API.");

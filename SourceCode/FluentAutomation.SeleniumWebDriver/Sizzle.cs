@@ -1,6 +1,8 @@
 ﻿// <copyright file="Sizzle.cs" author="Brandon Stirnaman">
 //     Copyright (c) 2011 Brandon Stirnaman, All rights reserved.
 // </copyright>
+//
+// Method inspired by SizSelCsZzz by Frank Schwieterman
 
 using System;
 using System.Collections.Generic;
@@ -13,7 +15,63 @@ namespace FluentAutomation.SeleniumWebDriver
     public class BySizzle : By
     {
         private readonly string _selector;
-        private string _compiledSizzleString = @"(function(){function y(a,b,c,d,f,e){for(var f=0,h=d.length;f<h;f++){var g=d[f];if(g){for(var i=!1,g=g[a];g;){if(g.sizcache===c){i=d[g.sizset];break}if(g.nodeType===1&&!e)g.sizcache=c,g.sizset=f;if(g.nodeName.toLowerCase()===b){i=g;break}g=g[a]}d[f]=i}}}function z(a,b,c,d,f,e){for(var f=0,h=d.length;f<h;f++){var g=d[f];if(g){for(var j=!1,g=g[a];g;){if(g.sizcache===c){j=d[g.sizset];break}if(g.nodeType===1){if(!e)g.sizcache=c,g.sizset=f;if(typeof b!==""string""){if(g===b){j=!0;break}}else if(i.filter(b,
+
+        public static new By CssSelector(string selector)
+        {
+            return new BySizzle(selector);
+        }
+
+        public BySizzle(string selector)
+        {
+            _selector = Newtonsoft.Json.JsonConvert.SerializeObject(selector);
+        }
+
+        public override ReadOnlyCollection<IWebElement> FindElements(ISearchContext context)
+        {
+            return new ReadOnlyCollection<IWebElement>(GetMatches((IJavaScriptExecutor)context, string.Format("return Sizzle({0})", _selector)).Cast<IWebElement>().ToList());
+        }
+
+        public override IWebElement FindElement(ISearchContext context)
+        {
+            return FindElements(context).First();
+        }
+
+        private IEnumerable<object> GetMatches(IJavaScriptExecutor scriptExecutor, string javascriptExpression)
+        {
+            EnsureSizzleIsLoaded(scriptExecutor);
+            
+            return ((IEnumerable<object>)scriptExecutor.ExecuteScript(javascriptExpression));
+        }
+
+        public static void EnsureSizzleIsLoaded(IJavaScriptExecutor scriptExecutor)
+        {
+            if (!SizzleLoaded(scriptExecutor))
+            {
+                InjectSizzle(scriptExecutor);
+
+                var ieDriver = scriptExecutor as OpenQA.Selenium.IE.InternetExplorerDriver;
+                if (ieDriver != null)
+                {
+                    // again for IE
+                    InjectSizzle(ieDriver);
+                }
+            }
+        }
+
+        public static bool SizzleLoaded(IJavaScriptExecutor scriptExecutor)
+        {
+            try
+            {
+                return (bool)scriptExecutor.ExecuteScript("return Sizzle()!=null");
+            }
+            catch (Exception) { }
+
+            return false;
+        }
+
+        public static void InjectSizzle(IJavaScriptExecutor driver)
+        {
+            string _compiledSizzleString = @"(function(){function y(a,b,c,d,f,e){for(var f=0,h=d.length;f<h;f++){var g=d[f];if(g){for(var i=!1,g=g[a];g;){if(g.sizcache===c){i=d[g.sizset];break}if(g.nodeType===1&&!e)g.sizcache=c,g.sizset=f;if(g.nodeName.toLowerCase()===b){i=g;break}g=g[a]}d[f]=i}}}function z(a,b,c,d,f,e){for(var f=0,h=d.length;f<h;f++){var g=d[f];if(g){for(var j=!1,g=g[a];g;){if(g.sizcache===c){j=d[g.sizset];break}if(g.nodeType===1){if(!e)g.sizcache=c,g.sizset=f;if(typeof b!==""string""){if(g===b){j=!0;break}}else if(i.filter(b,
 [g]).length>0){j=g;break}}g=g[a]}d[f]=j}}}var w=/((?:\((?:\([^()]+\)|[^()]+)+\)|\[(?:\[[^\[\]]*\]|['""][^'""]*['""]|[^\[\]'""]+)+\]|\\.|[^ >+~,(\[\\]+)+|[>+~])(\s*,\s*)?((?:.|\r|\n)*)/g,x=0,A=Object.prototype.toString,t=!1,B=!0,p=/\\/g,u=/\W/;[0,0].sort(function(){B=!1;return 0});var i=function(a,b,c,d){var c=c||[],f=b=b||document;if(b.nodeType!==1&&b.nodeType!==9)return[];if(!a||typeof a!==""string"")return c;var e,h,g,l,s,m=!0,n=i.isXML(b),k=[],p=a;do if(w.exec(""""),e=w.exec(p))if(p=e[3],k.push(e[1]),
 e[2]){l=e[3];break}while(e);if(k.length>1&&D.exec(a))if(k.length===2&&j.relative[k[0]])h=C(k[0]+k[1],b);else for(h=j.relative[k[0]]?[b]:i(k.shift(),b);k.length;)a=k.shift(),j.relative[a]&&(a+=k.shift()),h=C(a,h);else if(!d&&k.length>1&&b.nodeType===9&&!n&&j.match.ID.test(k[0])&&!j.match.ID.test(k[k.length-1])&&(e=i.find(k.shift(),b,n),b=e.expr?i.filter(e.expr,e.set)[0]:e.set[0]),b){e=d?{expr:k.pop(),set:o(d)}:i.find(k.pop(),k.length===1&&(k[0]===""~""||k[0]===""+"")&&b.parentNode?b.parentNode:b,n);h=
 e.expr?i.filter(e.expr,e.set):e.set;for(k.length>0?g=o(h):m=!1;k.length;)e=s=k.pop(),j.relative[s]?e=k.pop():s="""",e==null&&(e=b),j.relative[s](g,e,n)}else g=[];g||(g=h);g||i.error(s||a);if(A.call(g)===""[object Array]"")if(m)if(b&&b.nodeType===1)for(a=0;g[a]!=null;a++)g[a]&&(g[a]===!0||g[a].nodeType===1&&i.contains(b,g[a]))&&c.push(h[a]);else for(a=0;g[a]!=null;a++)g[a]&&g[a].nodeType===1&&c.push(h[a]);else c.push.apply(c,g);else o(g,c);l&&(i(l,f,c,d),i.uniqueSort(c));return c};i.uniqueSort=function(a){if(v&&
@@ -43,68 +101,26 @@ document;if(!h&&!i.isXML(c)){var g=/^(\w+$)|^\.([\w\-]+$)|^#([\w\-]+$)/.exec(b);
 if(a.getElementsByClassName&&a.getElementsByClassName(""e"").length!==0&&(a.lastChild.className=""e"",a.getElementsByClassName(""e"").length!==1))j.order.splice(1,0,""CLASS""),j.find.CLASS=function(a,c,d){if(typeof c.getElementsByClassName!==""undefined""&&!d)return c.getElementsByClassName(a[1])},a=null})();i.contains=document.documentElement.contains?function(a,b){return a!==b&&(a.contains?a.contains(b):!0)}:document.documentElement.compareDocumentPosition?function(a,b){return!!(a.compareDocumentPosition(b)&
 16)}:function(){return!1};i.isXML=function(a){return(a=(a?a.ownerDocument||a:0).documentElement)?a.nodeName!==""HTML"":!1};var C=function(a,b){for(var c,d=[],f="""",e=b.nodeType?[b]:b;c=j.match.PSEUDO.exec(a);)f+=c[0],a=a.replace(j.match.PSEUDO,"""");a=j.relative[a]?a+""*"":a;c=0;for(var h=e.length;c<h;c++)i(a,e[c],d);return i.filter(f,d)};window.Sizzle=i})();";
 
-        public static new By CssSelector(string selector)
-        {
-            return new BySizzle(selector);
-        }
-
-        public BySizzle(string selector)
-        {
-            _selector = Newtonsoft.Json.JsonConvert.SerializeObject(selector);
-        }
-
-        public override ReadOnlyCollection<IWebElement> FindElements(ISearchContext context)
-        {
-            return new ReadOnlyCollection<IWebElement>(GetMatches((IJavaScriptExecutor)context, string.Format("return Sizzle({0})", _selector)).Cast<IWebElement>().ToList());
-        }
-
-        public override IWebElement FindElement(ISearchContext context)
-        {
-            return FindElements(context).First();
-        }
-
-        private IEnumerable<object> GetMatches(IJavaScriptExecutor scriptExecutor, string javascriptExpression)
-        {
-            EnsureSizzleIsLoaded(scriptExecutor);
-
-            return ((IEnumerable<object>)scriptExecutor.ExecuteScript(javascriptExpression));
-        }
-
-        private void EnsureSizzleIsLoaded(IJavaScriptExecutor scriptExecutor)
-        {
-            if (!SizzleLoaded(scriptExecutor))
-            {
-                InjectSizzle(scriptExecutor);
-            }
-        }
-
-        private bool SizzleLoaded(IJavaScriptExecutor scriptExecutor)
-        {
             try
             {
-                return (bool)scriptExecutor.ExecuteScript("return Sizzle()!=null");
-            }
-            catch (Exception) { }
-
-            return false;
-        }
-
-        private void InjectSizzle(IJavaScriptExecutor driver)
-        {
-            driver.ExecuteScript(
-                "var scriptSource = " + _compiledSizzleString + @"
+                driver.ExecuteScript(
+                    "var scriptSource = " + _compiledSizzleString + @"
 var newScript = document.createElement('script');
 newScript.type = 'text/javascript';
 
 if (typeof (newScript.appendChild) == 'function') {
-    var scriptContent = document.createTextNode(scriptSource);
-    newScript.appendChild(scriptContent);
+var scriptContent = document.createTextNode(scriptSource);
+newScript.appendChild(scriptContent);
 } else {
-    newScript.text = scriptSource;
+newScript.text = scriptSource;
 }
 
 var headID = document.getElementsByTagName('head')[0];
 headID.appendChild(newScript);");
+            }
+            catch (Exception)
+            {
+            }
         }
     }
 }

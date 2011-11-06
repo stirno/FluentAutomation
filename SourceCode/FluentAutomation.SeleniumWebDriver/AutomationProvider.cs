@@ -114,6 +114,7 @@ namespace FluentAutomation.SeleniumWebDriver
             }
             
             _driver.Navigate().GoToUrl(pageUri);
+            BySizzle.EnsureSizzleIsLoaded((IJavaScriptExecutor)_driver);
         }
 
         public override void Navigate(API.Enumerations.NavigateDirection navigationDirection)
