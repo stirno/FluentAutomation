@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentAutomation.RemoteComm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentAutomation.Server", "SourceCode\FluentAutomation.Server\FluentAutomation.Server.csproj", "{86291166-095D-4725-9830-2A7A85E04E8D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentAutomation.Tests", "SourceCode\FluentAutomation.Tests\FluentAutomation.Tests.csproj", "{BC3B541A-02DA-4CAD-BBD0-7C79D2E8554D}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = FluentAutomation.vsmdi
@@ -79,6 +81,16 @@ Global
 		{86291166-095D-4725-9830-2A7A85E04E8D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{86291166-095D-4725-9830-2A7A85E04E8D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{86291166-095D-4725-9830-2A7A85E04E8D}.Release|x86.ActiveCfg = Release|Any CPU
+		{BC3B541A-02DA-4CAD-BBD0-7C79D2E8554D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC3B541A-02DA-4CAD-BBD0-7C79D2E8554D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC3B541A-02DA-4CAD-BBD0-7C79D2E8554D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BC3B541A-02DA-4CAD-BBD0-7C79D2E8554D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BC3B541A-02DA-4CAD-BBD0-7C79D2E8554D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BC3B541A-02DA-4CAD-BBD0-7C79D2E8554D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC3B541A-02DA-4CAD-BBD0-7C79D2E8554D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC3B541A-02DA-4CAD-BBD0-7C79D2E8554D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BC3B541A-02DA-4CAD-BBD0-7C79D2E8554D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BC3B541A-02DA-4CAD-BBD0-7C79D2E8554D}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -86,11 +86,5 @@ namespace FluentAutomation.Tests
             I.Open("http://datinix.net/fartest.html");
             I.Expect.Class("test").On("h1");
         }
-
-        public void Bug_HTTPAUTH()
-        {
-            I.Open("http://datinix.net/test/");
-            I.Expect.BasicAuthenticationDialog("test", "test");
-        }
     }
 }

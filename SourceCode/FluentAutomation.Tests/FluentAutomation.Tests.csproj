@@ -46,10 +46,10 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CloudServiceTests.cs" />
     <Compile Include="FeatureTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BugTests.cs" />
+    <Compile Include="ProviderLoadingTests.cs" />
     <Compile Include="SeleniumBugTests.cs" />
   </ItemGroup>
   <ItemGroup>
