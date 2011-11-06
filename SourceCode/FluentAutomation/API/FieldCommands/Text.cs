@@ -6,6 +6,7 @@ using System;
 using FluentAutomation.API.Enumerations;
 using FluentAutomation.API.Providers;
 using System.Linq.Expressions;
+using System.Collections.Generic;
 
 namespace FluentAutomation.API.FieldCommands
 {
@@ -57,19 +58,35 @@ namespace FluentAutomation.API.FieldCommands
         /// <param name="conditions">The conditions.</param>
         public void In(string fieldSelector, MatchConditions conditions)
         {
-            CommandManager.CurrentActionBucket.Add(() =>
+            if (CommandManager.EnableRemoteExecution)
             {
-                var field = Provider.GetTextElement(fieldSelector, conditions);
+                CommandManager.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
+                {
+                    Name = "Enter",
+                    Arguments = new Dictionary<string, dynamic>()
+                    {
+                        { "selector", fieldSelector },
+                        { "matchConditions", conditions.ToString() },
+                        { "value", _value }
+                    }
+                });
+            }
+            else
+            {
+                CommandManager.CurrentActionBucket.Add(() =>
+                {
+                    var field = Provider.GetTextElement(fieldSelector, conditions);
 
-                if (_quickEntry)
-                {
-                    field.SetValueQuickly(_value);
-                }
-                else
-                {
-                    field.SetValue(_value);
-                }
-            });
+                    if (_quickEntry)
+                    {
+                        field.SetValueQuickly(_value);
+                    }
+                    else
+                    {
+                        field.SetValue(_value);
+                    }
+                });
+            }
         }
 
         /// <summary>

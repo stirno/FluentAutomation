@@ -11,7 +11,24 @@ namespace FluentAutomation.API
     /// </summary>
     public abstract class FluentTest : IDisposable
     {
-        public abstract CommandManager I { get; set; }
+        private CommandManager _commandManager = null;
+        public virtual CommandManager I
+        {
+            get
+            {
+                if (_commandManager == null)
+                {
+                    this.Setup();
+                }
+
+                return _commandManager;
+            }
+
+            set
+            {
+                _commandManager = value;
+            }
+        }
 
         public bool ScreenshotOnAssertException { get; set; }
         public string ScreenshotPath { get; set; }

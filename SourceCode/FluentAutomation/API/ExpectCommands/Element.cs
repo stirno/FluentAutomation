@@ -30,34 +30,68 @@ namespace FluentAutomation.API.ExpectCommands
             _elementExpression = elementExpression;
         }
 
+        /// <summary>
+        /// Ins the specified field selector.
+        /// </summary>
+        /// <param name="fieldSelector">The field selector.</param>
         public void In(string fieldSelector)
         {
             In(fieldSelector, MatchConditions.None);
         }
 
+        /// <summary>
+        /// Ins the specified field selector.
+        /// </summary>
+        /// <param name="fieldSelector">The field selector.</param>
+        /// <param name="conditions">The conditions.</param>
         public void In(string fieldSelector, MatchConditions conditions)
         {
             _matchConditions = conditions;
 
-            CommandManager.CurrentActionBucket.Add(() =>
+            if (CommandManager.EnableRemoteExecution)
             {
-                var element = Provider.GetElement(fieldSelector, conditions);
+                // args
+                var arguments = new Dictionary<string, dynamic>();
+                arguments.Add("selector", fieldSelector);
+                if (_elementExpression != null) arguments.Add("expression", _elementExpression.ToExpressionString());
 
-                var compiledFunc = _elementExpression.Compile();
-                if (!compiledFunc(element))
+                CommandManager.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
                 {
-                    Provider.TakeAssertExceptionScreenshot();
-                    throw new AssertException("Element assertion failed. Expected element [{0}] to match expression [{1}].", fieldSelector, _elementExpression.ToExpressionString());
-                }
-            });
+                    Name = "ExpectElement",
+                    Arguments = arguments
+                });
+            }
+            else
+            {
+                CommandManager.CurrentActionBucket.Add(() =>
+                {
+                    var element = Provider.GetElement(fieldSelector, conditions);
+
+                    var compiledFunc = _elementExpression.Compile();
+                    if (!compiledFunc(element))
+                    {
+                        Provider.TakeAssertExceptionScreenshot();
+                        throw new AssertException("Element assertion failed. Expected element [{0}] to match expression [{1}].", fieldSelector, _elementExpression.ToExpressionString());
+                    }
+                });
+            }
         }
 
+        /// <summary>
+        /// Ins the specified conditions.
+        /// </summary>
+        /// <param name="conditions">The conditions.</param>
+        /// <param name="fieldSelectors">The field selectors.</param>
         public void In(MatchConditions conditions, params string[] fieldSelectors)
         {
             _matchConditions = conditions;
             In(fieldSelectors);
         }
 
+        /// <summary>
+        /// Ins the specified field selectors.
+        /// </summary>
+        /// <param name="fieldSelectors">The field selectors.</param>
         public void In(params string[] fieldSelectors)
         {
             foreach (var fieldSelector in fieldSelectors)

@@ -4,9 +4,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using FluentAutomation.API.Enumerations;
 using FluentAutomation.API.Providers;
+using System.Net;
+using System.IO;
+using Newtonsoft.Json;
+using FluentAutomation.RemoteConsole;
+using FluentAutomation.API.Exceptions;
 
 namespace FluentAutomation.API
 {
@@ -35,6 +41,12 @@ namespace FluentAutomation.API
 			}
 		}
 
+        public List<BrowserType> RemoteBrowsers { get; set; }
+
+        public List<RemoteCommands.RemoteCommandDetails> RemoteCommands { get; set; }
+
+        public bool EnableRemoteExecution { get; set; }
+
 		/// <summary>
 		/// Gets a value indicating whether this instance is record replay.
 		/// </summary>
@@ -57,38 +69,111 @@ namespace FluentAutomation.API
 		{
 			Provider = automationProvider;
 			_actionBuckets.Add(new ActionBucket(this));
+            this.RemoteCommands = new List<RemoteCommands.RemoteCommandDetails>();
+            this.RemoteBrowsers = new List<BrowserType>();
 		}
 
 		/// <summary>
 		/// Records this instance.
 		/// </summary>
-		public void Record()
+		public void Record(bool remote = false)
 		{
+            if (remote)
+            {
+                this.EnableRemoteExecution = true;
+            }
+
 			if (_bucketIndex > -1) _actionBuckets.Add(new ActionBucket(this));
 			_bucketIndex++;
 		}
 
+        /// <summary>
+        /// Executes the stored actions targetting the specified service endpoint URI. (RemoteCommand API)
+        /// </summary>
+        /// <param name="serviceEndpointUri">The service endpoint URI.</param>
+        public void Execute(Uri serviceEndpointUri)
+        {
+            if (this.EnableRemoteExecution)
+            {
+                // add remote browsers
+                if (this.RemoteBrowsers.Count > 0)
+                {
+                    this.RemoteCommands.Insert(0, new RemoteCommands.RemoteCommandDetails()
+                    {
+                        Name = "Use",
+                        Arguments = new Dictionary<string, dynamic>()
+                        {
+                            { "browserType", this.RemoteBrowsers }
+                        }
+                    });
+                }
+
+                string jsonCommands = JsonConvert.SerializeObject(this.RemoteCommands);
+
+                WebRequest request = WebRequest.Create(serviceEndpointUri);
+                request.Method = "POST";
+                request.ContentLength = jsonCommands.Length;
+                request.ContentType = "application/x-fluent-service";
+
+                StreamWriter requestWriter = new StreamWriter(request.GetRequestStream());
+                requestWriter.Write(jsonCommands);
+                requestWriter.Close();
+
+                WebResponse response = request.GetResponse();
+
+                StreamReader responseReader = new StreamReader(response.GetResponseStream());
+                string responseText = responseReader.ReadToEnd();
+                responseReader.Close();
+
+                response.Close();
+
+                // parse response
+                ServiceResponse svcResponse = JsonConvert.DeserializeObject<ServiceResponse>(responseText);
+
+                if (svcResponse.Status == "Error")
+                {
+                    throw new RemoteException(svcResponse.Message);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Executes the stored actions targetting the specified service endpoint URI using the appropriate browser(s). (RemoteCommand API)
+        /// </summary>
+        /// <param name="serviceEndpointUri">The service endpoint URI.</param>
+        /// <param name="browserTypes">The browser types.</param>
+        public void Execute(Uri serviceEndpointUri, params BrowserType[] browserTypes)
+        {
+            var newBrowsers = browserTypes.Where(x => !this.RemoteBrowsers.Contains(x));
+            if (newBrowsers.Count() > 0)
+            {
+                this.RemoteBrowsers.AddRange(newBrowsers);
+            }
+
+            Execute(serviceEndpointUri);
+        }
+
 		/// <summary>
-		/// Plays the stored actions with the appropriate bucket.
+        /// Executes the stored actions using the appropriate browser(s). (LOCAL EXECUTION ONLY)
 		/// </summary>
-		public void PlayWith(params BrowserType[] browserTypes)
+		public void Execute(params BrowserType[] browserTypes)
 		{
-			var bucket = CurrentActionBucket;
+            var bucket = CurrentActionBucket;
 
-			// cleanup bucket
-			_actionBuckets.RemoveAt(_bucketIndex);
-			_bucketIndex--;
+            // cleanup bucket
+            _actionBuckets.RemoveAt(_bucketIndex);
+            _bucketIndex--;
 
-			// execute bucket
-			foreach (var browser in browserTypes)
-			{
-				Provider.SetBrowser(browser);
-				foreach (var action in bucket)
-				{
-					action.Invoke();
-				}
-				Provider.Cleanup();
-			}
+            // execute bucket
+            foreach (var browser in browserTypes)
+            {
+                Provider.SetBrowser(browser);
+                foreach (var action in bucket)
+                {
+                    action.Invoke();
+                }
+                Provider.Cleanup();
+            }
 		}
 
 		/// <summary>
@@ -118,11 +203,27 @@ namespace FluentAutomation.API
 		/// <param name="conditions">The conditions.</param>
 		public void Click(string elementSelector, ClickMode clickMode, MatchConditions conditions)
 		{
-			CurrentActionBucket.Add(() =>
-			{
-				var field = Provider.GetElement(elementSelector, conditions);
-				field.Click(clickMode);
-			});
+            if (this.EnableRemoteExecution)
+            {
+                this.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
+                {
+                    Name = "Click",
+                    Arguments = new Dictionary<string, dynamic>()
+                    {
+                        { "selector", elementSelector },
+                        { "clickMode", clickMode.ToString() },
+                        { "matchConditions", conditions.ToString() }
+                    }
+                });
+            }
+            else
+            {
+                CurrentActionBucket.Add(() =>
+                {
+                    var field = Provider.GetElement(elementSelector, conditions);
+                    field.Click(clickMode);
+                });
+            }
 		}
 
 		/// <summary>
@@ -130,11 +231,25 @@ namespace FluentAutomation.API
 		/// </summary>
 		/// <param name="point">The point.</param>
 		public void Click(API.Point point)
-		{
-			CurrentActionBucket.Add(() =>
-			{
-				Provider.ClickPoint(point);
-			});
+        {
+            if (this.EnableRemoteExecution)
+            {
+                this.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
+                {
+                    Name = "Click",
+                    Arguments = new Dictionary<string, dynamic>()
+                    {
+                        { "point", string.Format("{0},{1}", point.X, point.Y) }
+                    }
+                });
+            }
+            else
+            {
+                CurrentActionBucket.Add(() =>
+                {
+                    Provider.ClickPoint(point);
+                });
+            }
 		}
 
 		/// <summary>
@@ -143,11 +258,26 @@ namespace FluentAutomation.API
 		/// <param name="containerSelector">The container selector.</param>
 		/// <param name="point">The point.</param>
 		public void Click(string containerSelector, API.Point point)
-		{
-			CurrentActionBucket.Add(() =>
-			{
-                Provider.ClickWithin(containerSelector, point);
-			});
+        {
+            if (this.EnableRemoteExecution)
+            {
+                this.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
+                {
+                    Name = "Click",
+                    Arguments = new Dictionary<string, dynamic>()
+                    {
+                        { "selector", containerSelector },
+                        { "point", string.Format("{0},{1}", point.X, point.Y) }
+                    }
+                });
+            }
+            else
+            {
+                CurrentActionBucket.Add(() =>
+                {
+                    Provider.ClickWithin(containerSelector, point);
+                });
+            }
 		}
 
         /// <summary>
@@ -243,11 +373,26 @@ namespace FluentAutomation.API
 		/// <param name="conditions">The conditions.</param>
 		public void Hover(string elementSelector, MatchConditions conditions)
 		{
-			CurrentActionBucket.Add(() =>
-			{
-				var field = Provider.GetElement(elementSelector, conditions);
-				field.Hover();
-			});
+            if (this.EnableRemoteExecution)
+            {
+                this.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
+                {
+                    Name = "Hover",
+                    Arguments = new Dictionary<string, dynamic>()
+                    {
+                        { "selector", elementSelector },
+                        { "matchConditions", conditions.ToString() }
+                    }
+                });
+            }
+            else
+            {
+                CurrentActionBucket.Add(() =>
+                {
+                    var field = Provider.GetElement(elementSelector, conditions);
+                    field.Hover();
+                });
+            }
 		}
 
 		/// <summary>
@@ -255,11 +400,25 @@ namespace FluentAutomation.API
 		/// </summary>
 		/// <param name="point">The point.</param>
 		public void Hover(API.Point point)
-		{
-			CurrentActionBucket.Add(() =>
-			{
-				Provider.HoverPoint(point);
-			});
+        {
+            if (this.EnableRemoteExecution)
+            {
+                this.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
+                {
+                    Name = "Hover",
+                    Arguments = new Dictionary<string, dynamic>()
+                    {
+                        { "point", string.Format("{0},{1}", point.X, point.Y) }
+                    }
+                });
+            }
+            else
+            {
+                CurrentActionBucket.Add(() =>
+                {
+                    Provider.HoverPoint(point);
+                });
+            }
 		}
 
 		/// <summary>
@@ -267,11 +426,25 @@ namespace FluentAutomation.API
 		/// </summary>
 		/// <param name="direction">The direction.</param>
 		public void Navigate(NavigateDirection direction)
-		{
-			CurrentActionBucket.Add(() =>
-			{
-				Provider.Navigate(direction);
-			});
+        {
+            if (this.EnableRemoteExecution)
+            {
+                this.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
+                {
+                    Name = "Navigate",
+                    Arguments = new Dictionary<string, dynamic>()
+                    {
+                        { "direction", direction.ToString() }
+                    }
+                });
+            }
+            else
+            {
+                CurrentActionBucket.Add(() =>
+                {
+                    Provider.Navigate(direction);
+                });
+            }
 		}
 
 		/// <summary>
@@ -279,11 +452,25 @@ namespace FluentAutomation.API
 		/// </summary>
 		/// <param name="pageUri">The page URI.</param>
 		public void Open(Uri pageUri)
-		{
-			CurrentActionBucket.Add(() =>
-			{
-				Provider.Navigate(pageUri);
-			});
+        {
+            if (this.EnableRemoteExecution)
+            {
+                this.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
+                {
+                    Name = "Open",
+                    Arguments = new Dictionary<string, dynamic>()
+                    {
+                        { "URL", pageUri.ToString() }
+                    }
+                });
+            }
+            else
+            {
+                CurrentActionBucket.Add(() =>
+                {
+                    Provider.Navigate(pageUri);
+                });
+            }
 		}
 
 		/// <summary>
@@ -300,11 +487,25 @@ namespace FluentAutomation.API
 		/// </summary>
 		/// <param name="keys">The keys.</param>
 		public void Press(string keys)
-		{
-			CurrentActionBucket.Add(() =>
-			{
-				CommandManager.SendKeys(keys);
-			});
+        {
+            if (this.EnableRemoteExecution)
+            {
+                this.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
+                {
+                    Name = "Press",
+                    Arguments = new Dictionary<string, dynamic>()
+                    {
+                        { "keys", keys }
+                    }
+                });
+            }
+            else
+            {
+                CurrentActionBucket.Add(() =>
+                {
+                    CommandManager.SendKeys(keys);
+                });
+            }
 		}
 
 		/// <summary>
@@ -313,14 +514,31 @@ namespace FluentAutomation.API
 		/// <param name="fileName">Name of the file.</param>
 		public void TakeScreenshot(string fileName)
 		{
-			if (!string.IsNullOrEmpty(Provider.ScreenshotPath))
-			{
-				Provider.TakeScreenshot(System.IO.Path.Combine(Provider.ScreenshotPath, fileName));
-			}
-			else
-			{
-				Provider.TakeScreenshot(fileName);
-			}
+            if (this.EnableRemoteExecution)
+            {
+                this.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
+                {
+                    Name = "Screenshot",
+                    Arguments = new Dictionary<string, dynamic>()
+                    {
+                        { "fileName", fileName }
+                    }
+                });
+            }
+            else
+            {
+                CurrentActionBucket.Add(() =>
+                {
+                    if (!string.IsNullOrEmpty(Provider.ScreenshotPath))
+                    {
+                        Provider.TakeScreenshot(System.IO.Path.Combine(Provider.ScreenshotPath, fileName));
+                    }
+                    else
+                    {
+                        Provider.TakeScreenshot(fileName);
+                    }
+                });
+            }
 		}
 
 		/// <summary>
@@ -328,11 +546,25 @@ namespace FluentAutomation.API
 		/// </summary>
 		/// <param name="value">The value.</param>
 		public void Type(string value)
-		{
-			CurrentActionBucket.Add(() =>
-			{
-				CommandManager.SendString(value);
-			});
+        {
+            if (this.EnableRemoteExecution)
+            {
+                this.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
+                {
+                    Name = "Type",
+                    Arguments = new Dictionary<string, dynamic>()
+                    {
+                        { "value", value }
+                    }
+                });
+            }
+            else
+            {
+                CurrentActionBucket.Add(() =>
+                {
+                    CommandManager.SendString(value);
+                });
+            }
 		}
 
 		/// <summary>
@@ -468,12 +700,29 @@ namespace FluentAutomation.API
         /// <param name="fieldSelector">The field selector.</param>
         /// <param name="offset">The offset.</param>
         /// <param name="conditions">The conditions.</param>
-        public void Upload(string fileName, string fieldSelector, API.Point offset, MatchConditions conditions)
+        protected void Upload(string fileName, string fieldSelector, API.Point offset, MatchConditions conditions)
         {
-            CurrentActionBucket.Add(() =>
+            if (this.EnableRemoteExecution)
             {
-                Provider.Upload(fileName, fieldSelector, offset, conditions);
-            });
+                this.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
+                {
+                    Name = "Upload",
+                    Arguments = new Dictionary<string, dynamic>()
+                    {
+                        { "selector", fieldSelector },
+                        { "fileName", fileName },
+                        { "offset", string.Format("{0},{1}", offset.X, offset.Y) },
+                        { "matchConditions", conditions.ToString() }
+                    }
+                });
+            }
+            else
+            {
+                CurrentActionBucket.Add(() =>
+                {
+                    Provider.Upload(fileName, fieldSelector, offset, conditions);
+                });
+            }
         }
 
 		/// <summary>
@@ -482,7 +731,14 @@ namespace FluentAutomation.API
 		/// <param name="browserType">Type of the browser.</param>
 		public void Use(BrowserType browserType)
 		{
-			Provider.SetBrowser(browserType);
+            if (this.EnableRemoteExecution)
+            {
+                this.RemoteBrowsers.Add(browserType);
+            }
+            else
+            {
+                Provider.SetBrowser(browserType);
+            }
 		}
 
 		/// <summary>
@@ -500,10 +756,24 @@ namespace FluentAutomation.API
 		/// <param name="timeSpan">The time span.</param>
 		public void Wait(TimeSpan timeSpan)
 		{
-			CurrentActionBucket.Add(() =>
-			{
-				Provider.Wait(timeSpan);
-			});
+            if (this.EnableRemoteExecution)
+            {
+                this.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
+                {
+                    Name = "Wait",
+                    Arguments = new Dictionary<string, dynamic>()
+                    {
+                        { "milliseconds", timeSpan.TotalMilliseconds.ToString() }
+                    }
+                });
+            }
+            else
+            {
+                CurrentActionBucket.Add(() =>
+                {
+                    Provider.Wait(timeSpan);
+                });
+            }
 		}
 	}
 }

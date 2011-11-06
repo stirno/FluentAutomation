@@ -6,6 +6,7 @@ using System.Linq;
 using FluentAutomation.API.Enumerations;
 using FluentAutomation.API.Exceptions;
 using FluentAutomation.API.Providers;
+using System.Collections.Generic;
 
 namespace FluentAutomation.API.ExpectCommands
 {
@@ -43,16 +44,32 @@ namespace FluentAutomation.API.ExpectCommands
         /// <param name="conditions">The conditions.</param>
         public void Of(string fieldSelector, MatchConditions conditions)
         {
-            CommandManager.CurrentActionBucket.Add(() =>
+            if (CommandManager.EnableRemoteExecution)
             {
-                var elements = Provider.GetElements(fieldSelector, conditions);
-
-                if (elements.Count() != _count)
+                CommandManager.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
                 {
-                	Provider.TakeAssertExceptionScreenshot();
-                    throw new AssertException("Count assertion failed. Expected there to be [{0}] elements matching [{1}]. Actual count is [{2}]", _count, fieldSelector, elements.Count());
-                }
-            });
+                    Name = "ExpectCount",
+                    Arguments = new Dictionary<string, dynamic>()
+                    {
+                        { "selector", fieldSelector },
+                        { "matchConditions", conditions.ToString() },
+                        { "value", _count }
+                    }
+                });
+            }
+            else
+            {
+                CommandManager.CurrentActionBucket.Add(() =>
+                {
+                    var elements = Provider.GetElements(fieldSelector, conditions);
+
+                    if (elements.Count() != _count)
+                    {
+                        Provider.TakeAssertExceptionScreenshot();
+                        throw new AssertException("Count assertion failed. Expected there to be [{0}] elements matching [{1}]. Actual count is [{2}]", _count, fieldSelector, elements.Count());
+                    }
+                });
+            }
         }
     }
 }

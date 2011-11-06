@@ -20,6 +20,14 @@ namespace FluentAutomation.WatiN
         private API.Enumerations.BrowserType _browserType = API.Enumerations.BrowserType.InternetExplorer;
         private List<string> _alertDialogMessages = new List<string>();
 
+        public override void Authenticate(string username, string password)
+        {
+            var dialogHandler = new Automation.Core.DialogHandlers.LogonDialogHandler(username, password);
+            using (new Automation.Core.DialogHandlers.UseDialogOnce(_browser.DialogWatcher, dialogHandler))
+            {
+            }
+        }
+
         public override void Cleanup()
         {
             _browser.Close();

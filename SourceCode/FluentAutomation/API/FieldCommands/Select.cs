@@ -7,6 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using FluentAutomation.API.Enumerations;
 using FluentAutomation.API.Providers;
+using System.Collections.Generic;
 
 namespace FluentAutomation.API.FieldCommands
 {
@@ -78,41 +79,61 @@ namespace FluentAutomation.API.FieldCommands
         /// <param name="conditions">The conditions.</param>
         public void From(string fieldSelector, MatchConditions conditions)
         {
-            CommandManager.CurrentActionBucket.Add(() =>
+            if (CommandManager.EnableRemoteExecution)
             {
-                var field = Provider.GetSelectElement(fieldSelector, conditions);
-                field.ClearSelectedItems();
+                // args
+                var arguments = new Dictionary<string, dynamic>();
+                arguments.Add("selector", fieldSelector);
+                arguments.Add("selectMode", _selectMode.ToString());
+                arguments.Add("matchConditions", conditions.ToString());
+                if (_values != null) arguments.Add("values", _values);
+                if (_optionMatchingFunc != null) arguments.Add("valueExpression", _optionMatchingFunc.ToExpressionString());
+                if (_selectedIndices != null) arguments.Add("indices", _selectedIndices);
 
-                if (_selectMode == SelectMode.Value || _selectMode == SelectMode.Text)
+                CommandManager.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
                 {
-                    if (_optionMatchingFunc == null)
-                    {
-                        if (_values.Length == 1)
-                        {
-                            field.SetValue(_values.First(), _selectMode);
-                        }
-                        else if (_values.Length > 1)
-                        {
-                            field.SetValues(_values, _selectMode);
-                        }
-                    }
-                    else
-                    {
-                        field.SetValues(_optionMatchingFunc, _selectMode);
-                    }
-                }
-                else if (_selectMode == SelectMode.Index)
+                    Name = "Select",
+                    Arguments = arguments
+                });
+            }
+            else
+            {
+                CommandManager.CurrentActionBucket.Add(() =>
                 {
-                    if (_selectedIndices.Length == 1)
+                    var field = Provider.GetSelectElement(fieldSelector, conditions);
+                    field.ClearSelectedItems();
+
+                    if (_selectMode == SelectMode.Value || _selectMode == SelectMode.Text)
                     {
-                        field.SetSelectedIndex(_selectedIndices.First());
+                        if (_optionMatchingFunc == null)
+                        {
+                            if (_values.Length == 1)
+                            {
+                                field.SetValue(_values.First(), _selectMode);
+                            }
+                            else if (_values.Length > 1)
+                            {
+                                field.SetValues(_values, _selectMode);
+                            }
+                        }
+                        else
+                        {
+                            field.SetValues(_optionMatchingFunc, _selectMode);
+                        }
                     }
-                    else if (_selectedIndices.Length > 1)
+                    else if (_selectMode == SelectMode.Index)
                     {
-                        field.SetSelectedIndices(_selectedIndices);
+                        if (_selectedIndices.Length == 1)
+                        {
+                            field.SetSelectedIndex(_selectedIndices.First());
+                        }
+                        else if (_selectedIndices.Length > 1)
+                        {
+                            field.SetSelectedIndices(_selectedIndices);
+                        }
                     }
-                }
-            });
+                });
+            }
         }
     }
 }

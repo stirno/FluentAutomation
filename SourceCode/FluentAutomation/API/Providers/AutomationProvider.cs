@@ -30,6 +30,13 @@ namespace FluentAutomation.API.Providers
         public string ScreenshotPath { get; set; }
 
         /// <summary>
+        /// Authenticates the specified username using HTTP BASIC Authentication.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <param name="password">The password.</param>
+        public abstract void Authenticate(string username, string password);
+
+        /// <summary>
         /// Provider cleanup.
         /// </summary>
         public abstract void Cleanup();

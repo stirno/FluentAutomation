@@ -6,6 +6,7 @@ using System.Linq;
 using FluentAutomation.API.Enumerations;
 using FluentAutomation.API.Exceptions;
 using FluentAutomation.API.Providers;
+using System.Collections.Generic;
 
 namespace FluentAutomation.API.ExpectCommands
 {
@@ -43,43 +44,59 @@ namespace FluentAutomation.API.ExpectCommands
         /// <param name="conditions">The conditions.</param>
         public void On(string fieldSelector, MatchConditions conditions)
         {
-            CommandManager.CurrentActionBucket.Add(() =>
+            if (CommandManager.EnableRemoteExecution)
             {
-                var element = Provider.GetElement(fieldSelector, conditions);
-                string className = _value.Replace(".", "").Trim();
-                string elementClassName = element.GetAttributeValue("class").Trim();
-
-                if (elementClassName.Contains(' '))
+                CommandManager.RemoteCommands.Add(new RemoteCommands.RemoteCommandDetails()
                 {
-                    string[] classes = elementClassName.Split(' ');
-                    bool hasMatches = false;
-                    foreach (var cssClass in classes)
+                    Name = "ExpectClass",
+                    Arguments = new Dictionary<string, dynamic>()
                     {
-                        var cssClassString = cssClass.Trim();
-                        if (!string.IsNullOrEmpty(cssClassString))
+                        { "selector", fieldSelector },
+                        { "value", _value },
+                        { "matchConditions", conditions.ToString() }
+                    }
+                });
+            }
+            else
+            {
+                CommandManager.CurrentActionBucket.Add(() =>
+                {
+                    var element = Provider.GetElement(fieldSelector, conditions);
+                    string className = _value.Replace(".", "").Trim();
+                    string elementClassName = element.GetAttributeValue("class").Trim();
+
+                    if (elementClassName.Contains(' '))
+                    {
+                        string[] classes = elementClassName.Split(' ');
+                        bool hasMatches = false;
+                        foreach (var cssClass in classes)
                         {
-                            if (cssClassString.Equals(className))
+                            var cssClassString = cssClass.Trim();
+                            if (!string.IsNullOrEmpty(cssClassString))
                             {
-                                hasMatches = true;
+                                if (cssClassString.Equals(className))
+                                {
+                                    hasMatches = true;
+                                }
                             }
                         }
-                    }
 
-                    if (!hasMatches)
-                    {
-						Provider.TakeAssertExceptionScreenshot();
-                        throw new AssertException("Class name assertion failed. Expected element [{0}] to include a CSS class of [{1}].", fieldSelector, className);
+                        if (!hasMatches)
+                        {
+                            Provider.TakeAssertExceptionScreenshot();
+                            throw new AssertException("Class name assertion failed. Expected element [{0}] to include a CSS class of [{1}].", fieldSelector, className);
+                        }
                     }
-                }
-                else
-                {
-                    if (!elementClassName.Equals(className))
+                    else
                     {
-						Provider.TakeAssertExceptionScreenshot();
-                        throw new AssertException("Class name assertion failed. Expected element [{0}] to include a CSS class of [{1}] but current CSS class is [{2}].", fieldSelector, className, elementClassName.PrettifyErrorValue());
+                        if (!elementClassName.Equals(className))
+                        {
+                            Provider.TakeAssertExceptionScreenshot();
+                            throw new AssertException("Class name assertion failed. Expected element [{0}] to include a CSS class of [{1}] but current CSS class is [{2}].", fieldSelector, className, elementClassName.PrettifyErrorValue());
+                        }
                     }
-                }
-            });
+                });
+            }
         }
 
         /// <summary>

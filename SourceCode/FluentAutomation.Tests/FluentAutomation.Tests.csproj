@@ -34,6 +34,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Newtonsoft.Json, Version=4.0.3.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\3rdPartyLib\SeleniumWebDriver\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
@@ -42,12 +46,17 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CloudServiceTests.cs" />
     <Compile Include="FeatureTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BugTests.cs" />
     <Compile Include="SeleniumBugTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FluentAutomation.RemoteCommands\FluentAutomation.RemoteCommands.csproj">
+      <Project>{907DAA1D-3E2B-4BA3-9D4C-C964C81D89D0}</Project>
+      <Name>FluentAutomation.RemoteCommands</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FluentAutomation.SeleniumWebDriver\FluentAutomation.SeleniumWebDriver.csproj">
       <Project>{B156C4A8-2C18-4FC4-BB0F-696B63446A83}</Project>
       <Name>FluentAutomation.SeleniumWebDriver</Name>
@@ -63,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
