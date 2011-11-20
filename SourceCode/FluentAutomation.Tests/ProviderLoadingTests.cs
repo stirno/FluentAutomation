@@ -6,23 +6,19 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FluentAutomation.Tests
 {
-    [TestClass]
-    public class ProviderLoadingTests : FluentAutomation.API.FluentTest
+[TestClass]
+public class ProviderLoadingTests : FluentAutomation.API.FluentTest
+{
+    [TestInitialize]
+    public void Init()
     {
-        [TestMethod]
-        public void Test()
-        {
-            I.Open("http://www.google.com/");
-        }
-
-        [TestMethod]
-        public void Test1()
-        {
-            I.Open("http://knockoutjs.com/examples/controlTypes.html");
-            I.Repeat(i =>
-            {
-                I.Enter("Test" + i).In("input:eq(0)");
-            }, 10);
-        }
+        ProviderName = "WatiN";
     }
+
+    [TestMethod]
+    public void Test()
+    {
+        I.Open("http://www.google.com/");
+    }
+}
 }

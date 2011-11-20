@@ -58,6 +58,12 @@ namespace FluentAutomation.Tests
         }
 
         [TestMethod]
+        public void Drag_Drop_Test_Chrome()
+        {
+            I.Use(BrowserType.Chrome);
+        }
+
+        [TestMethod]
         public void TestFromGitHub()
         {
             // specify a browser, this is optional - WatiN targets IE and Selenium defaults to Firefox
@@ -66,23 +72,23 @@ namespace FluentAutomation.Tests
             I.Select("Motorcycles").From("#cartEditor tr select:eq(0)"); // Select by value/text
             I.Select(2).From("#cartEditor tr select:eq(1)"); // Select by index
             I.Enter(6).In("#cartEditor td.quantity input:eq(0)");
-            I.Expect.This("$197.70").In("#cartEditor tr span:eq(1)");
+            I.Expect.Text("$197.70").In("#cartEditor tr span:eq(1)");
 
             // add second product
             I.Click("#cartEditor button:eq(0)");
             I.Select(1).From("#cartEditor tr select:eq(2)");
             I.Select(4).From("#cartEditor tr select:eq(3)");
             I.Enter(8).In("#cartEditor td.quantity input:eq(1)");
-            I.Expect.This("$788.64").In("#cartEditor tr span:eq(3)");
+            I.Expect.Text("$788.64").In("#cartEditor tr span:eq(3)");
 
             // validate totals
-            I.Expect.This("$986.34").In("p.grandTotal span");
+            I.Expect.Text("$986.34").In("p.grandTotal span");
 
             // remove first product
             I.Click("#cartEditor a:eq(0)");
 
             // validate new total
-            I.Expect.This("$788.62").In("p.grandTotal span");
+            I.Expect.Text("$788.62").In("p.grandTotal span");
         }
 
         [TestMethod]
