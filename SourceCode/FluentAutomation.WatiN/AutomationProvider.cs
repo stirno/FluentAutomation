@@ -42,7 +42,7 @@ namespace FluentAutomation.WatiN
 			if(_browser is Automation.Core.IE)
 			{
 				((SHDocVw.WebBrowser)((Automation.Core.IE) _browser).InternetExplorer).Stop();
-				
+				((SHDocVw.WebBrowser)((Automation.Core.IE)_browser).InternetExplorer).Quit();
 			}
 
 			_browser.Close();
