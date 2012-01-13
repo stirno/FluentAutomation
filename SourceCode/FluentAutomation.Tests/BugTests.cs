@@ -23,7 +23,7 @@ namespace FluentAutomation.Tests
         [TestMethod]
         public void Bug_1_CantExpectValueOnSelect()
         {
-            //I.Use(BrowserType.Chrome);
+            I.Use(BrowserType.Chrome);
             //I.Record();
             I.Open("http://knockoutjs.com/examples/controlTypes.html");
             I.Select(x => x.Contains("Be")).From("select:eq(0)");
