@@ -18,11 +18,11 @@ namespace FluentAutomation.Tests
         public void TestSelenium()
         {
             I.Open("http://knockoutjs.com/examples/cartEditor.html");
-            I.Select("Motorcycles").From("#cartEditor tr select:eq(0)");
-            I.Select("1957 Vespa GS150").From("#cartEditor tr select:eq(1)");
-            I.Enter(6).Quickly.In("#cartEditor td.quantity input");
+            I.Select("Motorcycles").From(".liveExample tr select:eq(0)");
+            I.Select("1957 Vespa GS150").From(".liveExample tr select:eq(1)");
+            I.Enter(6).Quickly.In(".liveExample td.quantity input");
 
-            I.Expect.Text("$197.70").In("#cartEditor tr span:eq(1)");
+            I.Expect.Text("$197.70").In(".liveExample tr span:eq(1)");
         }
 
         [TestMethod]
