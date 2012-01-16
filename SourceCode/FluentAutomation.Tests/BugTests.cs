@@ -77,14 +77,14 @@ namespace FluentAutomation.Tests
         public void Bug_FileUpload()
         {
             I.Open("http://encodable.com/uploaddemo/");
-            I.Upload(@"c:\Users\Public\Public Pictures\Sample Pictures\Chrysanthemum.jpg", "input[type='file']");
+            I.Upload(@"C:\Users\Public\Pictures\Sample Pictures\Chrysanthemum.jpg", "input[type='file']");
         }
 
         [TestMethod]
         public void Bug_41_ExpectClassStringFormatIssue()
         {
-            I.Open("http://datinix.net/fartest.html");
-            I.Expect.Class("test").On("h1");
+            I.Open("http://en.wikipedia.org/wiki/Main_Page");
+            I.Expect.Class("firstHeading").On("h1");
         }
     }
 }

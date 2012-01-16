@@ -13,7 +13,7 @@ namespace FluentAutomation.Tests
 {
     [TestClass]
     public class SeleniumBugTests : FluentAutomation.WatiN.FluentTest
-    {
+    {                                                                      
         [TestMethod]
         public void TestSelenium()
         {
