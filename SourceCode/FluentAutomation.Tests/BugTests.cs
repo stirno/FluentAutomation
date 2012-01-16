@@ -23,7 +23,7 @@ namespace FluentAutomation.Tests
         [TestMethod]
         public void Bug_1_CantExpectValueOnSelect()
         {
-            I.Use(BrowserType.Chrome);
+            //I.Use(BrowserType.Chrome);
             //I.Record();
             I.Open("http://knockoutjs.com/examples/controlTypes.html");
             I.Select(x => x.Contains("Be")).From("select:eq(0)");
@@ -43,8 +43,8 @@ namespace FluentAutomation.Tests
         public void Bug_4_CantExpectValueOnInput()
         {
             I.Open("http://knockoutjs.com/examples/controlTypes.html");
-            I.Enter("Test").In("input:eq(0)");
-            I.Expect.Value("Test21").In("input:eq(0)");
+            I.Enter("Test21").In("input:eq(0)");
+            I.Expect.Value("Test21").In("input:eq(1)");
         }
 
         [TestMethod]
@@ -77,7 +77,7 @@ namespace FluentAutomation.Tests
         public void Bug_FileUpload()
         {
             I.Open("http://encodable.com/uploaddemo/");
-            I.Upload(@"C:\Users\Public\Pictures\Sample Pictures\Chrysanthemum.jpg", "input[type='file']");
+            I.Upload(@"c:\Users\Public\Public Pictures\Sample Pictures\Chrysanthemum.jpg", "input[type='file']");
         }
 
         [TestMethod]
