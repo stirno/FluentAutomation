@@ -48,13 +48,13 @@ namespace FluentAutomation.Tests
         [TestInitialize]
         public void Setup()
         {
-            I.EnableRemoteExecution = true;
+            //I.EnableRemoteExecution = true;
         }
 
         [TestCleanup]
         public void Execute()
         {
-            I.Execute(new Uri("http://localhost:10001/runtest", UriKind.Absolute));
+           // I.Execute(new Uri("http://localhost:10001/runtest", UriKind.Absolute));
         }
 
         [TestMethod]
@@ -69,26 +69,26 @@ namespace FluentAutomation.Tests
             // specify a browser, this is optional - WatiN targets IE and Selenium defaults to Firefox
             I.Use(BrowserType.InternetExplorer);
             I.Open("http://knockoutjs.com/examples/cartEditor.html");
-            I.Select("Motorcycles").From("#cartEditor tr select:eq(0)"); // Select by value/text
-            I.Select(2).From("#cartEditor tr select:eq(1)"); // Select by index
-            I.Enter(6).In("#cartEditor td.quantity input:eq(0)");
-            I.Expect.Text("$197.70").In("#cartEditor tr span:eq(1)");
+            I.Select("Motorcycles").From(".liveExample tr select:eq(0)"); // Select by value/text
+            I.Select(2).From(".liveExample tr select:eq(1)"); // Select by index
+            I.Enter(6).In(".liveExample td.quantity input:eq(0)");
+            I.Expect.Text("$197.70").In(".liveExample tr span:eq(1)");
 
             // add second product
-            I.Click("#cartEditor button:eq(0)");
-            I.Select(1).From("#cartEditor tr select:eq(2)");
-            I.Select(4).From("#cartEditor tr select:eq(3)");
-            I.Enter(8).In("#cartEditor td.quantity input:eq(1)");
-            I.Expect.Text("$788.64").In("#cartEditor tr span:eq(3)");
+            I.Click(".liveExample button:eq(0)");
+            I.Select(1).From(".liveExample tr select:eq(2)");
+            I.Select(4).From(".liveExample tr select:eq(3)");
+            I.Enter(8).In(".liveExample td.quantity input:eq(1)");
+            I.Expect.Text("$788.64").In(".liveExample tr span:eq(3)");
 
             // validate totals
             I.Expect.Text("$986.34").In("p.grandTotal span");
 
             // remove first product
-            I.Click("#cartEditor a:eq(0)");
+            I.Click(".liveExample a:eq(0)");
 
             // validate new total
-            I.Expect.Text("$788.62").In("p.grandTotal span");
+            I.Expect.Text("$788.64").In("p.grandTotal span");
         }
 
         [TestMethod]
@@ -130,7 +130,7 @@ namespace FluentAutomation.Tests
         {
             I.Open("http://www.uploadify.com/demos/");
             I.Upload(@"C:\Users\Public\Pictures\Sample Pictures\Chrysanthemum.jpg", "#basic-demo", new API.Point { X = 2, Y = 90 });
-            I.Expect.Text(x => x.Contains("Err2or")).In("#file_uploadQueue .percentage");
+            I.Expect.Text(x => x.Contains("File Size Error")).In("#file_uploadQueue .percentage");
             //I.ClickWithin("#basic-demo", new API.Point { X = 2, Y = -100 });
             //I.Click("#basic-demo", new API.Point { X = 2, Y = 90 });
         }

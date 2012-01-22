@@ -43,8 +43,8 @@ namespace FluentAutomation.Tests
         public void Bug_4_CantExpectValueOnInput()
         {
             I.Open("http://knockoutjs.com/examples/controlTypes.html");
-            I.Enter("Test").In("input:eq(0)");
-            I.Expect.Value("Test21").In("input:eq(0)");
+            I.Enter("Test21").In("input:eq(0)");
+            I.Expect.Value("Test21").In("input:eq(1)");
         }
 
         [TestMethod]
@@ -83,8 +83,8 @@ namespace FluentAutomation.Tests
         [TestMethod]
         public void Bug_41_ExpectClassStringFormatIssue()
         {
-            I.Open("http://datinix.net/fartest.html");
-            I.Expect.Class("test").On("h1");
+            I.Open("http://en.wikipedia.org/wiki/Main_Page");
+            I.Expect.Class("firstHeading").On("h1");
         }
     }
 }
