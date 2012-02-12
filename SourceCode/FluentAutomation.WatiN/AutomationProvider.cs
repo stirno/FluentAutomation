@@ -10,6 +10,7 @@ using FluentAutomation.API;
 using FluentAutomation.API.Enumerations;
 using FluentAutomation.API.Exceptions;
 using FluentAutomation.API.Interfaces;
+using WatiN.Core.Interfaces;
 using Automation = global::WatiN;
 
 namespace FluentAutomation.WatiN
@@ -19,6 +20,7 @@ namespace FluentAutomation.WatiN
         private Automation.Core.Browser _browser = null;
         private API.Enumerations.BrowserType _browserType = API.Enumerations.BrowserType.InternetExplorer;
         private List<string> _alertDialogMessages = new List<string>();
+    	private IDialogHandler _jsAlerDialogHandler;
 
         public override void Authenticate(string username, string password)
         {
@@ -30,8 +32,21 @@ namespace FluentAutomation.WatiN
 
         public override void Cleanup()
         {
-            _browser.Close();
-            _browser = null;
+			if (_jsAlerDialogHandler != null)
+			{
+				_browser.RemoveDialogHandler(_jsAlerDialogHandler);
+				_browser.DialogWatcher.Clear();
+				_jsAlerDialogHandler = null;
+			}
+
+			if(_browser is Automation.Core.IE)
+			{
+				((SHDocVw.WebBrowser)((Automation.Core.IE) _browser).InternetExplorer).Stop();
+				((SHDocVw.WebBrowser)((Automation.Core.IE)_browser).InternetExplorer).Quit();
+			}
+
+			_browser.Close();
+        	_browser = null;
         }
 
         public override void ClickWithin(string selector, Point point)
@@ -216,9 +231,11 @@ namespace FluentAutomation.WatiN
                     Automation.Core.IE browser = new Automation.Core.IE(true);
                     ((SHDocVw.WebBrowser)browser.InternetExplorer).FullScreen = true;
 
+            		_jsAlerDialogHandler = new JavaScriptAlertDialogHandler(s => _alertDialogMessages.Add(s));
+
                     // setup handler
-                    browser.AddDialogHandler(new JavaScriptAlertDialogHandler(s => this._alertDialogMessages.Add(s)));
-                    browser.DialogWatcher.CloseUnhandledDialogs = true;
+					browser.AddDialogHandler(_jsAlerDialogHandler);
+					browser.DialogWatcher.CloseUnhandledDialogs = true;
                     browser.AutoClose = true;
 
                     return browser;
