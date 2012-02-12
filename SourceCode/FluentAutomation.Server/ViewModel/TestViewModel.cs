@@ -25,6 +25,8 @@ namespace FluentAutomation.Server.ViewModel
 			{
 				DispatcherHelper.CheckBeginInvokeOnUI(() =>
 				{
+                    this.FormVisibility = Visibility.Visible;
+
 					if (this.RemoteCommands.Count > 0)
 					{
                         // clear out previous test run
@@ -62,12 +64,6 @@ namespace FluentAutomation.Server.ViewModel
 					{
 						this._requiresSTA = true;
 					}
-
-                    if (!test.Content.ShowInterface)
-                    {
-                        this.FormVisibility = Visibility.Collapsed;
-                        this.ExecuteTest.Execute(null);
-                    }
 				});
 			});
 		}
@@ -348,7 +344,7 @@ namespace FluentAutomation.Server.ViewModel
 		private RelayCommand<RemoteCommandViewModel> _addBreakpoint;
 
         public const string FormVisibilityPropertyName = "FormVisibility";
-        private Visibility _formVisibility = Visibility.Visible;
+        private Visibility _formVisibility = Visibility.Collapsed;
         public Visibility FormVisibility
         {
             get

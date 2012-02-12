@@ -11,6 +11,7 @@ using FluentAutomation.RemoteConsole;
 using GalaSoft.MvvmLight.Messaging;
 using FluentAutomation.Server.Model;
 using FluentAutomation.API;
+using FluentAutomation.Server;
 
 namespace FluentAutomation.RemoteCommands
 {
@@ -31,7 +32,16 @@ namespace FluentAutomation.RemoteCommands
             try
             {
                 var testDetails = RemoteCommandManager.GetRemoteCommands(testSettings);
-                Messenger.Default.Send<GenericMessage<TestDetails>>(new GenericMessage<TestDetails>(testDetails));
+
+                if (testDetails.ShowInterface)
+                {
+                    Messenger.Default.Send<GenericMessage<TestDetails>>(new GenericMessage<TestDetails>(testDetails));
+                }
+                else
+                {
+                    TestExecutionManager manager = new TestExecutionManager(testDetails);
+                    manager.Execute();
+                }
             }
             catch (Exception ex)
             {

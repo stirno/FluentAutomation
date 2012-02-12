@@ -82,6 +82,7 @@
     <Compile Include="Model\TestDetails.cs" />
     <Compile Include="Service\RemoteCommandManager.cs" />
     <Compile Include="Service\ServiceEndpoint.cs" />
+    <Compile Include="TestExecutionManager.cs" />
     <Compile Include="ViewModel\RemoteCommandViewModel.cs" />
     <Compile Include="ViewModel\TestViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />

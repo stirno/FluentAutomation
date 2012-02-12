@@ -14,6 +14,7 @@ namespace FluentAutomation.Server
         public MainWindow()
         {
             InitializeComponent();
+            this.Hide();
             Closing += (s, e) => ViewModelLocator.Cleanup();
         }
     }
