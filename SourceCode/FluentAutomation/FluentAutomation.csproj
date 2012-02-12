@@ -87,6 +87,7 @@
     <Compile Include="API\Exceptions\SelectException.cs" />
     <Compile Include="API\ExtensionMethods.cs" />
     <Compile Include="API\RemoteCommand.cs" />
+    <Compile Include="API\RemoteTestRunDetails.cs" />
     <Compile Include="API\Size.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="API\FluentTest.cs" />

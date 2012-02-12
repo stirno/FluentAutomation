@@ -15,14 +15,15 @@ namespace FluentAutomation.RemoteCommands
 {
     public class RemoteCommandManager
     {
-        public static TestDetails GetRemoteCommands(IEnumerable<RemoteCommandDetails> commands)
+        public static TestDetails GetRemoteCommands(RemoteTestRunDetails testSettings)
         {
             TestDetails testDetails = new TestDetails();
+            testDetails.ShowInterface = testSettings.ShowInterface;
             Assembly asm = typeof(IRemoteCommand).Assembly;
 
             try
             {
-                foreach (var command in commands)
+                foreach (var command in testSettings.Commands)
                 {
                     // attempt to locate mapper
                     // TODO: Get rid of the 'magic string' Commands part, make this work with loaded assemblies

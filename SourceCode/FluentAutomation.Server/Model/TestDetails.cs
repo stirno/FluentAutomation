@@ -13,16 +13,20 @@ namespace FluentAutomation.Server.Model
         {
             this.RemoteCommands = new Dictionary<IRemoteCommand, IRemoteCommandArguments>();
             this.Browsers = new List<BrowserType>();
+            this.ShowInterface = true;
         }
 
         public TestDetails(Dictionary<IRemoteCommand, IRemoteCommandArguments> remoteCommands, List<BrowserType> browsers)
         {
             this.RemoteCommands = remoteCommands;
             this.Browsers = browsers;
+            this.ShowInterface = true;
         }
 
         public Dictionary<IRemoteCommand, IRemoteCommandArguments> RemoteCommands { get; set; }
 
         public List<BrowserType> Browsers { get; set; }
+
+        public bool ShowInterface { get; set; }
     }
 }

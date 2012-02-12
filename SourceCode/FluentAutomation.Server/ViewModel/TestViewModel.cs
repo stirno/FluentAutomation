@@ -25,41 +25,49 @@ namespace FluentAutomation.Server.ViewModel
 			{
 				DispatcherHelper.CheckBeginInvokeOnUI(() =>
 				{
-					// only handle one test at a time!
-					if (this.RemoteCommands.Count == 0)
+					if (this.RemoteCommands.Count > 0)
 					{
-						this.Browsers = new ObservableCollection<BrowserType>(test.Content.Browsers);
-						foreach (var commandItem in test.Content.RemoteCommands)
+                        // clear out previous test run
+                        this.RemoteCommands.Clear();
+                    }
+
+					this.Browsers = new ObservableCollection<BrowserType>(test.Content.Browsers);
+					foreach (var commandItem in test.Content.RemoteCommands)
+					{
+						this.RemoteCommands.Add(new RemoteCommandViewModel
 						{
-							this.RemoteCommands.Add(new RemoteCommandViewModel
-							{
-								CommandName = commandItem.Key.GetType().Name,
-								RemoteCommand = commandItem.Key,
-								RemoteCommandArguments = commandItem.Value
-							});
-						}
-
-						this.Name = "Received at " + DateTime.Now.ToLongTimeString();
-						this.ExecuteButtonVisibility = this.RemoteCommands.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
-
-						// new test class so we can grab the proper provider
-                        FluentTest testClass = new FluentTest();
-						this._manager = testClass.I;
-                        if (this.Browsers.Count > 0)
-                        {
-                            var selectedBrowser = this.Browsers[0];
-
-                            if (selectedBrowser == BrowserType.InternetExplorer)
-                                this._requiresSTA = true;
-
-                            this._manager.Use(this.Browsers[0]);
-                        }
-
-						if (testClass.ProviderName.Contains("WatiN"))
-						{
-							this._requiresSTA = true;
-						}
+							CommandName = commandItem.Key.GetType().Name,
+							RemoteCommand = commandItem.Key,
+							RemoteCommandArguments = commandItem.Value
+						});
 					}
+
+                    this.Name = "Received at " + DateTime.Now.ToLongTimeString();
+                    this.ExecuteButtonVisibility = this.RemoteCommands.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
+
+					// new test class so we can grab the proper provider
+                    FluentTest testClass = new FluentTest();
+					this._manager = testClass.I;
+                    if (this.Browsers.Count > 0)
+                    {
+                        var selectedBrowser = this.Browsers[0];
+
+                        if (selectedBrowser == BrowserType.InternetExplorer)
+                            this._requiresSTA = true;
+
+                        this._manager.Use(this.Browsers[0]);
+                    }
+
+					if (testClass.ProviderName.Contains("WatiN"))
+					{
+						this._requiresSTA = true;
+					}
+
+                    if (!test.Content.ShowInterface)
+                    {
+                        this.FormVisibility = Visibility.Collapsed;
+                        this.ExecuteTest.Execute(null);
+                    }
 				});
 			});
 		}
@@ -338,6 +346,27 @@ namespace FluentAutomation.Server.ViewModel
 		}
 
 		private RelayCommand<RemoteCommandViewModel> _addBreakpoint;
+
+        public const string FormVisibilityPropertyName = "FormVisibility";
+        private Visibility _formVisibility = Visibility.Visible;
+        public Visibility FormVisibility
+        {
+            get
+            {
+                return _formVisibility;
+            }
+
+            set
+            {
+                if (_formVisibility == value)
+                {
+                    return;
+                }
+
+                _formVisibility = value;
+                RaisePropertyChanged(FormVisibilityPropertyName);
+            }
+        }
 
 		/// <summary>
 		/// Gets the MyCommand.
