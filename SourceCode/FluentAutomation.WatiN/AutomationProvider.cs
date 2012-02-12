@@ -19,6 +19,7 @@ namespace FluentAutomation.WatiN
         private Automation.Core.Browser _browser = null;
         private API.Enumerations.BrowserType _browserType = API.Enumerations.BrowserType.InternetExplorer;
         private List<string> _alertDialogMessages = new List<string>();
+        private List<Automation.Core.Interfaces.IDialogHandler> _dialogHandlers = new List<Automation.Core.Interfaces.IDialogHandler>();
 
         public override void Authenticate(string username, string password)
         {
@@ -30,6 +31,18 @@ namespace FluentAutomation.WatiN
 
         public override void Cleanup()
         {
+            if (_dialogHandlers.Count > 0)
+            {
+                _dialogHandlers.ForEach(d => _browser.RemoveDialogHandler(d));
+                _browser.DialogWatcher.Clear();
+            }
+
+            if (_browser is Automation.Core.IE)
+            {
+                ((SHDocVw.WebBrowser)((Automation.Core.IE)_browser).InternetExplorer).Stop();
+                ((SHDocVw.WebBrowser)((Automation.Core.IE)_browser).InternetExplorer).Quit();
+            }
+
             _browser.Close();
             _browser = null;
         }
@@ -217,7 +230,9 @@ namespace FluentAutomation.WatiN
                     ((SHDocVw.WebBrowser)browser.InternetExplorer).FullScreen = true;
 
                     // setup handler
-                    browser.AddDialogHandler(new JavaScriptAlertDialogHandler(s => this._alertDialogMessages.Add(s)));
+                    var dialogHandler = new JavaScriptAlertDialogHandler(s => this._alertDialogMessages.Add(s));
+                    this._dialogHandlers.Add(dialogHandler);
+                    browser.AddDialogHandler(dialogHandler);
                     browser.DialogWatcher.CloseUnhandledDialogs = true;
                     browser.AutoClose = true;
 
