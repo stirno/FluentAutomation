@@ -93,7 +93,6 @@
     <Compile Include="API\ServiceResponse.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="StirnoKey_2011_Build.snk" />
   </ItemGroup>
   <ItemGroup>
