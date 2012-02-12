@@ -115,7 +115,13 @@ namespace FluentAutomation.SeleniumWebDriver
 
         public virtual void Hover()
         {
-            FluentAutomation.API.MouseControl.SetPosition(new API.Point(_element.Location.X, _element.Location.Y));
+            if (_driver is OpenQA.Selenium.IE.InternetExplorerDriver)
+            {
+                // Fix for IEDriver.. Make sure physical cursor is not on top of IE instance during Hover state.
+                FluentAutomation.API.MouseControl.SetPosition(new API.Point { X = 0, Y = 0 });
+            }
+
+            (new OpenQA.Selenium.Interactions.Actions(_driver)).MoveToElement(_element).Build().Perform();
         }
 
         public virtual void OnChange()

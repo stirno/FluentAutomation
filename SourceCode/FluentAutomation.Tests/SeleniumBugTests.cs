@@ -38,5 +38,14 @@ namespace FluentAutomation.Tests
             I.Drag("#pt1").To("#pt2");
             I.Drag("#pboth1").To("#pb2");
         }
+
+        [TestMethod]
+        public void HoverTest()
+        {
+            I.Use(BrowserType.InternetExplorer);
+            I.Open("http://www.asp.net/ajaxLibrary/AjaxControlToolkitSampleSite/HoverMenu/HoverMenu.aspx");
+            I.Hover("#ctl00_SampleContent_GridView1_ctl02_Label1");
+            I.Wait(10);
+        }
     }
 }
