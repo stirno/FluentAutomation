@@ -111,6 +111,8 @@ namespace FluentAutomation.SeleniumWebDriver
 
         public virtual void Focus()
         {
+            // lack of a focus option.. we'll just click for now.
+            Click();
         }
 
         public virtual void Hover()
