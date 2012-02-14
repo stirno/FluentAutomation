@@ -37,6 +37,6 @@ namespace FluentAutomation.Server.Model
         /// <value>
         /// The exception.
         /// </value>
-        public Exception Exception { get; set; }
+        public string ExceptionMessage { get; set; }
     }
 }

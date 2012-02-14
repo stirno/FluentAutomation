@@ -168,7 +168,7 @@ namespace FluentAutomation.RemoteCommands
             {
                 AgentIdentifier = agentIdentifier,
                 UniqueTestIdentifier = testIdentifier,
-                State = "StepComplete"
+                State = "StepCompleted"
             });
         }
 
@@ -179,7 +179,7 @@ namespace FluentAutomation.RemoteCommands
                 AgentIdentifier = agentIdentifier,
                 UniqueTestIdentifier = testIdentifier,
                 State = "StepFailed",
-                Exception = ex
+                ExceptionMessage = ex.ToString()
             });
         }
 
@@ -190,7 +190,7 @@ namespace FluentAutomation.RemoteCommands
                 AgentIdentifier = agentIdentifier,
                 UniqueTestIdentifier = testIdentifier,
                 State = "TestFailed",
-                Exception = ex
+                ExceptionMessage = ex.ToString()
             });
         }
 
@@ -209,7 +209,8 @@ namespace FluentAutomation.RemoteCommands
             if (pingbackUri != null && pingback != null)
             {
                 WebClient client = new WebClient();
-                client.UploadString(pingbackUri, JsonConvert.SerializeObject(pingback));
+                client.Headers.Add("Content-Type", "application/json");
+                client.UploadString(pingbackUri, "POST", JsonConvert.SerializeObject(pingback));
             }
         }
 
