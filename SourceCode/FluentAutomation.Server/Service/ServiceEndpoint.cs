@@ -33,14 +33,14 @@ namespace FluentAutomation.RemoteCommands
             {
                 var testDetails = RemoteCommandManager.GetRemoteCommands(testSettings);
 
-                if (testDetails.ShowInterface)
-                {
-                    Messenger.Default.Send<GenericMessage<TestDetails>>(new GenericMessage<TestDetails>(testDetails));
-                }
-                else
+                if (testDetails.ServiceModeEnabled)
                 {
                     TestExecutionManager manager = new TestExecutionManager(testDetails);
                     manager.Execute();
+                }
+                else
+                {
+                    Messenger.Default.Send<GenericMessage<TestDetails>>(new GenericMessage<TestDetails>(testDetails));
                 }
             }
             catch (Exception ex)

@@ -10,6 +10,8 @@ using FluentAutomation.API.Enumerations;
 using FluentAutomation.API.Providers;
 using FluentAutomation.RemoteCommands.Contrib;
 using FluentAutomation.Server.Model;
+using System.Net;
+using Newtonsoft.Json;
 
 namespace FluentAutomation.RemoteCommands
 {
@@ -18,7 +20,11 @@ namespace FluentAutomation.RemoteCommands
         public static TestDetails GetRemoteCommands(RemoteTestRunDetails testSettings)
         {
             TestDetails testDetails = new TestDetails();
-            testDetails.ShowInterface = testSettings.ShowInterface;
+            testDetails.ServiceModeEnabled = testSettings.ServiceModeEnabled;
+            testDetails.StepCompletionPingbackUri = testSettings.StepCompletionPingbackUri;
+            testDetails.UniqueTestRunIdentifier = testSettings.UniqueTestRunIdentifier;
+            testDetails.AgentIdentifier = testSettings.AgentIdentifier;
+
             Assembly asm = typeof(IRemoteCommand).Assembly;
 
             try
@@ -68,17 +74,9 @@ namespace FluentAutomation.RemoteCommands
                     testDetails.Browsers.Add(BrowserType.Chrome);
                 }
             }
-            catch (FluentAutomation.API.Exceptions.AssertException)
-            {
-                throw;
-            }
-            catch (ArgumentException)
-            {
-                throw;
-            }
             catch (Exception ex)
             {
-                throw new Exception("An error occurred while executing the specified commands.", ex);
+                PingbackTestFailed(testDetails.AgentIdentifier, testSettings.UniqueTestRunIdentifier, testSettings.StepCompletionPingbackUri, new Exception("An error occurred while building the command set for execution. See InnerException for details.", ex));
             }
 
             return testDetails;
@@ -161,6 +159,57 @@ namespace FluentAutomation.RemoteCommands
             finally
             {
                 provider.Cleanup();
+            }
+        }
+
+        public static void PingbackStepCompleted(string agentIdentifier, string testIdentifier, Uri pingbackUri)
+        {
+            SendPingback(pingbackUri, new Pingback
+            {
+                AgentIdentifier = agentIdentifier,
+                UniqueTestIdentifier = testIdentifier,
+                State = "StepComplete"
+            });
+        }
+
+        public static void PingbackStepFailed(string agentIdentifier, string testIdentifier, Uri pingbackUri, Exception ex)
+        {
+            SendPingback(pingbackUri, new Pingback
+            {
+                AgentIdentifier = agentIdentifier,
+                UniqueTestIdentifier = testIdentifier,
+                State = "StepFailed",
+                Exception = ex
+            });
+        }
+
+        public static void PingbackTestFailed(string agentIdentifier, string testIdentifier, Uri pingbackUri, Exception ex)
+        {
+            SendPingback(pingbackUri, new Pingback
+            {
+                AgentIdentifier = agentIdentifier,
+                UniqueTestIdentifier = testIdentifier,
+                State = "TestFailed",
+                Exception = ex
+            });
+        }
+
+        public static void PingbackTestCompleted(string agentIdentifier, string testIdentifier, Uri pingbackUri)
+        {
+            SendPingback(pingbackUri, new Pingback
+            {
+                AgentIdentifier = agentIdentifier,
+                UniqueTestIdentifier = testIdentifier,
+                State = "TestCompleted"
+            });
+        }
+
+        public static void SendPingback(Uri pingbackUri, Pingback pingback)
+        {
+            if (pingbackUri != null && pingback != null)
+            {
+                WebClient client = new WebClient();
+                client.UploadString(pingbackUri, JsonConvert.SerializeObject(pingback));
             }
         }
 

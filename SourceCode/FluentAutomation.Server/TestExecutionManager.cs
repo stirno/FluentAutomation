@@ -7,6 +7,7 @@ using FluentAutomation.Server.ViewModel;
 using FluentAutomation.API.Enumerations;
 using FluentAutomation.API;
 using System.Threading;
+using FluentAutomation.RemoteCommands;
 
 namespace FluentAutomation.Server
 {
@@ -45,21 +46,19 @@ namespace FluentAutomation.Server
         {
             foreach (var cmd in this.RemoteCommands)
             {
-                if (cmd.Status == "Executed")
-                {
-                    continue;
-                }
-
                 try
                 {
                     cmd.RemoteCommand.Execute(this.Manager, cmd.RemoteCommandArguments);
+                    RemoteCommandManager.PingbackStepCompleted(this.Details.AgentIdentifier, this.Details.UniqueTestRunIdentifier, this.Details.StepCompletionPingbackUri);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    RemoteCommandManager.PingbackStepFailed(this.Details.AgentIdentifier, this.Details.UniqueTestRunIdentifier, this.Details.StepCompletionPingbackUri, ex);
                 }
             }
 
             this.Manager.Finish();
+            RemoteCommandManager.PingbackTestCompleted(this.Details.AgentIdentifier, this.Details.UniqueTestRunIdentifier, this.Details.StepCompletionPingbackUri);
         }
 
         public List<RemoteCommandViewModel> RemoteCommands { get; set; }
