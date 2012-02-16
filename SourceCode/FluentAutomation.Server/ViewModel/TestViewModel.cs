@@ -22,11 +22,11 @@ namespace FluentAutomation.Server.ViewModel
 		public TestViewModel()
 		{
 			MessengerInstance.Register<GenericMessage<TestDetails>>(this, (test) =>
-			{
+            {
+                this.FormVisibility = Visibility.Visible;
+
 				DispatcherHelper.CheckBeginInvokeOnUI(() =>
 				{
-                    this.FormVisibility = Visibility.Visible;
-
 					if (this.RemoteCommands.Count > 0)
 					{
                         // clear out previous test run
@@ -344,7 +344,7 @@ namespace FluentAutomation.Server.ViewModel
 		private RelayCommand<RemoteCommandViewModel> _addBreakpoint;
 
         public const string FormVisibilityPropertyName = "FormVisibility";
-        private Visibility _formVisibility = Visibility.Collapsed;
+        private Visibility _formVisibility = Visibility.Hidden;
         public Visibility FormVisibility
         {
             get

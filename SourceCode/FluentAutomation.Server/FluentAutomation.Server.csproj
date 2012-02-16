@@ -90,6 +90,10 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\3rdPartyLib\SeleniumWebDriver\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\..\3rdPartyLib\NLog\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System" />
@@ -115,6 +119,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="FluentTest.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Model\Pingback.cs" />
     <Compile Include="Model\TestDetails.cs" />
     <Compile Include="Service\RemoteCommandManager.cs" />
@@ -157,6 +162,13 @@
     <None Include="app.config" />
     <None Include="app.manifest" />
     <None Include="FluentAutomation.Server_TemporaryKey.pfx" />
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

@@ -12,6 +12,7 @@ using FluentAutomation.RemoteCommands.Contrib;
 using FluentAutomation.Server.Model;
 using System.Net;
 using Newtonsoft.Json;
+using FluentAutomation.Server;
 
 namespace FluentAutomation.RemoteCommands
 {
@@ -206,11 +207,19 @@ namespace FluentAutomation.RemoteCommands
 
         public static void SendPingback(Uri pingbackUri, Pingback pingback)
         {
+            Logger.Network(JsonConvert.SerializeObject(new { PingbackUri = pingbackUri, Pingback = pingback }));
             if (pingbackUri != null && pingback != null)
             {
-                WebClient client = new WebClient();
-                client.Headers.Add("Content-Type", "application/json");
-                client.UploadString(pingbackUri, "POST", JsonConvert.SerializeObject(pingback));
+                try
+                {
+                    WebClient client = new WebClient();
+                    client.Headers.Add("Content-Type", "application/json");
+                    client.UploadString(pingbackUri, "POST", JsonConvert.SerializeObject(pingback));
+                }
+                catch (Exception ex)
+                {
+                    Logger.Network("Error when sending pingback: " + ex.ToString());
+                }
             }
         }
 

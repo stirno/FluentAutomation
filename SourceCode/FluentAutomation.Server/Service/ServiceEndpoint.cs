@@ -12,6 +12,7 @@ using GalaSoft.MvvmLight.Messaging;
 using FluentAutomation.Server.Model;
 using FluentAutomation.API;
 using FluentAutomation.Server;
+using System.Windows;
 
 namespace FluentAutomation.RemoteCommands
 {
@@ -21,6 +22,8 @@ namespace FluentAutomation.RemoteCommands
         {
             StreamReader reader = new StreamReader(requestBody);
             var contents = reader.ReadToEnd();
+
+            Logger.Network(contents);
 
             var testSettings = JsonConvert.DeserializeObject<RemoteTestRunDetails>(contents, new JsonSerializerSettings()
             {
@@ -45,9 +48,11 @@ namespace FluentAutomation.RemoteCommands
             }
             catch (Exception ex)
             {
+                Logger.Network("Returning error due to exception: " + ex.ToString());
                 return new ServiceResponse { Status = "Error", Message = ex.Message };
             }
 
+            Logger.Network("Returning status complete");
             return new ServiceResponse { Status = "Complete" };
         }
     }
