@@ -11,6 +11,4 @@ or
 ####[FluentAutomation.SeleniumWebDriver](http://nuget.org/List/Packages/FluentAutomation.SeleniumWebDriver)
 	PM> Install-Package FluentAutomation.SeleniumWebDriver
 
-##Latest unstable build available at [builds.stirno.com](http://builds.stirno.com/fluentautomation/)
-
 Checkout the documentation at [fluent.stirno.com/docs](http://fluent.stirno.com/docs/) to get started.
