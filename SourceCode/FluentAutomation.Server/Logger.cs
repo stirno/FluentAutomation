@@ -17,5 +17,11 @@ namespace FluentAutomation.Server
             NLog.Logger log = NLog.LogManager.GetLogger("network");
             log.Debug(message);
         }
+
+        public static void TestReceived(string message)
+        {
+            NLog.Logger log = NLog.LogManager.GetLogger("testReceived");
+            log.Info(message);
+        }
     }
 }

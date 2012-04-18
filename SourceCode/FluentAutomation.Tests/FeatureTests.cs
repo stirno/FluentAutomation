@@ -43,6 +43,8 @@ namespace FluentAutomation.Tests
             I.Drag("#pboth2").To("#b4");
             I.Drag("#pt1").To("#pt2");
             I.Drag("#pboth1").To("#pb2");
+
+            I.Type
         }
 
         [TestInitialize]

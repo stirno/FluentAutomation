@@ -35,6 +35,7 @@ namespace FluentAutomation.RemoteCommands
             try
             {
                 var testDetails = RemoteCommandManager.GetRemoteCommands(testSettings);
+                Logger.TestReceived(JsonConvert.SerializeObject(testDetails));
 
                 if (testDetails.ServiceModeEnabled)
                 {
