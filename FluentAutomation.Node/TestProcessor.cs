@@ -82,6 +82,7 @@ namespace FluentAutomation.Node
                         throw new FluentException("Unable to find method to match signature for action [{0}].", methodKey.ToString());
                     }
                     itemMethod.Invoke(this, new[] { action });
+                    Console.WriteLine("Action completed..");
                     if (this.actionCompleteHandler != null) this.actionCompleteHandler();
                 }
                 catch (FluentException exception)

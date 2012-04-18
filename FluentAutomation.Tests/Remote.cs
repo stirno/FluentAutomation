@@ -45,15 +45,13 @@ namespace FluentAutomation.Tests
             I.Expect.Text("$788.64").In(".liveExample tr span:eq(3)");
 
             // validate totals
-            I.Expect.Text("$986.35").In("p.grandTotal span");
+            I.Expect.Text("$986.34").In("p.grandTotal span");
 
             // remove first product
             I.Click(".liveExample a:eq(0)");
 
             // validate new total
             I.Expect.Text("$788.64").In("p.grandTotal span");
-
-            I.Execute();
         }
     }
 }

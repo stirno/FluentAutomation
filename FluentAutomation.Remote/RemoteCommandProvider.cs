@@ -15,8 +15,8 @@ namespace FluentAutomation
         private WebSocket webSocket = null;
         private readonly List<JObject> actions = new List<JObject>();
 
-        private bool isExecutingAction = false;
-        private Exception exceptionToRethrow = null;
+        private volatile bool isExecutingAction = false;
+        private volatile Exception exceptionToRethrow = null;
 
         public RemoteCommandProvider()
         {
@@ -24,6 +24,7 @@ namespace FluentAutomation
             this.webSocket.Connect();
             this.webSocket.OnMessage += (object sender, string eventdata) =>
             {
+                Console.WriteLine(eventdata);
                 var messageData = JObject.Parse(eventdata);
                 if (messageData["ExceptionType"] != null) {
                     var exceptionType = messageData["ExceptionType"].ToString();
@@ -33,7 +34,6 @@ namespace FluentAutomation
                 if (messageData["Response"] != null)
                 {
                     var response = messageData["Response"].ToString();
-
                     if (response == "ActionCompleted")
                     {
                         this.isExecutingAction = false;
@@ -64,6 +64,30 @@ namespace FluentAutomation
             }
         }
 
+        public void Execute()
+        {
+            if (this.exceptionToRethrow == null && this.actions.Count > 0)
+            {
+                JArray contentResult = new JArray();
+                this.actions.ForEach(o => contentResult.Add(o));
+
+                this.isExecutingAction = true;
+                this.webSocket.Send(contentResult.ToString());
+
+                while (this.isExecutingAction == true)
+                {
+                    if (this.exceptionToRethrow != null)
+                    {
+                        this.isExecutingAction = false;
+                        this.CleanupAndThrow(this.exceptionToRethrow);
+                    }
+                }
+            }
+
+            this.webSocket.Close();
+        }
+
+        #region Actions
         public void Navigate(Uri url)
         {
             this.Act(new { Action = "Navigate", Url = url.ToString() });
@@ -173,29 +197,7 @@ namespace FluentAutomation
         {
             this.Act(new { Action = "Type", Text = text });
         }
-
-        public void Execute()
-        {
-            if (this.exceptionToRethrow == null && this.actions.Count > 0)
-            {
-                JArray contentResult = new JArray();
-                this.actions.ForEach(o => contentResult.Add(o));
-
-                this.isExecutingAction = true;
-                this.webSocket.Send(contentResult.ToString());
-
-                while (this.isExecutingAction == true)
-                {
-                    if (this.exceptionToRethrow != null)
-                    {
-                        this.isExecutingAction = false;
-                        this.CleanupAndThrow(this.exceptionToRethrow);
-                    }
-                }
-            }
-
-            this.webSocket.Close();
-        }
+        #endregion
 
         public void CleanupAndThrow(Exception ex)
         {
