@@ -11,9 +11,17 @@ namespace FluentAutomation
 {
     public class Element : IElement
     {
+        private string selector = null;
+
         public Element(IWebElement webElement)
         {
             this.WebElement = webElement;
+        }
+
+        public Element(IWebElement webElement, string selector)
+        {
+            this.WebElement = webElement;
+            this.selector = selector;
         }
 
         public string TagName
@@ -44,6 +52,14 @@ namespace FluentAutomation
             get
             {
                 return this.WebElement.Text;
+            }
+        }
+
+        public string Selector
+        {
+            get
+            {
+                return this.selector;
             }
         }
 

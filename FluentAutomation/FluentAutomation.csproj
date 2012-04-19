@@ -56,7 +56,7 @@
     <Compile Include="Interfaces\ICommandProvider.cs" />
     <Compile Include="Interfaces\IExpectProvider.cs" />
     <Compile Include="LocalFileStoreProvider.cs" />
-    <Compile Include="Preferences.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

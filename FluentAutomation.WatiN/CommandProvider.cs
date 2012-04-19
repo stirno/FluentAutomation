@@ -39,7 +39,7 @@ namespace FluentAutomation
                     var automationElement = this.browser.Element(WatiNCore.Find.BySelector(selector));
                     if (!automationElement.Exists) throw new KeyNotFoundException();
 
-                    return new Element(automationElement);
+                    return new Element(automationElement, selector);
                 }
                 catch (KeyNotFoundException)
                 {
@@ -58,7 +58,7 @@ namespace FluentAutomation
                     if (automationElements.Count == 0) throw new KeyNotFoundException();
 
                     List<Element> resultSet = new List<Element>();
-                    automationElements.ToList().ForEach(x => resultSet.Add(new Element(x)));
+                    automationElements.ToList().ForEach(x => resultSet.Add(new Element(x, selector)));
                     return resultSet;
                 }
                 catch (KeyNotFoundException)

@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{36898A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentAutomation.Remote", "FluentAutomation.Remote\FluentAutomation.Remote.csproj", "{A860F48D-1A1E-4CBB-BC40-92CAF384DF82}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentAutomation.PhantomJS", "FluentAutomation.PhantomJS\FluentAutomation.PhantomJS.csproj", "{32DD8589-20D4-4302-B6B6-9BC532CBA4E5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{1FA2F73A-72B7-4B4A-94E6-7D5F52425A20}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1FA2F73A-72B7-4B4A-94E6-7D5F52425A20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1FA2F73A-72B7-4B4A-94E6-7D5F52425A20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32DD8589-20D4-4302-B6B6-9BC532CBA4E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32DD8589-20D4-4302-B6B6-9BC532CBA4E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32DD8589-20D4-4302-B6B6-9BC532CBA4E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32DD8589-20D4-4302-B6B6-9BC532CBA4E5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{458968B4-97D8-4391-B2A9-CAA1D8434142}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{458968B4-97D8-4391-B2A9-CAA1D8434142}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{458968B4-97D8-4391-B2A9-CAA1D8434142}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -53,9 +53,9 @@
       <Project>{458968b4-97d8-4391-b2a9-caa1d8434142}</Project>
       <Name>FluentAutomation.Node</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FluentAutomation.SeleniumWebDriver\FluentAutomation.SeleniumWebDriver.csproj">
-      <Project>{508e97d5-21ef-41dc-8fd1-a0eac0a637a4}</Project>
-      <Name>FluentAutomation.SeleniumWebDriver</Name>
+    <ProjectReference Include="..\FluentAutomation.PhantomJS\FluentAutomation.PhantomJS.csproj">
+      <Project>{32dd8589-20d4-4302-b6b6-9bc532cba4e5}</Project>
+      <Name>FluentAutomation.PhantomJS</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

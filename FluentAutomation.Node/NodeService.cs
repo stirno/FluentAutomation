@@ -19,19 +19,24 @@ namespace FluentAutomation.Node
             Current = new NodeService(new WebSocketServer("ws://0.0.0.0:8000"));
         }
 
-        private readonly Dictionary<IWebSocketConnection, TestProcessor> openConnections = null;
-        private readonly IWebSocketServer server = null;
+        private readonly Dictionary<IWebSocketConnection, TestProcessor> openClientConnections = null;
+        private readonly IWebSocketServer clientWebSocket = null;
         private TestProcessor processor = null;
 
-        public NodeService(IWebSocketServer server)
+        public NodeService(IWebSocketServer clientWebSocket)
         {
-            this.openConnections = new Dictionary<IWebSocketConnection, TestProcessor>();
-            this.server = server;
+            this.openClientConnections = new Dictionary<IWebSocketConnection, TestProcessor>();
+            this.clientWebSocket = clientWebSocket;
         }
         
         public void Start()
         {
-            this.server.Start(socket =>
+            this.OpenClientWebSocket();
+        }
+
+        private void OpenClientWebSocket()
+        {
+            this.clientWebSocket.Start((socket) =>
             {
                 var errorHandler = new Action<Exception>((exception) =>
                 {
@@ -44,7 +49,8 @@ namespace FluentAutomation.Node
                         // if the socket is still open, send the Excception back.
                         socket.Send(returnObject.ToString());
                         socket.Close();
-                    } catch (Exception) { }
+                    }
+                    catch (Exception) { }
                 });
 
                 var actionCompleteHandler = new Action(() =>
@@ -61,30 +67,28 @@ namespace FluentAutomation.Node
 
                 socket.OnClose = () =>
                 {
-                    if (openConnections.ContainsKey(socket))
+                    if (openClientConnections.ContainsKey(socket))
                     {
-                        openConnections[socket].Dispose();
-                        openConnections.Remove(socket);
+                        openClientConnections[socket].Dispose();
+                        openClientConnections.Remove(socket);
                     }
                 };
                 socket.OnMessage = (message) =>
                 {
                     // if this is the first message from a user, register it and provide
                     // an IoC container context
-                    if (!openConnections.ContainsKey(socket))
+                    if (!openClientConnections.ContainsKey(socket))
                     {
                         var container = new TinyIoCContainer();
                         FluentAutomation.Settings.Registration(container);
-                        lock (socket)
-                        {
-                            var testProcessor = container.Resolve<TestProcessor>();
-                            testProcessor.OnError(errorHandler);
-                            testProcessor.OnActionComplete(actionCompleteHandler);
-                            openConnections.Add(socket, testProcessor);
-                        }
+
+                        var testProcessor = container.Resolve<TestProcessor>();
+                        testProcessor.OnError(errorHandler);
+                        testProcessor.OnActionComplete(actionCompleteHandler);
+                        openClientConnections.Add(socket, testProcessor);
                     }
 
-                    openConnections[socket].Execute(message);
+                    openClientConnections[socket].Execute(message);
                 };
             });
         }
@@ -92,7 +96,7 @@ namespace FluentAutomation.Node
         public void Stop()
         {
             if (this.processor != null) this.processor.Dispose();
-            this.server.Dispose();
+            this.clientWebSocket.Dispose();
         }
     }
 }

@@ -51,7 +51,7 @@ namespace FluentAutomation
                 try
                 {
                     var webElement = this.webDriver.FindElement(Sizzle.Find(selector));
-                    return new Element(webElement);
+                    return new Element(webElement, selector);
                 }
                 catch (NoSuchElementException)
                 {
@@ -68,7 +68,7 @@ namespace FluentAutomation
                 {
                     var webElements = this.webDriver.FindElements(Sizzle.Find(selector));
                     List<Element> resultSet = new List<Element>();
-                    webElements.ToList().ForEach(x => resultSet.Add(new Element(x)));
+                    webElements.ToList().ForEach(x => resultSet.Add(new Element(x, selector)));
                     return resultSet;
                 }
                 catch (NoSuchElementException)

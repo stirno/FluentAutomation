@@ -10,9 +10,17 @@ namespace FluentAutomation
 {
     public class Element : IElement
     {
+        private string selector = null;
+
         public Element(WatiNCore.Element automationElement)
         {
             this.AutomationElement = automationElement;
+        }
+
+        public Element(WatiNCore.Element automationElement, string selector)
+        {
+            this.AutomationElement = automationElement;
+            this.selector = selector;
         }
 
         public WatiNCore.Element AutomationElement { get; set; }
@@ -61,6 +69,14 @@ namespace FluentAutomation
                 return this.AutomationElement.Text;
             }
         }
+
+        public string Selector
+        {
+            get
+            {
+                return this.selector;
+            }
+        } 
 
         public IEnumerable<string> SelectedOptionValues
         {
