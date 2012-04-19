@@ -10,6 +10,7 @@ using System.Text;
 using Fleck;
 using FluentAutomation.Interfaces;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace FluentAutomation
 {
@@ -44,23 +45,27 @@ namespace FluentAutomation
                 };
                 socket.OnClose = () => {
                     this.phantomConnection = null;
-                    this.isPhantomReady = false;
                     this.waitForPhantomReady();
                 };
                 socket.OnMessage = (message) =>
                 {
-                    
+                    var messageData = JObject.Parse(message);
+                    if (messageData["Response"] != null)
+                    {
+                        this.isPhantomReady = true;
+                    }
                 };
             });
         }
 
         private void waitForPhantomReady()
         {
-            while (isPhantomReady == false)
+            this.isPhantomReady = false;
+            while (this.isPhantomReady == false)
             {
             }
         }
-
+        
         private Process startPhantomJS(int portNumber)
         {
             var filePath = "phantomjs.exe";
@@ -109,98 +114,117 @@ namespace FluentAutomation
         public void Navigate(Uri url)
         {
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "Navigate", Url = url.ToString() }));
+            this.waitForPhantomReady();
         }
 
         public Func<IElement> Find(string selector)
         {
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "Find", Selector = selector }));
+            this.waitForPhantomReady();
             return () => new Element(selector);
         }
 
         public Func<IEnumerable<IElement>> FindMultiple(string selector)
         {
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "FindMultiple", Selector = selector }));
+            this.waitForPhantomReady();
             return () => new List<IElement>() { new Element(selector) };
         }
 
         public void Click(int x, int y)
         {
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "Click", Selector = "", X = x, Y = y }));
+            this.waitForPhantomReady();
         }
 
         public void Click(Func<IElement> element, int x, int y)
         {
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "Click", Selector = element().Selector, X = x, Y = y }));
+            this.waitForPhantomReady();
         }
 
         public void Click(Func<IElement> element)
         {
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "Click", Selector = element().Selector, X = 0, Y = 0 }));
+            this.waitForPhantomReady();
         }
 
         public void Hover(int x, int y)
         {
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "Hover", Selector = "", X = x, Y = y }));
+            this.waitForPhantomReady();
         }
 
         public void Hover(Func<IElement> element, int x, int y)
         {
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "Hover", Selector = element().Selector, X = x, Y = y }));
+            this.waitForPhantomReady();
         }
 
         public void Hover(Func<IElement> element)
         {
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "Hover", Selector = element().Selector, X = 0, Y = 0 }));
+            this.waitForPhantomReady();
         }
 
         public void Focus(Func<IElement> element)
         {
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "Focus", Selector = element().Selector, X = 0, Y = 0 }));
+            this.waitForPhantomReady();
         }
 
         public void DragAndDrop(Func<IElement> source, Func<IElement> target)
         {
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "DragAndDrop", SourceSelector = source().Selector, TargetSelector = target().Selector }));
+            this.waitForPhantomReady();
         }
 
         public void EnterText(Func<IElement> element, string text)
         {
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "EnterText", Selector = element().Selector, Text = text }));
+            this.waitForPhantomReady();
         }
 
         public void SelectText(Func<IElement> element, string optionText)
         {
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "SelectText", Selector = element().Selector, Text = optionText }));
+            this.waitForPhantomReady();
         }
 
         public void SelectValue(Func<IElement> element, string optionValue)
         {
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "SelectValue", Selector = element().Selector, Value = optionValue }));
+            this.waitForPhantomReady();
         }
 
         public void SelectIndex(Func<IElement> element, int optionIndex)
         {
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "SelectIndex", Selector = element().Selector, Index = optionIndex }));
+            this.waitForPhantomReady();
         }
 
         public void MultiSelectText(Func<IElement> element, string[] optionTextCollection)
         {
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "MultiSelectText", Selector = element().Selector, Text = optionTextCollection }));
+            this.waitForPhantomReady();
         }
 
         public void MultiSelectValue(Func<IElement> element, string[] optionValues)
         {
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "MultiSelectValue", Selector = element().Selector, Value = optionValues }));
+            this.waitForPhantomReady();
         }
 
         public void MultiSelectIndex(Func<IElement> element, int[] optionIndices)
         {
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "MultiSelectIndex", Selector = element().Selector, Index = optionIndices }));
+            this.waitForPhantomReady();
         }
 
         public void TakeScreenshot(string screenshotName)
         {
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "TakeScreenshot", FileName = screenshotName }));
+            this.waitForPhantomReady();
         }
 
         public void UploadFile(Func<IElement> element, int x, int y, string fileName)
@@ -246,11 +270,13 @@ namespace FluentAutomation
         public void Press(string keys)
         {
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "Press", Keys = keys }));
+            this.waitForPhantomReady();
         }
 
         public void Type(string text)
         {
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "Type", Text = text }));
+            this.waitForPhantomReady();
         }
 
         public void Dispose()

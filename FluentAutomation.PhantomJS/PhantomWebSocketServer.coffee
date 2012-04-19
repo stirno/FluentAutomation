@@ -1,4 +1,5 @@
 ﻿system = require 'system'
+page = require('webpage').create()
 
 class PhantomWebSocketServer
 	constructor: () ->
@@ -15,10 +16,9 @@ class PhantomWebSocketServer
 			console.log "Connecting to ws://127.0.0.1:#{portNumber} ..."
 			@socket.send "here!"
 			@socket.onmessage = (message) ->
-				console.log message
-				#command = JSON.parse message.data
-				#if command.Action?
-				#	@controller[command.Action].apply this, command.slice(1)
+				command = JSON.parse message.data
+				if command.Action?
+					@controller[command.Action].apply this, command.slice(1)
 
 	throw: (errorMessage) ->
 		console.log errorMessage
@@ -28,11 +28,27 @@ class PhantomBrowserController
 	constructor: (@owner) ->
 
 	# Commands
+	Navigate: (url) ->
+		page.onLoadFinished = (status) ->
+			@socket.send JSON.stringify({ Response: "ActionCompleted" })
+
+		page.open url
+
 	Find: (selector) ->
+		domElement = page.evaluate ->
+			document.querySelector(selector)
+
+		@socket.send JSON.stringify({ Response: "ActionCompleted", Element: domElement })
 
 	FindMultiple: (selector) ->
+		domElement = page.evaluate ->
+			document.querySelectorAll(selector)
+
+		@socket.send JSON.stringify({ Response: "ActionCompleted", Element: domElement })
 
 	Click: (selector, x, y) ->
+		page.evaluate ->
+			document.querySelector(selector)
 
 	Hover: (select, x, y) ->
 

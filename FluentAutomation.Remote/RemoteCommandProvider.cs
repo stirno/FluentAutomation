@@ -24,7 +24,6 @@ namespace FluentAutomation
             this.webSocket.Connect();
             this.webSocket.OnMessage += (object sender, string eventdata) =>
             {
-                Console.WriteLine(eventdata);
                 var messageData = JObject.Parse(eventdata);
                 if (messageData["ExceptionType"] != null) {
                     var exceptionType = messageData["ExceptionType"].ToString();

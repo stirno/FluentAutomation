@@ -29,6 +29,13 @@ namespace FluentAutomation.Tests
         }
 
         [Fact]
+        public void TestPhantom()
+        {
+            I.Open("http://knockoutjs.com/examples/cartEditor.html");
+            I.Expect.Text("$197.70").In(".liveExample");
+        }
+
+        [Fact]
         public void TestSelect()
         {
             I.Open("http://knockoutjs.com/examples/cartEditor.html");
