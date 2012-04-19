@@ -74,7 +74,7 @@ namespace FluentAutomation
             ProcessStartInfo startInfo = new ProcessStartInfo(filePath);
             startInfo.WorkingDirectory = Path.GetDirectoryName(workingDirectory);
             startInfo.CreateNoWindow = true;
-            startInfo.Arguments = "PhantomWebSocketServer.coffee " + portNumber.ToString();
+            startInfo.Arguments = "PhantomDriver.coffee " + portNumber.ToString();
             return Process.Start(startInfo);
         }
 
@@ -96,7 +96,7 @@ namespace FluentAutomation
             var containerAssembly = Assembly.GetAssembly(typeof(PhantomJS));
 
             unpackResource("phantomjs.exe", containerAssembly);
-            unpackResource("PhantomWebSocketServer.coffee", containerAssembly);
+            unpackResource("PhantomDriver.coffee", containerAssembly);
 
             return containerAssembly.CodeBase;
         }
