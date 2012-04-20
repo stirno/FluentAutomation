@@ -22,6 +22,7 @@ namespace FluentAutomation
 
         private IWebSocketConnection phantomConnection = null;
         private volatile bool isPhantomReady = false;
+        private JObject phantomResponse = null;
 
         public CommandProvider()
         {
@@ -52,6 +53,7 @@ namespace FluentAutomation
                     var messageData = JObject.Parse(message);
                     if (messageData["Response"] != null)
                     {
+                        this.phantomResponse = messageData["Result"] as JObject;
                         this.isPhantomReady = true;
                     }
                 };
@@ -121,14 +123,15 @@ namespace FluentAutomation
         {
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "Find", Selector = selector }));
             this.waitForPhantomReady();
-            return () => new Element(selector);
+
+            return () => new Element(this.phantomResponse);
         }
 
         public Func<IEnumerable<IElement>> FindMultiple(string selector)
         {
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "FindMultiple", Selector = selector }));
             this.waitForPhantomReady();
-            return () => new List<IElement>() { new Element(selector) };
+            return () => new List<IElement>() { new Element(this.phantomResponse) };
         }
 
         public void Click(int x, int y)

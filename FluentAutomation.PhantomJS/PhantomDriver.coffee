@@ -50,14 +50,28 @@ class PhantomBrowserController
 		selector = command.selector
 
 		fn = ->
-			$( 'SELECTOR' )
-		fnStr = fn.toString().replace( 'SELECTOR', selector )
-		domElement = page.evaluate fnStr
-		
-		element = ""
-		element = selector if domElement?
+			parseAttributes = (el) ->
+				results = []
+				for attr in el.attributes
+					results.push { Name: attr.name, Value: attr.value }
 
-		@owner.socket.send JSON.stringify({ Response: "ActionCompleted", Element: element })
+				return results
+
+			elem = $('SELECTOR')
+			if elem.length == 1
+				return { Selector: 'SELECTOR', Html: elem.html(), Attributes: parseAttributes(elem[0]), Value: elem.val(), Text: elem.text(), TagName: elem[0].tagName }
+			else if elem.length == 0
+				return null
+			else
+				result = []
+				for el in elem
+					result.push { Selector: 'SELECTOR', Html: el.html(), Attributes: parseAttributes(el[0]), Value: el.val(), Text: el.text(), TagName: el[0].tagName }
+				return result
+
+		fnStr = fn.toString().replace(/SELECTOR/g, selector)
+		evalResult = page.evaluate fnStr
+	
+		@owner.socket.send JSON.stringify({ Response: "ActionCompleted", Result: evalResult })
 
 	FindMultiple: (command) ->
 		@Find(command)
