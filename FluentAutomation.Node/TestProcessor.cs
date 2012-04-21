@@ -184,6 +184,15 @@ namespace FluentAutomation.Node
         }
         #endregion
 
+        #region Focus
+        [BindingSignature(BindingType.Action, "Focus", "Selector")]
+        public void FocusSelector(JToken action)
+        {
+            var t = ToType(action, new { Selector = "" });
+            this.commandProvider.Focus(this.commandProvider.Find(t.Selector));
+        }
+        #endregion
+
         #region Drag/Drop
         [BindingSignature(BindingType.Action, "DragAndDrop", "SourceSelector", "TargetSelector")]
         public void DragAndDrop(JToken action)
