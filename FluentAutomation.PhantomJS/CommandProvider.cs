@@ -58,8 +58,12 @@ namespace FluentAutomation
                     var messageData = JObject.Parse(message);
                     if (messageData["Response"] != null)
                     {
-                        this.phantomStringResult = messageData["Result"].ToString();
-                        this.phantomJsonResult = messageData["Result"] as JObject;
+                        if (messageData["Result"] != null)
+                        {
+                            this.phantomStringResult = messageData["Result"].ToString();
+                            this.phantomJsonResult = messageData["Result"] as JObject;
+                        }
+
                         this.isPhantomReady = true;
                     }
                 };
