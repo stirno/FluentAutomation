@@ -30,6 +30,7 @@ class PhantomDriver
 
 	throw: (errorMessage) ->
 		console.log errorMessage
+		@owner.socket.send JSON.stringify({ ErrorMessage: errorMessage })
 		#phantom.exit()
 
 class PhantomBrowserController
@@ -41,7 +42,7 @@ class PhantomBrowserController
 		url = command.url
 
 		page.onLoadFinished = (status) =>
-			@InjectSizzle()
+			@IncludeJQuery()
 			@owner.socket.send JSON.stringify({ Response: "ActionCompleted" })
 
 		page.open url
@@ -54,7 +55,6 @@ class PhantomBrowserController
 				results = []
 				for attr in el.attributes
 					results.push { Name: attr.name, Value: attr.value }
-
 				return results
 
 			elem = $('SELECTOR')
@@ -65,7 +65,8 @@ class PhantomBrowserController
 			else
 				result = []
 				for el in elem
-					result.push { Selector: 'SELECTOR', Html: el.html(), Attributes: parseAttributes(el[0]), Value: el.val(), Text: el.text(), TagName: el[0].tagName }
+					$el = $(el)
+					result.push { Selector: 'SELECTOR', Html: $el.html(), Attributes: parseAttributes( el ), Value: $el.val(), Text: $el.text(), TagName: el.tagName }
 				return result
 
 		fnStr = fn.toString().replace(/SELECTOR/g, selector)
@@ -77,25 +78,40 @@ class PhantomBrowserController
 		@Find(command)
 
 	Click: (command) ->
-		selector = command.selector if command.selector?
-		x = command.x if command.y?
-		y = command.y if command.x?
+		selector = command.selector if command.selector isnt ""
+		x = if command.x? then parseInt command.x else 0
+		y = if command.y? then parseInt command.y else 0
 
-		@owner.throw "NotImplementedException"
+		offset = { top:0, left:0 }
+		if selector?
+			fn = ->
+				offset = $('SELECTOR').offset()
+			offset = page.evaluate fn.toString().replace( 'SELECTOR', selector )
+
+		page.sendEvent 'mousemove', offset.left+x, offset.top+y
+		page.sendEvent 'click', offset.left+x, offset.top+y
+
+		@owner.socket.send JSON.stringify({ Response: "ActionCompleted" })
+		
 
 	Hover: (command) ->
-		selector = command.selector if command.selector?
-		x = command.x if command.y?
-		y = command.y if command.x?
+		selector = command.selector if command.selector isnt ""
+		x = if command.x? then parseInt command.x else 0
+		y = if command.y? then parseInt command.y else 0
 
-		@owner.throw "NotImplementedException"
+		offset = { top:0, left:0 }
+		if selector?
+			fn = ->
+				offset = $('SELECTOR').offset()
+			offset = page.evaluate fn.toString().replace( 'SELECTOR', selector )
+
+		page.sendEvent 'mousemove', offset.left+x, offset.top+y
+
+		@owner.socket.send JSON.stringify({ Response: "ActionCompleted" })
+
 
 	Focus: (command) ->
-		selector = command.selector if command.selector?
-		x = command.x if command.y?
-		y = command.y if command.x?
-
-		@owner.throw "NotImplementedException"
+		@Click command
 
 	DragAndDrop: (command) ->
 		sourceSelector = command.sourceselector
@@ -115,23 +131,81 @@ class PhantomBrowserController
 
 		@owner.socket.send JSON.stringify({ Response: "ActionCompleted" })
 
-	SelectText: (selector, text) ->
-		@owner.throw "NotImplementedException"
+	SelectText: (command) ->
+		selector = command.selector if command.selector?
+		text = command.text if command.text?
 
-	SelectValue: (selector, value) ->
-		@owner.throw "NotImplementedException"
+		fn = ->
+			success = false
+			$('SELECTOR option').each ->
+				if $(this).text() is 'TEXT'
+					$(this).attr('selected','selected')
+					success = true
+			return success
+		success = page.evaluate fn.toString().replace( 'SELECTOR', selector ).replace( 'TEXT', text )
 
-	SelectIndex: (selector, index) ->
-		@owner.throw "NotImplementedException"
+		if !success 
+			@owner.throw "Could not find option"
 
-	TakeScreenshot: (fileName) ->
-		@owner.throw "NotImplementedException"
+		@owner.socket.send JSON.stringify({ Response: "ActionCompleted" })
 
-	Wait: ->
-		@owner.throw "NotImplementedException"
 
-	WaitMilliseconds: (milliseconds) ->
-		@owner.throw "NotImplementedException"
+	SelectValue: (command) ->
+		selector = command.selector if command.selector?
+		value = command.value if command.value?
+
+		fn = ->
+			success = false
+			$('SELECTOR option').each ->
+				if $(this).val() is 'VALUE'
+					$(this).attr('selected','selected')
+					success = true
+			return success
+		success = page.evaluate fn.toString().replace( 'SELECTOR', selector ).replace( 'VALUE', value )
+
+		if !success 
+			@owner.throw "Could not find option"
+
+		@owner.socket.send JSON.stringify({ Response: "ActionCompleted" })
+
+	SelectIndex: (command) ->
+		selector = command.selector if command.selector?
+		index = command.index if command.index?
+
+		fn = ->
+			opt = $('SELECTOR option:eq(INDEX)')
+			opt.attr('selected','selected')
+			if opt.length > 0 then true else false
+		success = page.evaluate fn.toString().replace( 'SELECTOR', selector ).replace( 'INDEX', index )
+
+		if !success 
+			@owner.throw "Could not find option"
+
+		@owner.socket.send JSON.stringify({ Response: "ActionCompleted" })
+
+	TakeScreenshot: (command) ->
+		fs = require 'fs'
+		filename = new Date().getTime() + 'screenshot.png'
+		page.render filename
+		@owner.socket.send JSON.stringify({ Response: "ActionCompleted", Result: filename })
+
+	Wait: (command) ->
+		# Note this is currently implemented by the CommandProvider
+		seconds = command.seconds if command.seconds?
+		console.log "Waiting #{seconds} seconds"
+		fn = =>
+			console.log "Wait complete"
+			@owner.socket.send JSON.stringify({ Response: "ActionCompleted" })
+		setInterval fn, (seconds * 1000)
+
+	WaitMilliseconds: (command) ->
+		# Note this is currently implemented by the CommandProvider
+		milliseconds = command.milliseconds if command.milliseconds?
+		console.log "Waiting #{milliseconds} milliseconds"
+		fn = =>
+			console.log "Wait complete"
+			@owner.socket.send JSON.stringify({ Response: "ActionCompleted" })
+		setInterval fn, milliseconds
 
 	Press: (keys) ->
 		@owner.throw "NotImplementedException"
@@ -139,7 +213,7 @@ class PhantomBrowserController
 	Type: (text) ->
 		@owner.throw "NotImplementedException"
 
-	InjectSizzle: () ->
+	IncludeJQuery: () ->
 		page.includeJs "http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"
 
 new PhantomDriver()

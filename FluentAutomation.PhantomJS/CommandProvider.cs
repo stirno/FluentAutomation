@@ -182,7 +182,7 @@ namespace FluentAutomation
 
         public void Focus(Func<IElement> element)
         {
-            this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "Focus", Selector = element().Selector, X = 0, Y = 0 }));
+            this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "Focus", Selector = element().Selector }));
             this.waitForPhantomReady();
         }
 
