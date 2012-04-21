@@ -21,7 +21,7 @@ namespace FluentAutomation
 
         public void CssClass(string selector, string className)
         {
-            this.commandProvider.Act(new { Expect = "CssClass", Selector = selector, ClassName = className });
+            this.commandProvider.Act(new { Expect = "CssClass", Selector = selector, CssClass = className });
         }
 
         public void Text(string selector, string text)

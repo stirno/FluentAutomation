@@ -128,6 +128,7 @@ namespace FluentAutomation.Node
         {
             return JsonConvert.DeserializeAnonymousType(action.ToString(), type);
         }
+
         #region Action Methods
 
         [BindingSignature(BindingType.Action, "Navigate", "Url")]

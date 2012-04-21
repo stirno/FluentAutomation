@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
 using Fleck;
+using FluentAutomation.Exceptions;
 using FluentAutomation.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -16,6 +18,7 @@ namespace FluentAutomation
 {
     public class CommandProvider : BaseCommandProvider, ICommandProvider, IDisposable
     {
+        private readonly IFileStoreProvider fileStoreProvider = null;
         private readonly IWebSocketServer phantomWebSocket = null;
         private readonly int portNumber = -1;
         private readonly Process phantomProcess = null;
@@ -24,8 +27,9 @@ namespace FluentAutomation
         private volatile bool isPhantomReady = false;
         private JObject phantomResponse = null;
 
-        public CommandProvider()
+        public CommandProvider(IFileStoreProvider fileStoreProvider)
         {
+            this.fileStoreProvider = fileStoreProvider;
             this.portNumber = this.getRandomUnusedPort();
             this.phantomWebSocket = new WebSocketServer(string.Format("ws://0.0.0.0:{0}", this.portNumber));
             this.OpenPhantomWebSocket();
@@ -228,6 +232,8 @@ namespace FluentAutomation
         {
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "TakeScreenshot", FileName = screenshotName }));
             this.waitForPhantomReady();
+
+            this.fileStoreProvider.SaveScreenshot(Convert.FromBase64String(this.phantomResponse["Data"].ToString()), screenshotName);
         }
 
         public void UploadFile(Func<IElement> element, int x, int y, string fileName)
@@ -250,24 +256,77 @@ namespace FluentAutomation
             this.Act(() => System.Threading.Thread.Sleep(timeSpan));
         }
 
-        public void WaitUntil(System.Linq.Expressions.Expression<Func<bool>> conditionFunc)
+        public void WaitUntil(Expression<Func<bool>> conditionFunc)
         {
-            throw new NotImplementedException();
+            this.WaitUntil(conditionFunc, Settings.DefaultWaitUntilTimeout);
         }
 
-        public void WaitUntil(System.Linq.Expressions.Expression<Func<bool>> conditionFunc, TimeSpan timeout)
+        public void WaitUntil(Expression<Func<bool>> conditionFunc, TimeSpan timeout)
         {
-            throw new NotImplementedException();
+            this.Act(() =>
+            {
+                DateTime dateTimeTimeout = DateTime.Now.Add(timeout);
+                bool isFuncValid = false;
+                var compiledFunc = conditionFunc.Compile();
+
+                while (DateTime.Now < dateTimeTimeout)
+                {
+                    if (compiledFunc() == true)
+                    {
+                        isFuncValid = true;
+                        break;
+                    }
+
+                    System.Threading.Thread.Sleep(Settings.DefaultWaitUntilThreadSleep);
+                }
+
+                // If func is still not valid, assume we've hit the timeout.
+                if (isFuncValid == false)
+                {
+                    throw new FluentException("Conditional wait passed the timeout [{0}ms] for expression [{1}].", timeout.TotalMilliseconds, conditionFunc.ToExpressionString());
+                }
+            });
         }
 
-        public void WaitUntil(System.Linq.Expressions.Expression<Action> conditionAction)
+        public void WaitUntil(Expression<Action> conditionAction)
         {
-            throw new NotImplementedException();
+            this.WaitUntil(conditionAction, Settings.DefaultWaitUntilTimeout);
         }
 
-        public void WaitUntil(System.Linq.Expressions.Expression<Action> conditionAction, TimeSpan timeout)
+        public void WaitUntil(Expression<Action> conditionAction, TimeSpan timeout)
         {
-            throw new NotImplementedException();
+            this.Act(() =>
+            {
+                DateTime dateTimeTimeout = DateTime.Now.Add(timeout);
+                bool threwException = false;
+                var compiledAction = conditionAction.Compile();
+
+                while (DateTime.Now < dateTimeTimeout)
+                {
+                    try
+                    {
+                        threwException = false;
+                        compiledAction();
+                    }
+                    catch (FluentException)
+                    {
+                        threwException = true;
+                    }
+
+                    if (!threwException)
+                    {
+                        break;
+                    }
+
+                    System.Threading.Thread.Sleep(Settings.DefaultWaitUntilThreadSleep);
+                }
+
+                // If an exception was thrown the last loop, assume we hit the timeout
+                if (threwException == true)
+                {
+                    throw new FluentException("Conditional wait passed the timeout [{0}ms]", timeout.TotalMilliseconds, conditionAction.ToExpressionString());
+                }
+            });
         }
 
         public void Press(string keys)

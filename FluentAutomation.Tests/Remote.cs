@@ -29,6 +29,13 @@ namespace FluentAutomation.Tests
         }
 
         [Fact]
+        public void RunMyTests()
+        {
+            I.Open("http://localhost:41575/_cassette/jasmine/scripts/tests");
+            I.Expect.Class("passed").On("div.runner");
+        }
+
+        [Fact]
         public void TestPhantom()
         {
             I.Open("http://knockoutjs.com/examples/cartEditor.html");

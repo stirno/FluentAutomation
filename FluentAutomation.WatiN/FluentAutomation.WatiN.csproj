@@ -9,11 +9,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FluentAutomation.WatiN</RootNamespace>
     <AssemblyName>FluentAutomation.WatiN</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,7 +39,6 @@
     </Reference>
     <Reference Include="Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <Private>True</Private>
       <HintPath>..\packages\WatiN.2.1.0\lib\net40\Microsoft.mshtml.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -62,7 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FluentAutomation\FluentAutomation.csproj">
-      <Project>{07d8de59-3deb-4722-b093-6fcc0b0f7fff}</Project>
+      <Project>{07D8DE59-3DEB-4722-B093-6FCC0B0F7FFF}</Project>
       <Name>FluentAutomation</Name>
     </ProjectReference>
   </ItemGroup>
