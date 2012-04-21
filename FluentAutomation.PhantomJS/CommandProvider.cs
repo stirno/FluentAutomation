@@ -239,7 +239,7 @@ namespace FluentAutomation
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "TakeScreenshot", FileName = screenshotName }));
             this.waitForPhantomReady();
 
-            this.fileStoreProvider.SaveScreenshot(Convert.FromBase64String(this.phantomStringResult), screenshotName);
+            this.fileStoreProvider.SaveScreenshot(File.ReadAllBytes(this.phantomStringResult), screenshotName);
         }
 
         public void UploadFile(Func<IElement> element, int x, int y, string fileName)
