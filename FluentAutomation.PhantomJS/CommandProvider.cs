@@ -25,7 +25,8 @@ namespace FluentAutomation
 
         private IWebSocketConnection phantomConnection = null;
         private volatile bool isPhantomReady = false;
-        private JObject phantomResponse = null;
+        private JObject phantomJsonResult = null;
+        private string phantomStringResult = null;
 
         public CommandProvider(IFileStoreProvider fileStoreProvider)
         {
@@ -57,12 +58,8 @@ namespace FluentAutomation
                     var messageData = JObject.Parse(message);
                     if (messageData["Response"] != null)
                     {
-                        this.phantomResponse = messageData["Result"] as JObject;
-                        if (this.phantomResponse == null && messageData["Result"] != null)
-                        {
-                            this.phantomResponse = JObject.FromObject(messageData["Result"].ToString());
-                        }
-
+                        this.phantomStringResult = messageData["Result"].ToString();
+                        this.phantomJsonResult = messageData["Result"] as JObject;
                         this.isPhantomReady = true;
                     }
                 };
@@ -133,14 +130,14 @@ namespace FluentAutomation
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "Find", Selector = selector }));
             this.waitForPhantomReady();
 
-            return () => new Element(this.phantomResponse);
+            return () => new Element(this.phantomJsonResult);
         }
 
         public Func<IEnumerable<IElement>> FindMultiple(string selector)
         {
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "FindMultiple", Selector = selector }));
             this.waitForPhantomReady();
-            return () => new List<IElement>() { new Element(this.phantomResponse) };
+            return () => new List<IElement>() { new Element(this.phantomJsonResult) };
         }
 
         public void Click(int x, int y)
@@ -238,7 +235,7 @@ namespace FluentAutomation
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "TakeScreenshot", FileName = screenshotName }));
             this.waitForPhantomReady();
 
-            this.fileStoreProvider.SaveScreenshot(Convert.FromBase64String(this.phantomResponse.ToString()), screenshotName);
+            this.fileStoreProvider.SaveScreenshot(Convert.FromBase64String(this.phantomStringResult), screenshotName);
         }
 
         public void UploadFile(Func<IElement> element, int x, int y, string fileName)
