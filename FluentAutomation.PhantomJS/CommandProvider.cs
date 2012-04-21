@@ -58,6 +58,11 @@ namespace FluentAutomation
                     if (messageData["Response"] != null)
                     {
                         this.phantomResponse = messageData["Result"] as JObject;
+                        if (this.phantomResponse == null && messageData["Result"] != null)
+                        {
+                            this.phantomResponse = JObject.FromObject(messageData["Result"].ToString());
+                        }
+
                         this.isPhantomReady = true;
                     }
                 };
