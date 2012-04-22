@@ -208,8 +208,15 @@ namespace FluentAutomation
 
         public string Get(string name)
         {
-            var attributeValue = automationElement.GetAttributeValue(name);
-            return attributeValue;
+            if (name.ToLower() == "class")
+            {
+                return automationElement.ClassName;
+            }
+            else
+            {
+                var attributeValue = automationElement.GetAttributeValue(name);
+                return attributeValue;
+            }
         }
     }
 }

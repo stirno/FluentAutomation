@@ -20,13 +20,13 @@ namespace FluentAutomation.Tests
             this.interactive.I.Expect.Url("http://automation.apphb.com/interactive");
         }
 
-        [Fact]
+        [Fact(Skip = "Bad phantom does bad things")]
         public void Autocomplete_ExpectedResult()
         {
             this.forms.Autocomplete_ExpectedResult();
         }
 
-        [Fact]
+        [Fact(Skip="Bad phantom does bad things")]
         public void CartEditor_BuyMotorcycles()
         {
             this.forms.CartEditor_BuyMotorcycles();

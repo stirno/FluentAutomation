@@ -95,6 +95,7 @@ namespace FluentAutomation
                     .MoveToElement(rootElement.WebElement)
                     .MoveByOffset(x, y)
                     .Click()
+                    .Build()
                     .Perform();
             });
         }
@@ -108,6 +109,7 @@ namespace FluentAutomation
                     .MoveToElement(containerElement.WebElement)
                     .MoveByOffset(x, y)
                     .Click()
+                    .Build()
                     .Perform();
             });
         }
@@ -130,6 +132,7 @@ namespace FluentAutomation
                     .MoveToElement(rootElement.WebElement)
                     .MoveByOffset(x, y)
                     .DoubleClick()
+                    .Build()
                     .Perform();
             });
         }
@@ -143,6 +146,7 @@ namespace FluentAutomation
                     .MoveToElement(containerElement.WebElement)
                     .MoveByOffset(x, y)
                     .DoubleClick()
+                    .Build()
                     .Perform();
             });
         }
@@ -155,6 +159,7 @@ namespace FluentAutomation
                 new Actions(this.webDriver)
                     .MoveToElement(containerElement.WebElement)
                     .DoubleClick()
+                    .Build()
                     .Perform();
             });
         }
@@ -166,6 +171,7 @@ namespace FluentAutomation
                 var containerElement = element() as Element;
                 new Actions(this.webDriver)
                     .ContextClick(containerElement.WebElement)
+                    .Build()
                     .Perform();
             });
         }
@@ -178,6 +184,7 @@ namespace FluentAutomation
                 new Actions(this.webDriver)
                     .MoveToElement(rootElement.WebElement)
                     .MoveByOffset(x, y)
+                    .Build()
                     .Perform();
             });
         }
@@ -190,6 +197,7 @@ namespace FluentAutomation
                 new Actions(this.webDriver)
                     .MoveToElement(containerElement.WebElement)
                     .MoveByOffset(x, y)
+                    .Build()
                     .Perform();
             });
         }
@@ -201,6 +209,7 @@ namespace FluentAutomation
                 var unwrappedElement = element() as Element;
                 new Actions(this.webDriver)
                     .MoveToElement(unwrappedElement.WebElement)
+                    .Build()
                     .Perform();
             });
         }
@@ -235,6 +244,7 @@ namespace FluentAutomation
 
                 new Actions(this.webDriver)
                     .DragAndDrop(unwrappedSource.WebElement, unwrappedTarget.WebElement)
+                    .Build()
                     .Perform();
             });
         }

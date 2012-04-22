@@ -101,6 +101,7 @@ namespace FluentAutomation
         public void DoubleClick(int x, int y)
         {
             FluentAutomation.MouseControl.Click(x, y);
+            System.Threading.Thread.Sleep(30);
             FluentAutomation.MouseControl.Click(x, y);
         }
 
@@ -108,19 +109,20 @@ namespace FluentAutomation
         {
             var el = element() as Element;
             FluentAutomation.MouseControl.Click(el.PosX + x, el.PosY + y);
+            System.Threading.Thread.Sleep(30);
             FluentAutomation.MouseControl.Click(el.PosX + x, el.PosY + y);
         }
 
         public void DoubleClick(Func<IElement> element)
         {
             var el = element() as Element;
-            el.AutomationElement.DoubleClick();
+            this.browser.DomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).dblclick(); }}", el.AutomationElement.GetJavascriptElementReference()));
         }
 
         public void RightClick(Func<IElement> element)
         {
-            var containerElement = element() as Element;
-            containerElement.AutomationElement.FireEvent("oncontextmenu");
+            var el = element() as Element;
+            this.browser.DomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).trigger('contextmenu'); }}", el.AutomationElement.GetJavascriptElementReference()));
         }
 
         public void Hover(int x, int y)
