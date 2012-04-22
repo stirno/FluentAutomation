@@ -15,10 +15,10 @@ namespace FluentAutomation
             this.tagName = data["TagName"].ToString();
             this.value = data["Value"].ToString();
             this.text = data["Text"].ToString();
-            this.posX = Convert.ToInt32(data["PosX"]);
-            this.posY = Convert.ToInt32(data["PosY"]);
-            this.width = Convert.ToInt32(data["Width"]);
-            this.height = Convert.ToInt32(data["Height"]);
+            this.posX = Convert.ToInt32(data["PosX"].ToString());
+            this.posY = Convert.ToInt32(data["PosY"].ToString());
+            this.width = Convert.ToInt32(data["Width"].ToString());
+            this.height = Convert.ToInt32(data["Height"].ToString());
 
             this.attributes = new ElementAttributeSelector(data["Attributes"] as JArray);
         }
