@@ -508,7 +508,7 @@ namespace FluentAutomation
         public void Url(Uri expectedUrl)
         {
             this.commandProvider.Act(() => {
-                if (expectedUrl.ToString().Equals(this.commandProvider.Url.ToString(), StringComparison.InvariantCultureIgnoreCase))
+                if (!expectedUrl.ToString().Equals(this.commandProvider.Url.ToString(), StringComparison.InvariantCultureIgnoreCase))
                 {
                     throw new FluentExpectFailedException("Expected URL to match [{0}] but it was actually [{1}].", expectedUrl.ToString(), this.commandProvider.Url.ToString());
                 }
