@@ -6,7 +6,7 @@ using Xunit;
 
 namespace FluentAutomation.Tests.Remote
 {
-    class Node : IDisposable
+    public class Node : IDisposable
     {
         private Lazy<InteractiveRemote> interactiveFactory = new Lazy<InteractiveRemote>(() => new InteractiveRemote());
         protected InteractiveRemote interactive { get { return interactiveFactory.Value; } }

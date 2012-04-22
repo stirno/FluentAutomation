@@ -6,7 +6,7 @@ using Xunit;
 
 namespace FluentAutomation.Tests
 {
-    class PhantomJS : RepeatableNativeTest
+    public class PhantomJS : RepeatableNativeTest
     {
         public PhantomJS()
         {
