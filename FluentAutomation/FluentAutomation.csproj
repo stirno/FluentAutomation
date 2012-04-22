@@ -44,6 +44,7 @@
     <Compile Include="ActionSyntaxProvider.cs" />
     <Compile Include="BaseCommandProvider.cs" />
     <Compile Include="BaseFluentTest.cs" />
+    <Compile Include="EmbeddedResources.cs" />
     <Compile Include="ExpectProvider.cs" />
     <Compile Include="Exceptions\FluentException.cs" />
     <Compile Include="Exceptions\FluentExpectFailedException.cs" />

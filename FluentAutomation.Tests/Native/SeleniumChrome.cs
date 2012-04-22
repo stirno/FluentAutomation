@@ -5,11 +5,11 @@ using Xunit;
 
 namespace Tests
 {
-    public class Selenium : RepeatableNativeTest
+    public class SeleniumChrome : RepeatableNativeTest
     {
-        public Selenium()
+        public SeleniumChrome()
         {
-            FluentAutomation.SeleniumWebDriver.Bootstrap(SeleniumWebDriver.Browser.Firefox);
+            FluentAutomation.SeleniumWebDriver.Bootstrap(SeleniumWebDriver.Browser.Chrome);
         }
 
         [Fact]

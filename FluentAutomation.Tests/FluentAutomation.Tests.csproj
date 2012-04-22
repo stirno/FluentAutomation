@@ -48,13 +48,15 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Native\SeleniumChrome.cs" />
+    <Compile Include="Native\SeleniumFirefox.cs" />
     <Compile Include="Native\FormsNative.cs" />
     <Compile Include="Native\InteractiveNative.cs" />
     <Compile Include="Native\PhantomJS.cs" />
     <Compile Include="Remote\FormsRemote.cs" />
     <Compile Include="Remote\InteractiveRemote.cs" />
     <Compile Include="Native\RepeatableNativeTest.cs" />
-    <Compile Include="Native\Selenium.cs" />
+    <Compile Include="Native\SeleniumIE.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Native\WatiN.cs" />
     <Compile Include="Remote\Node.cs" />

@@ -92,23 +92,10 @@ namespace FluentAutomation
 
         private static string UnpackResources()
         {
-            var unpackResource = new Action<string, Assembly>((resourceFileName, assembly) =>
-            {
-                var resourceName = assembly.GetManifestResourceNames().FirstOrDefault(x => x.EndsWith(resourceFileName));
-                if (!File.Exists(resourceFileName))
-                {
-                    var resourceStream = assembly.GetManifestResourceStream(resourceName);
-                    var resourceBytes = new byte[(int)resourceStream.Length];
-
-                    resourceStream.Read(resourceBytes, 0, resourceBytes.Length);
-                    File.WriteAllBytes(resourceFileName, resourceBytes);
-                }
-            });
-
             var containerAssembly = Assembly.GetAssembly(typeof(PhantomJS));
 
-            unpackResource("phantomjs.exe", containerAssembly);
-            unpackResource("PhantomDriver.coffee", containerAssembly);
+            EmbeddedResources.UnpackFromAssembly("phantomjs.exe", containerAssembly);
+            EmbeddedResources.UnpackFromAssembly("PhantomDriver.coffee", containerAssembly);
 
             return containerAssembly.CodeBase;
         }

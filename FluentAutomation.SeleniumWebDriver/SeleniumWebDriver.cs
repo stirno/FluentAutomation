@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAutomation.Interfaces;
@@ -43,6 +44,7 @@ namespace FluentAutomation
                         container.Register<IWebDriver, OpenQA.Selenium.Firefox.FirefoxDriver>().AsMultiInstance();
                         break;
                     case Browser.Chrome:
+                        EmbeddedResources.UnpackFromAssembly("chromedriver.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
                         container.Register<IWebDriver, OpenQA.Selenium.Chrome.ChromeDriver>().AsMultiInstance();
                         break;
                 }
