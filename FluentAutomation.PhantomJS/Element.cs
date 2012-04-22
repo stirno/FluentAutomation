@@ -15,6 +15,11 @@ namespace FluentAutomation
             this.tagName = data["TagName"].ToString();
             this.value = data["Value"].ToString();
             this.text = data["Text"].ToString();
+            this.posX = Convert.ToInt32(data["PosX"]);
+            this.posY = Convert.ToInt32(data["PosY"]);
+            this.width = Convert.ToInt32(data["Width"]);
+            this.height = Convert.ToInt32(data["Height"]);
+
             this.attributes = new ElementAttributeSelector(data["Attributes"] as JArray);
         }
 
@@ -107,6 +112,30 @@ namespace FluentAutomation
                     return false;
                 }
             }
+        }
+
+        private int posX = -1;
+        public int PosX
+        {
+            get { return posX; }
+        }
+
+        private int posY = -1;
+        public int PosY
+        {
+            get { return posY; }
+        }
+
+        private int width = -1;
+        public int Width
+        {
+            get { return width; }
+        }
+
+        private int height = -1;
+        public int Height
+        {
+            get { return height; }
         }
     }
 

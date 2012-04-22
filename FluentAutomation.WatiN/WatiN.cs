@@ -27,10 +27,13 @@ namespace FluentAutomation
         {
             WatiN.SelectedBrowser = browser;
 
-            TinyIoC.TinyIoCContainer.Current.Register<IExpectProvider, ExpectProvider>();
-            TinyIoC.TinyIoCContainer.Current.Register<ICommandProvider, CommandProvider>();
-            TinyIoC.TinyIoCContainer.Current.Register<IFileStoreProvider, LocalFileStoreProvider>();
-            TinyIoC.TinyIoCContainer.Current.Register<WatiNCore.Browser, WatiNCore.IE>().UsingConstructor(() => new WatiNCore.IE());
+            FluentAutomation.Settings.Registration = (container) =>
+            {
+                container.Register<IExpectProvider, ExpectProvider>();
+                container.Register<ICommandProvider, CommandProvider>();
+                container.Register<IFileStoreProvider, LocalFileStoreProvider>();
+                container.Register<WatiNCore.IE>().UsingConstructor(() => new WatiNCore.IE());
+            };
         }
     }
 }

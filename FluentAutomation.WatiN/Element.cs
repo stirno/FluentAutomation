@@ -11,16 +11,19 @@ namespace FluentAutomation
     public class Element : IElement
     {
         private string selector = null;
+        private Tuple<int, int, int, int> bounds = null;
 
-        public Element(WatiNCore.Element automationElement)
+        public Element(WatiNCore.Element automationElement) : this(automationElement, null)
         {
-            this.AutomationElement = automationElement;
         }
 
         public Element(WatiNCore.Element automationElement, string selector)
         {
             this.AutomationElement = automationElement;
             this.selector = selector;
+
+            var nativeBounds = automationElement.NativeElement.GetElementBounds();
+            this.bounds = new Tuple<int, int, int, int>(nativeBounds.Left, nativeBounds.Top, nativeBounds.Size.Width, nativeBounds.Size.Height);
         }
 
         public WatiNCore.Element AutomationElement { get; set; }
@@ -115,7 +118,7 @@ namespace FluentAutomation
             get
             {
                 bool isText = false;
-                switch (this.TagName)
+                switch (this.TagName.ToLower())
                 {
                     case "input":
                         switch (this.Attributes.Get("type").ToLower())
@@ -158,6 +161,38 @@ namespace FluentAutomation
                 {
                     return false;
                 }
+            }
+        }
+
+        public int Height
+        {
+            get
+            {
+                return this.bounds.Item4;
+            }
+        }
+
+        public int Width
+        {
+            get
+            {
+                return this.bounds.Item3;
+            }
+        }
+
+        public int PosX
+        {
+            get
+            {
+                return this.bounds.Item1;
+            }
+        }
+
+        public int PosY
+        {
+            get
+            {
+                return this.bounds.Item2;
             }
         }
     }

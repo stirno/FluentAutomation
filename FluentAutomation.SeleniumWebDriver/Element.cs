@@ -161,6 +161,38 @@ namespace FluentAutomation
         }
 
         public IWebElement WebElement { get; set; }
+
+        public int Height
+        {
+            get
+            {
+                return this.WebElement.Size.Height;
+            }
+        }
+
+        public int Width
+        {
+            get
+            {
+                return this.WebElement.Size.Width;
+            }
+        }
+
+        public int PosX
+        {
+            get
+            {
+                return this.WebElement.Location.X;
+            }
+        }
+
+        public int PosY
+        {
+            get
+            {
+                return this.WebElement.Location.Y;
+            }
+        }
     }
 
     public class ElementAttributeSelector : IElementAttributeSelector

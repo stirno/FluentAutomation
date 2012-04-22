@@ -21,6 +21,11 @@ namespace FluentAutomation.Interfaces
         bool IsText { get; }
         bool IsSelect { get; }
         bool IsMultipleSelect { get; }
+
+        int PosX { get; }
+        int PosY { get; }
+        int Width { get; }
+        int Height { get; }
     }
 
     public interface IElementAttributeSelector
