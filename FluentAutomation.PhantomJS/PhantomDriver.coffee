@@ -58,20 +58,42 @@ class PhantomBrowserController
 				return results
 
 			elem = $('SELECTOR')
+
 			if elem.length == 1
-				return { Selector: 'SELECTOR', Html: elem.html(), Attributes: parseAttributes(elem[0]), Value: elem.val(), Text: elem.text(), TagName: elem[0].tagName }
+				result =
+					Selector: 'SELECTOR'
+					Html: elem.html()
+					Attributes: parseAttributes elem[0]
+					Value: elem.val()
+					Text: elem.text()
+					TagName: elem[0].tagName
+					PosX: elem.offset().left
+					PosY: elem.offset().top
+					Width: elem.width()
+					Height: elem.height()
+
 			else if elem.length == 0
-				return null
+				result = null
+
 			else
 				result = []
 				for el in elem
 					$el = $(el)
-					result.push { Selector: 'SELECTOR', Html: $el.html(), Attributes: parseAttributes( el ), Value: $el.val(), Text: $el.text(), TagName: el.tagName }
-				return result
+					result.push
+						Selector: 'SELECTOR'
+						Html: $el.html()
+						Attributes: parseAttributes el
+						Value: $el.val()
+						Text: $el.text()
+						TagName: el.tagName
+						PosX: $el.offset().left
+						PosY: $el.offset().top
+						Width: $el.width()
+						Height: $el.height()
+			return result
 
 		fnStr = fn.toString().replace(/SELECTOR/g, selector)
 		evalResult = page.evaluate fnStr
-	
 		@owner.socket.send JSON.stringify({ Response: "ActionCompleted", Result: evalResult })
 
 	FindMultiple: (command) ->
