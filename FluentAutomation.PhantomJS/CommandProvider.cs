@@ -163,6 +163,30 @@ namespace FluentAutomation
             this.waitForPhantomReady();
         }
 
+        public void DoubleClick(int x, int y)
+        {
+            this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "DoubleClick", Selector = "", X = x, Y = y }));
+            this.waitForPhantomReady();
+        }
+
+        public void DoubleClick(Func<IElement> element, int x, int y)
+        {
+            this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "DoubleClick", Selector = element().Selector, X = x, Y = y }));
+            this.waitForPhantomReady();
+        }
+
+        public void DoubleClick(Func<IElement> element)
+        {
+            this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "DoubleClick", Selector = element().Selector, X = 0, Y = 0 }));
+            this.waitForPhantomReady();
+        }
+
+        public void RightClick(Func<IElement> element)
+        {
+            this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "RightClick", Selector = element().Selector }));
+            this.waitForPhantomReady();
+        }
+
         public void Hover(int x, int y)
         {
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "Hover", Selector = "", X = x, Y = y }));

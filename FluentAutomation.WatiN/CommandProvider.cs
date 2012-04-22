@@ -98,6 +98,31 @@ namespace FluentAutomation
             el.AutomationElement.Click();
         }
 
+        public void DoubleClick(int x, int y)
+        {
+            FluentAutomation.MouseControl.Click(x, y);
+            FluentAutomation.MouseControl.Click(x, y);
+        }
+
+        public void DoubleClick(Func<IElement> element, int x, int y)
+        {
+            var el = element() as Element;
+            FluentAutomation.MouseControl.Click(el.PosX + x, el.PosY + y);
+            FluentAutomation.MouseControl.Click(el.PosX + x, el.PosY + y);
+        }
+
+        public void DoubleClick(Func<IElement> element)
+        {
+            var el = element() as Element;
+            el.AutomationElement.DoubleClick();
+        }
+
+        public void RightClick(Func<IElement> element)
+        {
+            var containerElement = element() as Element;
+            containerElement.AutomationElement.FireEvent("oncontextmenu");
+        }
+
         public void Hover(int x, int y)
         {
             FluentAutomation.MouseControl.SetPosition(x, y);

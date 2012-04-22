@@ -138,7 +138,7 @@ namespace FluentAutomation.Node
             this.commandProvider.Navigate(new Uri(t.Url, UriKind.Absolute));
         }
 
-        #region Click
+        #region Click / DoubleClick / RightClick
         [BindingSignature(BindingType.Action, "Click", "Selector")]
         public void ClickSelector(JToken action)
         {
@@ -158,6 +158,34 @@ namespace FluentAutomation.Node
         {
             var t = ToType(action, new { Selector = "", X = 0, Y = 0 });
             this.commandProvider.Click(this.commandProvider.Find(t.Selector), t.X, t.Y);
+        }
+
+        [BindingSignature(BindingType.Action, "DoubleClick", "Selector")]
+        public void DoubleClickSelector(JToken action)
+        {
+            var t = ToType(action, new { Selector = "" });
+            this.commandProvider.DoubleClick(this.commandProvider.Find(t.Selector));
+        }
+
+        [BindingSignature(BindingType.Action, "DoubleClick", "X", "Y")]
+        public void DoubleClickCoords(JToken action)
+        {
+            var t = ToType(action, new { X = 0, Y = 0 });
+            this.commandProvider.DoubleClick(t.X, t.Y);
+        }
+
+        [BindingSignature(BindingType.Action, "DoubleClick", "Selector", "X", "Y")]
+        public void DoubleClickSelectorCoords(JToken action)
+        {
+            var t = ToType(action, new { Selector = "", X = 0, Y = 0 });
+            this.commandProvider.DoubleClick(this.commandProvider.Find(t.Selector), t.X, t.Y);
+        }
+        
+        [BindingSignature(BindingType.Action, "RightClick", "Selector")]
+        public void RightClickSelector(JToken action)
+        {
+            var t = ToType(action, new { Selector = "" });
+            this.commandProvider.RightClick(this.commandProvider.Find(t.Selector));
         }
         #endregion
 

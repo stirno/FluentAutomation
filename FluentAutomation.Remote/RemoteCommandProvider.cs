@@ -107,6 +107,26 @@ namespace FluentAutomation
             this.Act(new { Action = "Click", Selector = selector });
         }
 
+        public void DoubleClick(int x, int y)
+        {
+            this.Act(new { Action = "DoubleClick", X = x, Y = y });
+        }
+
+        public void DoubleClick(string selector, int x, int y)
+        {
+            this.Act(new { Action = "DoubleClick", Selector = selector, X = x, Y = y });
+        }
+
+        public void DoubleClick(string selector)
+        {
+            this.Act(new { Action = "DoubleClick", Selector = selector });
+        }
+
+        public void RightClick(string selector)
+        {
+            this.Act(new { Action = "RightClick", Selector = selector });
+        }
+
         public void Hover(int x, int y)
         {
             this.Act(new { Action = "Hover", X = x, Y = y });

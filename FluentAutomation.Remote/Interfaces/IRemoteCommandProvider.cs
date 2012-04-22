@@ -12,6 +12,10 @@ namespace FluentAutomation.Interfaces
         void Click(int x, int y);
         void Click(string selector, int x, int y);
         void Click(string selector);
+        void DoubleClick(int x, int y);
+        void DoubleClick(string selector, int x, int y);
+        void DoubleClick(string selector);
+        void RightClick(string selector);
 
         void Hover(int x, int y);
         void Hover(string selector, int x, int y);

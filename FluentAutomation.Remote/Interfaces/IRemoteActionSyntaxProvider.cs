@@ -10,6 +10,10 @@ namespace FluentAutomation.Interfaces
         void Click(int x, int y);
         void Click(string selector);
         void Click(string selector, int x, int y);
+        void DoubleClick(int x, int y);
+        void DoubleClick(string selector);
+        void DoubleClick(string selector, int x, int y);
+        void RightClick(string selector);
         RemoteActionSyntaxProvider.DragDropSyntaxProvider Drag(string selector);
         RemoteActionSyntaxProvider.TextEntrySyntaxProvider Enter(dynamic nonString);
         RemoteActionSyntaxProvider.TextEntrySyntaxProvider Enter(string text);

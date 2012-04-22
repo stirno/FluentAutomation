@@ -19,6 +19,12 @@ namespace FluentAutomation.Interfaces
         void Click(Func<IElement> element, int x, int y);
         void Click(Func<IElement> element);
 
+        void DoubleClick(int x, int y);
+        void DoubleClick(Func<IElement> element, int x, int y);
+        void DoubleClick(Func<IElement> element);
+
+        void RightClick(Func<IElement> element);
+
         void Hover(int x, int y);
         void Hover(Func<IElement> element, int x, int y);
         void Hover(Func<IElement> element);

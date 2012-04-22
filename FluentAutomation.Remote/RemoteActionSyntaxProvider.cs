@@ -33,6 +33,26 @@ namespace FluentAutomation
             this.commandProvider.Click(selector, x, y);
         }
 
+        public void DoubleClick(int x, int y)
+        {
+            this.commandProvider.DoubleClick(x, y);
+        }
+
+        public void DoubleClick(string selector)
+        {
+            this.commandProvider.DoubleClick(selector);
+        }
+
+        public void DoubleClick(string selector, int x, int y)
+        {
+            this.commandProvider.DoubleClick(selector, x, y);
+        }
+
+        public void RightClick(string selector)
+        {
+            this.commandProvider.RightClick(selector);
+        }
+
         public void Focus(string selector)
         {
             this.commandProvider.Focus(selector);

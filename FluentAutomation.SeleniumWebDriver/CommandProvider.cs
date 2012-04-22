@@ -121,6 +121,55 @@ namespace FluentAutomation
             });
         }
 
+        public void DoubleClick(int x, int y)
+        {
+            this.Act(() =>
+            {
+                var rootElement = this.Find("html")() as Element;
+                new Actions(this.webDriver)
+                    .MoveToElement(rootElement.WebElement)
+                    .MoveByOffset(x, y)
+                    .DoubleClick()
+                    .Perform();
+            });
+        }
+
+        public void DoubleClick(Func<IElement> element, int x, int y)
+        {
+            this.Act(() =>
+            {
+                var containerElement = element() as Element;
+                new Actions(this.webDriver)
+                    .MoveToElement(containerElement.WebElement)
+                    .MoveByOffset(x, y)
+                    .DoubleClick()
+                    .Perform();
+            });
+        }
+
+        public void DoubleClick(Func<IElement> element)
+        {
+            this.Act(() =>
+            {
+                var containerElement = element() as Element;
+                new Actions(this.webDriver)
+                    .MoveToElement(containerElement.WebElement)
+                    .DoubleClick()
+                    .Perform();
+            });
+        }
+        
+        public void RightClick(Func<IElement> element)
+        {
+            this.Act(() =>
+            {
+                var containerElement = element() as Element;
+                new Actions(this.webDriver)
+                    .ContextClick(containerElement.WebElement)
+                    .Perform();
+            });
+        }
+
         public void Hover(int x, int y)
         {
             this.Act(() =>
