@@ -31,6 +31,12 @@ namespace FluentAutomation.Tests.Remote
             this.forms.Autocomplete_ExpectedResult();
         }
 
+        [Fact]
+        public void CartEditor_BuyMotorcycles()
+        {
+            this.forms.CartEditor_BuyMotorcycles();
+        }
+
         public void Dispose()
         {
             try
