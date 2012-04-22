@@ -1,9 +1,10 @@
 ﻿using System;
-using FluentAutomation;
-using FluentAutomation.Tests;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Xunit;
 
-namespace Tests
+namespace FluentAutomation.Tests.Native
 {
     public class SeleniumChrome : RepeatableNativeTest
     {
@@ -22,6 +23,12 @@ namespace Tests
         public void Autocomplete_ExpectedResult()
         {
             this.forms.Autocomplete_ExpectedResult();
+        }
+
+        [Fact]
+        public void CartEditor_BuyMotorcycles()
+        {
+            this.forms.CartEditor_BuyMotorcycles();
         }
     }
 }

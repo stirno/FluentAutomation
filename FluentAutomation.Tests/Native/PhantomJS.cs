@@ -18,5 +18,17 @@ namespace FluentAutomation.Tests
         {
             this.interactive.YUIDragDrop();
         }
+
+        [Fact]
+        public void Autocomplete_ExpectedResult()
+        {
+            this.forms.Autocomplete_ExpectedResult();
+        }
+
+        [Fact]
+        public void CartEditor_BuyMotorcycles()
+        {
+            this.forms.CartEditor_BuyMotorcycles();
+        }
     }
 }
