@@ -120,7 +120,34 @@ class PhantomBrowserController
 		page.sendEvent 'click', offset.left+x, offset.top+y
 
 		@CompleteAction()
+
+	DoubleClick: (command) ->
+		selector = command.selector if command.selector isnt ""
+		x = if command.x? then parseInt command.x else 0
+		y = if command.y? then parseInt command.y else 0
+
+		offset = { top:0, left:0 }
+		if selector?
+			fn = ->
+				offset = $('SELECTOR').offset()
+			offset = page.evaluate fn.toString().replace( 'SELECTOR', selector )
+
+		page.sendEvent 'mousemove', offset.left+x, offset.top+y
+		page.sendEvent 'click', offset.left+x, offset.top+y
+		page.sendEvent 'click', offset.left+x, offset.top+y
+
+		@CompleteAction()
 		
+	RightClick: (command) ->
+		selector = command.selector if command.selector isnt ""
+
+		offset = { top:0, left:0 }
+		if selector?
+			fn = ->
+				$('SELECTOR').contextmenu()
+			page.evaluate fn.toString().replace( 'SELECTOR', selector )
+
+		@CompleteAction()
 
 	Hover: (command) ->
 		selector = command.selector if command.selector isnt ""
