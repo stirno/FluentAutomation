@@ -17,6 +17,7 @@ namespace FluentAutomation.Tests
         public void YUIDragDrop()
         {
             this.interactive.YUIDragDrop();
+            this.interactive.I.Expect.Url("http://automation.apphb.com/interactive");
         }
 
         [Fact]
