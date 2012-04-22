@@ -37,13 +37,19 @@ class PhantomBrowserController
 	constructor: (@owner) ->
 		@className = "PhantomBrowserController"
 
+	CompleteAction: ( response ) ->
+		response = {} if not response
+		response.Response = "ActionCompleted"
+		response.Url = page.evaluate -> window.location.href
+		@owner.socket.send JSON.stringify response
+
 	# Commands
 	Navigate: (command) ->
 		url = command.url
 
 		page.onLoadFinished = (status) =>
 			@IncludeJQuery()
-			@owner.socket.send JSON.stringify({ Response: "ActionCompleted" })
+			@CompleteAction()
 
 		page.open url
 
@@ -94,7 +100,7 @@ class PhantomBrowserController
 
 		fnStr = fn.toString().replace(/SELECTOR/g, selector)
 		evalResult = page.evaluate fnStr
-		@owner.socket.send JSON.stringify({ Response: "ActionCompleted", Result: evalResult })
+		@CompleteAction { Result: evalResult }
 
 	FindMultiple: (command) ->
 		@Find(command)
@@ -113,7 +119,7 @@ class PhantomBrowserController
 		page.sendEvent 'mousemove', offset.left+x, offset.top+y
 		page.sendEvent 'click', offset.left+x, offset.top+y
 
-		@owner.socket.send JSON.stringify({ Response: "ActionCompleted" })
+		@CompleteAction()
 		
 
 	Hover: (command) ->
@@ -129,7 +135,7 @@ class PhantomBrowserController
 
 		page.sendEvent 'mousemove', offset.left+x, offset.top+y
 
-		@owner.socket.send JSON.stringify({ Response: "ActionCompleted" })
+		@CompleteAction()
 
 
 	Focus: (command) ->
@@ -151,7 +157,7 @@ class PhantomBrowserController
 		page.sendEvent 'mousemove', dstOffset.left, dstOffset.top
 		page.sendEvent 'mouseup', dstOffset.left, dstOffset.top
 
-		@owner.socket.send JSON.stringify({ Response: "ActionCompleted" })
+		@CompleteAction()
 
 	SelectText: (command) ->
 		selector = command.selector if command.selector?
@@ -169,7 +175,7 @@ class PhantomBrowserController
 		if !success 
 			@owner.throw "Could not find option"
 
-		@owner.socket.send JSON.stringify({ Response: "ActionCompleted" })
+		@CompleteAction()
 
 
 	SelectValue: (command) ->
@@ -188,7 +194,7 @@ class PhantomBrowserController
 		if !success 
 			@owner.throw "Could not find option"
 
-		@owner.socket.send JSON.stringify({ Response: "ActionCompleted" })
+		@CompleteAction()
 
 	SelectIndex: (command) ->
 		selector = command.selector if command.selector?
@@ -203,13 +209,13 @@ class PhantomBrowserController
 		if !success 
 			@owner.throw "Could not find option"
 
-		@owner.socket.send JSON.stringify({ Response: "ActionCompleted" })
+		@CompleteAction()
 
 	TakeScreenshot: (command) ->
 		fs = require 'fs'
 		filename = new Date().getTime() + 'screenshot.png'
 		page.render filename
-		@owner.socket.send JSON.stringify({ Response: "ActionCompleted", Result: filename })
+		@CompleteAction { Result: filename }
 
 	Wait: (command) ->
 		# Note this is currently implemented by the CommandProvider
@@ -217,7 +223,7 @@ class PhantomBrowserController
 		console.log "Waiting #{seconds} seconds"
 		fn = =>
 			console.log "Wait complete"
-			@owner.socket.send JSON.stringify({ Response: "ActionCompleted" })
+			@CompleteAction()
 		setInterval fn, (seconds * 1000)
 
 	WaitMilliseconds: (command) ->
@@ -226,7 +232,7 @@ class PhantomBrowserController
 		console.log "Waiting #{milliseconds} milliseconds"
 		fn = =>
 			console.log "Wait complete"
-			@owner.socket.send JSON.stringify({ Response: "ActionCompleted" })
+			@CompleteAction()
 		setInterval fn, milliseconds
 
 	Press: (keys) ->
