@@ -12,5 +12,6 @@ namespace FluentAutomation.Interfaces
         void CssClass(string selector, string className);
         void Text(string selector, string text);
         void Value(string selector, string value);
+        void Url(string url);
     }
 }

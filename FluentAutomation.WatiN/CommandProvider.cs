@@ -30,6 +30,14 @@ namespace FluentAutomation
             });
         }
 
+        public Uri Url
+        {
+            get
+            {
+                return this.browser.Uri;
+            }
+        }
+
         public void Navigate(Uri uri)
         {
             this.browser.GoTo(uri);

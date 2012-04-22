@@ -82,6 +82,18 @@ namespace FluentAutomation
         }
         #endregion
 
+        #region Url
+        public void Url(string url)
+        {
+            Url(new Uri(url, UriKind.Absolute));
+        }
+
+        public void Url(Uri url)
+        {
+            this.expectProvider.Url(url.ToString());
+        }
+        #endregion
+
         #region Value
         public RemoteExpectValueSyntaxProvider Value(int value)
         {

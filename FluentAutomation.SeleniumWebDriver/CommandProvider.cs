@@ -39,6 +39,14 @@ namespace FluentAutomation
             this.fileStoreProvider = fileStoreProvider;
         }
 
+        public Uri Url
+        {
+            get
+            {
+                return new Uri(this.webDriver.Url, UriKind.Absolute);
+            }
+        }
+
         public void Navigate(Uri url)
         {
             this.Act(() => this.webDriver.Navigate().GoToUrl(url));

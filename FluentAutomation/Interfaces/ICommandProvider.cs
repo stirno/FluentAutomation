@@ -9,6 +9,8 @@ namespace FluentAutomation.Interfaces
 {
     public interface ICommandProvider : IActionProvider, IDisposable
     {
+        Uri Url { get; }
+
         void Navigate(Uri url);
         Func<IElement> Find(string selector);
         Func<IEnumerable<IElement>> FindMultiple(string selector);

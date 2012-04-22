@@ -25,6 +25,9 @@ namespace FluentAutomation.Interfaces
         void Value(string selector, Expression<Func<string, bool>> matchFunc);
         void Value(Func<IElement> element, Expression<Func<string, bool>> matchFunc);
 
+        void Url(Uri expectedUrl);
+        void Url(Expression<Func<Uri, bool>> urlExpression);
+
         void True(Expression<Func<bool>> matchFunc);
         void False(Expression<Func<bool>> matchFunc);
         void Throws(Expression<Action> matchAction);

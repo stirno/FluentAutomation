@@ -27,6 +27,7 @@ namespace FluentAutomation
         private volatile bool isPhantomReady = false;
         private JObject phantomJsonResult = null;
         private string phantomStringResult = null;
+        private Uri phantomLastUrl = null;
 
         public CommandProvider(IFileStoreProvider fileStoreProvider)
         {
@@ -62,6 +63,11 @@ namespace FluentAutomation
                         {
                             this.phantomStringResult = messageData["Result"].ToString();
                             this.phantomJsonResult = messageData["Result"] as JObject;
+                        }
+
+                        if (messageData["Url"] != null)
+                        {
+                            this.phantomLastUrl = new Uri(messageData["Url"].ToString(), UriKind.Absolute);
                         }
 
                         this.isPhantomReady = true;
@@ -108,6 +114,14 @@ namespace FluentAutomation
             listener.Stop();
 
             return port;
+        }
+
+        public Uri Url
+        {
+            get
+            {
+                return this.phantomLastUrl;
+            }
         }
 
         public void Navigate(Uri url)

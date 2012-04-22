@@ -33,5 +33,10 @@ namespace FluentAutomation
         {
             this.commandProvider.Act(new { Expect = "Value", Selector = selector, Value = value });
         }
+
+        public void Url(string url)
+        {
+            this.commandProvider.Act(new { Expect = "Url", Url = url });
+        }
     }
 }

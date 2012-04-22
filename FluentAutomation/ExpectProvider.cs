@@ -505,6 +505,29 @@ namespace FluentAutomation
         }
         #endregion
 
+        public void Url(Uri expectedUrl)
+        {
+            this.commandProvider.Act(() => {
+                if (expectedUrl.ToString().Equals(this.commandProvider.Url.ToString(), StringComparison.InvariantCultureIgnoreCase))
+                {
+                    throw new FluentExpectFailedException("Expected URL to match [{0}] but it was actually [{1}].", expectedUrl.ToString(), this.commandProvider.Url.ToString());
+                }
+            });
+        }
+
+        public void Url(Expression<Func<Uri, bool>> urlExpression)
+        {
+            this.commandProvider.Act(() =>
+            {
+                var compiledExpr = urlExpression.Compile();
+
+                if (compiledExpr(this.commandProvider.Url) != true)
+                {
+                    throw new FluentExpectFailedException("Expected expression [{0}] to return true.", urlExpression.ToExpressionString());
+                }
+            });
+        }
+
         #region Boolean / Throws
         public void True(Expression<Func<bool>> matchFunc)
         {

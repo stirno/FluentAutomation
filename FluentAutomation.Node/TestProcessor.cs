@@ -306,6 +306,13 @@ namespace FluentAutomation.Node
             var t = ToType(expect, new { Selector = "", CssClass = "" });
             this.expectProvider.CssClass(t.Selector, t.CssClass);
         }
+
+        [BindingSignature(BindingType.Expect, "Url", "Url")]
+        public void ExpectUrl(JToken expect)
+        {
+            var t = ToType(expect, new { Url = "" });
+            this.expectProvider.Url(new Uri(t.Url, UriKind.Absolute));
+        }
         #endregion
 
         #endregion

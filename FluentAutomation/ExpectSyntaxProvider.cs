@@ -183,6 +183,23 @@ namespace FluentAutomation
         }
         #endregion
 
+        #region Url
+        public void Url(string expectedUrl)
+        {
+            Url(new Uri(expectedUrl, UriKind.Absolute));
+        }
+
+        public void Url(Uri expectedUrl)
+        {
+            this.expectProvider.Url(expectedUrl);
+        }
+
+        public void Url(Expression<Func<Uri, bool>> urlExpression)
+        {
+            this.expectProvider.Url(urlExpression);
+        }
+        #endregion
+
         #region Boolean / Throws
         public void True(Expression<Func<bool>> matchFunc)
         {
