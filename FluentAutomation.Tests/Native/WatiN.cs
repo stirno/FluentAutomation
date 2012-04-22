@@ -31,5 +31,11 @@ namespace FluentAutomation.Tests
         {
             this.forms.CartEditor_BuyMotorcycles();
         }
+
+        [Fact]
+        public void MouseClickOperations()
+        {
+            this.interactive.MouseClickOperations();
+        }
     }
 }
