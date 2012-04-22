@@ -10,8 +10,8 @@ namespace FluentAutomation.Node.Debug
     {
         static void Main(string[] args)
         {
-            //SeleniumWebDriver.Bootstrap(FluentAutomation.SeleniumWebDriver.Browser.Firefox);
-            PhantomJS.Bootstrap();
+            SeleniumWebDriver.Bootstrap(FluentAutomation.SeleniumWebDriver.Browser.Firefox);
+            //PhantomJS.Bootstrap();
             NodeService.Current.Start();
             System.Console.ReadLine();
             NodeService.Current.Stop();

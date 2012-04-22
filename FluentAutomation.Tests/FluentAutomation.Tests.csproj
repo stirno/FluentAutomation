@@ -48,13 +48,22 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="Remote.cs" />
-    <Compile Include="Selenium.cs" />
+    <Compile Include="Native\FormsNative.cs" />
+    <Compile Include="Native\InteractiveNative.cs" />
+    <Compile Include="Native\PhantomJS.cs" />
+    <Compile Include="Remote\FormsRemote.cs" />
+    <Compile Include="Remote\InteractiveRemote.cs" />
+    <Compile Include="Native\RepeatableNativeTest.cs" />
+    <Compile Include="Native\Selenium.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SpamTests.cs" />
-    <Compile Include="WatiN.cs" />
+    <Compile Include="Native\WatiN.cs" />
+    <Compile Include="Remote\Node.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FluentAutomation.PhantomJS\FluentAutomation.PhantomJS.csproj">
+      <Project>{32dd8589-20d4-4302-b6b6-9bc532cba4e5}</Project>
+      <Name>FluentAutomation.PhantomJS</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FluentAutomation.Remote\FluentAutomation.Remote.csproj">
       <Project>{a860f48d-1a1e-4cbb-bc40-92caf384df82}</Project>
       <Name>FluentAutomation.Remote</Name>
