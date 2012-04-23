@@ -14,7 +14,12 @@ namespace FluentAutomation.Tests
         {
             I.Open(testUrl);
             I.Enter("abcd").In("#form02input02");
+
+            // wait for first render of results list
             I.WaitUntil(() => I.Expect.Count(1).Of("ul.typeahead li:eq(0) a"));
+
+            // wait for our keypresses to be processed
+            I.Wait(TimeSpan.FromMilliseconds(2500));
             I.Expect.Text("Olercwlc").In("ul.typeahead li:eq(0) a");
         }
 

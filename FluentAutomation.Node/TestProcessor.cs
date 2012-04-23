@@ -261,10 +261,11 @@ namespace FluentAutomation.Node
             this.commandProvider.TakeScreenshot(t.FileName);
         }
 
-        [BindingSignature(BindingType.Action, "Wait")]
-        public void Wait(JToken action)
+        [BindingSignature(BindingType.Action, "Wait", "Milliseconds")]
+        public void WaitMilliseconds(JToken action)
         {
-            this.commandProvider.Wait();
+            var t = ToType(action, new { Milliseconds = 0.0 });
+            this.commandProvider.Wait(TimeSpan.FromMilliseconds(t.Milliseconds));
         }
 
         [BindingSignature(BindingType.Action, "Wait", "Seconds")]
@@ -274,11 +275,10 @@ namespace FluentAutomation.Node
             this.commandProvider.Wait(t.Seconds);
         }
 
-        [BindingSignature(BindingType.Action, "Wait", "Milliseconds")]
-        public void WaitMilliseconds(JToken action)
+        [BindingSignature(BindingType.Action, "Wait")]
+        public void Wait(JToken action)
         {
-            var t = ToType(action, new { Milliseconds = 0 });
-            this.commandProvider.Wait(TimeSpan.FromMilliseconds(t.Milliseconds));
+            this.commandProvider.Wait();
         }
         #endregion
 

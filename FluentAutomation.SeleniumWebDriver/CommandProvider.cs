@@ -33,6 +33,7 @@ namespace FluentAutomation
             {
                 var webDriver = webDriverFactory();
                 webDriver.Manage().Cookies.DeleteAllCookies();
+                webDriver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(10));
                 return webDriver;
             });
 

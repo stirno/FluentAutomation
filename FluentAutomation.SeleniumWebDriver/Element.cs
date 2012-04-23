@@ -16,6 +16,7 @@ namespace FluentAutomation
         public Element(IWebElement webElement)
         {
             this.WebElement = webElement;
+            this.tagName = this.WebElement.TagName;
         }
 
         public Element(IWebElement webElement, string selector)
@@ -24,11 +25,12 @@ namespace FluentAutomation
             this.selector = selector;
         }
 
+        private string tagName = null;
         public string TagName
         {
             get
             {
-                return this.WebElement.TagName.ToLower();
+                return this.tagName;
             }
         }
 

@@ -10,6 +10,7 @@ using WatiNCore = global::WatiN.Core;
 
 namespace FluentAutomation
 {
+    // Dirty hacks on several funcs that require jQuery to properly work due to flaw in WatiN events in IE9.. Replace with native JavaScript ASAP
     public class CommandProvider : BaseCommandProvider, ICommandProvider, IDisposable
     {
         private readonly Lazy<WatiNCore.IE> lazyBrowser = null;
@@ -164,14 +165,8 @@ namespace FluentAutomation
             if (el.IsText)
             {
                 var txt = new WatiNCore.TextField(this.browser.DomContainer, el.AutomationElement.NativeElement);
-                
-                foreach (var chr in text)
-                {
-                    txt.KeyDown(chr);
-                    txt.KeyPress(chr);
-                    txt.KeyUp(chr);
-                    fireOnChange(el.AutomationElement);
-                }
+                txt.Value = text;
+                this.browser.DomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).trigger('keyup'); }}", el.AutomationElement.GetJavascriptElementReference()));
             }
         }
 
