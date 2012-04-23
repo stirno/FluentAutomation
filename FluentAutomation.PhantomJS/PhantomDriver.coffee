@@ -1,8 +1,10 @@
 ﻿system = require 'system'
 page = require('webpage').create()
+viewportWidth = 1280
+viewportHeight = 1024
 page.viewportSize =
-	width: 1280
-	height: 1024
+	width: viewportWidth
+	height: viewportHeight
 
 class PhantomDriver
 	constructor: () ->
@@ -105,65 +107,86 @@ class PhantomBrowserController
 	FindMultiple: (command) ->
 		@Find(command)
 
-	Click: (command) ->
-		selector = command.selector if command.selector isnt ""
-		x = if command.x? then parseInt command.x else 0
-		y = if command.y? then parseInt command.y else 0
+	ScrollToPoint: (x, y) ->
+		fn = ->
+			viewportOffset = { x:0, y:0 }
+			$(document).scrollTop SCROLL_Y
+			viewportOffset.y = $(document).scrollTop()
+			$(document).scrollLeft SCROLL_X
+			viewportOffset.x = $(document).scrollLeft()
+			return viewportOffset
+		viewportOffset = page.evaluate fn.toString().replace( 'SCROLL_X', x ).replace( 'SCROLL_Y', y )
+		console.log "Scrolled to: #{viewportOffset.x}, #{viewportOffset.y}"
+		return viewportOffset
 
+	ResolveSelectorXY: ( selector = null, x = 0, y = 0 ) ->
 		offset = { top:0, left:0 }
+
 		if selector?
 			fn = ->
 				offset = $('SELECTOR').offset()
 			offset = page.evaluate fn.toString().replace( 'SELECTOR', selector )
 
-		page.sendEvent 'mousemove', offset.left+x, offset.top+y
-		page.sendEvent 'click', offset.left+x, offset.top+y
+		clickX = parseInt( offset.left, 10 ) + parseInt( x, 10 )
+		clickY = parseInt( offset.top, 10 ) + parseInt( y, 10 )
+
+		viewportOffset = @ScrollToPoint clickX, clickY
+
+		clickX -= viewportOffset.x
+		clickY -= viewportOffset.y
+
+		return { x: clickX, y: clickY }
+
+	Click: (command) ->
+		selector = command.selector if command.selector isnt ""
+		x = if command.x? then parseInt( command.x, 10 ) else 0
+		y = if command.y? then parseInt( command.y, 10 ) else 0
+
+		target = @ResolveSelectorXY selector, x, y
+
+		page.sendEvent 'mousemove', target.x, target.y
+		page.sendEvent 'click', target.x, target.y
 
 		@CompleteAction()
 
 	DoubleClick: (command) ->
 		selector = command.selector if command.selector isnt ""
-		x = if command.x? then parseInt command.x else 0
-		y = if command.y? then parseInt command.y else 0
+		x = if command.x? then parseInt( command.x, 10 ) else 0
+		y = if command.y? then parseInt( command.y, 10 ) else 0
+		
+		throw "NotImplementedException" if x or y
 
-		offset = { top:0, left:0 }
+		target = @ResolveSelectorXY selector, x, y
+		page.sendEvent 'mousemove', target.x, target.y
+
 		if selector?
 			fn = ->
-				offset = $('SELECTOR').offset()
-			offset = page.evaluate fn.toString().replace( 'SELECTOR', selector )
-
-		page.sendEvent 'mousemove', offset.left+x, offset.top+y
-		page.sendEvent 'click', offset.left+x, offset.top+y
-		page.sendEvent 'click', offset.left+x, offset.top+y
+				$('SELECTOR').dblclick()
+			page.evaluate fn.toString().replace( 'SELECTOR', selector )
 
 		@CompleteAction()
 		
 	RightClick: (command) ->
 		selector = command.selector if command.selector isnt ""
 
-		offset = { top:0, left:0 }
+		target = @ResolveSelectorXY selector
+		page.sendEvent 'mousemove', target.x, target.y
+
 		if selector?
 			fn = ->
-				$('SELECTOR').contextmenu()
+				$('SELECTOR').trigger 'contextmenu'
 			page.evaluate fn.toString().replace( 'SELECTOR', selector )
 
 		@CompleteAction()
 
 	Hover: (command) ->
 		selector = command.selector if command.selector isnt ""
-		x = if command.x? then parseInt command.x else 0
-		y = if command.y? then parseInt command.y else 0
+		x = if command.x? then parseInt( command.x, 10 ) else 0
+		y = if command.y? then parseInt( command.y, 10 ) else 0
 
-		offset = { top:0, left:0 }
-		if selector?
-			fn = ->
-				offset = $('SELECTOR').offset()
-			offset = page.evaluate fn.toString().replace( 'SELECTOR', selector )
+		target = @ResolveSelectorXY selector, x, y
 
-		page.sendEvent 'mousemove', offset.left+x, offset.top+y
-
-		@CompleteAction()
-
+		page.sendEvent 'mousemove', target.x, target.y
 
 	Focus: (command) ->
 		@Click command
@@ -172,17 +195,12 @@ class PhantomBrowserController
 		sourceSelector = command.sourceselector
 		targetSelector = command.targetselector
 
-		fn = ->
-			srcOffset = $('SELECTOR1').offset()
-		srcOffset = page.evaluate fn.toString().replace( 'SELECTOR1', sourceSelector )
+		target = @ResolveSelectorXY sourceSelector
+		page.sendEvent 'mousedown', target.x, target.y
 
-		fn = ->
-			dstOffset = $('SELECTOR2').offset()
-		dstOffset = page.evaluate fn.toString().replace( 'SELECTOR2', targetSelector )
-
-		page.sendEvent 'mousedown', srcOffset.left, srcOffset.top
-		page.sendEvent 'mousemove', dstOffset.left, dstOffset.top
-		page.sendEvent 'mouseup', dstOffset.left, dstOffset.top
+		target = @ResolveSelectorXY targetSelector
+		page.sendEvent 'mousemove', target.x, target.y
+		page.sendEvent 'mouseup', target.x, target.y
 
 		@CompleteAction()
 
