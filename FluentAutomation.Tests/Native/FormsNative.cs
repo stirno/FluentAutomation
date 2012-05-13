@@ -51,16 +51,15 @@ namespace FluentAutomation.Tests
         public void GoogleInputField()
         {
             I.Open("https://www.google.com/search?sugexp=chrome,mod=6&ix=nh&sourceid=chrome&ie=UTF-8&q=input+text+default+value#hl=en&sclient=psy-ab&q=input+text+value+example&oq=input+text+value+example&aq=f&aqi=q-A1&aql=&gs_l=serp.3..33i29.11385.13741.0.13852.20.13.1.4.4.0.164.1177.10j3.13.0...0.0.pAQWKOmV8pg&pbx=1&bav=on.2,or.r_gc.r_pw.r_cp.r_qf.,cf.osb&fp=356e729b7a15c7f0&ix=nh&biw=1986&bih=650");
-            I.Wait(3);
-            I.Expect.Text("input text value example");
-            I.Expect.Value("input text value example");
+            I.Expect.Value("input text value example").In("input[type='text']:first");
+            I.Expect.Text("input text value example").In("input[type='text']:first");
         }
 
         public void MSDNInputField()
         {
             I.Open("http://msdn.microsoft.com/en-us/library/ie/ms535841(v=vs.85).aspx");
             I.Wait(10);
-            I.Expect.Throws(() => I.Expect.Value("Search Dev Center with Bing").In("#HeaderSearchTextBox"));
+            I.Expect.Text("Search Dev Center with Bing").In("#HeaderSearchTextBox");
         }
     }
 }

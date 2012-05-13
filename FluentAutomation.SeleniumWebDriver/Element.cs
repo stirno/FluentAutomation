@@ -23,6 +23,7 @@ namespace FluentAutomation
         {
             this.WebElement = webElement;
             this.selector = selector;
+            this.tagName = this.WebElement.TagName;
         }
 
         private string tagName = null;
@@ -53,7 +54,14 @@ namespace FluentAutomation
         {
             get
             {
-                return this.WebElement.Text;
+                if (this.TagName == "input")
+                {
+                    return this.Value;
+                }
+                else
+                {
+                    return this.WebElement.Text;
+                }
             }
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FluentAutomation.Exceptions;
 using Newtonsoft.Json;
 using OpenQA.Selenium;
 
@@ -71,7 +72,7 @@ a){var b=F.exec(a);b&&(b[1]=(b[1]||"""").toLowerCase(),b[3]=b[3]&&new RegExp(""(
                 }
                 catch (InvalidOperationException ex)
                 {
-                    throw new NoSuchElementException("No such element");
+                    throw new NoSuchElementException("An error occurred while locating an element. See InnerException for more details.", ex);
                 }
             }
 
@@ -82,14 +83,14 @@ a){var b=F.exec(a);b&&(b[1]=(b[1]||"""").toLowerCase(),b[3]=b[3]&&new RegExp(""(
 
                 try
                 {
-                    IEnumerable<object> matchedItems = (IEnumerable<object>)executor.ExecuteScript("return fluentjQuery(" + serializedSelector + ").get()");
+                    IEnumerable<object> matchedItems = (IEnumerable<object>)executor.ExecuteScript("return fluentjQuery.find(" + serializedSelector + ")");
                     List<IWebElement> webElements = matchedItems.Cast<IWebElement>().ToList();
 
                     return new System.Collections.ObjectModel.ReadOnlyCollection<IWebElement>(webElements);
                 }
                 catch (Exception ex)
                 {
-                    throw;
+                    throw new FluentException("An error ocurred while locating an element via jQuery/Sizzle. InnerException may have more details.", ex);
                 }
             }
         }
