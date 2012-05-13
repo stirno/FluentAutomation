@@ -36,5 +36,17 @@ namespace FluentAutomation.Tests.Native
         {
             this.interactive.MouseClickOperations();
         }
+
+        [Fact]
+        public void MSDNInputField()
+        {
+            this.forms.MSDNInputField();
+        }
+
+        [Fact]
+        public void GoogleInputField()
+        {
+            this.forms.GoogleInputField();
+        }
     }
 }

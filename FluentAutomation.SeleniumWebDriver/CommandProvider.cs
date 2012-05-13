@@ -424,13 +424,20 @@ namespace FluentAutomation
 
                 while (DateTime.Now < dateTimeTimeout)
                 {
-                    if (compiledFunc() == true)
+                    try
                     {
-                        isFuncValid = true;
-                        break;
-                    }
+                        if (compiledFunc() == true)
+                        {
+                            isFuncValid = true;
+                            break;
+                        }
 
-                    System.Threading.Thread.Sleep(Settings.DefaultWaitUntilThreadSleep);
+                        System.Threading.Thread.Sleep(Settings.DefaultWaitUntilThreadSleep);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new FluentException("An unexpected exception was thrown inside WaitUntil(Func<bool>). See InnerException for details.", ex);
+                    }
                 }
 
                 // If func is still not valid, assume we've hit the timeout.
@@ -454,6 +461,7 @@ namespace FluentAutomation
                 bool threwException = false;
                 var compiledAction = conditionAction.Compile();
 
+                FluentException lastFluentException = null;
                 while (DateTime.Now < dateTimeTimeout)
                 {
                     try
@@ -461,9 +469,14 @@ namespace FluentAutomation
                         threwException = false;
                         compiledAction();
                     }
-                    catch (FluentException)
+                    catch (FluentException ex)
                     {
                         threwException = true;
+                        lastFluentException = ex;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new FluentException("An unexpected exception was thrown inside WaitUntil(Action). See InnerException for details.", ex);
                     }
 
                     if (!threwException)
@@ -477,7 +490,7 @@ namespace FluentAutomation
                 // If an exception was thrown the last loop, assume we hit the timeout
                 if (threwException == true)
                 {
-                    throw new FluentException("Conditional wait passed the timeout [{0}ms]", timeout.TotalMilliseconds, conditionAction.ToExpressionString());
+                    throw new FluentException("Conditional wait passed the timeout [{0}ms]. See InnerException for details of the last FluentException thrown.", lastFluentException, timeout.TotalMilliseconds);
                 }
             });
         }
@@ -503,6 +516,7 @@ namespace FluentAutomation
         {
             try
             {
+                this.webDriver.Manage().Cookies.DeleteAllCookies();
                 this.webDriver.Quit();
                 this.webDriver.Dispose();
             }
