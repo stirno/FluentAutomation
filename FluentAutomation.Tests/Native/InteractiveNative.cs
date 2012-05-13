@@ -54,5 +54,12 @@ namespace FluentAutomation.Tests
             I.Drag("#pt1").To("#pt2");
             I.Drag("#pboth1").To("#pb2");
         }
+
+        public void ASPNETAJAXHover()
+        {
+            I.Open("http://www.asp.net/ajaxLibrary/AjaxControlToolkitSampleSite/HoverMenu/HoverMenu.aspx");
+            I.Hover("#ctl00_SampleContent_GridView1_ctl02_Label1");
+            I.Click("#ctl00_SampleContent_GridView1_ctl02_LinkButton1");
+        }
     }
 }

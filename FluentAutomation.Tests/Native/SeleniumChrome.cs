@@ -48,5 +48,11 @@ namespace FluentAutomation.Tests.Native
         {
             this.forms.GoogleInputField();
         }
+
+        [Fact]
+        public void ASPNETAJAXHoverTest()
+        {
+            this.interactive.ASPNETAJAXHover();
+        }
     }
 }

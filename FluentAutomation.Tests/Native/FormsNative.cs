@@ -45,7 +45,7 @@ namespace FluentAutomation.Tests
             I.Click(".liveExample a:eq(0)");
 
             // validate new total
-            I.Expect.Text("$788.64").In("p.grandTotal span");
+            I.WaitUntil(() => I.Expect.Text("$788.64").In("p.grandTotal span"));
         }
 
         public void GoogleInputField()
