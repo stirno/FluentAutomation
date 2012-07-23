@@ -10,6 +10,32 @@ namespace FluentAutomation.Tests
     {
         private static string testUrl = "http://automation.apphb.com/forms";
 
+        [Fact]
+        public void FizzBuzz()
+        {
+            //for (int i = 1; i <= 100; i++)
+            //{
+            //    if (i % 3 == 0 && i % 5 == 0)
+            //    {
+            //        Console.WriteLine("FizzBuzz");
+            //    }
+            //    if (i % 3 == 0)
+            //    {
+            //        Console.WriteLine("Fizz");
+            //    }
+            //    else if (i % 5 == 0)
+            //    {
+            //        Console.WriteLine("Buzz");
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine(i.ToString());
+            //    }
+            //}
+
+            for (int i = 1; i <= 100; i++) { Console.WriteLine(i % 3 == 0 && i % 5 == 0 ? "FizzBuzz" : i % 3 == 0 ? "Fizz" : i % 5 == 0 ? "Buzz" : i.ToString()); }
+        }
+
         public void Autocomplete_ExpectedResult()
         {
             I.Open(testUrl);
@@ -58,8 +84,8 @@ namespace FluentAutomation.Tests
         public void MSDNInputField()
         {
             I.Open("http://msdn.microsoft.com/en-us/library/ie/ms535841(v=vs.85).aspx");
-            I.Wait(10);
             I.Expect.Text("Search Dev Center with Bing").In("#HeaderSearchTextBox");
+            I.Expect.Value("Search Dev Center with Bing").In("#HeaderSearchTextBox");
         }
     }
 }
