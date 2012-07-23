@@ -223,6 +223,12 @@ namespace FluentAutomation
             this.waitForPhantomReady();
         }
 
+        public void EnterTextWithoutEvents(Func<IElement> element, string text)
+        {
+            // PhantomJS doesn't differentiate currently
+            this.EnterText(element, text);
+        }
+
         public void SelectText(Func<IElement> element, string optionText)
         {
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "SelectText", Selector = element().Selector, Text = optionText }));

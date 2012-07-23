@@ -165,6 +165,16 @@ namespace FluentAutomation
             if (el.IsText)
             {
                 var txt = new WatiNCore.TextField(this.browser.DomContainer, el.AutomationElement.NativeElement);
+                txt.TypeText(text);
+            }
+        }
+
+        public void EnterTextWithoutEvents(Func<IElement> element, string text)
+        {
+            var el = element() as Element;
+            if (el.IsText)
+            {
+                var txt = new WatiNCore.TextField(this.browser.DomContainer, el.AutomationElement.NativeElement);
                 txt.Value = text;
                 this.browser.DomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).trigger('keyup'); }}", el.AutomationElement.GetJavascriptElementReference()));
             }

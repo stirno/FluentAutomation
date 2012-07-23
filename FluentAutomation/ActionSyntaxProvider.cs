@@ -240,11 +240,18 @@ namespace FluentAutomation
         {
             protected readonly ActionSyntaxProvider syntaxProvider = null;
             protected readonly string text = null;
+            protected bool eventsEnabled = true;
 
             public TextEntrySyntaxProvider(ActionSyntaxProvider syntaxProvider, string text)
             {
                 this.syntaxProvider = syntaxProvider;
                 this.text = text;
+            }
+
+            public TextEntrySyntaxProvider WithoutEvents()
+            {
+                this.eventsEnabled = false;
+                return this;
             }
 
             public void In(string selector)
@@ -254,7 +261,14 @@ namespace FluentAutomation
 
             public void In(Func<IElement> element)
             {
-                this.syntaxProvider.commandProvider.EnterText(element, text);
+                if (this.eventsEnabled)
+                {
+                    this.syntaxProvider.commandProvider.EnterText(element, text);
+                }
+                else
+                {
+                    this.syntaxProvider.commandProvider.EnterTextWithoutEvents(element, text);
+                }
             }
         }
         #endregion

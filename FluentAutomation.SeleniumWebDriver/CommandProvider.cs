@@ -261,6 +261,16 @@ namespace FluentAutomation
             });
         }
 
+        public void EnterTextWithoutEvents(Func<IElement> element, string text)
+        {
+            this.Act(() =>
+            {
+                var unwrappedElement = element() as Element;
+
+                ((IJavaScriptExecutor)this.webDriver).ExecuteScript(string.Format("if (typeof jQuery != 'undefined') {{ jQuery(\"{0}\").val(\"{1}\").trigger('change'); }}", unwrappedElement.Selector.Replace("\"", ""), text.Replace("\"", "")));
+            });
+        }
+
         public void SelectText(Func<IElement> element, string optionText)
         {
             this.Act(() =>
