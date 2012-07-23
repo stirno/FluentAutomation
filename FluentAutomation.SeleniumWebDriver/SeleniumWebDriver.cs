@@ -38,6 +38,7 @@ namespace FluentAutomation
                 switch (SeleniumWebDriver.SelectedBrowser)
                 {
                     case Browser.InternetExplorer:
+                        EmbeddedResources.UnpackFromAssembly("IEDriverServer.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
                         container.Register<IWebDriver, OpenQA.Selenium.IE.InternetExplorerDriver>().AsMultiInstance();
                         break;
                     case Browser.Firefox:
