@@ -32,7 +32,7 @@ namespace FluentAutomation.Tests
             //        Console.WriteLine(i.ToString());
             //    }
             //}
-
+            
             for (int i = 1; i <= 100; i++) { Console.WriteLine(i % 3 == 0 && i % 5 == 0 ? "FizzBuzz" : i % 3 == 0 ? "Fizz" : i % 5 == 0 ? "Buzz" : i.ToString()); }
         }
 
@@ -40,7 +40,7 @@ namespace FluentAutomation.Tests
         {
             I.Open(testUrl);
             I.Enter("abcd").In("#form02input02");
-
+            
             // wait for first render of results list
             I.WaitUntil(() => I.Expect.Count(1).Of("ul.typeahead li:eq(0) a"));
 

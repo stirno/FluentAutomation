@@ -7,8 +7,14 @@ using FluentAutomation.Interfaces;
 
 namespace FluentAutomation
 {
+    /// <summary>
+    /// FluentTest - To be extended by tests targeting FluentAutomation. In the constructor, a user should call an appropriate bootstrap function from a FluentAutomation Provider.
+    /// </summary>
     public class FluentTest : BaseFluentTest
     {
+        /// <summary>
+        /// Actions - Fluent's action functionality.
+        /// </summary>
         public INativeActionSyntaxProvider I
         {
             get

@@ -8,22 +8,40 @@ using WatiNCore = global::WatiN.Core;
 
 namespace FluentAutomation
 {
+    /// <summary>
+    /// WatiN FluentAutomation Provider
+    /// </summary>
     public class WatiN
     {
-        [Flags]
-        public enum Browsers
+        /// <summary>
+        /// Supported browsers for the FluentAutomation WatiN provider.
+        /// </summary>
+        public enum Browser
         {
+            /// <summary>
+            /// Internet Explorer
+            /// </summary>
             InternetExplorer = 1
         }
 
-        public static Browsers SelectedBrowser;
+        /// <summary>
+        /// Currently selected <see cref="Browser"/>.
+        /// </summary>
+        public static Browser SelectedBrowser;
 
+        /// <summary>
+        /// Bootstrap WatiN provider and utilize Internet Explorer.
+        /// </summary>
         public static void Bootstrap()
         {
-            Bootstrap(Browsers.InternetExplorer);
+            Bootstrap(Browser.InternetExplorer);
         }
 
-        public static void Bootstrap(Browsers browser)
+        /// <summary>
+        /// Bootstrap WatiN provider and utilize the specified <paramref name="browser"/>.
+        /// </summary>
+        /// <param name="browser"></param>
+        public static void Bootstrap(Browser browser)
         {
             WatiN.SelectedBrowser = browser;
 

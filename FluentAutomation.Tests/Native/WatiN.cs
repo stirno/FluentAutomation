@@ -11,7 +11,7 @@ namespace FluentAutomation.Tests
     {
         public WatiN()
         {
-            FluentAutomation.WatiN.Bootstrap(FluentAutomation.WatiN.Browsers.InternetExplorer);
+            FluentAutomation.WatiN.Bootstrap(FluentAutomation.WatiN.Browser.InternetExplorer);
         }
 
         [Fact]

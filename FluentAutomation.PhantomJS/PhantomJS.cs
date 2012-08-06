@@ -10,8 +10,14 @@ using FluentAutomation.Interfaces;
 
 namespace FluentAutomation
 {
+    /// <summary>
+    /// PhantomJS FluentAutomation Provider
+    /// </summary>
     public class PhantomJS
     {
+        /// <summary>
+        /// Bootstrap PhantomJS provider.
+        /// </summary>
         public static void Bootstrap()
         {
             FluentAutomation.Settings.Registration = (container) =>

@@ -263,7 +263,7 @@ namespace FluentAutomation
 
         public void EnterTextWithoutEvents(Func<IElement> element, string text)
         {
-            this.Act(() =>
+            this.Act(() =>  
             {
                 var unwrappedElement = element() as Element;
 

@@ -213,11 +213,19 @@ namespace FluentAutomation
                 this.sourceElement = element;
             }
 
+            /// <summary>
+            /// End Drag/Drop operation at element matching <paramref name="selector"/>.
+            /// </summary>
+            /// <param name="selector">Sizzle selector.</param>
             public void To(string selector)
             {
                 this.To(this.syntaxProvider.Find(selector));
             }
 
+            /// <summary>
+            /// End Drag/Drop operation at specified <paramref name="targetElement"/>.
+            /// </summary>
+            /// <param name="targetElement">IElement factory function.</param>
             public void To(Func<IElement> targetElement)
             {
                 this.syntaxProvider.commandProvider.DragAndDrop(this.sourceElement, targetElement);
@@ -248,17 +256,39 @@ namespace FluentAutomation
                 this.text = text;
             }
 
+            /// <summary>
+            /// Set text entry to set value without firing key events. Faster, but may cause issues with applications
+            /// that bind to the keyup/keydown/keypress events to function.
+            /// </summary>
+            /// <returns><c>TextEntrySyntaxProvider</c></returns>
             public TextEntrySyntaxProvider WithoutEvents()
             {
                 this.eventsEnabled = false;
                 return this;
             }
 
+            /// <summary>
+            /// [deprecated] Use WithoutEvents() instead. To be removed in the future.
+            /// </summary>
+            /// <returns><c>TextEntrySyntaxProvider</c></returns>
+            public TextEntrySyntaxProvider Quickly()
+            {
+                return this.WithoutEvents();
+            }
+
+            /// <summary>
+            /// Enter text into input or textarea element matching <paramref name="selector"/>.
+            /// </summary>
+            /// <param name="selector">Sizzle selector.</param>
             public void In(string selector)
             {
                 this.In(this.syntaxProvider.Find(selector));
             }
 
+            /// <summary>
+            /// Enter text into specified <paramref name="element"/>.
+            /// </summary>
+            /// <param name="element">IElement factory function.</param>
             public void In(Func<IElement> element)
             {
                 if (this.eventsEnabled)
@@ -317,11 +347,20 @@ namespace FluentAutomation
                 this.mode = mode;
             }
 
+            /// <summary>
+            /// Select from element matching <paramref name="selector"/>.
+            /// </summary>
+            /// <param name="selector">Sizzle selector.</param>
             public void From(string selector)
             {
                 this.From(this.syntaxProvider.Find(selector));
             }
 
+
+            /// <summary>
+            /// Select from specified <paramref name="element"/>.
+            /// </summary>
+            /// <param name="element">IElement factory function.</param>
             public void From(Func<IElement> element)
             {
                 if (this.mode == Option.Value)
@@ -378,6 +417,9 @@ namespace FluentAutomation
         }
     }
 
+    /// <summary>
+    /// Option mode for <select /> manipulation: Text, Value or Index
+    /// </summary>
     public enum Option
     {
         Text = 1,
