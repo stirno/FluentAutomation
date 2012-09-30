@@ -432,6 +432,7 @@ namespace FluentAutomation
                 bool isFuncValid = false;
                 var compiledFunc = conditionFunc.Compile();
 
+                FluentException lastException = null;
                 while (DateTime.Now < dateTimeTimeout)
                 {
                     try
@@ -444,6 +445,10 @@ namespace FluentAutomation
 
                         System.Threading.Thread.Sleep(Settings.DefaultWaitUntilThreadSleep);
                     }
+                    catch (FluentException ex)
+                    {
+                        lastException = ex;
+                    }
                     catch (Exception ex)
                     {
                         throw new FluentException("An unexpected exception was thrown inside WaitUntil(Func<bool>). See InnerException for details.", ex);
@@ -453,7 +458,7 @@ namespace FluentAutomation
                 // If func is still not valid, assume we've hit the timeout.
                 if (isFuncValid == false)
                 {
-                    throw new FluentException("Conditional wait passed the timeout [{0}ms] for expression [{1}].", timeout.TotalMilliseconds, conditionFunc.ToExpressionString());
+                    throw new FluentException("Conditional wait passed the timeout [{0}ms] for expression [{1}].", lastException, timeout.TotalMilliseconds, conditionFunc.ToExpressionString());
                 }
             });
         }

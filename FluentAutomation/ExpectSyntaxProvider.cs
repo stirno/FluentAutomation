@@ -316,6 +316,15 @@ namespace FluentAutomation
             });
         }
         #endregion
+
+        /// <summary>
+        /// Expect the element specified exists.
+        /// </summary>
+        /// <param name="selector">Element selector.</param>
+        public void Exists(string selector)
+        {
+            this.expectProvider.Exists(selector);
+        }
     }
 
     public class BaseExpectSyntaxProvider

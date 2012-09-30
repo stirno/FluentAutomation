@@ -576,5 +576,17 @@ namespace FluentAutomation
             });
         }
         #endregion
+
+        public void Exists(string selector)
+        {
+            this.commandProvider.Act(() =>
+            {
+                var unwrappedElement = this.commandProvider.Find(selector)() as IElement;
+                if (unwrappedElement == null)
+                {
+                    throw new FluentExpectFailedException("Expected element matching selector [{0}] to exist.", selector);
+                }
+            });
+        }
     }
 }

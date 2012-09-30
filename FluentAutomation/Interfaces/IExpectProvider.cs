@@ -31,5 +31,6 @@ namespace FluentAutomation.Interfaces
         void True(Expression<Func<bool>> matchFunc);
         void False(Expression<Func<bool>> matchFunc);
         void Throws(Expression<Action> matchAction);
+        void Exists(string selector);
     }
 }
