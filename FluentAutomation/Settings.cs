@@ -44,6 +44,34 @@ namespace FluentAutomation
             } 
         }
 
+        private static bool screenshotOnFailedExpect = false;
+        public static bool ScreenshotOnFailedExpect
+        {
+            get
+            {
+                return screenshotOnFailedExpect;
+            }
+
+            set
+            {
+                screenshotOnFailedExpect = value;
+            }
+        }
+
+        private static bool screenshotOnFailedAction = false;
+        public static bool ScreenshotOnFailedAction
+        {
+            get
+            {
+                return screenshotOnFailedAction;
+            }
+
+            set
+            {
+                screenshotOnFailedAction = value;
+            }
+        }
+
         private static TimeSpan defaultWaitTimeout = TimeSpan.FromSeconds(1);
         public static TimeSpan DefaultWaitTimeout
         {
@@ -59,6 +87,9 @@ namespace FluentAutomation
         }
 
         private static TimeSpan defaultWaitUntilTimeout = TimeSpan.FromSeconds(30);
+        /// <summary>
+        /// Time to wait before assuming the provided WaitUntil() condition will never be reached. Defaults to 30 seconds.
+        /// </summary>
         public static TimeSpan DefaultWaitUntilTimeout
         {
             get
@@ -73,6 +104,9 @@ namespace FluentAutomation
         }
 
         private static TimeSpan defaultWaitUntilThreadSleep = TimeSpan.FromMilliseconds(100);
+        /// <summary>
+        /// Time to wait before attempting to validate the provided condition for WatiUntil(). Defaults to 100 milliseconds.
+        /// </summary>
         public static TimeSpan DefaultWaitUntilThreadSleep
         {
             get
@@ -83,6 +117,23 @@ namespace FluentAutomation
             set
             {
                 defaultWaitUntilThreadSleep = value;
+            }
+        }
+
+        private static bool minimizeAllWindowsOnTestStart = true;
+        /// <summary>
+        /// Determines whether or not windows will automatically be minimized on start of test execution and reverted when finished. Defaults to true.
+        /// </summary>
+        public static bool MinimizeAllWindowsOnTestStart
+        {
+            get
+            {
+                return minimizeAllWindowsOnTestStart;
+            }
+
+            set
+            {
+                minimizeAllWindowsOnTestStart = value;
             }
         }
     }

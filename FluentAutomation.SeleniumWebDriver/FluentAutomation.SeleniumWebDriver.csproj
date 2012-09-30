@@ -68,6 +68,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SeleniumWebDriver.cs" />
     <Compile Include="Sizzle.cs" />
+    <Compile Include="Wrappers\IEDriver.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FluentAutomation\FluentAutomation.csproj">

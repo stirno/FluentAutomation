@@ -265,7 +265,7 @@ namespace FluentAutomation
             this.waitForPhantomReady();
         }
 
-        public void TakeScreenshot(string screenshotName)
+        public override void TakeScreenshot(string screenshotName)
         {
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "TakeScreenshot", FileName = screenshotName }));
             this.waitForPhantomReady();

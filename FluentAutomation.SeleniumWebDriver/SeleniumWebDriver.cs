@@ -66,7 +66,7 @@ namespace FluentAutomation
                 {
                     case Browser.InternetExplorer:
                         EmbeddedResources.UnpackFromAssembly("IEDriverServer.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
-                        container.Register<IWebDriver, OpenQA.Selenium.IE.InternetExplorerDriver>().AsMultiInstance();
+                        container.Register<IWebDriver, Wrappers.IEDriverWrapper>().AsMultiInstance();
                         break;
                     case Browser.Firefox:
                         container.Register<IWebDriver, OpenQA.Selenium.Firefox.FirefoxDriver>().AsMultiInstance();

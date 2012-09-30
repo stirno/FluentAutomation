@@ -255,7 +255,7 @@ namespace FluentAutomation
             }
         }
 
-        public void TakeScreenshot(string screenshotName)
+        public override void TakeScreenshot(string screenshotName)
         {
             this.browser.CaptureWebPageToFile(screenshotName);
         }

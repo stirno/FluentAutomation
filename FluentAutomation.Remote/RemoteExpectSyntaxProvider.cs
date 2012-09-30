@@ -64,7 +64,6 @@ namespace FluentAutomation
         public class RemoteExpectTextSyntaxProvider : RemoteBaseExpectSyntaxProvider
         {
             private readonly string text = null;
-            private readonly Expression<Func<string, bool>> matchFunc = null;
 
             public RemoteExpectTextSyntaxProvider(IRemoteCommandProvider commandProvider, IRemoteExpectProvider expectProvider, string text)
                 : base(commandProvider, expectProvider)

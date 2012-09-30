@@ -15,6 +15,7 @@ namespace FluentAutomation
                 if (container == null)
                 {
                     container = new TinyIoC.TinyIoCContainer();
+                    if (Settings.MinimizeAllWindowsOnTestStart) Win32Magic.MinimizeAllWindows();
                 }
 
                 return container;
@@ -28,6 +29,7 @@ namespace FluentAutomation
             try
             {
                 if (this.syntaxProvider != null) this.syntaxProvider.Dispose();
+                if (Settings.MinimizeAllWindowsOnTestStart) Win32Magic.RestoreAllWindows();
             }
             catch { };
         }
