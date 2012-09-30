@@ -36,6 +36,8 @@ namespace FluentAutomation.Exceptions
             }
         }
 
+        public string ScreenshotPath { get; set; }
+
         /// <remarks>
         /// Credit to MvcContrib.TestHelper.AssertionException for PreserveStackTrace
         /// </remarks>

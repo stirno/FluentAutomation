@@ -20,20 +20,24 @@ namespace FluentAutomation
                 {
                     action();
                 }
-                catch (Exceptions.FluentExpectFailedException)
+                catch (Exceptions.FluentExpectFailedException ex)
                 {
                     if (Settings.ScreenshotOnFailedExpect)
                     {
-                        this.TakeScreenshot(string.Format(CultureInfo.CurrentCulture, "ExpectFailed_", DateTimeOffset.Now.Date.ToShortTimeString()));
+                        var screenshotName = string.Format(CultureInfo.CurrentCulture, "ExpectFailed_{0}", DateTimeOffset.Now.Date.ToFileTime());
+                        ex.ScreenshotPath = System.IO.Path.Combine(Settings.ScreenshotPath, screenshotName);
+                        this.TakeScreenshot(screenshotName);
                     }
 
                     throw;
                 }
-                catch (Exceptions.FluentException)
+                catch (Exceptions.FluentException ex)
                 {
-                    if (Settings.ScreenshotOnFailedExpect)
+                    if (Settings.ScreenshotOnFailedAction)
                     {
-                        this.TakeScreenshot(string.Format(CultureInfo.CurrentCulture, "ActionFailed_", DateTimeOffset.Now.Date.ToShortTimeString()));
+                        var screenshotName = string.Format(CultureInfo.CurrentCulture, "ActionFailed_{0}", DateTimeOffset.Now.Date.ToFileTime());
+                        ex.ScreenshotPath = System.IO.Path.Combine(Settings.ScreenshotPath, screenshotName);
+                        this.TakeScreenshot(screenshotName);
                     }
 
                     throw;

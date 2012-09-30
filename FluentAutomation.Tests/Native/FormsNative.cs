@@ -8,6 +8,12 @@ namespace FluentAutomation.Tests
 {
     public class FormsNative : FluentTest
     {
+        public FormsNative()
+        {
+            Settings.ScreenshotOnFailedAction = true;
+            Settings.ScreenshotOnFailedExpect = true;
+        }
+
         private static string testUrl = "http://automation.apphb.com/forms";
 
         [Fact]
@@ -52,6 +58,7 @@ namespace FluentAutomation.Tests
         public void CartEditor_BuyMotorcycles()
         {
             I.Open(testUrl);
+            I.Expect.Url("http://google.com");
             I.Select("Motorcycles").From(".liveExample tr select:eq(0)"); // Select by value/text
             I.Select(2).From(".liveExample tr select:eq(1)"); // Select by index
             I.Enter(6).In(".liveExample td.quantity input:eq(0)");
