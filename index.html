@@ -1,51 +1,33 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <meta charset='utf-8'>
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=640" />
-
-    <link rel="stylesheet" href="stylesheets/core.css" media="screen"/>
-    <link rel="stylesheet" href="stylesheets/mobile.css" media="handheld, only screen and (max-device-width:640px)"/>
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
-
-    <script type="text/javascript" src="javascripts/modernizr.js"></script>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script type="text/javascript" src="javascripts/headsmart.min.js"></script>
-    <script type="text/javascript">
-      $(document).ready(function () {
-        $('#main_content').headsmart()
-      })
-    </script>
     <title>Fluentautomation by stirno</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
   </head>
-
   <body>
-    <a id="forkme_banner" href="https://github.com/stirno/FluentAutomation">View on GitHub</a>
-    <div class="shell">
-
+    <div class="wrapper">
       <header>
-        <span class="ribbon-outer">
-          <span class="ribbon-inner">
-            <h1>Fluentautomation</h1>
-            <h2>Simple Fluent API for UI Automation</h2>
-          </span>
-          <span class="left-tail"></span>
-          <span class="right-tail"></span>
-        </span>
+        <h1>Fluentautomation</h1>
+        <p>Simple Fluent API for UI Automation</p>
+
+        <p class="view"><a href="https://github.com/stirno/FluentAutomation">View the Project on GitHub <small>stirno/FluentAutomation</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/stirno/FluentAutomation/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/stirno/FluentAutomation/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/stirno/FluentAutomation">View On <strong>GitHub</strong></a></li>
+        </ul>
       </header>
-
-      <section id="downloads">
-        <span class="inner">
-          <a href="https://github.com/stirno/FluentAutomation/zipball/master" class="zip"><em>download</em> .ZIP</a><a href="https://github.com/stirno/FluentAutomation/tarball/master" class="tgz"><em>download</em> .TGZ</a>
-        </span>
-      </section>
-
-
-      <span class="banner-fix"></span>
-
-
-      <section id="main_content">
+      <section>
         <h2>Fluent Automation API</h2>
 
 <h4>Getting Started</h4>
@@ -286,19 +268,45 @@ I.Wait(TimeSpan.FromMilliseconds(500)); // Wait 500ms
 
 <p><strong>Text</strong> Verify that an element matching the selector has the specified text in its innerHTML or value depending on type.</p>
 
+<pre><code>I.Expect.Text("sup").In(selector);
+</code></pre>
+
 <p><strong>Value</strong> Verify that an element matching the selector has the specified value. This works with <code>&lt;input type='text' /&gt;</code>, <code>&lt;textarea&gt;&lt;/textarea&gt;</code> and <code>&lt;select&gt;&lt;option value='1'&gt;&lt;/select&gt;</code>.</p>
+
+<pre><code>I.Expect.Value(10).In(selector);
+</code></pre>
 
 <p><strong>Exists</strong> Verify that an element matching the selector exists. Alternative: <code>I.Expect.Count(0).Of(selector);</code></p>
 
+<pre><code>I.Expect.Exists(selector);
+</code></pre>
+
 <p><strong>Class</strong> Verify that the element matching the selector has the specified CSS class.</p>
+
+<pre><code>I.Expect.Class("error").On(selector);
+</code></pre>
 
 <p><strong>Count</strong> Verify that a specific count of elements matching the selector exist on the page.</p>
 
+<pre><code>I.Expect.Count(1).Of(selector);
+</code></pre>
+
 <p><strong>Url</strong> Verify that the current open page URL matches the specified value.</p>
+
+<pre><code>I.Expect.Url("http://www.google.com/");
+</code></pre>
 
 <p><strong>True / False</strong> Verify that the expression returns either true or false.</p>
 
+<pre><code>var fieldFunc = I.Find(selector);
+I.Expect.True(() =&gt; fieldFunc().IsText);
+I.Expect.False(() =&gt; fieldFunc().IsSelect);
+</code></pre>
+
 <p><strong>Throws</strong> Verify that an expression causes an exception to be thrown.</p>
+
+<pre><code>I.Expect.Throws(() =&gt; I.Expect.Class("error").On(selector)); // selector does not have class
+</code></pre>
 
 <h4>Extending Fluent v2</h4>
 
@@ -328,21 +336,22 @@ I.Wait(TimeSpan.FromMilliseconds(500)); // Wait 500ms
 
 <p>Additionally, you can build new providers that implement <code>IExpectProvider, IFileStoreProvider</code> or <code>ICommandProvider</code> that can be injected with a custom Bootstrap method. We are working on making more internal interfaces accessible for injection soon. Let us know if you've got something interesting in mind.</p>
       </section>
-
       <footer>
-        <span class="ribbon-outer">
-          <span class="ribbon-inner">
-            <p>this project by <a href="https://github.com/stirno">stirno</a> can be found on <a href="https://github.com/stirno/FluentAutomation">GitHub</a></p>
-          </span>
-          <span class="left-tail"></span>
-          <span class="right-tail"></span>
-        </span>
-        <p>Generated with <a href="http://pages.github.com">GitHub Pages</a> using Merlot</p>
-        <span class="octocat"></span>
+        <p>This project is maintained by <a href="https://github.com/stirno">stirno</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
       </footer>
-
     </div>
+    <script src="javascripts/scale.fix.js"></script>
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-35282988-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
 
-    
   </body>
 </html>
