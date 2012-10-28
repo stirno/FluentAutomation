@@ -1,0 +1,167 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="author" content="Brandon Stirnaman" />
+		<title>Fluent Automation // FluentAutomation API</title>
+
+		<link href='/site.css' rel='stylesheet' />
+		<link href='/pygments.css' rel='stylesheet' />
+
+		<script type="text/javascript">
+		  var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', 'UA-26845406-1']);
+		  _gaq.push(['_setDomainName', 'stirno.com']);
+		  _gaq.push(['_trackPageview']);
+
+		  (function() {
+		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+		</script>
+	</head>
+	<body>
+		<header>
+			<a href='/'><h1>FLUENT<span>AUTOMATION</span></h1></a>
+			<p class='who'><span class='blue'><a href='//twitter.com/stirno'>@stirno</a></span> // <a href='//github.com/stirno'>github.com/stirno</a></p>
+			<p class='tagline'>Simple, fluent DSL for automating web applications.</p>
+			<br />
+			<nav>
+				<a href='/docs' title='Get Started' class='tile double blue video'>
+					<!-- <img src='/code-getting-started.gif' /> -->
+					<iframe src="http://player.vimeo.com/video/52308617?title=0&amp;byline=0&amp;portrait=0&amp;autoplay=1&amp;loop=1" width="260" height="123" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+					<span>GETTING STARTED</span>
+				</a>
+				<a href='/docs' title='Read the Docs' class='tile red'>
+					<div class='icon-docs'></div>
+					<span>DOCUMENTATION</span>
+				</a>
+				<a href='//github.com/stirno/FluentAutomation' title='View on GitHub' class='tile purple left-spacer'>
+					<div class='icon-github'></div>
+					<span>VIEW ON GITHUB</span>
+				</a>
+				<div class='tile double orange'>
+					<div class="nuget-badge">
+					<p>
+						<code>
+							PM&gt; <a title='FluentAutomation.SeleniumWebDriver on NuGet' href='//nuget.org/packages/FluentAutomation.SeleniumWebDriver'>Install-Package FluentAutomation.SeleniumWebDriver</a><br /><br />
+							PM&gt; <a title='FluentAutomation.WatiN on NuGet' href='//nuget.org/packages/FluentAutomation.WatiN'>Install-Package FluentAutomation.WatiN</a><br /><br />
+							PM&gt; <a title='FluentAutomation.PhantomJS on NuGet' href='//nuget.org/packages/FluentAutomation.PhantomJS'>Install-Package FluentAutomation.PhantomJS</a>
+						</code>
+					</p>
+					</div>
+					<span>AVAILABLE ON NUGET</span>
+				</div>
+			</nav>		
+<!-- 		<div class='clear'></div>
+			<h1>FLUENT<span>AUTOMATION</span><span class='lighter'>recorder<span></h1>
+			<p class='who'><span class='blue'><a href='//twitter.com/pauljz'>@pauljz</a></span> // <a href='//github.com/pauljz'>github.com/pauljz</a></p> -->
+		</header>
+		<section class='articles'>
+			<article>
+	<header title='FluentAutomation API'><a href='/blog/FluentAutomation-API'>FluentAutomation API</a></header>
+	<div class='clear'></div>
+	<p>Announcing the new Fluent Automation API. A quick, easy to use library for automating web applications.</p>
+
+<p>Here is an example of the new framework:</p>
+
+<p>using FluentAutomation.API;
+using FluentAutomation.API.Enumerations;
+using Microsoft.VisualStudio.TestTools.UnitTesting;</p>
+<div class="highlight"><pre><code class="csharp"><span class="k">namespace</span> <span class="nn">FluentAutomation.Samples</span>
+<span class="p">{</span>
+<span class="na">    [TestClass]</span>
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">LoginTests</span> <span class="p">:</span> <span class="n">TestClass</span>
+    <span class="p">{</span>
+<span class="na">        [TestMethod]</span>
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">Login_HappyPath</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Use</span><span class="p">(</span><span class="n">BrowserType</span><span class="p">.</span><span class="n">InternetExplorer</span><span class="p">);</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Open</span><span class="p">(</span><span class="s">&quot;http://www.yoursite.com/Login&quot;</span><span class="p">);</span>
+
+            <span class="c1">// Validate expected strings on page</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">This</span><span class="p">(</span><span class="s">&quot;Username&quot;</span><span class="p">).</span><span class="n">In</span><span class="p">(</span><span class="s">&quot;label.username-field&quot;</span><span class="p">);</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">This</span><span class="p">(</span><span class="s">&quot;Password&quot;</span><span class="p">).</span><span class="n">In</span><span class="p">(</span><span class="s">&quot;label.password-field&quot;</span><span class="p">);</span>
+
+            <span class="c1">// Perform login</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Enter</span><span class="p">(</span><span class="s">&quot;username&quot;</span><span class="p">).</span><span class="n">In</span><span class="p">(</span><span class="s">&quot;input.username-field&quot;</span><span class="p">);</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Enter</span><span class="p">(</span><span class="s">&quot;password&quot;</span><span class="p">).</span><span class="n">In</span><span class="p">(</span><span class="s">&quot;input.password-field&quot;</span><span class="p">);</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Click</span><span class="p">(</span><span class="s">&quot;input[type=&#39;button&#39;].login&quot;</span><span class="p">);</span>
+
+            <span class="c1">// Validate login successful</span>
+            <span class="c1">// Forwarded correctly</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">Url</span><span class="p">(</span><span class="s">&quot;http://www.yoursite.com/&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+
+<span class="na">        [TestMethod]</span>
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">Login_BadPassword</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Use</span><span class="p">(</span><span class="n">BrowserType</span><span class="p">.</span><span class="n">InternetExplorer</span><span class="p">);</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Open</span><span class="p">(</span><span class="s">&quot;http://www.yoursite.com/Login&quot;</span><span class="p">);</span>
+
+            <span class="c1">// Validate expected strings on page</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">This</span><span class="p">(</span><span class="s">&quot;Username&quot;</span><span class="p">).</span><span class="n">In</span><span class="p">(</span><span class="s">&quot;label.username-field&quot;</span><span class="p">);</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">This</span><span class="p">(</span><span class="s">&quot;Password&quot;</span><span class="p">).</span><span class="n">In</span><span class="p">(</span><span class="s">&quot;label.password-field&quot;</span><span class="p">);</span>
+
+            <span class="c1">// Perform login</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Enter</span><span class="p">(</span><span class="s">&quot;username&quot;</span><span class="p">).</span><span class="n">In</span><span class="p">(</span><span class="s">&quot;input.username-field&quot;</span><span class="p">);</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Enter</span><span class="p">(</span><span class="s">&quot;wrong password&quot;</span><span class="p">).</span><span class="n">In</span><span class="p">(</span><span class="s">&quot;input.password-field&quot;</span><span class="p">);</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Click</span><span class="p">(</span><span class="s">&quot;input[type=&#39;button&#39;].login&quot;</span><span class="p">);</span>
+
+            <span class="c1">// Validate login successful</span>
+            <span class="c1">// Error shown</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">This</span><span class="p">(</span><span class="s">&quot;Username/password not correct.&quot;</span><span class="p">).</span><span class="n">In</span><span class="p">(</span><span class="s">&quot;div.error&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+<p>Much more information coming soon!</p>
+
+<p>NOTE: This is very old. Several changes have been made to the API since this was posted. Please reference the Docs when writing new tests.</p>
+
+	
+	<nav>
+		<div class='right tiles'>
+			<a class='author brown' href='//twitter.com/stirno'><img class='gravatar' src='http://www.gravatar.com/avatar/f0911b8dd77a34c0354968639b4545f4' /><span>@stirno</span></a>
+			<div>28 August 2011</div>
+			<div class='orange' style='margin-right: 0px'>
+				<span class='text'>SHARE</span>
+			</div>
+			<div class='orange' style='padding-left: 0px'>
+				<span class='icon-google-plus'></span>
+				<span class='icon-twitter'></span>
+			</div>
+		</div>
+	</nav>
+	<div class='clear' style='padding-top: 20px'></div>
+	
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	var disqus_shortname = 'fluent';
+	var disqus_identifier = '/blog/FluentAutomation-API';
+
+	(function() {
+	var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+	(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</article>
+		</section>
+
+		<script type="text/javascript">
+			// Disqus
+			var disqus_shortname = 'fluent';
+			(function () {
+				var s = document.createElement('script'); s.async = true;
+				s.type = 'text/javascript';
+				s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+				(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+			}());
+		</script>
+	</body>
+</html>

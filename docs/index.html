@@ -1,0 +1,369 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="author" content="Brandon Stirnaman" />
+		<title>Fluent Automation // Documentation API</title>
+
+		<link href='/site.css' rel='stylesheet' />
+		<link href='/pygments.css' rel='stylesheet' />
+
+		<script type="text/javascript">
+		  var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', 'UA-26845406-1']);
+		  _gaq.push(['_setDomainName', 'stirno.com']);
+		  _gaq.push(['_trackPageview']);
+
+		  (function() {
+		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+		</script>
+	</head>
+	<body>
+		<header>
+			<a href='/'><h1>FLUENT<span>AUTOMATION</span></h1></a>
+			<p class='who'><span class='blue'><a href='//twitter.com/stirno'>@stirno</a></span> // <a href='//github.com/stirno'>github.com/stirno</a></p>
+			<p class='tagline'>Simple, fluent DSL for automating web applications.</p>
+			<br />
+			<nav>
+				<a href='/docs' title='Get Started' class='tile double blue video'>
+					<!-- <img src='/code-getting-started.gif' /> -->
+					<iframe src="http://player.vimeo.com/video/52308617?title=0&amp;byline=0&amp;portrait=0&amp;autoplay=1&amp;loop=1" width="260" height="123" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+					<span>GETTING STARTED</span>
+				</a>
+				<a href='/docs' title='Read the Docs' class='tile red'>
+					<div class='icon-docs'></div>
+					<span>DOCUMENTATION</span>
+				</a>
+				<a href='//github.com/stirno/FluentAutomation' title='View on GitHub' class='tile purple left-spacer'>
+					<div class='icon-github'></div>
+					<span>VIEW ON GITHUB</span>
+				</a>
+				<div class='tile double orange'>
+					<div class="nuget-badge">
+					<p>
+						<code>
+							PM&gt; <a title='FluentAutomation.SeleniumWebDriver on NuGet' href='//nuget.org/packages/FluentAutomation.SeleniumWebDriver'>Install-Package FluentAutomation.SeleniumWebDriver</a><br /><br />
+							PM&gt; <a title='FluentAutomation.WatiN on NuGet' href='//nuget.org/packages/FluentAutomation.WatiN'>Install-Package FluentAutomation.WatiN</a><br /><br />
+							PM&gt; <a title='FluentAutomation.PhantomJS on NuGet' href='//nuget.org/packages/FluentAutomation.PhantomJS'>Install-Package FluentAutomation.PhantomJS</a>
+						</code>
+					</p>
+					</div>
+					<span>AVAILABLE ON NUGET</span>
+				</div>
+			</nav>		
+<!-- 		<div class='clear'></div>
+			<h1>FLUENT<span>AUTOMATION</span><span class='lighter'>recorder<span></h1>
+			<p class='who'><span class='blue'><a href='//twitter.com/pauljz'>@pauljz</a></span> // <a href='//github.com/pauljz'>github.com/pauljz</a></p> -->
+		</header>
+		<section class='articles'>
+			<article>
+	<header title='Documentation API'><a href='/docs/index.html'>Documentation API</a></header>
+	<div class='clear'></div>
+	<h4 id="toc_6">Getting Started</h4>
+
+<p>The intent of Fluent Automation is to simplify the task of creating automated tests for web applications.</p>
+
+<h5 id="toc_7">Installation</h5>
+
+<p>Official releases of Fluent Automation for .NET are available via NuGet Package manager. They are provided as packages based on which underlying provider you wish to use. </p>
+
+<p><em>PM&gt; Install-Package FluentAutomation.SeleniumWebDriver</em></p>
+
+<p>SeleniumWebDriver is the recommended provider. </p>
+
+<p><em>PM&gt; Install-Package FluentAutomation.WatiN</em></p>
+
+<p>WatiN is provided as an alternative, but it only supports automating Internet Explorer.</p>
+
+<p><em>PM&gt; Install-Package FluentAutomation.PhantomJS</em></p>
+
+<p>PhantomJS is currently in development, but has near feature parity with the other providers. It is intended for testing in environments where headless execution is preferred.</p>
+
+<h5 id="toc_8">Test Setup</h5>
+
+<p>To utilize Fluent Automation, all you need to do is create a class that inherits from our base test class and bootstrap your provider.</p>
+
+<p>This can be done via constructor or test initialization methods. In the following sample, I will bootstrap the Selenium provider via constructor and open a browser to Google.</p>
+<div class="highlight"><pre><code class="csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">SampleTest</span> <span class="p">:</span> <span class="n">FluentAutomation</span><span class="p">.</span><span class="n">FluentTest</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="nf">SampleTest</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">FluentAutomation</span><span class="p">.</span><span class="n">SeleniumWebDriver</span><span class="p">.</span><span class="n">Bootstrap</span><span class="p">();</span>
+    <span class="p">}</span>
+
+<span class="na">    [Fact]</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">OpenGoogle</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">I</span><span class="p">.</span><span class="n">Open</span><span class="p">(</span><span class="s">&quot;http://www.google.com/&quot;</span><span class="p">);</span>
+        <span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">Url</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">LocalPath</span><span class="p">.</span><span class="n">Contains</span><span class="p">(</span><span class="s">&quot;google.com&quot;</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+<p>The different providers have varying degrees of customization that can be applied during bootstrapping. For example, the Selenium provider can specify the web browser to target.</p>
+
+<p>Configuration of various test-wide settings can be done using the static FluentAutomation.Settings class properties.</p>
+<div class="highlight"><pre><code class="csharp"><span class="n">Settings</span><span class="p">.</span><span class="n">ScreenshotPath</span> <span class="p">=</span> <span class="s">@&quot;C:\Results\SampleTestSuite&quot;</span><span class="p">;</span>
+<span class="n">Settings</span><span class="p">.</span><span class="n">ScreenshotOnFailedExpect</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+<span class="n">Settings</span><span class="p">.</span><span class="n">ScreenshotOnFailedAction</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+<span class="n">Settings</span><span class="p">.</span><span class="n">DefaultWaitTimeout</span> <span class="p">=</span> <span class="n">TimeSpan</span><span class="p">.</span><span class="n">FromSeconds</span><span class="p">(</span><span class="m">1</span><span class="p">);</span>
+<span class="n">Settings</span><span class="p">.</span><span class="n">DefaultWaitUntilTimeout</span> <span class="p">=</span> <span class="n">TimeSpan</span><span class="p">.</span><span class="n">FromSeconds</span><span class="p">(</span><span class="m">30</span><span class="p">);</span>
+<span class="n">Settings</span><span class="p">.</span><span class="n">MinimizeAllWindowsOnTestStart</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+</code></pre>
+</div>
+<h4 id="toc_9">Actions</h4>
+
+<p>All of the functionality of the API is available via sentence-like fluent method calls.</p>
+
+<h5 id="toc_10">Open</h5>
+
+<p>Open the browser, launch the provider and navigate to the specified URL.</p>
+<div class="highlight"><pre><code class="csharp"><span class="n">I</span><span class="p">.</span><span class="n">Open</span><span class="p">(</span><span class="s">&quot;http://www.google.com&quot;</span><span class="p">);</span>
+</code></pre>
+</div>
+<h5 id="toc_11">Click</h5>
+
+<p>Click the specified point or element.</p>
+<div class="highlight"><pre><code class="csharp"><span class="n">I</span><span class="p">.</span><span class="n">Click</span><span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">10</span><span class="p">);</span> <span class="c1">// click by coordinate</span>
+<span class="n">I</span><span class="p">.</span><span class="n">Click</span><span class="p">(</span><span class="s">&quot;button.submit&quot;</span><span class="p">);</span> <span class="c1">// click by selector</span>
+</code></pre>
+</div>
+<p>Overloads support clicking relative to a selector.</p>
+
+<h5 id="toc_12">DoubleClick</h5>
+
+<p>DoubleClick the specified point or element.</p>
+<div class="highlight"><pre><code class="csharp"><span class="n">I</span><span class="p">.</span><span class="n">DoubleClick</span><span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">10</span><span class="p">);</span> <span class="c1">// by coordinate.</span>
+<span class="n">I</span><span class="p">.</span><span class="n">DoubleClick</span><span class="p">(</span><span class="s">&quot;button.submit&quot;</span><span class="p">);</span> <span class="c1">// by selector.</span>
+</code></pre>
+</div>
+<p>Overloads support clicking relative to a selector.</p>
+
+<h5 id="toc_13">RightClick</h5>
+
+<p>RightClick the specified point or element.</p>
+<div class="highlight"><pre><code class="csharp"><span class="n">I</span><span class="p">.</span><span class="n">RightClick</span><span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">10</span><span class="p">);</span> <span class="c1">// by coordinate.</span>
+<span class="n">I</span><span class="p">.</span><span class="n">RightClick</span><span class="p">(</span><span class="s">&quot;button.submit&quot;</span><span class="p">);</span> <span class="c1">// by selector.</span>
+</code></pre>
+</div>
+<p>Overloads support clicking relative to a selector.</p>
+
+<h5 id="toc_14">Hover</h5>
+
+<p>Hover over the specified point or element.</p>
+<div class="highlight"><pre><code class="csharp"><span class="n">I</span><span class="p">.</span><span class="n">Hover</span><span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">10</span><span class="p">);</span> <span class="c1">// by coordinate.</span>
+<span class="n">I</span><span class="p">.</span><span class="n">Hover</span><span class="p">(</span><span class="s">&quot;button.submit&quot;</span><span class="p">);</span> <span class="c1">// by selector.</span>
+</code></pre>
+</div>
+<p>Overloads support hovering relative to a selector.</p>
+
+<h5 id="toc_15">Focus</h5>
+
+<p>Set focus on an element.</p>
+<div class="highlight"><pre><code class="csharp"><span class="n">I</span><span class="p">.</span><span class="n">Focus</span><span class="p">(</span><span class="s">&quot;button.submit&quot;</span><span class="p">);</span>
+</code></pre>
+</div>
+<h5 id="toc_16">Press</h5>
+
+<p>Using <a href="http://msdn.microsoft.com/en-us/library/system.windows.forms.sendkeys.aspx">Windows Forms SendKeys</a> values, trigger a keypress event with the specified key.</p>
+<div class="highlight"><pre><code class="csharp"><span class="n">I</span><span class="p">.</span><span class="n">Press</span><span class="p">(</span><span class="s">&quot;{TAB}&quot;</span><span class="p">);</span> <span class="c1">// trigger a tab keypress event</span>
+</code></pre>
+</div>
+<h5 id="toc_17">Type</h5>
+
+<p>Type a string one character at a time. Cannot be used with special keycodes such as {TAB}. Should be used in combination with other methods that set the focus inside of controls that cannot be automated, such as Flash or popup windows.</p>
+<div class="highlight"><pre><code class="csharp"><span class="n">I</span><span class="p">.</span><span class="n">Type</span><span class="p">(</span><span class="s">&quot;Test String&quot;</span><span class="p">);</span>
+</code></pre>
+</div>
+<h5 id="toc_18">Select</h5>
+
+<p>Select a value or values from a <code>&lt;SELECT /&gt;</code> element. Overloads allow for selection via Value, Text or Index.</p>
+<div class="highlight"><pre><code class="csharp"><span class="n">I</span><span class="p">.</span><span class="n">Select</span><span class="p">(</span><span class="s">&quot;MN&quot;</span><span class="p">).</span><span class="n">From</span><span class="p">(</span><span class="s">&quot;select#states&quot;</span><span class="p">);</span>
+</code></pre>
+</div>
+<h4 id="toc_19">Advanced Actions</h4>
+
+<h5 id="toc_20">Find / Find Multiple</h5>
+
+<p>In the rare scenarios that you need access to the element directly, you can use <code>I.Find/I.FindMultiple</code> to get a factory function that will locate and return the element to you.</p>
+
+<p>It can be useful to do this in large test suites, where the same element is interacted with several times. Most Actions and Expects support a factory overload for the scenarios.</p>
+<div class="highlight"><pre><code class="csharp"><span class="kt">var</span> <span class="n">notificationsDiv</span> <span class="p">=</span> <span class="n">I</span><span class="p">.</span><span class="n">Find</span><span class="p">(</span><span class="s">&quot;div#notifications&quot;</span><span class="p">);</span>
+
+<span class="c1">// Verify no notifications on page.</span>
+<span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">Count</span><span class="p">(</span><span class="m">0</span><span class="p">).</span><span class="n">Of</span><span class="p">(</span><span class="n">notificationsDiv</span><span class="p">);</span>
+
+<span class="c1">// Trigger Notification</span>
+<span class="n">I</span><span class="p">.</span><span class="n">Click</span><span class="p">(</span><span class="s">&quot;button.trigger-notify&quot;</span><span class="p">);</span>
+<span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">Count</span><span class="p">(</span><span class="m">1</span><span class="p">).</span><span class="n">Of</span><span class="p">(</span><span class="n">notificationsDiv</span><span class="p">);</span>
+<span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">Text</span><span class="p">(</span><span class="s">&quot;Button Clicked&quot;</span><span class="p">).</span><span class="n">In</span><span class="p">(</span><span class="n">notificationsDiv</span><span class="p">);</span>
+
+<span class="c1">// Clicking notification removes from page</span>
+<span class="n">I</span><span class="p">.</span><span class="n">Click</span><span class="p">(</span><span class="n">notificationsDiv</span><span class="p">);</span>
+<span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">Count</span><span class="p">(</span><span class="m">0</span><span class="p">).</span><span class="n">Of</span><span class="p">(</span><span class="n">notificationsDiv</span><span class="p">);</span>
+</code></pre>
+</div>
+<p>This can be a useful optimization in tests that are very complex and interact with the same element multiple times. This is unnecessary in most cases.</p>
+
+<p>Another use of <code>I.Find/I.FindMultiple</code> is to directly get to the element instance itself, in this case an instance that implements IElement.</p>
+<div class="highlight"><pre><code class="csharp"><span class="kt">var</span> <span class="n">inputFunc</span> <span class="p">=</span> <span class="n">I</span><span class="p">.</span><span class="n">Find</span><span class="p">(</span><span class="s">&quot;input:eq(0)&quot;</span><span class="p">);</span>
+<span class="n">IElement</span> <span class="n">input</span> <span class="p">=</span> <span class="n">inputFunc</span><span class="p">();</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">input</span><span class="p">.</span><span class="n">IsText</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// do something</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+<p>By doing this, you lose some of the implicit retry logic for selectors. In general this is not something you want to do, but if you absolutely have no other choice, you can. This will also allow you to break the abstraction from the test provider by casting to the type used in that framework, Selenium&#39;s WebElement type for example. Again, not recommended.</p>
+
+<h5 id="toc_21">Take Screenshot</h5>
+
+<p>Grab a screenshot of the current browser window and save it to disk. You must provide the name to save the file. The path it is saved in is configurable via Settings.ScreenshotPath.</p>
+<div class="highlight"><pre><code class="csharp"><span class="n">I</span><span class="p">.</span><span class="n">TakeScreenshot</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="n">Format</span><span class="p">(</span><span class="s">&quot;LoginScreen_{0}&quot;</span><span class="p">,</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">.</span><span class="n">ToString</span><span class="p">()));</span>
+</code></pre>
+</div>
+<h5 id="toc_22">Upload</h5>
+
+<p>Using a standard HTML File Input (<code>&lt;input type=&#39;file&#39; /&gt;</code>), upload a file to the server.</p>
+<div class="highlight"><pre><code class="csharp"><span class="n">I</span><span class="p">.</span><span class="n">Upload</span><span class="p">(</span><span class="s">&quot;input[type=&#39;file&#39;]:eq(0)&quot;</span><span class="p">,</span> <span class="s">@&quot;C:\Penguins.jpg&quot;</span><span class="p">);</span>
+</code></pre>
+</div>
+<p>The path must be absolute and point to the file you wish to upload. This has worked with several Flash-based uploaders as well.</p>
+
+<h5 id="toc_23">Drag &amp; Drop</h5>
+
+<p>Proper Drag &amp; Drop is supported in all providers. It can be specific to dragging a single selector to another, or dragging from an offset near a selector.</p>
+<div class="highlight"><pre><code class="csharp"><span class="n">I</span><span class="p">.</span><span class="n">Open</span><span class="p">(</span><span class="s">&quot;http://developer.yahoo.com/yui/examples/dragdrop/dd-groups.html&quot;</span><span class="p">);</span>
+<span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pt1&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#t2&quot;</span><span class="p">);</span>
+<span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pt2&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#t1&quot;</span><span class="p">);</span>
+<span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pb1&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#b1&quot;</span><span class="p">);</span>
+<span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pb2&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#b2&quot;</span><span class="p">);</span>
+<span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pboth1&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#b3&quot;</span><span class="p">);</span>
+<span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pboth2&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#b4&quot;</span><span class="p">);</span>
+<span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pt1&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#pt2&quot;</span><span class="p">);</span>
+<span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pboth1&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#pb2&quot;</span><span class="p">);</span>
+</code></pre>
+</div>
+<h4 id="toc_24">Waits</h4>
+
+<p>Any automated testing will require waits. Fluent supports both implicit and explicit waits. Implicit waits are used with Actions where a selector can&#39;t be located. Explicit waits can be used based on time or conditions.</p>
+
+<h5 id="toc_25">Wait</h5>
+
+<p>Wait for specific period, before continiuing test execution.</p>
+<div class="highlight"><pre><code class="csharp"><span class="n">I</span><span class="p">.</span><span class="n">Wait</span><span class="p">(</span><span class="m">1</span><span class="p">);</span> <span class="c1">// Wait 1 second</span>
+<span class="n">I</span><span class="p">.</span><span class="n">Wait</span><span class="p">(</span><span class="n">TimeSpan</span><span class="p">.</span><span class="n">FromMilliseconds</span><span class="p">(</span><span class="m">500</span><span class="p">));</span> <span class="c1">// Wait 500ms   </span>
+</code></pre>
+</div>
+<h5 id="toc_26">WaitUntil</h5>
+
+<p>Wait for a condition to be true, or an action to successfully pass without Exception.</p>
+
+<p>This is very useful for pages with lots of AJAX where the implicit waits builtin to Actions just aren&#39;t good enough.</p>
+
+<p>When an <code>Expression&lt;Action&gt;</code> is provided, the expression will be re-evaluated until the timeout (Settings.DefaultWaitUntilTimeout) has passed or succeeds without throwing a FluentException. This means you can use any Action or Expect inside the expression.</p>
+<div class="highlight"><pre><code class="csharp"><span class="n">I</span><span class="p">.</span><span class="n">WaitUntil</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">Exists</span><span class="p">(</span><span class="s">&quot;#navbar&quot;</span><span class="p">));</span>
+</code></pre>
+</div>
+<p>When an <code>Expression&lt;Func&lt;bool&gt;&gt;</code> is provided, the expression will be re-evaluated until the timeout has passed or the Func returns true.</p>
+<div class="highlight"><pre><code class="csharp"><span class="n">I</span><span class="p">.</span><span class="n">WaitUntil</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="kt">var</span> <span class="n">element</span> <span class="p">=</span> <span class="n">I</span><span class="p">.</span><span class="n">Find</span><span class="p">(</span><span class="s">&quot;#navbar&quot;</span><span class="p">)();</span>
+    <span class="k">return</span> <span class="n">element</span> <span class="p">!=</span> <span class="k">null</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre>
+</div>
+<h4 id="toc_27">Expects</h4>
+
+<p>In Fluent, you can expect that a certain state exists. If this state does not exist, an Exception of type <code>FluentExpectFailedException</code> will be thrown.</p>
+
+<p><strong>Text</strong> Verify that an element matching the selector has the specified text in its innerHTML or value depending on type.</p>
+<div class="highlight"><pre><code class="csharp"><span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">Text</span><span class="p">(</span><span class="s">&quot;sup&quot;</span><span class="p">).</span><span class="n">In</span><span class="p">(</span><span class="n">selector</span><span class="p">);</span>
+</code></pre>
+</div>
+<p><strong>Value</strong> Verify that an element matching the selector has the specified value. This works with <code>&lt;input type=&#39;text&#39; /&gt;</code>, <code>&lt;textarea&gt;&lt;/textarea&gt;</code> and <code>&lt;select&gt;&lt;option value=&#39;1&#39;&gt;&lt;/select&gt;</code>.</p>
+<div class="highlight"><pre><code class="csharp"><span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">Value</span><span class="p">(</span><span class="m">10</span><span class="p">).</span><span class="n">In</span><span class="p">(</span><span class="n">selector</span><span class="p">);</span>
+</code></pre>
+</div>
+<p><strong>Exists</strong> Verify that an element matching the selector exists. Alternative: <code>I.Expect.Count(0).Of(selector);</code></p>
+<div class="highlight"><pre><code class="csharp"><span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">Exists</span><span class="p">(</span><span class="n">selector</span><span class="p">);</span>
+</code></pre>
+</div>
+<p><strong>Class</strong> Verify that the element matching the selector has the specified CSS class.</p>
+<div class="highlight"><pre><code class="csharp"><span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">Class</span><span class="p">(</span><span class="s">&quot;error&quot;</span><span class="p">).</span><span class="n">On</span><span class="p">(</span><span class="n">selector</span><span class="p">);</span>
+</code></pre>
+</div>
+<p><strong>Count</strong> Verify that a specific count of elements matching the selector exist on the page.</p>
+<div class="highlight"><pre><code class="csharp"><span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">Count</span><span class="p">(</span><span class="m">1</span><span class="p">).</span><span class="n">Of</span><span class="p">(</span><span class="n">selector</span><span class="p">);</span>
+</code></pre>
+</div>
+<p><strong>Url</strong> Verify that the current open page URL matches the specified value.</p>
+<div class="highlight"><pre><code class="csharp"><span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">Url</span><span class="p">(</span><span class="s">&quot;http://www.google.com/&quot;</span><span class="p">);</span>
+</code></pre>
+</div>
+<p><strong>True / False</strong> Verify that the expression returns either true or false.</p>
+<div class="highlight"><pre><code class="csharp"><span class="kt">var</span> <span class="n">fieldFunc</span> <span class="p">=</span> <span class="n">I</span><span class="p">.</span><span class="n">Find</span><span class="p">(</span><span class="n">selector</span><span class="p">);</span>
+<span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">True</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="n">fieldFunc</span><span class="p">().</span><span class="n">IsText</span><span class="p">);</span>
+<span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">False</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="n">fieldFunc</span><span class="p">().</span><span class="n">IsSelect</span><span class="p">);</span>
+</code></pre>
+</div>
+<p><strong>Throws</strong> Verify that an expression causes an exception to be thrown.</p>
+<div class="highlight"><pre><code class="csharp"><span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">Throws</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">Class</span><span class="p">(</span><span class="s">&quot;error&quot;</span><span class="p">).</span><span class="n">On</span><span class="p">(</span><span class="n">selector</span><span class="p">));</span> <span class="c1">// selector does not have class</span>
+</code></pre>
+</div>
+<h4 id="toc_28">Extending Fluent v2</h4>
+
+<p>As with previous versions of Fluent, extension methods are the preferred way of adding convenience methods. A very common example would be to add <code>I.Login()</code> to your tests.</p>
+<div class="highlight"><pre><code class="csharp"><span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">Login</span><span class="p">(</span><span class="k">this</span> <span class="n">FluentAutomation</span><span class="p">.</span><span class="n">Interfaces</span><span class="p">.</span><span class="n">INativeActionSyntaxProvider</span> <span class="n">I</span><span class="p">,</span> <span class="kt">string</span> <span class="n">username</span><span class="p">,</span> <span class="kt">string</span> <span class="n">password</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Open</span><span class="p">(</span><span class="n">PageUrls</span><span class="p">.</span><span class="n">LoginPage</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Enter</span><span class="p">(</span><span class="n">username</span><span class="p">).</span><span class="n">In</span><span class="p">(</span><span class="s">&quot;input#username&quot;</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Enter</span><span class="p">(</span><span class="n">password</span><span class="p">).</span><span class="n">In</span><span class="p">(</span><span class="s">&quot;input#password&quot;</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Click</span><span class="p">(</span><span class="s">&quot;button#login&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+<p>From this point, you&#39;ll be able to simply reference this extension method in your tests:</p>
+<div class="highlight"><pre><code class="csharp"><span class="n">I</span><span class="p">.</span><span class="n">Login</span><span class="p">(</span><span class="s">&quot;username&quot;</span><span class="p">,</span> <span class="s">&quot;password&quot;</span><span class="p">);</span>
+</code></pre>
+</div>
+<p>Expect syntax can be extended similarly.</p>
+<div class="highlight"><pre><code class="csharp"><span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">Checked</span><span class="p">(</span><span class="k">this</span> <span class="n">FluentAutomation</span><span class="p">.</span><span class="n">ExpectSyntaxProvider</span> <span class="n">expect</span><span class="p">,</span> <span class="kt">string</span> <span class="n">selector</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">expect</span><span class="p">.</span><span class="n">Count</span><span class="p">(</span><span class="m">0</span><span class="p">).</span><span class="n">Of</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="n">Format</span><span class="p">(</span><span class="s">&quot;{0}:checked&quot;</span><span class="p">,</span> <span class="n">selector</span><span class="p">));</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+<p>Additionally, you can build new providers that implement <code>IExpectProvider, IFileStoreProvider</code> or <code>ICommandProvider</code> that can be injected with a custom Bootstrap method. We are working on making more internal interfaces accessible for injection soon. Let us know if you&#39;ve got something interesting in mind.</p>
+
+	
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	var disqus_shortname = 'fluent';
+	var disqus_identifier = '/docs/index.html';
+
+	(function() {
+	var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+	(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</article>
+		</section>
+
+		<script type="text/javascript">
+			// Disqus
+			var disqus_shortname = 'fluent';
+			(function () {
+				var s = document.createElement('script'); s.async = true;
+				s.type = 'text/javascript';
+				s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+				(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+			}());
+		</script>
+	</body>
+</html>

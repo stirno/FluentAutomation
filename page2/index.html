@@ -1,0 +1,404 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="author" content="Brandon Stirnaman" />
+		<title>Fluent Automation // Blog</title>
+
+		<link href='/site.css' rel='stylesheet' />
+		<link href='/pygments.css' rel='stylesheet' />
+
+		<script type="text/javascript">
+		  var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', 'UA-26845406-1']);
+		  _gaq.push(['_setDomainName', 'stirno.com']);
+		  _gaq.push(['_trackPageview']);
+
+		  (function() {
+		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+		</script>
+	</head>
+	<body>
+		<header>
+			<a href='/'><h1>FLUENT<span>AUTOMATION</span></h1></a>
+			<p class='who'><span class='blue'><a href='//twitter.com/stirno'>@stirno</a></span> // <a href='//github.com/stirno'>github.com/stirno</a></p>
+			<p class='tagline'>Simple, fluent DSL for automating web applications.</p>
+			<br />
+			<nav>
+				<a href='/docs' title='Get Started' class='tile double blue video'>
+					<!-- <img src='/code-getting-started.gif' /> -->
+					<iframe src="http://player.vimeo.com/video/52308617?title=0&amp;byline=0&amp;portrait=0&amp;autoplay=1&amp;loop=1" width="260" height="123" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+					<span>GETTING STARTED</span>
+				</a>
+				<a href='/docs' title='Read the Docs' class='tile red'>
+					<div class='icon-docs'></div>
+					<span>DOCUMENTATION</span>
+				</a>
+				<a href='//github.com/stirno/FluentAutomation' title='View on GitHub' class='tile purple left-spacer'>
+					<div class='icon-github'></div>
+					<span>VIEW ON GITHUB</span>
+				</a>
+				<div class='tile double orange'>
+					<div class="nuget-badge">
+					<p>
+						<code>
+							PM&gt; <a title='FluentAutomation.SeleniumWebDriver on NuGet' href='//nuget.org/packages/FluentAutomation.SeleniumWebDriver'>Install-Package FluentAutomation.SeleniumWebDriver</a><br /><br />
+							PM&gt; <a title='FluentAutomation.WatiN on NuGet' href='//nuget.org/packages/FluentAutomation.WatiN'>Install-Package FluentAutomation.WatiN</a><br /><br />
+							PM&gt; <a title='FluentAutomation.PhantomJS on NuGet' href='//nuget.org/packages/FluentAutomation.PhantomJS'>Install-Package FluentAutomation.PhantomJS</a>
+						</code>
+					</p>
+					</div>
+					<span>AVAILABLE ON NUGET</span>
+				</div>
+			</nav>		
+<!-- 		<div class='clear'></div>
+			<h1>FLUENT<span>AUTOMATION</span><span class='lighter'>recorder<span></h1>
+			<p class='who'><span class='blue'><a href='//twitter.com/pauljz'>@pauljz</a></span> // <a href='//github.com/pauljz'>github.com/pauljz</a></p> -->
+		</header>
+		<section class='articles'>
+			
+<article>
+	<header title='Introducing the RemoteCommand API'><a href='/blog/Introducing-RemoteCommand-API'>Introducing the RemoteCommand API</a></header>
+	<div class='clear'></div>
+	<p>I’ve mentioned the RemoteCommand API several times recently in posts, even on the Coming Soon portion of the site.</p>
+
+<p>I think its time I explain what it is, why it exists and why I’m excited about it.</p>
+
+<h4 id="toc_0">What</h4>
+
+<p>The RemoteCommand bits essentially expose a service endpoint that receives instructions in the form of a JSON document. The document contains a collection of Commands with the necessary Arguments to execute them.</p>
+
+<h4 id="toc_1">Why</h4>
+
+<p><strong>Any-Platform Test Creation</strong></p>
+
+<p>This allows for the origin of the tests to essentially be.. <strong>anything</strong>. Any language that can create well-formed JSON can run an automated UI test. We’re looking for contributors to help provide native fluent bindings for languages such as Ruby, PHP and Java.</p>
+
+<p>An example of a Ruby test being built/executed via JSON is available <a href="https://gist.github.com/1305261">here</a>.</p>
+
+<p><strong>Playback from Fluent Automation Recorder</strong></p>
+
+<p>Another project that utilizes this API is the <a href="http://github.com/pauljz/FluentAutomationRecorder">Fluent Automation Recorder</a> by Paul Zumbrun. It allows you to instantly play back the test you’ve just recorded for verification.</p>
+
+<p><strong>Scalability</strong></p>
+
+<p>A common problem in UI Automation testing is the time involved in test runs. Anything that simulates user input is inherently slow compared to Unit Tests or even standard Integration Tests. As much as we try to speed things up, sometimes the only way to get through your tests in a reasonable manner is to scale out.</p>
+
+<p>The native C# binding supports enabling Remote Execution which essentially targets a machine hosting the RemoteCommand service endpoint. This can be used for any number of scale out plans to spread the load of testing across several machines.</p>
+
+<h4 id="toc_2">When</h4>
+
+<p>RemoteCommand support is in the master branch and in latest builds now, but not officially released. I’m working on the user experience of the FluentAutomation.Server (RemoteCommand endpoint) application to be useful in local debugging scenarios when tied with the Recorder.</p>
+
+<p>I expect to have it out in the wild, ready to go in the next few weeks. The code is there for anyone who wants to try it out.</p>
+
+<p>Let me know what you think of this upcoming feature!</p>
+
+	<nav>
+		<div class='left tiles'><div class='comments'><a href='/blog/Introducing-RemoteCommand-API#disqus_thread'>COMMENTS AND REACTIONS</a></div></div>
+		<div class='right tiles'>
+			<a class='author brown' href='//twitter.com/stirno'><img class='gravatar' src='http://www.gravatar.com/avatar/f0911b8dd77a34c0354968639b4545f4' /><span>@stirno</span></a>
+			<div>06 November 2011</div>
+<!-- 			<div class='orange' style='margin-right: 0px'>
+				<span class='text'>SHARE</span>
+			</div>
+			<div class='orange' style='padding-left: 0px'>
+				<span class='icon-google-plus'></span>
+				<span class='icon-twitter'></span>
+			</div> -->
+		</div>
+	</nav>
+
+	<div class='clear'></div>
+</article>
+
+<article>
+	<header title='New Site - fluent.stirno.com'><a href='/blog/New-Site-fluent.stirno.com'>New Site - fluent.stirno.com</a></header>
+	<div class='clear'></div>
+	<p>Setup a new site for Fluent Automation at <a href="//fluent.stirno.com">fluent.stirno.com</a>. I’ve re-posted the old blog entries with some updates to reflect the status of the work.</p>
+
+<p>This new setup will make it much easier to share with you the latest changes, maybe some documentation that is longer than a few blocks and possibly our collection of ninja lizards. Maybe.</p>
+
+<p>Many thanks to Curt Ziegler (<a href="http://cudazi.com/">cudazi</a>) for contributing this great design. Much appreciated.</p>
+
+	<nav>
+		<div class='left tiles'><div class='comments'><a href='/blog/New-Site-fluent.stirno.com#disqus_thread'>COMMENTS AND REACTIONS</a></div></div>
+		<div class='right tiles'>
+			<a class='author brown' href='//twitter.com/stirno'><img class='gravatar' src='http://www.gravatar.com/avatar/f0911b8dd77a34c0354968639b4545f4' /><span>@stirno</span></a>
+			<div>05 November 2011</div>
+<!-- 			<div class='orange' style='margin-right: 0px'>
+				<span class='text'>SHARE</span>
+			</div>
+			<div class='orange' style='padding-left: 0px'>
+				<span class='icon-google-plus'></span>
+				<span class='icon-twitter'></span>
+			</div> -->
+		</div>
+	</nav>
+
+	<div class='clear'></div>
+</article>
+
+<article>
+	<header title='Same Test, Multiple Browsers'><a href='/blog/Same-Test-Multiple-Browsers'>Same Test, Multiple Browsers</a></header>
+	<div class='clear'></div>
+	<p>When we added Selenium support a few weeks back, we finally had real support for multiple browsers. Quickly we decided that writing tests multiple times or even having to stub them out with different I.Use() calls just wasn’t a compelling enough experience.</p>
+
+<p>Now… Enter the I.Record() and I.Execute() commands.</p>
+
+<p>Take this simple test for example:</p>
+<div class="highlight"><pre><code class="csharp"><span class="na">[TestMethod]</span>
+<span class="k">public</span> <span class="k">void</span> <span class="nf">Drag_Drop_Test</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Use</span><span class="p">(</span><span class="n">BrowserType</span><span class="p">.</span><span class="n">InternetExplorer</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Open</span><span class="p">(</span><span class="s">&quot;http://developer.yahoo.com/yui/examples/dragdrop/dd-groups.html&quot;</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pt1&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#t2&quot;</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pt2&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#t1&quot;</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pb1&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#b1&quot;</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pb2&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#b2&quot;</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pboth1&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#b3&quot;</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pboth2&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#b4&quot;</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pt1&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#pt2&quot;</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pboth1&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#pb2&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+<p>Easily runs against IE (or if I.Use is excluded, the default browser for the provider). But what if you wanted to test it against Chrome?</p>
+
+<p>You could do something like…</p>
+<div class="highlight"><pre><code class="csharp"><span class="k">private</span> <span class="k">void</span> <span class="nf">DragDropTestActions</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Open</span><span class="p">(</span><span class="s">&quot;http://developer.yahoo.com/yui/examples/dragdrop/dd-groups.html&quot;</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pt1&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#t2&quot;</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pt2&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#t1&quot;</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pb1&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#b1&quot;</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pb2&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#b2&quot;</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pboth1&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#b3&quot;</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pboth2&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#b4&quot;</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pt1&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#pt2&quot;</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pboth1&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#pb2&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="na">[TestMethod]</span>
+<span class="k">public</span> <span class="k">void</span> <span class="nf">Drag_Drop_Test</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Use</span><span class="p">(</span><span class="n">BrowserType</span><span class="p">.</span><span class="n">InternetExplorer</span><span class="p">);</span>
+    <span class="n">DragDropTestActions</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="na">[TestMethod]</span>
+<span class="k">public</span> <span class="k">void</span> <span class="nf">Drag_Drop_Test_Chrome</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Use</span><span class="p">(</span><span class="n">BrowserType</span><span class="p">.</span><span class="n">Chrome</span><span class="p">);</span>
+    <span class="n">DragDropTestActions</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+<p>This isn’t necessarily wrong, and in some situations might even be required. But we can do better.</p>
+<div class="highlight"><pre><code class="csharp"><span class="na">[TestMethod]</span>
+<span class="k">public</span> <span class="k">void</span> <span class="nf">Drag_Drop_Test</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Record</span><span class="p">();</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Open</span><span class="p">(</span><span class="s">&quot;http://developer.yahoo.com/yui/examples/dragdrop/dd-groups.html&quot;</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pt1&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#t2&quot;</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pt2&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#t1&quot;</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pb1&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#b1&quot;</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pb2&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#b2&quot;</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pboth1&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#b3&quot;</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pboth2&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#b4&quot;</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pt1&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#pt2&quot;</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Drag</span><span class="p">(</span><span class="s">&quot;#pboth1&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;#pb2&quot;</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Execute</span><span class="p">(</span><span class="n">BrowserType</span><span class="p">.</span><span class="n">InternetExplorer</span><span class="p">,</span> <span class="n">BrowserType</span><span class="p">.</span><span class="n">Chrome</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+<p>This last test will run the steps against IE first, and then Chrome. Any failures in either run will fail this test. Currently we do not continue to the next browser if an Exception is thrown or an Assertion/Expect fails. Looking for feedback on this behavior. Using these commands, it becomes incredibly easy to extend the scope of your automated testing to include other major browsers.</p>
+
+<p>There is a trade-off though. The way this works, the actions are stored then executed when I.Execute is called. In general this isn’t an issue but it does mean you can’t count on passing data from one Command to another (something we strongly discourage in any case). A secondary issue is that, with only a single test, your test results are not as granular in scenarios where tools like Microsoft’s Test Manager product are being used.</p>
+
+	<nav>
+		<div class='left tiles'><div class='comments'><a href='/blog/Same-Test-Multiple-Browsers#disqus_thread'>COMMENTS AND REACTIONS</a></div></div>
+		<div class='right tiles'>
+			<a class='author brown' href='//twitter.com/stirno'><img class='gravatar' src='http://www.gravatar.com/avatar/f0911b8dd77a34c0354968639b4545f4' /><span>@stirno</span></a>
+			<div>07 October 2011</div>
+<!-- 			<div class='orange' style='margin-right: 0px'>
+				<span class='text'>SHARE</span>
+			</div>
+			<div class='orange' style='padding-left: 0px'>
+				<span class='icon-google-plus'></span>
+				<span class='icon-twitter'></span>
+			</div> -->
+		</div>
+	</nav>
+
+	<div class='clear'></div>
+</article>
+
+<article>
+	<header title='Selenium WebDriver Provider'><a href='/blog/Selenium-WebDriver-Provider'>Selenium WebDriver Provider</a></header>
+	<div class='clear'></div>
+	<p>New to FluentAutomation, we’ve completed the Selenium WebDriver Provider.</p>
+
+<p>Tests can now be written against Firefox and Chrome when Selenium is the chosen provider.</p>
+
+<p>With some tweaks, all functionality is ‘standardized’ across the WatiN and Selenium providers. Some noticeable differences include WatiN running only against IE via Full Screen mode. Selenium can test against all the supported browsers and does not require Full Screen due to its native implementation of Drag-and-Drop.</p>
+
+<p>To support Chrome via Selenium, you’ll need to download and include the ChromeDriver.exe in your project. Make sure it gets copied to the /bin folder when you execute tests.</p>
+
+	<nav>
+		<div class='left tiles'><div class='comments'><a href='/blog/Selenium-WebDriver-Provider#disqus_thread'>COMMENTS AND REACTIONS</a></div></div>
+		<div class='right tiles'>
+			<a class='author brown' href='//twitter.com/stirno'><img class='gravatar' src='http://www.gravatar.com/avatar/f0911b8dd77a34c0354968639b4545f4' /><span>@stirno</span></a>
+			<div>25 September 2011</div>
+<!-- 			<div class='orange' style='margin-right: 0px'>
+				<span class='text'>SHARE</span>
+			</div>
+			<div class='orange' style='padding-left: 0px'>
+				<span class='icon-google-plus'></span>
+				<span class='icon-twitter'></span>
+			</div> -->
+		</div>
+	</nav>
+
+	<div class='clear'></div>
+</article>
+
+<article>
+	<header title='NuGet.org'><a href='/blog/NuGet.org'>NuGet.org</a></header>
+	<div class='clear'></div>
+	<p>After some though, Fluent Automation is now available via NuGet Package Manager. This will be the primary source of official API releases.</p>
+
+<p><em>PM&gt; Install-Package FluentAutomation.SeleniumWebDriver</em></p>
+
+<p><em>PM&gt; Install-Package FluentAutomation.WatiN</em></p>
+
+<p>If you’re using the API, please go and rate it or leave a review at NuGet.org!</p>
+
+<p>Both packages can be used together in the same project. Try them out, let me know if you have any problems!</p>
+
+	<nav>
+		<div class='left tiles'><div class='comments'><a href='/blog/NuGet.org#disqus_thread'>COMMENTS AND REACTIONS</a></div></div>
+		<div class='right tiles'>
+			<a class='author brown' href='//twitter.com/stirno'><img class='gravatar' src='http://www.gravatar.com/avatar/f0911b8dd77a34c0354968639b4545f4' /><span>@stirno</span></a>
+			<div>09 September 2011</div>
+<!-- 			<div class='orange' style='margin-right: 0px'>
+				<span class='text'>SHARE</span>
+			</div>
+			<div class='orange' style='padding-left: 0px'>
+				<span class='icon-google-plus'></span>
+				<span class='icon-twitter'></span>
+			</div> -->
+		</div>
+	</nav>
+
+	<div class='clear'></div>
+</article>
+
+<article>
+	<header title='FluentAutomation API'><a href='/blog/FluentAutomation-API'>FluentAutomation API</a></header>
+	<div class='clear'></div>
+	<p>Announcing the new Fluent Automation API. A quick, easy to use library for automating web applications.</p>
+
+<p>Here is an example of the new framework:</p>
+
+<p>using FluentAutomation.API;
+using FluentAutomation.API.Enumerations;
+using Microsoft.VisualStudio.TestTools.UnitTesting;</p>
+<div class="highlight"><pre><code class="csharp"><span class="k">namespace</span> <span class="nn">FluentAutomation.Samples</span>
+<span class="p">{</span>
+<span class="na">    [TestClass]</span>
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">LoginTests</span> <span class="p">:</span> <span class="n">TestClass</span>
+    <span class="p">{</span>
+<span class="na">        [TestMethod]</span>
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">Login_HappyPath</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Use</span><span class="p">(</span><span class="n">BrowserType</span><span class="p">.</span><span class="n">InternetExplorer</span><span class="p">);</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Open</span><span class="p">(</span><span class="s">&quot;http://www.yoursite.com/Login&quot;</span><span class="p">);</span>
+
+            <span class="c1">// Validate expected strings on page</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">This</span><span class="p">(</span><span class="s">&quot;Username&quot;</span><span class="p">).</span><span class="n">In</span><span class="p">(</span><span class="s">&quot;label.username-field&quot;</span><span class="p">);</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">This</span><span class="p">(</span><span class="s">&quot;Password&quot;</span><span class="p">).</span><span class="n">In</span><span class="p">(</span><span class="s">&quot;label.password-field&quot;</span><span class="p">);</span>
+
+            <span class="c1">// Perform login</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Enter</span><span class="p">(</span><span class="s">&quot;username&quot;</span><span class="p">).</span><span class="n">In</span><span class="p">(</span><span class="s">&quot;input.username-field&quot;</span><span class="p">);</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Enter</span><span class="p">(</span><span class="s">&quot;password&quot;</span><span class="p">).</span><span class="n">In</span><span class="p">(</span><span class="s">&quot;input.password-field&quot;</span><span class="p">);</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Click</span><span class="p">(</span><span class="s">&quot;input[type=&#39;button&#39;].login&quot;</span><span class="p">);</span>
+
+            <span class="c1">// Validate login successful</span>
+            <span class="c1">// Forwarded correctly</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">Url</span><span class="p">(</span><span class="s">&quot;http://www.yoursite.com/&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+
+<span class="na">        [TestMethod]</span>
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">Login_BadPassword</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Use</span><span class="p">(</span><span class="n">BrowserType</span><span class="p">.</span><span class="n">InternetExplorer</span><span class="p">);</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Open</span><span class="p">(</span><span class="s">&quot;http://www.yoursite.com/Login&quot;</span><span class="p">);</span>
+
+            <span class="c1">// Validate expected strings on page</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">This</span><span class="p">(</span><span class="s">&quot;Username&quot;</span><span class="p">).</span><span class="n">In</span><span class="p">(</span><span class="s">&quot;label.username-field&quot;</span><span class="p">);</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">This</span><span class="p">(</span><span class="s">&quot;Password&quot;</span><span class="p">).</span><span class="n">In</span><span class="p">(</span><span class="s">&quot;label.password-field&quot;</span><span class="p">);</span>
+
+            <span class="c1">// Perform login</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Enter</span><span class="p">(</span><span class="s">&quot;username&quot;</span><span class="p">).</span><span class="n">In</span><span class="p">(</span><span class="s">&quot;input.username-field&quot;</span><span class="p">);</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Enter</span><span class="p">(</span><span class="s">&quot;wrong password&quot;</span><span class="p">).</span><span class="n">In</span><span class="p">(</span><span class="s">&quot;input.password-field&quot;</span><span class="p">);</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Click</span><span class="p">(</span><span class="s">&quot;input[type=&#39;button&#39;].login&quot;</span><span class="p">);</span>
+
+            <span class="c1">// Validate login successful</span>
+            <span class="c1">// Error shown</span>
+            <span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">This</span><span class="p">(</span><span class="s">&quot;Username/password not correct.&quot;</span><span class="p">).</span><span class="n">In</span><span class="p">(</span><span class="s">&quot;div.error&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+<p>Much more information coming soon!</p>
+
+<p>NOTE: This is very old. Several changes have been made to the API since this was posted. Please reference the Docs when writing new tests.</p>
+
+	<nav>
+		<div class='left tiles'><div class='comments'><a href='/blog/FluentAutomation-API#disqus_thread'>COMMENTS AND REACTIONS</a></div></div>
+		<div class='right tiles'>
+			<a class='author brown' href='//twitter.com/stirno'><img class='gravatar' src='http://www.gravatar.com/avatar/f0911b8dd77a34c0354968639b4545f4' /><span>@stirno</span></a>
+			<div>28 August 2011</div>
+<!-- 			<div class='orange' style='margin-right: 0px'>
+				<span class='text'>SHARE</span>
+			</div>
+			<div class='orange' style='padding-left: 0px'>
+				<span class='icon-google-plus'></span>
+				<span class='icon-twitter'></span>
+			</div> -->
+		</div>
+	</nav>
+
+	<div class='clear'></div>
+</article>
+
+
+<!-- Pagination links -->
+<div class="pagination">
+
+  
+  <a href="/" title="Previous Page">&laquo; Previous</a>
+  
+
+
+ 
+</div>
+		</section>
+
+		<script type="text/javascript">
+			// Disqus
+			var disqus_shortname = 'fluent';
+			(function () {
+				var s = document.createElement('script'); s.async = true;
+				s.type = 'text/javascript';
+				s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+				(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+			}());
+		</script>
+	</body>
+</html>

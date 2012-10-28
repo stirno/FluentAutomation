@@ -1,0 +1,140 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="author" content="Brandon Stirnaman" />
+		<title>Fluent Automation // Introducing the FluentAutomation Recorder</title>
+
+		<link href='/site.css' rel='stylesheet' />
+		<link href='/pygments.css' rel='stylesheet' />
+
+		<script type="text/javascript">
+		  var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', 'UA-26845406-1']);
+		  _gaq.push(['_setDomainName', 'stirno.com']);
+		  _gaq.push(['_trackPageview']);
+
+		  (function() {
+		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+		</script>
+	</head>
+	<body>
+		<header>
+			<a href='/'><h1>FLUENT<span>AUTOMATION</span></h1></a>
+			<p class='who'><span class='blue'><a href='//twitter.com/stirno'>@stirno</a></span> // <a href='//github.com/stirno'>github.com/stirno</a></p>
+			<p class='tagline'>Simple, fluent DSL for automating web applications.</p>
+			<br />
+			<nav>
+				<a href='/docs' title='Get Started' class='tile double blue video'>
+					<!-- <img src='/code-getting-started.gif' /> -->
+					<iframe src="http://player.vimeo.com/video/52308617?title=0&amp;byline=0&amp;portrait=0&amp;autoplay=1&amp;loop=1" width="260" height="123" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+					<span>GETTING STARTED</span>
+				</a>
+				<a href='/docs' title='Read the Docs' class='tile red'>
+					<div class='icon-docs'></div>
+					<span>DOCUMENTATION</span>
+				</a>
+				<a href='//github.com/stirno/FluentAutomation' title='View on GitHub' class='tile purple left-spacer'>
+					<div class='icon-github'></div>
+					<span>VIEW ON GITHUB</span>
+				</a>
+				<div class='tile double orange'>
+					<div class="nuget-badge">
+					<p>
+						<code>
+							PM&gt; <a title='FluentAutomation.SeleniumWebDriver on NuGet' href='//nuget.org/packages/FluentAutomation.SeleniumWebDriver'>Install-Package FluentAutomation.SeleniumWebDriver</a><br /><br />
+							PM&gt; <a title='FluentAutomation.WatiN on NuGet' href='//nuget.org/packages/FluentAutomation.WatiN'>Install-Package FluentAutomation.WatiN</a><br /><br />
+							PM&gt; <a title='FluentAutomation.PhantomJS on NuGet' href='//nuget.org/packages/FluentAutomation.PhantomJS'>Install-Package FluentAutomation.PhantomJS</a>
+						</code>
+					</p>
+					</div>
+					<span>AVAILABLE ON NUGET</span>
+				</div>
+			</nav>		
+<!-- 		<div class='clear'></div>
+			<h1>FLUENT<span>AUTOMATION</span><span class='lighter'>recorder<span></h1>
+			<p class='who'><span class='blue'><a href='//twitter.com/pauljz'>@pauljz</a></span> // <a href='//github.com/pauljz'>github.com/pauljz</a></p> -->
+		</header>
+		<section class='articles'>
+			<article>
+	<header title='Introducing the FluentAutomation Recorder'><a href='/blog/Introducing-FluentAutomation-Recorder'>Introducing the FluentAutomation Recorder</a></header>
+	<div class='clear'></div>
+	<p>In a previous post, Brandon introduced the RemoteCommand API, a REST endpoint that accepts and runs Fluent Automation tests serialised into JSON. Having a portable format for tests has let us start to branch the project out into a few interesting tools outside the .NET world. A tool I’ve been developing is the Fluent Automation Recorder - a Chrome extension that lets you record tests naturally by clicking around your site in the browser.</p>
+
+<h4 id="toc_3">Overview</h4>
+
+<p><img src="http://fluent.stirno.com/wp-content/uploads/2011/11/far-start-recording.png" alt="Start Recording"></p>
+
+<p>When you install the Fluent Automation Recorder extension, it sits idle in the top right of Chrome, until you Start Recording.</p>
+
+<p>When you start recording in a tab, the extension attaches event listeners that will record basic browser interactions: entering text, selecting options, radios, and checkboxes, hovers, clicks and therefore navigating links and submitting forms. It resolves unique Sizzle selectors for the DOM nodes you interact with, and sends these to be stored as JSON for later use (and yes since I’ve been asked, you can specify HTML attributes that you want the recorder to consider to be unique, by default it looks for a data-key as unique, and you can add more with the settings interface).</p>
+
+<p>Once you finish recording, the same dropdown menu will let you Stop Recording, and the test is saved. The Manage Recordings link takes you to a <a href="http://fluent.stirno.com/wp-content/uploads/2011/11/fluent-automation-recorder-manager.png">management interface</a> where you can organise, name, and bookmark your past recordings, play them back using the RemoteCommand API, export to JSON, and view a list of the commands in the recording.</p>
+
+<p>The Settings tab lets you set those unique attributes I mentioned. More coming soon here, but I’d appreciate feedback on what all else should be customisable.</p>
+
+<h4 id="toc_4">Roadmap</h4>
+
+<p>The biggest outstanding feature is the ability to add Expects; this is kind of crucial for tests, after all. I’ve started working on this as a context menu. When you right click a DOM Node and select “I Expect …” it’ll pop up a Lightbox (or something along those lines) to accept the conditions of your expect. At first I’ll support class/text based selects, but after that I’ll add support for as many of Fluent Automation’s Expect types as possible.</p>
+
+<p><img src="http://fluent.stirno.com/wp-content/uploads/2011/11/fluent-automation-recorder-i-expect.png" alt="Expect"></p>
+
+<p>After Expects, I plan to flesh out the Recording Manager a bit more. The big ticket item here is the ability to manually add, edit and re-order steps within a recording. This would allow for the creation of some commands that don’t make sense to record natively in the browser like Wait. I also want to improve the organisation capabilities of the manager: labeling/categorising recordings via drag and drop (a la GMail) and deleting/archiving recordings.</p>
+
+<p>One more upcoming addition to the Recorder itself is the ability to record Drag and Drops. This will probably require a shortcut key (much like Ctrl-Alt-H to record a Hover now) to indicate the drag and drop you’re about to perform is “significant”.</p>
+
+<p>Of course, over time I want to support as much of the Fluent Automation API as possible, including a lot of the less obvious commands; however, unless there’s a particularly high demand for some of these, I feel that most of the important functionality for the recorder is already in place.</p>
+
+<h4 id="toc_5">More information</h4>
+
+<p>This project is still very young and I am certainly open to suggestions on what else the Fluent Automation Recorder should do in the future. I am aiming for a first stable beta release some time in mid-December, at which point I’ll put it up on the Chrome Webstore.</p>
+
+<p>For more information, or to download the latest development version, check out the <a href="https://github.com/pauljz/FluentAutomationRecorder">Fluent Automation Recorder on GitHub</a>. If you’ve taken the recorder for a spin and have suggestions or bugs to report use <a href="https://github.com/pauljz/FluentAutomationRecorder/issues">Issues on GitHub</a>.</p>
+
+	
+	<nav>
+		<div class='right tiles'>
+			<a class='author brown' href='//twitter.com/pauljz'><img class='gravatar' src='http://www.gravatar.com/avatar/32bfb0ffedef1d40bb7904b75ccbda42' /><span>@pauljz</span></a>
+			<div>13 November 2011</div>
+			<div class='orange' style='margin-right: 0px'>
+				<span class='text'>SHARE</span>
+			</div>
+			<div class='orange' style='padding-left: 0px'>
+				<span class='icon-google-plus'></span>
+				<span class='icon-twitter'></span>
+			</div>
+		</div>
+	</nav>
+	<div class='clear' style='padding-top: 20px'></div>
+	
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	var disqus_shortname = 'fluent';
+	var disqus_identifier = '/blog/Introducing-FluentAutomation-Recorder';
+
+	(function() {
+	var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+	(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</article>
+		</section>
+
+		<script type="text/javascript">
+			// Disqus
+			var disqus_shortname = 'fluent';
+			(function () {
+				var s = document.createElement('script'); s.async = true;
+				s.type = 'text/javascript';
+				s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+				(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+			}());
+		</script>
+	</body>
+</html>

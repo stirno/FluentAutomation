@@ -1,0 +1,120 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="author" content="Brandon Stirnaman" />
+		<title>Fluent Automation // Continued work.. and some questions for the users</title>
+
+		<link href='/site.css' rel='stylesheet' />
+		<link href='/pygments.css' rel='stylesheet' />
+
+		<script type="text/javascript">
+		  var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', 'UA-26845406-1']);
+		  _gaq.push(['_setDomainName', 'stirno.com']);
+		  _gaq.push(['_trackPageview']);
+
+		  (function() {
+		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+		</script>
+	</head>
+	<body>
+		<header>
+			<a href='/'><h1>FLUENT<span>AUTOMATION</span></h1></a>
+			<p class='who'><span class='blue'><a href='//twitter.com/stirno'>@stirno</a></span> // <a href='//github.com/stirno'>github.com/stirno</a></p>
+			<p class='tagline'>Simple, fluent DSL for automating web applications.</p>
+			<br />
+			<nav>
+				<a href='/docs' title='Get Started' class='tile double blue video'>
+					<!-- <img src='/code-getting-started.gif' /> -->
+					<iframe src="http://player.vimeo.com/video/52308617?title=0&amp;byline=0&amp;portrait=0&amp;autoplay=1&amp;loop=1" width="260" height="123" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+					<span>GETTING STARTED</span>
+				</a>
+				<a href='/docs' title='Read the Docs' class='tile red'>
+					<div class='icon-docs'></div>
+					<span>DOCUMENTATION</span>
+				</a>
+				<a href='//github.com/stirno/FluentAutomation' title='View on GitHub' class='tile purple left-spacer'>
+					<div class='icon-github'></div>
+					<span>VIEW ON GITHUB</span>
+				</a>
+				<div class='tile double orange'>
+					<div class="nuget-badge">
+					<p>
+						<code>
+							PM&gt; <a title='FluentAutomation.SeleniumWebDriver on NuGet' href='//nuget.org/packages/FluentAutomation.SeleniumWebDriver'>Install-Package FluentAutomation.SeleniumWebDriver</a><br /><br />
+							PM&gt; <a title='FluentAutomation.WatiN on NuGet' href='//nuget.org/packages/FluentAutomation.WatiN'>Install-Package FluentAutomation.WatiN</a><br /><br />
+							PM&gt; <a title='FluentAutomation.PhantomJS on NuGet' href='//nuget.org/packages/FluentAutomation.PhantomJS'>Install-Package FluentAutomation.PhantomJS</a>
+						</code>
+					</p>
+					</div>
+					<span>AVAILABLE ON NUGET</span>
+				</div>
+			</nav>		
+<!-- 		<div class='clear'></div>
+			<h1>FLUENT<span>AUTOMATION</span><span class='lighter'>recorder<span></h1>
+			<p class='who'><span class='blue'><a href='//twitter.com/pauljz'>@pauljz</a></span> // <a href='//github.com/pauljz'>github.com/pauljz</a></p> -->
+		</header>
+		<section class='articles'>
+			<article>
+	<header title='Continued work.. and some questions for the users'><a href='/blog/Continued-work-and-some-questions'>Continued work.. and some questions for the users</a></header>
+	<div class='clear'></div>
+	<p>I’ve been continuing work on making the RemoteCommand API awesome, including better debugging a test in progress against a remote box, proper error handling and integrating into your Continuous Integration processes.</p>
+
+<p>This has driven some questions as to where we should focus first as far as verifying compatibility with HOW people are using Fluent Automation.</p>
+
+<p>1) What frameworks are people utilizing with Fluent Automation? Currently I’m testing with MSTest, NUnit and soon xUnit.</p>
+
+<p>2) How important is it to get ‘proper’ test pass/fail back from a Remote API? I ask this because we’re looking at ways to multi-thread the testing when used with a cluster and I really like the fire and forget method that I’m using for my own stuff. I then generate a test results report from the boxes actually running the tests via the RemoteCommand Server (this feature not yet available in source). This works great for me, but it leaves the built-in results for the testing framework in an odd bind. It can’t really wait for the results to come back because you never know how long an automation test will take. It essentially becomes an Asynchronous process, where I then Assert.Inconclusive essentially.</p>
+
+<p>I do know of one particular scenario that this is troubling for.. People utilizing TFS to relate a test to a test case need the MSTest TRX file to contain proper results. I’m hoping this can be solved by utilizing TFS for test scale out instead of the RemoteCommand API, but that has not yet been proven.</p>
+
+<p>Nothing decided on this yet, but that is how I am using the system currently.</p>
+
+	
+	<nav>
+		<div class='right tiles'>
+			<a class='author brown' href='//twitter.com/stirno'><img class='gravatar' src='http://www.gravatar.com/avatar/f0911b8dd77a34c0354968639b4545f4' /><span>@stirno</span></a>
+			<div>20 November 2011</div>
+			<div class='orange' style='margin-right: 0px'>
+				<span class='text'>SHARE</span>
+			</div>
+			<div class='orange' style='padding-left: 0px'>
+				<span class='icon-google-plus'></span>
+				<span class='icon-twitter'></span>
+			</div>
+		</div>
+	</nav>
+	<div class='clear' style='padding-top: 20px'></div>
+	
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	var disqus_shortname = 'fluent';
+	var disqus_identifier = '/blog/Continued-work-and-some-questions';
+
+	(function() {
+	var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+	(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</article>
+		</section>
+
+		<script type="text/javascript">
+			// Disqus
+			var disqus_shortname = 'fluent';
+			(function () {
+				var s = document.createElement('script'); s.async = true;
+				s.type = 'text/javascript';
+				s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+				(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+			}());
+		</script>
+	</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="author" content="Brandon Stirnaman" />
+		<title>Fluent Automation // Runtime Provider Selection</title>
+
+		<link href='/site.css' rel='stylesheet' />
+		<link href='/pygments.css' rel='stylesheet' />
+
+		<script type="text/javascript">
+		  var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', 'UA-26845406-1']);
+		  _gaq.push(['_setDomainName', 'stirno.com']);
+		  _gaq.push(['_trackPageview']);
+
+		  (function() {
+		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+		</script>
+	</head>
+	<body>
+		<header>
+			<a href='/'><h1>FLUENT<span>AUTOMATION</span></h1></a>
+			<p class='who'><span class='blue'><a href='//twitter.com/stirno'>@stirno</a></span> // <a href='//github.com/stirno'>github.com/stirno</a></p>
+			<p class='tagline'>Simple, fluent DSL for automating web applications.</p>
+			<br />
+			<nav>
+				<a href='/docs' title='Get Started' class='tile double blue video'>
+					<!-- <img src='/code-getting-started.gif' /> -->
+					<iframe src="http://player.vimeo.com/video/52308617?title=0&amp;byline=0&amp;portrait=0&amp;autoplay=1&amp;loop=1" width="260" height="123" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+					<span>GETTING STARTED</span>
+				</a>
+				<a href='/docs' title='Read the Docs' class='tile red'>
+					<div class='icon-docs'></div>
+					<span>DOCUMENTATION</span>
+				</a>
+				<a href='//github.com/stirno/FluentAutomation' title='View on GitHub' class='tile purple left-spacer'>
+					<div class='icon-github'></div>
+					<span>VIEW ON GITHUB</span>
+				</a>
+				<div class='tile double orange'>
+					<div class="nuget-badge">
+					<p>
+						<code>
+							PM&gt; <a title='FluentAutomation.SeleniumWebDriver on NuGet' href='//nuget.org/packages/FluentAutomation.SeleniumWebDriver'>Install-Package FluentAutomation.SeleniumWebDriver</a><br /><br />
+							PM&gt; <a title='FluentAutomation.WatiN on NuGet' href='//nuget.org/packages/FluentAutomation.WatiN'>Install-Package FluentAutomation.WatiN</a><br /><br />
+							PM&gt; <a title='FluentAutomation.PhantomJS on NuGet' href='//nuget.org/packages/FluentAutomation.PhantomJS'>Install-Package FluentAutomation.PhantomJS</a>
+						</code>
+					</p>
+					</div>
+					<span>AVAILABLE ON NUGET</span>
+				</div>
+			</nav>		
+<!-- 		<div class='clear'></div>
+			<h1>FLUENT<span>AUTOMATION</span><span class='lighter'>recorder<span></h1>
+			<p class='who'><span class='blue'><a href='//twitter.com/pauljz'>@pauljz</a></span> // <a href='//github.com/pauljz'>github.com/pauljz</a></p> -->
+		</header>
+		<section class='articles'>
+			<article>
+	<header title='Runtime Provider Selection'><a href='/blog/Runtime-Provider-Selection'>Runtime Provider Selection</a></header>
+	<div class='clear'></div>
+	<p>Recently we added a great little change that allows you to stop compiling your tests directly against the Providers FluentTest class implementation.</p>
+
+<p>Now you can do this:</p>
+<div class="highlight"><pre><code class="csharp"><span class="na">[TestClass]</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">ProviderLoadingTests</span> <span class="p">:</span> <span class="n">FluentAutomation</span><span class="p">.</span><span class="n">API</span><span class="p">.</span><span class="n">FluentTest</span>
+<span class="p">{</span>
+<span class="na">    [TestMethod]</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Test</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">I</span><span class="p">.</span><span class="n">Open</span><span class="p">(</span><span class="s">&quot;http://www.google.com/&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+<p>Notice there is no reference to either Selenium or WatiN. This is because the new FluentTest base class will go and grab the first loaded provider and use that when none are specified.</p>
+
+<p>There are two ways to specify the provider. Using a TestInitialize or Setup method or directly inside a test (must be called before any I.* commands):</p>
+<div class="highlight"><pre><code class="csharp"><span class="na">[TestClass]</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">ProviderLoadingTests</span> <span class="p">:</span> <span class="n">FluentAutomation</span><span class="p">.</span><span class="n">API</span><span class="p">.</span><span class="n">FluentTest</span>
+<span class="p">{</span>
+<span class="na">    [TestInitialize]</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Init</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">ProviderName</span> <span class="p">=</span> <span class="s">&quot;WatiN&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="na">    [TestMethod]</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Test</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">I</span><span class="p">.</span><span class="n">Open</span><span class="p">(</span><span class="s">&quot;http://www.google.com/&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+<p>or via the application configuration (preferred approach):</p>
+<div class="highlight"><pre><code class="csharp"><span class="p">&lt;</span><span class="n">appSettings</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="k">add</span> <span class="n">key</span><span class="p">=</span><span class="s">&quot;AutomationProvider&quot;</span> <span class="k">value</span><span class="p">=</span><span class="s">&quot;Selenium&quot;</span> <span class="p">/&gt;</span>
+<span class="p">&lt;/</span><span class="n">appSettings</span><span class="p">&gt;</span>
+</code></pre>
+</div>
+<p>This should make it a lot easier to use new providers as they are built.</p>
+
+<p>NOTE: The ProviderName value is essentially a partial match via Assembly.FullName.Contains(). This is why just Selenium or WatiN works to grab the right provider.</p>
+
+	
+	<nav>
+		<div class='right tiles'>
+			<a class='author brown' href='//twitter.com/stirno'><img class='gravatar' src='http://www.gravatar.com/avatar/f0911b8dd77a34c0354968639b4545f4' /><span>@stirno</span></a>
+			<div>06 November 2011</div>
+			<div class='orange' style='margin-right: 0px'>
+				<span class='text'>SHARE</span>
+			</div>
+			<div class='orange' style='padding-left: 0px'>
+				<span class='icon-google-plus'></span>
+				<span class='icon-twitter'></span>
+			</div>
+		</div>
+	</nav>
+	<div class='clear' style='padding-top: 20px'></div>
+	
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	var disqus_shortname = 'fluent';
+	var disqus_identifier = '/blog/Runtime-Provider-Selection';
+
+	(function() {
+	var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+	(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</article>
+		</section>
+
+		<script type="text/javascript">
+			// Disqus
+			var disqus_shortname = 'fluent';
+			(function () {
+				var s = document.createElement('script'); s.async = true;
+				s.type = 'text/javascript';
+				s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+				(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+			}());
+		</script>
+	</body>
+</html>

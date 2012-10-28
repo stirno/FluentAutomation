@@ -1,357 +1,497 @@
-<!doctype html>
+<!DOCTYPE HTML>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Fluent Automation by stirno</title>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="author" content="Brandon Stirnaman" />
+		<title>Fluent Automation // Blog</title>
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="wrapper">
-      <header>
-        <h1>Fluent Automation</h1>
-        <p>Simple Fluent API for UI Automation</p>
+		<link href='/site.css' rel='stylesheet' />
+		<link href='/pygments.css' rel='stylesheet' />
 
-        <p class="view"><a href="https://github.com/stirno/FluentAutomation">View the Project on GitHub <small>stirno/FluentAutomation</small></a></p>
+		<script type="text/javascript">
+		  var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', 'UA-26845406-1']);
+		  _gaq.push(['_setDomainName', 'stirno.com']);
+		  _gaq.push(['_trackPageview']);
 
+		  (function() {
+		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+		</script>
+	</head>
+	<body>
+		<header>
+			<a href='/'><h1>FLUENT<span>AUTOMATION</span></h1></a>
+			<p class='who'><span class='blue'><a href='//twitter.com/stirno'>@stirno</a></span> // <a href='//github.com/stirno'>github.com/stirno</a></p>
+			<p class='tagline'>Simple, fluent DSL for automating web applications.</p>
+			<br />
+			<nav>
+				<a href='/docs' title='Get Started' class='tile double blue video'>
+					<!-- <img src='/code-getting-started.gif' /> -->
+					<iframe src="http://player.vimeo.com/video/52308617?title=0&amp;byline=0&amp;portrait=0&amp;autoplay=1&amp;loop=1" width="260" height="123" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+					<span>GETTING STARTED</span>
+				</a>
+				<a href='/docs' title='Read the Docs' class='tile red'>
+					<div class='icon-docs'></div>
+					<span>DOCUMENTATION</span>
+				</a>
+				<a href='//github.com/stirno/FluentAutomation' title='View on GitHub' class='tile purple left-spacer'>
+					<div class='icon-github'></div>
+					<span>VIEW ON GITHUB</span>
+				</a>
+				<div class='tile double orange'>
+					<div class="nuget-badge">
+					<p>
+						<code>
+							PM&gt; <a title='FluentAutomation.SeleniumWebDriver on NuGet' href='//nuget.org/packages/FluentAutomation.SeleniumWebDriver'>Install-Package FluentAutomation.SeleniumWebDriver</a><br /><br />
+							PM&gt; <a title='FluentAutomation.WatiN on NuGet' href='//nuget.org/packages/FluentAutomation.WatiN'>Install-Package FluentAutomation.WatiN</a><br /><br />
+							PM&gt; <a title='FluentAutomation.PhantomJS on NuGet' href='//nuget.org/packages/FluentAutomation.PhantomJS'>Install-Package FluentAutomation.PhantomJS</a>
+						</code>
+					</p>
+					</div>
+					<span>AVAILABLE ON NUGET</span>
+				</div>
+			</nav>		
+<!-- 		<div class='clear'></div>
+			<h1>FLUENT<span>AUTOMATION</span><span class='lighter'>recorder<span></h1>
+			<p class='who'><span class='blue'><a href='//twitter.com/pauljz'>@pauljz</a></span> // <a href='//github.com/pauljz'>github.com/pauljz</a></p> -->
+		</header>
+		<section class='articles'>
+			
+<article>
+	<header title='Docs now hosted on GitHub'><a href='/blog/Docs-Hosted-on-GitHub'>Docs now hosted on GitHub</a></header>
+	<div class='clear'></div>
+	<p>I’m going to start keeping the documentation with our source on GH now, so this means we will be hosting our documentation with GitHub Pages.</p>
 
-        <ul>
-          <li><a href="https://github.com/stirno/FluentAutomation/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/stirno/FluentAutomation/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/stirno/FluentAutomation">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h2>Fluent Automation API</h2>
+<p>Docs for v2 are available here: <a href="http://stirno.github.com/FluentAutomation/">http://stirno.github.com/FluentAutomation/</a></p>
 
-<h4>Getting Started</h4>
+	<nav>
+		<div class='left tiles'><div class='comments'><a href='/blog/Docs-Hosted-on-GitHub#disqus_thread'>COMMENTS AND REACTIONS</a></div></div>
+		<div class='right tiles'>
+			<a class='author brown' href='//twitter.com/stirno'><img class='gravatar' src='http://www.gravatar.com/avatar/f0911b8dd77a34c0354968639b4545f4' /><span>@stirno</span></a>
+			<div>03 October 2012</div>
+<!-- 			<div class='orange' style='margin-right: 0px'>
+				<span class='text'>SHARE</span>
+			</div>
+			<div class='orange' style='padding-left: 0px'>
+				<span class='icon-google-plus'></span>
+				<span class='icon-twitter'></span>
+			</div> -->
+		</div>
+	</nav>
 
-<p>The intent of Fluent Automation is to simplify the task of creating automated tests for web applications.</p>
+	<div class='clear'></div>
+</article>
 
-<h5>Installation</h5>
+<article>
+	<header title='RELEASED: Fluent Automation v2.0-Alpha'><a href='/blog/Released-FluentAutomation-v2-Alpha'>RELEASED: Fluent Automation v2.0-Alpha</a></header>
+	<div class='clear'></div>
+	<p>A few days ago we pushed Fluent Automation v2 to NuGet, its been in our master branch on GitHub for awhile now but we’ve continued testing and felt it was ready for some more widespread use.</p>
 
-<p>Official releases of Fluent Automation for .NET are available via NuGet Package manager. They are provided as packages based on which underlying provider you wish to use. </p>
-
-<p><em>PM&gt; Install-Package FluentAutomation.SeleniumWebDriver</em></p>
-
-<p>SeleniumWebDriver is the recommended provider. </p>
-
-<p><em>PM&gt; Install-Package FluentAutomation.WatiN</em></p>
-
-<p>WatiN is provided as an alternative, but it only supports automating Internet Explorer.</p>
-
-<p><em>PM&gt; Install-Package FluentAutomation.PhantomJS</em></p>
-
-<p>PhantomJS is currently in development, but has near feature parity with the other providers. It is intended for testing in environments where headless execution is preferred.</p>
-
-<h5>Test Setup</h5>
-
-<p>To utilize Fluent Automation, all you need to do is create a class that inherits from our base test class and bootstrap your provider.</p>
-
-<p>This can be done via constructor or test initialization methods. In the following sample, I will bootstrap the Selenium provider via constructor and open a browser to <a href="http://google.com/">Google</a>.</p>
-
-<pre><code>public class SampleTest : FluentAutomation.FluentTest
-{
-    public SampleTest()
-    {
-        FluentAutomation.SeleniumWebDriver.Bootstrap();
-    }
-
-    [Fact]
-    public void OpenGoogle()
-    {
-        I.Open("http://www.google.com/");
-        I.Expect.Url(x =&gt; x.Contains("google.com"));
-    }
-}
+<p>There are several breaking changes from v1 to v2, but we’ve streamlined our model considerably so we can hopefully avoid another round of breaking changes in the future. For example, a test class should now be created as:</p>
+<div class="highlight"><pre><code class="csharp"><span class="na">[TestClass]</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">ExampleTestClass</span> <span class="p">:</span> <span class="n">FluentAutomation</span><span class="p">.</span><span class="n">FluentTest</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="nf">ExampleTestClass</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">FluentAutomation</span><span class="p">.</span><span class="n">PhantomJS</span><span class="p">.</span><span class="n">Bootstrap</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </code></pre>
+</div>
+<p>Compared to the old setup, you now must be explicit about what provider you’re intending to test against for a test class. Generally I expect this to get hidden away in a base class, but this change was based on some feedback of the last update to the v1 code-base. Several users had issues with the way we looked for providers and allowed an override via AppSettings configuration or a magic string setting in the Setup method. There was definitely a code smell that we needed to look at.</p>
 
-<p>The different providers have varying degrees of customization that can be applied during bootstrapping. For example, the Selenium provider can specify the web browser to target.</p>
+<p>At the same time, we transitioned to using IoC to load the providers. Specifically TinyIoC is now a part of the API. Given the new changes and the IoC model we’ve adopted, the Bootstrap method call will be our primary way of providing configuration bits to the framework for the foreseeable future.</p>
 
-<p>Configuration of various test-wide settings can be done using the static FluentAutomation.Settings class properties.</p>
-
-<pre><code>Settings.ScreenshotPath = @"C:\Results\SampleTestSuite";
-Settings.ScreenshotOnFailedExpect = false;
-Settings.ScreenshotOnFailedAction = false;
-Settings.DefaultWaitTimeout = TimeSpan.FromSeconds(1);
-Settings.DefaultWaitUntilTimeout = TimeSpan.FromSeconds(30);
-Settings.MinimizeAllWindowsOnTestStart = true;
+<p>New world, no more virtual Setup method waiting for your custom bits, so how do you manage global configuration? Presently (in v2.0alpha2 build) this is done via a static Settings class.</p>
+<div class="highlight"><pre><code class="csharp"><span class="n">Settings</span><span class="p">.</span><span class="n">ScreenshotPath</span>
+<span class="n">Settings</span><span class="p">.</span><span class="n">DefaultWaitTimeout</span>
+<span class="n">Settings</span><span class="p">.</span><span class="n">DefaultWaitUntilTimeout</span>
+<span class="n">Settings</span><span class="p">.</span><span class="n">DefaultWaitUntilThreadSleep</span>
 </code></pre>
+</div>
+<p>(If you noticed something missing… fear not! ScreenshotOnAssertException will be making a comeback in v2.0-alpha3!)</p>
 
-<h4>Actions</h4>
+<p>Also new, you may have noticed the bootstrapped automation provider is currently PhantomJS. As of version 2.0 PhantomJS is a fully supported platform for headless automation. Still working out a few issues but its very exciting!</p>
 
-<p>All of the functionality of the API is available via sentence-like fluent method calls.</p>
+<p>Lots, lots, lots more changes coming for the better, including a new method of running tests on a remote machine without resorting to the more limited JSON-based protocols. The new docs will be moving to GitHub so we can more easily manage them and hopefully allow users to help fill in the gaps.</p>
 
-<h5>Open</h5>
+<p>Kind of rant-ish I know, but I wanted to get something out there, hit me up on twitter (@stirno) if you need help with anything Fluenty </p>
 
-<p>Open the browser, launch the provider and navigate to the specified URL.</p>
+<p>EDIT: Forgot another interesting tidbit — Try using Chrome on a brand new project, without ChromeDriver. Let me know if it works for you   </p>
 
-<pre><code>I.Open("http://www.google.com");
+	<nav>
+		<div class='left tiles'><div class='comments'><a href='/blog/Released-FluentAutomation-v2-Alpha#disqus_thread'>COMMENTS AND REACTIONS</a></div></div>
+		<div class='right tiles'>
+			<a class='author brown' href='//twitter.com/stirno'><img class='gravatar' src='http://www.gravatar.com/avatar/f0911b8dd77a34c0354968639b4545f4' /><span>@stirno</span></a>
+			<div>24 July 2012</div>
+<!-- 			<div class='orange' style='margin-right: 0px'>
+				<span class='text'>SHARE</span>
+			</div>
+			<div class='orange' style='padding-left: 0px'>
+				<span class='icon-google-plus'></span>
+				<span class='icon-twitter'></span>
+			</div> -->
+		</div>
+	</nav>
+
+	<div class='clear'></div>
+</article>
+
+<article>
+	<header title='NuGet Package updated to 1.0.0.97'><a href='/blog/NuGet-Package-Updated-to-1.0.0.97'>NuGet Package updated to 1.0.0.97</a></header>
+	<div class='clear'></div>
+	<p>Just released to NuGet, the latest code including all the .NET client side bits for RemoteCommand API. This is the first big push to NuGet in months and I wanted to make sure the documentation now available matched what people were likely to be using.</p>
+
+<p>This will likely be the last release using the default versioning scheme. v1.1 is next and we’ll try our hand at semantic versioning from that point forward.</p>
+
+	<nav>
+		<div class='left tiles'><div class='comments'><a href='/blog/NuGet-Package-Updated-to-1.0.0.97#disqus_thread'>COMMENTS AND REACTIONS</a></div></div>
+		<div class='right tiles'>
+			<a class='author brown' href='//twitter.com/stirno'><img class='gravatar' src='http://www.gravatar.com/avatar/f0911b8dd77a34c0354968639b4545f4' /><span>@stirno</span></a>
+			<div>04 March 2012</div>
+<!-- 			<div class='orange' style='margin-right: 0px'>
+				<span class='text'>SHARE</span>
+			</div>
+			<div class='orange' style='padding-left: 0px'>
+				<span class='icon-google-plus'></span>
+				<span class='icon-twitter'></span>
+			</div> -->
+		</div>
+	</nav>
+
+	<div class='clear'></div>
+</article>
+
+<article>
+	<header title='.NET API Docs'><a href='/blog/.NET-API-Docs'>.NET API Docs</a></header>
+	<div class='clear'></div>
+	<p>Finally, after much delay, I’ve put together a first draft of the .NET API documentation and some setup instructions. Hopefully this will help people get comfortable with Fluent more quickly. I included some advanced configuration details where possible.</p>
+
+<p>The next step will be to include more code samples, examples and RemoteCommand API examples for each .NET command. <a href="/docs/">Check out the new Docs!</a></p>
+
+<p>Take a look and let me know what you think. These docs are a living thing and will adapt where necessary.</p>
+
+	<nav>
+		<div class='left tiles'><div class='comments'><a href='/blog/.NET-API-Docs#disqus_thread'>COMMENTS AND REACTIONS</a></div></div>
+		<div class='right tiles'>
+			<a class='author brown' href='//twitter.com/stirno'><img class='gravatar' src='http://www.gravatar.com/avatar/f0911b8dd77a34c0354968639b4545f4' /><span>@stirno</span></a>
+			<div>04 March 2012</div>
+<!-- 			<div class='orange' style='margin-right: 0px'>
+				<span class='text'>SHARE</span>
+			</div>
+			<div class='orange' style='padding-left: 0px'>
+				<span class='icon-google-plus'></span>
+				<span class='icon-twitter'></span>
+			</div> -->
+		</div>
+	</nav>
+
+	<div class='clear'></div>
+</article>
+
+<article>
+	<header title='RELEASED: RemoteCommand API'><a href='/blog/Released-RemoteCommand-API'>RELEASED: RemoteCommand API</a></header>
+	<div class='clear'></div>
+	<p>So we’ve talked about it before.. But now I’m ready to call it ‘released’ and I want to give this some more exposure because I think it will serve as the main testing method for most users very soon.</p>
+
+<p>Scalability of UI automation tests is a big concern for development teams. The primary point of the RemoteCommand API is to allow tests to be run across multiple machines at once. There are a few solutions to this specific problem already including Selenium Server/Selenium Grid. Our alternative solution, to keep our abstraction in place, is to utilize the pieces that already exist in the Fluent framework to create our own test execution engine: FluentAutomation.Server.</p>
+
+<p>As a proof-of-concept (PoC), we took the current bits and built a test coordinator application; coupled with a custom EC2 AMI and Amazon’s CloudWatch metrics, the PoC system scales up or down automatically based on tests in progress. It has worked better than we’d ever thought it would in this environment. Perfectly capable of testing on EC2 Micro images, we can utilize cost-effective services to test our applications.</p>
+
+<p>With this, I want to talk about some of the limitations to this approach… First, the basics of how remote execution works. For managed bits such as the .NET API, you write your Fluent code as normal integration tests bundled in with the rest of your project. Very tidy and clean, an example test such as ..</p>
+<div class="highlight"><pre><code class="csharp"><span class="n">I</span><span class="p">.</span><span class="n">Open</span><span class="p">(</span><span class="s">&quot;http://fluent.stirno.com&quot;</span><span class="p">);</span>
+<span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">Text</span><span class="p">(</span><span class="s">&quot;Blog&quot;</span><span class="p">).</span><span class="n">In</span><span class="p">(</span><span class="s">&quot;#menu-item-8 a&quot;</span><span class="p">);</span>
+<span class="n">I</span><span class="p">.</span><span class="n">Click</span><span class="p">(</span><span class="s">&quot;#menu-item-8 a&quot;</span><span class="p">);</span>
+<span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">Text</span><span class="p">(</span><span class="s">&quot;News&quot;</span><span class="p">).</span><span class="n">In</span><span class="p">(</span><span class="s">&quot;li.cat-item.cat-item-6 a&quot;</span><span class="p">);</span>
 </code></pre>
+</div>
+<p>.. that opens a page, makes a few assertions, takes an action or two and completes; feels very natural. In either normal or remote execution modes this test will perform precisely the same steps in the same ways. Sometimes when writing a test you want to take an action only in the event of a failure. We see users commonly catching AssertExceptions and making decisions based on that. An example ..</p>
+<div class="highlight"><pre><code class="csharp"><span class="n">I</span><span class="p">.</span><span class="n">Open</span><span class="p">(</span><span class="s">&quot;http://fluent.stirno.com&quot;</span><span class="p">);</span>
+<span class="k">try</span> <span class="p">{</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">Text</span><span class="p">(</span><span class="s">&quot;Blogs&quot;</span><span class="p">).</span><span class="n">In</span><span class="p">(</span><span class="s">&quot;#menu-item-8 a&quot;</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Click</span><span class="p">(</span><span class="s">&quot;#menu-item-8 a&quot;</span><span class="p">);</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="n">AssertException</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">.</span><span class="n">Text</span><span class="p">(</span><span class="s">&quot;Docs&quot;</span><span class="p">).</span><span class="n">In</span><span class="p">(</span><span class="s">&quot;#menu-item-236 a&quot;</span><span class="p">);</span>
+    <span class="n">I</span><span class="p">.</span><span class="n">Click</span><span class="p">(</span><span class="s">&quot;#menu-item-236 a&quot;</span><span class="p">);</span>
+<span class="p">}</span>
 
-<h5>Click</h5>
-
-<p>Click the specified point or element.</p>
-
-<pre><code>I.Click(10, 10); // click by coordinate
-I.Click("button.submit"); // click by selector
+<span class="n">I</span><span class="p">.</span><span class="n">Expect</span><span class="p">(</span><span class="s">&quot;News&quot;</span><span class="p">).</span><span class="n">In</span><span class="p">(</span><span class="s">&quot;li.cat-item.cat-item-6 a&quot;</span><span class="p">);</span>
 </code></pre>
+</div>
+<p>.. that opens the page, asserts that the Blogs link exists and clicks it. But if its missing for some reason, perhaps under maintenance, continue on and click on Docs instead. Both of these paths eventually test that the “News” list item exists on the resulting pages. This is essentially branching within a single test based on the pages current state. When run locally, it will behave as the user expects. When parsed for remote execution, the test methods in the catch will never be hit.</p>
 
-<p>Overloads support clicking relative to a selector.</p>
+<p>With the asynchronous nature of assertions and actions while executing via FluentAutomation.Server, inline code blocks such as the try { } catch() {} can’t be serialized and sent to the server to make that decision. This is the core reason that we have avoided allowing the user to retrieve data from the page into local variables. In general I’d advise against this type of logic because it makes each test more complex than they need to be. If there is an issue you can’t test around with this type of code, its a shortcoming in our framework and I’d love to help you solve these problems. Hit me up via email, comments on the blog or create issues on our GitHub site and we’ll figure out the best path to get you moving forward.</p>
 
-<h5>DoubleClick</h5>
+<p>Along with the cons, comes some pretty striking pros in my opinion:</p>
 
-<p>DoubleClick the specified point or element.</p>
+<p><em>Single test, multiple browser execution</em> is baked into the RemoteCommand API at the lowest level. Know exactly how your test executes against any browser without having to mess with different drivers, tools or any of that.</p>
 
-<pre><code>I.DoubleClick(10, 10); // by coordinate.
-I.DoubleClick("button.submit"); // by selector.
+<p>Any automation framework with a compatible AutomationProvider implementation (*Selenium* and <em>WatiN</em> presently) can be used in this manner. No changes to your code required.</p>
+
+<p>Any language that can form valid JSON is supported. First class providers are being built for <em>.NET, JavaScript, CoffeeScript</em> (my new favorite toy), <em>PHP</em> and others. Looking for people willing to help expand the use of the Fluent API to other languages.</p>
+
+<p>Test recording! The contrib project by Paul Zumbrun, (FluentAutomation Recorder)[<a href="https://github.com/pauljz/FluentAutomationRecorder">https://github.com/pauljz/FluentAutomationRecorder</a>] allows tests to be recorded and played back via the chrome extension utilizing the RemoteCommand API.</p>
+
+<p>I think we have a fairly compelling automation story playing out here, but I’d love to hear more feedback from people using or interested in using the Fluent API. The next step for Paul and I is to actually build the documentation we’ve been promising for months. This will take some time to become ‘good’ but I know our users need it.</p>
+
+<p>Thanks for the support!</p>
+
+	<nav>
+		<div class='left tiles'><div class='comments'><a href='/blog/Released-RemoteCommand-API#disqus_thread'>COMMENTS AND REACTIONS</a></div></div>
+		<div class='right tiles'>
+			<a class='author brown' href='//twitter.com/stirno'><img class='gravatar' src='http://www.gravatar.com/avatar/f0911b8dd77a34c0354968639b4545f4' /><span>@stirno</span></a>
+			<div>01 March 2012</div>
+<!-- 			<div class='orange' style='margin-right: 0px'>
+				<span class='text'>SHARE</span>
+			</div>
+			<div class='orange' style='padding-left: 0px'>
+				<span class='icon-google-plus'></span>
+				<span class='icon-twitter'></span>
+			</div> -->
+		</div>
+	</nav>
+
+	<div class='clear'></div>
+</article>
+
+<article>
+	<header title='Recorder updates: Expect Builder and more to come'><a href='/blog/Recorder-Updates-Expect-Builder-and-more'>Recorder updates: Expect Builder and more to come</a></header>
+	<div class='clear'></div>
+	<p>Time for an update! It’s been a while but Brandon and I are back actively developing after the holidays, and we have some fun stuff coming up for Fluent Automation.</p>
+
+<p><img class="size-full wp-image-247  alignright" title="The Expect Builder in action" src="http://fluent.stirno.com/wp-content/uploads/2012/02/expect-builder-screenshot1.png" alt="" width="476" height="265"></p>
+
+<p>I just finished a working draft of the Expect Builder for the <a href="http://github.com/pauljz/FluentAutomationRecorder">Fluent Automation Recorder</a> (read the <a href="/blog/Introducing-FluentAutomation-Recorder/">Recorder introduction post</a> for more information), which finally lets it run useful tests, rather than just simple playbacks. As of now it can record Text, Value, Element, Count, Class, Alert, and Url Expects.</p>
+
+<p>As Brandon pointed out, the dialog is “a bit fat”; we may shrink it down.</p>
+
+<p>For basic event recording, there is still some debugging work needed, particularly surrounding any recorded events events that trigger AJAX calls and then interact with the DOM. Right now it doesn’t know to wait for the XHR to complete before continuing the test. Apart from that, there are some little bugs that make the Recorder difficult to use, but shouldn’t be difficult to overcome over the next few days of development. Notably, pressing enter to submit a form doesn’t get saved. Punching in a new URL manually in the browser also needs to be handled.</p>
+
+<p>I’m sure more bugs like this will turn up the more we hammer away at the Recorder, but the reliability of what I’ve seen so far in the recordings has me optimistic.</p>
+
+<p>A few more pipeline items include the ability to manually insert a Wait/Pause type of event, instructing Fluent Automation to take screenshots in the course of a test, exporting .NET code rather than just JSON, and editing saved tests after the fact.</p>
+
+<p>If you have any feature requests, suggestions, or feedback of any kind, let us know in the comments.</p>
+
+	<nav>
+		<div class='left tiles'><div class='comments'><a href='/blog/Recorder-Updates-Expect-Builder-and-more#disqus_thread'>COMMENTS AND REACTIONS</a></div></div>
+		<div class='right tiles'>
+			<a class='author brown' href='//twitter.com/pauljz'><img class='gravatar' src='http://www.gravatar.com/avatar/32bfb0ffedef1d40bb7904b75ccbda42' /><span>@pauljz</span></a>
+			<div>15 February 2012</div>
+<!-- 			<div class='orange' style='margin-right: 0px'>
+				<span class='text'>SHARE</span>
+			</div>
+			<div class='orange' style='padding-left: 0px'>
+				<span class='icon-google-plus'></span>
+				<span class='icon-twitter'></span>
+			</div> -->
+		</div>
+	</nav>
+
+	<div class='clear'></div>
+</article>
+
+<article>
+	<header title='Still going..'><a href='/blog/Still-going'>Still going..</a></header>
+	<div class='clear'></div>
+	<p>I’ve received a few emails wondering about progress of the Fluent API. Just throwing this out there so you all know, I am still working on it regularly. It has been a very busy few weeks to prepare for some vacation time I’m taking now with family in town. Paul has also been traveling the world but expect us to come back with a vengeance in 2012.</p>
+
+<p>I will review a few pending feature requests from email and a pull request this week. Also we’ll be upgrading the version of Selenium we link our NuGet package against to fix issues with Firefox 8. If there is anything incredibly urgent that you need fixed, hit me up via email or the comments section ASAP.</p>
+
+<p>Thanks!</p>
+
+	<nav>
+		<div class='left tiles'><div class='comments'><a href='/blog/Still-going#disqus_thread'>COMMENTS AND REACTIONS</a></div></div>
+		<div class='right tiles'>
+			<a class='author brown' href='//twitter.com/stirno'><img class='gravatar' src='http://www.gravatar.com/avatar/f0911b8dd77a34c0354968639b4545f4' /><span>@stirno</span></a>
+			<div>13 December 2011</div>
+<!-- 			<div class='orange' style='margin-right: 0px'>
+				<span class='text'>SHARE</span>
+			</div>
+			<div class='orange' style='padding-left: 0px'>
+				<span class='icon-google-plus'></span>
+				<span class='icon-twitter'></span>
+			</div> -->
+		</div>
+	</nav>
+
+	<div class='clear'></div>
+</article>
+
+<article>
+	<header title='Continued work.. and some questions for the users'><a href='/blog/Continued-work-and-some-questions'>Continued work.. and some questions for the users</a></header>
+	<div class='clear'></div>
+	<p>I’ve been continuing work on making the RemoteCommand API awesome, including better debugging a test in progress against a remote box, proper error handling and integrating into your Continuous Integration processes.</p>
+
+<p>This has driven some questions as to where we should focus first as far as verifying compatibility with HOW people are using Fluent Automation.</p>
+
+<p>1) What frameworks are people utilizing with Fluent Automation? Currently I’m testing with MSTest, NUnit and soon xUnit.</p>
+
+<p>2) How important is it to get ‘proper’ test pass/fail back from a Remote API? I ask this because we’re looking at ways to multi-thread the testing when used with a cluster and I really like the fire and forget method that I’m using for my own stuff. I then generate a test results report from the boxes actually running the tests via the RemoteCommand Server (this feature not yet available in source). This works great for me, but it leaves the built-in results for the testing framework in an odd bind. It can’t really wait for the results to come back because you never know how long an automation test will take. It essentially becomes an Asynchronous process, where I then Assert.Inconclusive essentially.</p>
+
+<p>I do know of one particular scenario that this is troubling for.. People utilizing TFS to relate a test to a test case need the MSTest TRX file to contain proper results. I’m hoping this can be solved by utilizing TFS for test scale out instead of the RemoteCommand API, but that has not yet been proven.</p>
+
+<p>Nothing decided on this yet, but that is how I am using the system currently.</p>
+
+	<nav>
+		<div class='left tiles'><div class='comments'><a href='/blog/Continued-work-and-some-questions#disqus_thread'>COMMENTS AND REACTIONS</a></div></div>
+		<div class='right tiles'>
+			<a class='author brown' href='//twitter.com/stirno'><img class='gravatar' src='http://www.gravatar.com/avatar/f0911b8dd77a34c0354968639b4545f4' /><span>@stirno</span></a>
+			<div>20 November 2011</div>
+<!-- 			<div class='orange' style='margin-right: 0px'>
+				<span class='text'>SHARE</span>
+			</div>
+			<div class='orange' style='padding-left: 0px'>
+				<span class='icon-google-plus'></span>
+				<span class='icon-twitter'></span>
+			</div> -->
+		</div>
+	</nav>
+
+	<div class='clear'></div>
+</article>
+
+<article>
+	<header title='Introducing the FluentAutomation Recorder'><a href='/blog/Introducing-FluentAutomation-Recorder'>Introducing the FluentAutomation Recorder</a></header>
+	<div class='clear'></div>
+	<p>In a previous post, Brandon introduced the RemoteCommand API, a REST endpoint that accepts and runs Fluent Automation tests serialised into JSON. Having a portable format for tests has let us start to branch the project out into a few interesting tools outside the .NET world. A tool I’ve been developing is the Fluent Automation Recorder - a Chrome extension that lets you record tests naturally by clicking around your site in the browser.</p>
+
+<h4 id="toc_3">Overview</h4>
+
+<p><img src="http://fluent.stirno.com/wp-content/uploads/2011/11/far-start-recording.png" alt="Start Recording"></p>
+
+<p>When you install the Fluent Automation Recorder extension, it sits idle in the top right of Chrome, until you Start Recording.</p>
+
+<p>When you start recording in a tab, the extension attaches event listeners that will record basic browser interactions: entering text, selecting options, radios, and checkboxes, hovers, clicks and therefore navigating links and submitting forms. It resolves unique Sizzle selectors for the DOM nodes you interact with, and sends these to be stored as JSON for later use (and yes since I’ve been asked, you can specify HTML attributes that you want the recorder to consider to be unique, by default it looks for a data-key as unique, and you can add more with the settings interface).</p>
+
+<p>Once you finish recording, the same dropdown menu will let you Stop Recording, and the test is saved. The Manage Recordings link takes you to a <a href="http://fluent.stirno.com/wp-content/uploads/2011/11/fluent-automation-recorder-manager.png">management interface</a> where you can organise, name, and bookmark your past recordings, play them back using the RemoteCommand API, export to JSON, and view a list of the commands in the recording.</p>
+
+<p>The Settings tab lets you set those unique attributes I mentioned. More coming soon here, but I’d appreciate feedback on what all else should be customisable.</p>
+
+<h4 id="toc_4">Roadmap</h4>
+
+<p>The biggest outstanding feature is the ability to add Expects; this is kind of crucial for tests, after all. I’ve started working on this as a context menu. When you right click a DOM Node and select “I Expect …” it’ll pop up a Lightbox (or something along those lines) to accept the conditions of your expect. At first I’ll support class/text based selects, but after that I’ll add support for as many of Fluent Automation’s Expect types as possible.</p>
+
+<p><img src="http://fluent.stirno.com/wp-content/uploads/2011/11/fluent-automation-recorder-i-expect.png" alt="Expect"></p>
+
+<p>After Expects, I plan to flesh out the Recording Manager a bit more. The big ticket item here is the ability to manually add, edit and re-order steps within a recording. This would allow for the creation of some commands that don’t make sense to record natively in the browser like Wait. I also want to improve the organisation capabilities of the manager: labeling/categorising recordings via drag and drop (a la GMail) and deleting/archiving recordings.</p>
+
+<p>One more upcoming addition to the Recorder itself is the ability to record Drag and Drops. This will probably require a shortcut key (much like Ctrl-Alt-H to record a Hover now) to indicate the drag and drop you’re about to perform is “significant”.</p>
+
+<p>Of course, over time I want to support as much of the Fluent Automation API as possible, including a lot of the less obvious commands; however, unless there’s a particularly high demand for some of these, I feel that most of the important functionality for the recorder is already in place.</p>
+
+<h4 id="toc_5">More information</h4>
+
+<p>This project is still very young and I am certainly open to suggestions on what else the Fluent Automation Recorder should do in the future. I am aiming for a first stable beta release some time in mid-December, at which point I’ll put it up on the Chrome Webstore.</p>
+
+<p>For more information, or to download the latest development version, check out the <a href="https://github.com/pauljz/FluentAutomationRecorder">Fluent Automation Recorder on GitHub</a>. If you’ve taken the recorder for a spin and have suggestions or bugs to report use <a href="https://github.com/pauljz/FluentAutomationRecorder/issues">Issues on GitHub</a>.</p>
+
+	<nav>
+		<div class='left tiles'><div class='comments'><a href='/blog/Introducing-FluentAutomation-Recorder#disqus_thread'>COMMENTS AND REACTIONS</a></div></div>
+		<div class='right tiles'>
+			<a class='author brown' href='//twitter.com/pauljz'><img class='gravatar' src='http://www.gravatar.com/avatar/32bfb0ffedef1d40bb7904b75ccbda42' /><span>@pauljz</span></a>
+			<div>13 November 2011</div>
+<!-- 			<div class='orange' style='margin-right: 0px'>
+				<span class='text'>SHARE</span>
+			</div>
+			<div class='orange' style='padding-left: 0px'>
+				<span class='icon-google-plus'></span>
+				<span class='icon-twitter'></span>
+			</div> -->
+		</div>
+	</nav>
+
+	<div class='clear'></div>
+</article>
+
+<article>
+	<header title='Runtime Provider Selection'><a href='/blog/Runtime-Provider-Selection'>Runtime Provider Selection</a></header>
+	<div class='clear'></div>
+	<p>Recently we added a great little change that allows you to stop compiling your tests directly against the Providers FluentTest class implementation.</p>
+
+<p>Now you can do this:</p>
+<div class="highlight"><pre><code class="csharp"><span class="na">[TestClass]</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">ProviderLoadingTests</span> <span class="p">:</span> <span class="n">FluentAutomation</span><span class="p">.</span><span class="n">API</span><span class="p">.</span><span class="n">FluentTest</span>
+<span class="p">{</span>
+<span class="na">    [TestMethod]</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Test</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">I</span><span class="p">.</span><span class="n">Open</span><span class="p">(</span><span class="s">&quot;http://www.google.com/&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </code></pre>
+</div>
+<p>Notice there is no reference to either Selenium or WatiN. This is because the new FluentTest base class will go and grab the first loaded provider and use that when none are specified.</p>
 
-<p>Overloads support clicking relative to a selector.</p>
+<p>There are two ways to specify the provider. Using a TestInitialize or Setup method or directly inside a test (must be called before any I.* commands):</p>
+<div class="highlight"><pre><code class="csharp"><span class="na">[TestClass]</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">ProviderLoadingTests</span> <span class="p">:</span> <span class="n">FluentAutomation</span><span class="p">.</span><span class="n">API</span><span class="p">.</span><span class="n">FluentTest</span>
+<span class="p">{</span>
+<span class="na">    [TestInitialize]</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Init</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">ProviderName</span> <span class="p">=</span> <span class="s">&quot;WatiN&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
 
-<h5>RightClick</h5>
-
-<p>RightClick the specified point or element.</p>
-
-<pre><code>I.RightClick(10, 10); // by coordinate.
-I.RightClick("button.submit"); // by selector.
+<span class="na">    [TestMethod]</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Test</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">I</span><span class="p">.</span><span class="n">Open</span><span class="p">(</span><span class="s">&quot;http://www.google.com/&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </code></pre>
-
-<p>Overloads support clicking relative to a selector.</p>
-
-<h5>Hover</h5>
-
-<p>Hover over the specified point or element.</p>
-
-<pre><code>I.Hover(10, 10); // by coordinate.
-I.Hover("button.submit"); // by selector.
+</div>
+<p>or via the application configuration (preferred approach):</p>
+<div class="highlight"><pre><code class="csharp"><span class="p">&lt;</span><span class="n">appSettings</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="k">add</span> <span class="n">key</span><span class="p">=</span><span class="s">&quot;AutomationProvider&quot;</span> <span class="k">value</span><span class="p">=</span><span class="s">&quot;Selenium&quot;</span> <span class="p">/&gt;</span>
+<span class="p">&lt;/</span><span class="n">appSettings</span><span class="p">&gt;</span>
 </code></pre>
-
-<p>Overloads support hovering relative to a selector.</p>
-
-<h5>Focus</h5>
-
-<p>Set focus on an element.</p>
-
-<pre><code>I.Focus("button.submit");
-</code></pre>
-
-<h5>Press</h5>
-
-<p>Using <a href="">Windows Forms SendKeys</a> values, trigger a keypress event with the specified key.</p>
-
-<pre><code>I.Press("{TAB}"); // trigger a tab keypress event
-</code></pre>
-
-<h5>Type</h5>
-
-<p>Type a string one character at a time. Cannot be used with special keycodes such as {TAB}. Should be used in combination with other methods that set the focus inside of controls that cannot be automated, such as Flash or popup windows.</p>
-
-<pre><code>I.Type("Test String");
-</code></pre>
-
-<h5>Select</h5>
-
-<p>Select a value or values from a <code>&lt;SELECT /&gt;</code> element. Overloads allow for selection via Value, Text or Index.</p>
-
-<pre><code>I.Select("MN").From("select#states");
-</code></pre>
-
-<h4>Advanced Actions</h4>
-
-<h5>Find / Find Multiple</h5>
-
-<p>In the rare scenarios that you need access to the element directly, you can use <code>I.Find/I.FindMultiple</code> to get a factory function that will locate and return the element to you.</p>
-
-<p>It can be useful to do this in large test suites, where the same element is interacted with several times. Most Actions and Expects support a factory overload for the scenarios.</p>
-
-<pre><code>    var notificationsDiv = I.Find("div#notifications");
-
-    // Verify no notifications on page.
-    I.Expect.Count(0).Of(notificationsDiv);
-
-    // Trigger Notification
-    I.Click("button.trigger-notify");
-    I.Expect.Count(1).Of(notificationsDiv);
-    I.Expect.Text("Button Clicked").In(notificationsDiv);
-
-    // Clicking notification removes from page
-    I.Click(notificationsDiv);
-    I.Expect.Count(0).Of(notificationsDiv);
-</code></pre>
-
-<p>This can be a useful optimization in tests that are very complex and interact with the same element multiple times. This is unnecessary in most cases.</p>
-
-<p>Another use of <code>I.Find/I.FindMultiple</code> is to directly get to the element instance itself, in this case an instance that implements IElement.</p>
-
-<pre><code>var inputFunc = I.Find("input:eq(0)");
-IElement input = inputFunc();
-
-if (input.IsText) {
-    // do something
-}
-</code></pre>
-
-<p>By doing this, you lose some of the implicit retry logic for selectors. In general this is not something you want to do, but if you absolutely have no other choice, you can. This will also allow you to break the abstraction from the test provider by casting to the type used in that framework, Selenium's WebElement type for example. Again, not recommended.</p>
-
-<h5>Take Screenshot</h5>
-
-<p>Grab a screenshot of the current browser window and save it to disk. You must provide the name to save the file. The path it is saved in is configurable via Settings.ScreenshotPath.</p>
-
-<pre><code>I.TakeScreenshot(string.Format("LoginScreen_{0}", DateTime.Now.ToString()));
-</code></pre>
-
-<h5>Upload</h5>
-
-<p>Using a standard HTML File Input (<code>&lt;input type='file' /&gt;</code>), upload a file to the server.</p>
-
-<pre><code>I.Upload("input[type='file']:eq(0)", @"C:\Penguins.jpg");
-</code></pre>
-
-<p>The path must be absolute and point to the file you wish to upload. This has worked with several Flash-based uploaders as well.</p>
-
-<h5>Drag &amp; Drop</h5>
-
-<p>Proper Drag &amp; Drop is supported in all providers. It can be specific to dragging a single selector to another, or dragging from an offset near a selector.</p>
-
-<pre><code>I.Open("http://developer.yahoo.com/yui/examples/dragdrop/dd-groups.html");
-I.Drag("#pt1").To("#t2");
-I.Drag("#pt2").To("#t1");
-I.Drag("#pb1").To("#b1");
-I.Drag("#pb2").To("#b2");
-I.Drag("#pboth1").To("#b3");
-I.Drag("#pboth2").To("#b4");
-I.Drag("#pt1").To("#pt2");
-I.Drag("#pboth1").To("#pb2");
-</code></pre>
-
-<h4>Waits</h4>
-
-<p>Any automated testing will require waits. Fluent supports both implicit and explicit waits. Implicit waits are used with Actions where a selector can't be located. Explicit waits can be used based on time or conditions.</p>
-
-<h5>Wait</h5>
-
-<p>Wait for specific period, before continiuing test execution.</p>
-
-<pre><code>I.Wait(1); // Wait 1 second
-I.Wait(TimeSpan.FromMilliseconds(500)); // Wait 500ms   
-</code></pre>
-
-<h5>WaitUntil</h5>
-
-<p>Wait for a condition to be true, or an action to successfully pass without Exception.</p>
-
-<p>This is very useful for pages with lots of AJAX where the implicit waits builtin to Actions just aren't good enough.</p>
-
-<p>When an <code>Expression&lt;Action&gt;</code> is provided, the expression will be re-evaluated until the timeout (Settings.DefaultWaitUntilTimeout) has passed or succeeds without throwing a FluentException. This means you can use any Action or Expect inside the expression.</p>
-
-<pre><code>I.WaitUntil(() =&gt; I.Expect.Exists("#navbar"));
-</code></pre>
-
-<p>When an <code>Expression&lt;Func&lt;bool&gt;&gt;</code> is provided, the expression will be re-evaluated until the timeout has passed or the Func returns true.</p>
-
-<pre><code>I.WaitUntil(() =&gt; {
-    var element = I.Find("#navbar")();
-    return element != null;
-});
-</code></pre>
-
-<h4>Expects</h4>
-
-<p>In Fluent, you can expect that a certain state exists. If this state does not exist, an Exception of type <code>FluentExpectFailedException</code> will be thrown.</p>
-
-<p><strong>Text</strong> Verify that an element matching the selector has the specified text in its innerHTML or value depending on type.</p>
-
-<pre><code>I.Expect.Text("sup").In(selector);
-</code></pre>
-
-<p><strong>Value</strong> Verify that an element matching the selector has the specified value. This works with <code>&lt;input type='text' /&gt;</code>, <code>&lt;textarea&gt;&lt;/textarea&gt;</code> and <code>&lt;select&gt;&lt;option value='1'&gt;&lt;/select&gt;</code>.</p>
-
-<pre><code>I.Expect.Value(10).In(selector);
-</code></pre>
-
-<p><strong>Exists</strong> Verify that an element matching the selector exists. Alternative: <code>I.Expect.Count(0).Of(selector);</code></p>
-
-<pre><code>I.Expect.Exists(selector);
-</code></pre>
-
-<p><strong>Class</strong> Verify that the element matching the selector has the specified CSS class.</p>
-
-<pre><code>I.Expect.Class("error").On(selector);
-</code></pre>
-
-<p><strong>Count</strong> Verify that a specific count of elements matching the selector exist on the page.</p>
-
-<pre><code>I.Expect.Count(1).Of(selector);
-</code></pre>
-
-<p><strong>Url</strong> Verify that the current open page URL matches the specified value.</p>
-
-<pre><code>I.Expect.Url("http://www.google.com/");
-</code></pre>
-
-<p><strong>True / False</strong> Verify that the expression returns either true or false.</p>
-
-<pre><code>var fieldFunc = I.Find(selector);
-I.Expect.True(() =&gt; fieldFunc().IsText);
-I.Expect.False(() =&gt; fieldFunc().IsSelect);
-</code></pre>
-
-<p><strong>Throws</strong> Verify that an expression causes an exception to be thrown.</p>
-
-<pre><code>I.Expect.Throws(() =&gt; I.Expect.Class("error").On(selector)); // selector does not have class
-</code></pre>
-
-<h4>Extending Fluent v2</h4>
-
-<p>As with previous versions of Fluent, extension methods are the preferred way of adding convenience methods. A very common example would be to add <code>I.Login()</code> to your tests.</p>
-
-<pre><code>public static void Login(this FluentAutomation.Interfaces.INativeActionSyntaxProvider I, string username, string password)
-{
-    I.Open(PageUrls.LoginPage);
-    I.Enter(username).In("input#username");
-    I.Enter(password).In("input#password");
-    I.Click("button#login");
-}
-</code></pre>
-
-<p>From this point, you'll be able to simply reference this extension method in your tests:</p>
-
-<pre><code>I.Login("username", "password");
-</code></pre>
-
-<p>Expect syntax can be extended similarly.</p>
-
-<pre><code>public static void Checked(this FluentAutomation.ExpectSyntaxProvider expect, string selector)
-{
-    expect.Count(0).Of(string.Format("{0}:checked", selector));
-}
-</code></pre>
-
-<p>Additionally, you can build new providers that implement <code>IExpectProvider, IFileStoreProvider</code> or <code>ICommandProvider</code> that can be injected with a custom Bootstrap method. We are working on making more internal interfaces accessible for injection soon. Let us know if you've got something interesting in mind.</p>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/stirno">stirno</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
-    </div>
-    <script src="javascripts/scale.fix.js"></script>
-              <script type="text/javascript">
-            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-          </script>
-          <script type="text/javascript">
-            try {
-              var pageTracker = _gat._getTracker("UA-35282988-1");
-            pageTracker._trackPageview();
-            } catch(err) {}
-          </script>
-
-  </body>
+</div>
+<p>This should make it a lot easier to use new providers as they are built.</p>
+
+<p>NOTE: The ProviderName value is essentially a partial match via Assembly.FullName.Contains(). This is why just Selenium or WatiN works to grab the right provider.</p>
+
+	<nav>
+		<div class='left tiles'><div class='comments'><a href='/blog/Runtime-Provider-Selection#disqus_thread'>COMMENTS AND REACTIONS</a></div></div>
+		<div class='right tiles'>
+			<a class='author brown' href='//twitter.com/stirno'><img class='gravatar' src='http://www.gravatar.com/avatar/f0911b8dd77a34c0354968639b4545f4' /><span>@stirno</span></a>
+			<div>06 November 2011</div>
+<!-- 			<div class='orange' style='margin-right: 0px'>
+				<span class='text'>SHARE</span>
+			</div>
+			<div class='orange' style='padding-left: 0px'>
+				<span class='icon-google-plus'></span>
+				<span class='icon-twitter'></span>
+			</div> -->
+		</div>
+	</nav>
+
+	<div class='clear'></div>
+</article>
+
+
+<!-- Pagination links -->
+<div class="pagination">
+
+
+ 
+<a href="/page2/" title="Next Page">Next &raquo;</a>
+ 
+</div>
+		</section>
+
+		<script type="text/javascript">
+			// Disqus
+			var disqus_shortname = 'fluent';
+			(function () {
+				var s = document.createElement('script'); s.async = true;
+				s.type = 'text/javascript';
+				s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+				(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+			}());
+		</script>
+	</body>
 </html>
