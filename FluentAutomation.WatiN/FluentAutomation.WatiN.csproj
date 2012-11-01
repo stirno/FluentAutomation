@@ -58,6 +58,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\FluentAutomation\Properties\AssemblyGlobal.cs">
+      <Link>Properties\AssemblyGlobal.cs</Link>
+    </Compile>
     <Compile Include="CommandProvider.cs" />
     <Compile Include="Element.cs" />
     <Compile Include="MouseControl.cs" />
@@ -71,6 +74,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="FluentAutomation.WatiN.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -51,6 +51,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\FluentAutomation\Properties\AssemblyGlobal.cs">
+      <Link>Properties\AssemblyGlobal.cs</Link>
+    </Compile>
     <Compile Include="CommandProvider.cs" />
     <Compile Include="Element.cs" />
     <Compile Include="PhantomJS.cs" />
