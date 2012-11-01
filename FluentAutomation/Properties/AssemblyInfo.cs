@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("FluentAutomation")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Fluent Automation API Core Library")]
+[assembly: AssemblyDescription("Fluent Automation is a simplified DSL for web application automation testing.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Brandon Stirnaman")]
-[assembly: AssemblyProduct("FluentAutomation")]
+[assembly: AssemblyProduct("FluentAutomation.Core")]
 [assembly: AssemblyCopyright("Copyright © Brandon Stirnaman 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -32,4 +32,4 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.0.*")]
+[assembly: AssemblyVersion("2.0.0")]
