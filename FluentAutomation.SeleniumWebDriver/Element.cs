@@ -43,6 +43,10 @@ namespace FluentAutomation
                 {
                     return this.Attributes.Get("value");
                 }
+                else if (this.IsSelect)
+                {
+                    return string.Join(",", this.SelectedOptionValues);
+                }
                 else
                 {
                     return this.Text;

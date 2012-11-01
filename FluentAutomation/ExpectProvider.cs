@@ -320,28 +320,25 @@ namespace FluentAutomation
                 }
                 else if (unwrappedElement.IsSelect)
                 {
-                    if (unwrappedElement.IsMultipleSelect)
+                    var foundMatch = false;
+                    foreach (var optionValue in unwrappedElement.SelectedOptionValues)
                     {
-                        var foundMatch = false;
-                        foreach (var optionValue in unwrappedElement.SelectedOptionValues)
+                        if (IsTextMatch(optionValue, value))
                         {
-                            if (IsTextMatch(optionValue, value))
-                            {
-                                foundMatch = true;
-                                break;
-                            }
-                        }
-
-                        if (!foundMatch)
-                        {
-                            throw new FluentExpectFailedException("Expected SelectElement [{0}] selected options to have at least one option with value of [{1}]. Selected option text values include [{2}]", selector, value, string.Join(",", unwrappedElement.SelectedOptionValues));
+                            foundMatch = true;
+                            break;
                         }
                     }
-                    else
+
+                    if (!foundMatch)
                     {
-                        if (!IsTextMatch(unwrappedElement.Value, value))
+                        if (unwrappedElement.IsMultipleSelect)
                         {
-                            throw new FluentExpectFailedException("Expected SelectElement [{0}] selected option value to be [{1}] but it was actually [{2}].", selector, value, unwrappedElement.Text);
+                            throw new FluentExpectFailedException("Expected SelectElement [{0}] selected options to have at least one option with value of [{1}]. Selected option text values include [{2}]", selector, value, unwrappedElement.Value);
+                        }
+                        else
+                        {
+                            throw new FluentExpectFailedException("Expected SelectElement [{0}] selected option value to be [{1}] but it was actually [{2}].", selector, value, unwrappedElement.Value);
                         }
                     }
                 }

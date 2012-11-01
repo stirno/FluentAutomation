@@ -241,48 +241,48 @@ namespace FluentAutomation.Interfaces
         void Press(string keys);
 
         /// <summary>
-        /// Manipulates a <c><select /></c> DOM element by selecting all matching <paramref name="values"/>.
+        /// Manipulates a <c>&lt;select /></c> DOM element by selecting options with matching <paramref name="values"/> using the specified <paramref name="mode"/>.
         /// </summary>
-        /// <param name="mode">Mode of interaction with the <c><select /></c>; by Text, Value or Index.</param>
-        /// <param name="values">Values to be selected.</param>
+        /// <param name="mode">Mode of interaction with the <c>&lt;select /></c>; by Text, Value or Index.</param>
+        /// <param name="values">Options to be selected.</param>
         /// <returns><c>SelectSyntaxProvider</c></returns>
         ActionSyntaxProvider.SelectSyntaxProvider Select(Option mode, params string[] values);
 
         /// <summary>
-        /// Manipulates a <c><select /></c> DOM element by selecting the specified <paramref name="value"/>.
+        /// Manipulates a <c>&lt;select /></c> DOM element by selecting an option with matching <paramref name="value"/> using the specified <paramref name="mode"/>.
         /// </summary>
-        /// <param name="mode">Mode of interaction with the <c><select /></c>; by Text, Value or Index.</param>
-        /// <param name="value">Value to be selected.</param>
+        /// <param name="mode">Mode of interaction with the <c>&lt;select /></c>; by Text, Value or Index.</param>
+        /// <param name="value">Option to be selected.</param>
         /// <returns><c>SelectSyntaxProvider</c></returns>
         ActionSyntaxProvider.SelectSyntaxProvider Select(Option mode, string value);
 
         /// <summary>
-        /// Manipulates a <c><select /></c> DOM element by selecting the specified <paramref name="indices"/>.
+        /// Manipulates a <c>&lt;select /></c> DOM element by selecting options at the specified <paramref name="indices"/>.
         /// </summary>
-        /// <param name="indices">Indices to select.</param>
+        /// <param name="indices">Options to be selected by Index.</param>
         /// <returns><c>SelectSyntaxProvider</c></returns>
         ActionSyntaxProvider.SelectSyntaxProvider Select(params int[] indices);
 
         /// <summary>
-        /// Manipulates a <c><select /></c> DOM element by selecting the specified <paramref name="values"/>.
+        /// Manipulates a <c>&lt;select /></c> DOM element by selecting options with matching <paramref name="text"/>.
         /// </summary>
-        /// <param name="values">Values to be selected.</param>
+        /// <param name="values">Options to be selected by Text.</param>
         /// <returns><c>SelectSyntaxProvider</c></returns>
-        ActionSyntaxProvider.SelectSyntaxProvider Select(params string[] values);
+        ActionSyntaxProvider.SelectSyntaxProvider Select(params string[] text);
 
         /// <summary>
-        /// Manipulates a <c><select /></c> DOM element by selecting the specified <paramref name="index"/>.
+        /// Manipulates a <c>&lt;select /></c> DOM element by selecting an option at the specified <paramref name="index"/>.
         /// </summary>
-        /// <param name="index">Index to be selected.</param>
+        /// <param name="index">Option to be selected by Index.</param>
         /// <returns><c>SelectSyntaxProvider</c></returns>
         ActionSyntaxProvider.SelectSyntaxProvider Select(int index);
 
         /// <summary>
-        /// Manipulates a <c><select /></c> DOM element by selecting the specified <paramref name="value"/>.
+        /// Manipulates a <c>&lt;select /></c> DOM element by selecting an option with matching <paramref name="text"/>.
         /// </summary>
-        /// <param name="value">Value to be selected.</param>
+        /// <param name="text">Option to be selected by Text.</param>
         /// <returns><c>SelectSyntaxProvider</c></returns>
-        ActionSyntaxProvider.SelectSyntaxProvider Select(string value);
+        ActionSyntaxProvider.SelectSyntaxProvider Select(string text);
 
         /// <summary>
         /// Takes a screenshot of the active web browser window.
