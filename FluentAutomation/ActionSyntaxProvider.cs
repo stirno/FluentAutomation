@@ -65,6 +65,21 @@ namespace FluentAutomation
             this.commandProvider.Click(element);
         }
 
+        public void Scroll(int x, int y)
+        {
+            this.commandProvider.Hover(x, y);
+        }
+
+        public void Scroll(string selector)
+        {
+            this.commandProvider.Hover(this.Find(selector));
+        }
+
+        public void Scroll(Func<IElement> element)
+        {
+            this.commandProvider.Hover(element);
+        }
+
         public void DoubleClick(int x, int y)
         {
             this.commandProvider.DoubleClick(x, y);
