@@ -119,8 +119,12 @@ namespace FluentAutomation
         {
             this.Act(() =>
             {
-                var unwrappedElement = element() as Element;
-                unwrappedElement.WebElement.Click();
+                var containerElement = element() as Element;
+                new Actions(this.webDriver)
+                    .MoveToElement(containerElement.WebElement)
+                    .Click()
+                    .Build()
+                    .Perform();
             });
         }
 
