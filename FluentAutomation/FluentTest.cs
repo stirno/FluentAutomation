@@ -19,7 +19,8 @@ namespace FluentAutomation
         {
             get
             {
-                if (syntaxProvider == null)
+                var provider = syntaxProvider as INativeActionSyntaxProvider;
+                if (provider == null || provider.IsDisposed())
                 {
                     // register types
                     FluentAutomation.Settings.Registration(this.Container);

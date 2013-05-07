@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace FluentAutomation.Interfaces
 {
-    public interface INativeActionSyntaxProvider : IDisposable
+    public interface INativeActionSyntaxProvider : ISyntaxProvider
     {
         // native only
         /// <summary>

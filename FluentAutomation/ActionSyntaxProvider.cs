@@ -426,8 +426,15 @@ namespace FluentAutomation
             }
         }
 
+        private bool isDisposed = false;
+        public bool IsDisposed()
+        {
+            return isDisposed;
+        }
+
         public void Dispose()
         {
+            this.isDisposed = true;
             this.commandProvider.Dispose();
         }
     }

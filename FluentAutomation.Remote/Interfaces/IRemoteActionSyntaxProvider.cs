@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FluentAutomation.Interfaces
 {
-    public interface IRemoteActionSyntaxProvider : IDisposable
+    public interface IRemoteActionSyntaxProvider : ISyntaxProvider
     {
         void Click(int x, int y);
         void Click(string selector);

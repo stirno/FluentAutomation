@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="3rdPartyLib\TinyIoC.cs" />
     <Compile Include="ActionSyntaxProvider.cs" />
+    <Compile Include="Interfaces\ISyntaxProvider.cs" />
     <Compile Include="Properties\AssemblyGlobal.cs" />
     <Compile Include="BaseCommandProvider.cs" />
     <Compile Include="BaseFluentTest.cs" />
