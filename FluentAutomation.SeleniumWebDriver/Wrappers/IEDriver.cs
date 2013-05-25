@@ -10,7 +10,9 @@ namespace FluentAutomation.Wrappers
         public IEDriverWrapper()
             : base(new OpenQA.Selenium.IE.InternetExplorerOptions()
             {
-                IgnoreZoomLevel = true
+                IgnoreZoomLevel = true,
+                IntroduceInstabilityByIgnoringProtectedModeSettings = true,
+                EnableNativeEvents = true
             })
         {
         }

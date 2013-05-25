@@ -13,7 +13,7 @@ namespace FluentAutomation.Tests
         public void MouseClickOperations()
         {
             I.Open(testUrl);
-
+            
             // single click should add btn-primary
             I.Click("#button-form button:eq(0)");
             I.Expect.Class("btn-primary").On("#button-form button:eq(0)");

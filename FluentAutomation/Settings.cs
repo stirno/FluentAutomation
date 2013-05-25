@@ -136,5 +136,39 @@ namespace FluentAutomation
                 minimizeAllWindowsOnTestStart = value;
             }
         }
+
+        private static int? windowHeight = null;
+        /// <summary>
+        /// Determines the height of the automated browser window. Defaults to null, which will use the provider defaults.
+        /// </summary>
+        public static int? WindowHeight
+        {
+            get
+            {
+                return windowHeight;
+            }
+
+            set
+            {
+                windowHeight = value;
+            }
+        }
+
+        private static int? windowWidth = null;
+        /// <summary>
+        /// Determines the width of the automated browser window. Defaults to null, which will use the provider defaults.
+        /// </summary>
+        public static int? WindowWidth
+        {
+            get
+            {
+                return windowWidth;
+            }
+
+            set
+            {
+                windowWidth = value;
+            }
+        }
     }
 }

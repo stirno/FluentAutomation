@@ -148,6 +148,14 @@ namespace FluentAutomation
             throw new NotImplementedException();
         }
 
+        public void DragAndDrop(int sourceX, int sourceY, int destinationX, int destinationY)
+        {
+            MouseControl.SetPosition(sourceX, sourceY);
+            MouseControl.MouseEvent(MouseControl.MouseEvent_LeftButtonDown, sourceX, sourceY, 0, 0);
+            MouseControl.SetPosition(destinationX, destinationY);
+            MouseControl.MouseEvent(MouseControl.MouseEvent_LeftButtonUp, destinationX, destinationY, 0, 0);
+        }
+
         public void DragAndDrop(Func<IElement> source, Func<IElement> target)
         {
             var sourceEl = source() as Element;
@@ -170,6 +178,27 @@ namespace FluentAutomation
         }
 
         public void EnterTextWithoutEvents(Func<IElement> element, string text)
+        {
+            var el = element() as Element;
+            if (el.IsText)
+            {
+                var txt = new WatiNCore.TextField(this.browser.DomContainer, el.AutomationElement.NativeElement);
+                txt.Value = text;
+                this.browser.DomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).trigger('keyup'); }}", el.AutomationElement.GetJavascriptElementReference()));
+            }
+        }
+
+        public void AppendText(Func<IElement> element, string text)
+        {
+            var el = element() as Element;
+            if (el.IsText)
+            {
+                var txt = new WatiNCore.TextField(this.browser.DomContainer, el.AutomationElement.NativeElement);
+                txt.AppendText(text);
+            }
+        }
+
+        public void AppendTextWithoutEvents(Func<IElement> element, string text)
         {
             var el = element() as Element;
             if (el.IsText)

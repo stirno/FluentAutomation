@@ -217,6 +217,11 @@ namespace FluentAutomation
             return new DragDropSyntaxProvider(this, element);
         }
 
+        public DragDropByPositionSyntaxProvider Drag(int sourceX, int sourceY)
+        {
+            return new DragDropByPositionSyntaxProvider(this, sourceX, sourceY);
+        }
+
         public class DragDropSyntaxProvider
         {
             protected readonly ActionSyntaxProvider syntaxProvider = null;
@@ -246,9 +251,43 @@ namespace FluentAutomation
                 this.syntaxProvider.commandProvider.DragAndDrop(this.sourceElement, targetElement);
             }
         }
+
+        public class DragDropByPositionSyntaxProvider
+        {
+            protected readonly ActionSyntaxProvider syntaxProvider = null;
+            protected readonly int sourceX = 0;
+            protected readonly int sourceY = 0;
+
+            public DragDropByPositionSyntaxProvider(ActionSyntaxProvider syntaxProvider, int sourceX, int sourceY)
+            {
+                this.syntaxProvider = syntaxProvider;
+                this.sourceX = sourceX;
+                this.sourceY = sourceY;
+            }
+            
+            /// <summary>
+            /// End Drag/Drop operation at specified coordinates.
+            /// </summary>
+            /// <param name="destinationX">X coordinate</param>
+            /// <param name="destinationY">Y coordinate</param>
+            public void To(int destinationX, int destinationY)
+            {
+                this.syntaxProvider.commandProvider.DragAndDrop(this.sourceX, this.sourceY, destinationX, destinationY);
+            }
+        }
         #endregion
 
         #region <input />, <textarea />
+        public TextAppendSyntaxProvider Append(string text)
+        {
+            return new TextAppendSyntaxProvider(this, text);
+        }
+
+        public TextAppendSyntaxProvider Append(dynamic nonString)
+        {
+            return this.Append(nonString.ToString());
+        }
+
         public TextEntrySyntaxProvider Enter(string text)
         {
             return new TextEntrySyntaxProvider(this, text);
@@ -256,7 +295,7 @@ namespace FluentAutomation
 
         public TextEntrySyntaxProvider Enter(dynamic nonString)
         {
-            return new TextEntrySyntaxProvider(this, nonString.ToString());
+            return this.Enter(nonString.ToString());
         }
 
         public class TextEntrySyntaxProvider
@@ -313,6 +352,65 @@ namespace FluentAutomation
                 else
                 {
                     this.syntaxProvider.commandProvider.EnterTextWithoutEvents(element, text);
+                }
+            }
+        }
+
+        public class TextAppendSyntaxProvider
+        {
+            protected readonly ActionSyntaxProvider syntaxProvider = null;
+            protected readonly string text = null;
+            protected bool eventsEnabled = true;
+            protected bool isAppend = false;
+
+            public TextAppendSyntaxProvider(ActionSyntaxProvider syntaxProvider, string text)
+            {
+                this.syntaxProvider = syntaxProvider;
+                this.text = text;
+            }
+
+            /// <summary>
+            /// Set text entry to set value without firing key events. Faster, but may cause issues with applications
+            /// that bind to the keyup/keydown/keypress events to function.
+            /// </summary>
+            /// <returns><c>TextEntrySyntaxProvider</c></returns>
+            public TextAppendSyntaxProvider WithoutEvents()
+            {
+                this.eventsEnabled = false;
+                return this;
+            }
+
+            /// <summary>
+            /// [deprecated] Use WithoutEvents() instead. To be removed in the future.
+            /// </summary>
+            /// <returns><c>TextEntrySyntaxProvider</c></returns>
+            public TextAppendSyntaxProvider Quickly()
+            {
+                return this.WithoutEvents();
+            }
+
+            /// <summary>
+            /// Enter text into input or textarea element matching <paramref name="selector"/>.
+            /// </summary>
+            /// <param name="selector">Sizzle selector.</param>
+            public void To(string selector)
+            {
+                this.To(this.syntaxProvider.Find(selector));
+            }
+
+            /// <summary>
+            /// Enter text into specified <paramref name="element"/>.
+            /// </summary>
+            /// <param name="element">IElement factory function.</param>
+            public void To(Func<IElement> element)
+            {
+                if (this.eventsEnabled)
+                {
+                    this.syntaxProvider.commandProvider.AppendText(element, text);
+                }
+                else
+                {
+                    this.syntaxProvider.commandProvider.AppendTextWithoutEvents(element, text);
                 }
             }
         }

@@ -48,6 +48,14 @@ namespace FluentAutomation.Interfaces
         ActionSyntaxProvider.DragDropSyntaxProvider Drag(Func<IElement> element);
 
         /// <summary>
+        /// Begin a Drag/Drop operation using coordinates.
+        /// </summary>
+        /// <param name="sourceX"></param>
+        /// <param name="sourceY"></param>
+        /// <returns></returns>
+        ActionSyntaxProvider.DragDropByPositionSyntaxProvider Drag(int sourceX, int sourceY);
+
+        /// <summary>
         /// Find an element matching <paramref name="selector"/>.
         /// </summary>
         /// <param name="selector">Sizzle DOM selector.</param>
@@ -194,6 +202,20 @@ namespace FluentAutomation.Interfaces
         /// <param name="text">Text to enter into input or textarea.</param>
         /// <returns><c>TextEntrySyntaxProvider</c></returns>
         ActionSyntaxProvider.TextEntrySyntaxProvider Enter(string text);
+
+        /// <summary>
+        /// Append a number or other object value into a valid input or textarea. Syntactical candy to avoid having to call .ToString() on integers in tests.
+        /// </summary>
+        /// <param name="nonString">Value to enter into input or textarea.</param>
+        /// <returns><c>TextEntrySyntaxProvider</c></returns>
+        ActionSyntaxProvider.TextAppendSyntaxProvider Append(dynamic nonString);
+
+        /// <summary>
+        /// Append text into a valid input or textarea.
+        /// </summary>
+        /// <param name="text">Text to enter into input or textarea.</param>
+        /// <returns><c>TextEntrySyntaxProvider</c></returns>
+        ActionSyntaxProvider.TextAppendSyntaxProvider Append(string text);
 
         /// <summary>
         /// Sets the focus to element matching <paramref name="selector"/>.

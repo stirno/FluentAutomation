@@ -31,9 +31,12 @@ namespace FluentAutomation.Interfaces
 
         void Focus(Func<IElement> element);
 
+        void DragAndDrop(int sourceX, int sourceY, int destinationX, int destinationY);
         void DragAndDrop(Func<IElement> source, Func<IElement> target);
         void EnterText(Func<IElement> element, string text);
         void EnterTextWithoutEvents(Func<IElement> element, string text);
+        void AppendText(Func<IElement> element, string text);
+        void AppendTextWithoutEvents(Func<IElement> element, string text);
 
         void SelectText(Func<IElement> element, string optionText);
         void SelectValue(Func<IElement> element, string optionValue);

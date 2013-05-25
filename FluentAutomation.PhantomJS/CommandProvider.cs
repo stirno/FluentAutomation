@@ -211,6 +211,11 @@ namespace FluentAutomation
             this.waitForPhantomReady();
         }
 
+        public void DragAndDrop(int sourceX, int sourceY, int destinationX, int destinationY)
+        {
+            throw new NotImplementedException();
+        }
+
         public void DragAndDrop(Func<IElement> source, Func<IElement> target)
         {
             this.phantomConnection.Send(JsonConvert.SerializeObject(new { Action = "DragAndDrop", SourceSelector = source().Selector, TargetSelector = target().Selector }));
@@ -227,6 +232,16 @@ namespace FluentAutomation
         {
             // PhantomJS doesn't differentiate currently
             this.EnterText(element, text);
+        }
+
+        public void AppendText(Func<IElement> element, string text)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AppendTextWithoutEvents(Func<IElement> element, string text)
+        {
+            throw new NotImplementedException();
         }
 
         public void SelectText(Func<IElement> element, string optionText)

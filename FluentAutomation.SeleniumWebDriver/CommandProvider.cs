@@ -34,6 +34,12 @@ namespace FluentAutomation
                 var webDriver = webDriverFactory();
                 webDriver.Manage().Cookies.DeleteAllCookies();
                 webDriver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(10));
+
+                if (FluentAutomation.Settings.WindowHeight.HasValue && FluentAutomation.Settings.WindowWidth.HasValue)
+                {
+                    webDriver.Manage().Window.Size = new Size(FluentAutomation.Settings.WindowWidth.Value, FluentAutomation.Settings.WindowHeight.Value);
+                }
+
                 return webDriver;
             });
 
@@ -93,10 +99,8 @@ namespace FluentAutomation
             {
                 var rootElement = this.Find("html")() as Element;
                 new Actions(this.webDriver)
-                    .MoveToElement(rootElement.WebElement)
-                    .MoveByOffset(x, y)
+                    .MoveToElement(rootElement.WebElement, x, y)
                     .Click()
-                    .Build()
                     .Perform();
             });
         }
@@ -107,10 +111,8 @@ namespace FluentAutomation
             {
                 var containerElement = element() as Element;
                 new Actions(this.webDriver)
-                    .MoveToElement(containerElement.WebElement)
-                    .MoveByOffset(x, y)
+                    .MoveToElement(containerElement.WebElement, x, y)
                     .Click()
-                    .Build()
                     .Perform();
             });
         }
@@ -121,9 +123,7 @@ namespace FluentAutomation
             {
                 var containerElement = element() as Element;
                 new Actions(this.webDriver)
-                    .MoveToElement(containerElement.WebElement)
-                    .Click()
-                    .Build()
+                    .Click(containerElement.WebElement)
                     .Perform();
             });
         }
@@ -134,10 +134,8 @@ namespace FluentAutomation
             {
                 var rootElement = this.Find("html")() as Element;
                 new Actions(this.webDriver)
-                    .MoveToElement(rootElement.WebElement)
-                    .MoveByOffset(x, y)
+                    .MoveToElement(rootElement.WebElement, x, y)
                     .DoubleClick()
-                    .Build()
                     .Perform();
             });
         }
@@ -148,10 +146,8 @@ namespace FluentAutomation
             {
                 var containerElement = element() as Element;
                 new Actions(this.webDriver)
-                    .MoveToElement(containerElement.WebElement)
-                    .MoveByOffset(x, y)
+                    .MoveToElement(containerElement.WebElement, x, y)
                     .DoubleClick()
-                    .Build()
                     .Perform();
             });
         }
@@ -162,9 +158,7 @@ namespace FluentAutomation
             {
                 var containerElement = element() as Element;
                 new Actions(this.webDriver)
-                    .MoveToElement(containerElement.WebElement)
-                    .DoubleClick()
-                    .Build()
+                    .DoubleClick(containerElement.WebElement)
                     .Perform();
             });
         }
@@ -176,7 +170,6 @@ namespace FluentAutomation
                 var containerElement = element() as Element;
                 new Actions(this.webDriver)
                     .ContextClick(containerElement.WebElement)
-                    .Build()
                     .Perform();
             });
         }
@@ -187,9 +180,7 @@ namespace FluentAutomation
             {
                 var rootElement = this.Find("html")() as Element;
                 new Actions(this.webDriver)
-                    .MoveToElement(rootElement.WebElement)
-                    .MoveByOffset(x, y)
-                    .Build()
+                    .MoveToElement(rootElement.WebElement, x, y)
                     .Perform();
             });
         }
@@ -200,9 +191,7 @@ namespace FluentAutomation
             {
                 var containerElement = element() as Element;
                 new Actions(this.webDriver)
-                    .MoveToElement(containerElement.WebElement)
-                    .MoveByOffset(x, y)
-                    .Build()
+                    .MoveToElement(containerElement.WebElement, x, y)
                     .Perform();
             });
         }
@@ -214,7 +203,6 @@ namespace FluentAutomation
                 var unwrappedElement = element() as Element;
                 new Actions(this.webDriver)
                     .MoveToElement(unwrappedElement.WebElement)
-                    .Build()
                     .Perform();
             });
         }
@@ -240,6 +228,20 @@ namespace FluentAutomation
             });
         }
 
+        public void DragAndDrop(int sourceX, int sourceY, int destinationX, int destinationY)
+        {
+            this.Act(() =>
+            {
+                var rootElement = this.Find("html")() as Element;
+                new Actions(this.webDriver)
+                    .MoveToElement(rootElement.WebElement, sourceX, sourceY)
+                    .ClickAndHold()
+                    .MoveToElement(rootElement.WebElement, destinationX, destinationY)
+                    .Release()
+                    .Perform();
+            });
+        }
+
         public void DragAndDrop(Func<IElement> source, Func<IElement> target)
         {
             this.Act(() =>
@@ -249,7 +251,6 @@ namespace FluentAutomation
 
                 new Actions(this.webDriver)
                     .DragAndDrop(unwrappedSource.WebElement, unwrappedTarget.WebElement)
-                    .Build()
                     .Perform();
             });
         }
@@ -272,6 +273,24 @@ namespace FluentAutomation
                 var unwrappedElement = element() as Element;
 
                 ((IJavaScriptExecutor)this.webDriver).ExecuteScript(string.Format("if (typeof jQuery != 'undefined') {{ jQuery(\"{0}\").val(\"{1}\").trigger('change'); }}", unwrappedElement.Selector.Replace("\"", ""), text.Replace("\"", "")));
+            });
+        }
+
+        public void AppendText(Func<IElement> element, string text)
+        {
+            this.Act(() =>
+            {
+                var unwrappedElement = element() as Element;
+                unwrappedElement.WebElement.SendKeys(text);
+            });
+        }
+
+        public void AppendTextWithoutEvents(Func<IElement> element, string text)
+        {
+            this.Act(() =>
+            {
+                var unwrappedElement = element() as Element;
+                ((IJavaScriptExecutor)this.webDriver).ExecuteScript(string.Format("if (typeof jQuery != 'undefined') {{ jQuery(\"{0}\").val(jQuery(\"{0}\").val() + \"{1}\").trigger('change'); }}", unwrappedElement.Selector.Replace("\"", ""), text.Replace("\"", "")));
             });
         }
 
