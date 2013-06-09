@@ -7,6 +7,6 @@ namespace FluentAutomation.Interfaces
 {
     public interface IActionProvider
     {
-        void Act(Action action);
+        void Act(Action action, bool waitableAction = true);
     }
 }

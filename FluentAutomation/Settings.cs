@@ -120,7 +120,41 @@ namespace FluentAutomation
             }
         }
 
-        private static bool minimizeAllWindowsOnTestStart = true;
+        private static bool waitOnAllCommands = true;
+        /// <summary>
+        /// Wait on all comamnds to be successful. Removes the need for explicit I.WaitUntil() calls for actions
+        /// </summary>
+        public static bool WaitOnAllCommands
+        {
+            get
+            {
+                return waitOnAllCommands;
+            }
+
+            set
+            {
+                waitOnAllCommands = value;
+            }
+        }
+
+        private static bool waitOnAllExpects = true;
+        /// <summary>
+        /// Wait on all I.Expect.* actions to be successful. Removes the need for explicit I.WaitUntil() calls.
+        /// </summary>
+        public static bool WaitOnAllExpects
+        {
+            get
+            {
+                return waitOnAllExpects;
+            }
+
+            set
+            {
+                waitOnAllExpects = value;
+            }
+        }
+
+        private static bool minimizeAllWindowsOnTestStart = false;
         /// <summary>
         /// Determines whether or not windows will automatically be minimized on start of test execution and reverted when finished. Defaults to true.
         /// </summary>
