@@ -19,15 +19,29 @@ namespace FluentAutomation
         {
             get
             {
-                var provider = syntaxProvider as INativeActionSyntaxProvider;
+                var provider = SyntaxProvider as INativeActionSyntaxProvider;
                 if (provider == null || provider.IsDisposed())
                 {
-                    // register types
-                    FluentAutomation.Settings.Registration(this.Container);
-                    syntaxProvider = this.Container.Resolve<ActionSyntaxProvider>();
+                    this.Session.BootstrapTypeRegistration(FluentAutomation.Settings.Registration);
+                    SyntaxProvider = this.Session.GetSyntaxProvider();
                 }
 
-                return syntaxProvider as INativeActionSyntaxProvider;
+                return SyntaxProvider as INativeActionSyntaxProvider;
+            }
+        }
+
+        private FluentSession session = null;
+        public FluentSession Session
+        {
+            get
+            {
+                if (session == null)
+                {
+                    session = new FluentSession();
+                    session.RegisterSyntaxProvider<ActionSyntaxProvider>();
+                }
+
+                return session;
             }
         }
     }

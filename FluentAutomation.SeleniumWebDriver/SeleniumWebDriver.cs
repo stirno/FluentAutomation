@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentAutomation.Exceptions;
 using FluentAutomation.Interfaces;
+using FluentAutomation.Wrappers;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Remote;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace FluentAutomation
 {
@@ -41,15 +42,30 @@ namespace FluentAutomation
             Chrome = 4,
 
             /// <summary>
-            /// PhantomJS - Headless browser - Support is Experimental
+            /// PhantomJS - Experimental - Headless browser
             /// </summary>
-            PhantomJs = 5
-        }
+            PhantomJs = 5,
 
-        /// <summary>
-        /// Currently selected <see cref="Browser"/>.
-        /// </summary>
-        public static Browser SelectedBrowser;
+            /// <summary>
+            /// Safari - Experimental - Only usable with a Remote URI
+            /// </summary>
+            Safari = 6,
+
+            /// <summary>
+            /// iPad - Experimental - Only usable with a Remote URI
+            /// </summary>
+            iPad = 7,
+
+            /// <summary>
+            /// iPhone - Experimental - Only usable with a Remote URI
+            /// </summary>
+            iPhone = 8,
+
+            /// <summary>
+            /// Android - Experimental - Only usable with a Remote URI
+            /// </summary>
+            Android = 9
+        }
 
         /// <summary>
         /// Bootstrap Selenium provider and utilize Firefox.
@@ -65,74 +81,54 @@ namespace FluentAutomation
         /// <param name="browser"></param>
         public static void Bootstrap(Browser browser)
         {
-            SeleniumWebDriver.SelectedBrowser = browser;
-
             FluentAutomation.Settings.Registration = (container) =>
             {
                 container.Register<ICommandProvider, CommandProvider>();
                 container.Register<IExpectProvider, ExpectProvider>();
                 container.Register<IFileStoreProvider, LocalFileStoreProvider>();
-            
-                switch (SeleniumWebDriver.SelectedBrowser)
-                {
-                    case Browser.InternetExplorer:
-                        EmbeddedResources.UnpackFromAssembly("IEDriverServer32.exe", "IEDriverServer.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
-                        container.Register<IWebDriver, Wrappers.IEDriverWrapper>().AsMultiInstance();
-                        break;
-                    case Browser.InternetExplorer64:
-                        EmbeddedResources.UnpackFromAssembly("IEDriverServer64.exe", "IEDriverServer.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
-                        container.Register<IWebDriver, Wrappers.IEDriverWrapper>().AsMultiInstance();
-                        break;
-                    case Browser.Firefox:
-                        container.Register<IWebDriver, OpenQA.Selenium.Firefox.FirefoxDriver>().AsMultiInstance();
-                        break;
-                    case Browser.Chrome:
-                        EmbeddedResources.UnpackFromAssembly("chromedriver.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
-                        container.Register<IWebDriver, OpenQA.Selenium.Chrome.ChromeDriver>().AsMultiInstance();
-                        break;
-                    case Browser.PhantomJs:
-                        EmbeddedResources.UnpackFromAssembly("phantomjs.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
-                        container.Register<IWebDriver, OpenQA.Selenium.PhantomJS.PhantomJSDriver>().AsMultiInstance();
-                        break;
-                }
+
+                var browserDriver = GenerateBrowserSpecificDriver(browser);
+                container.Register<IWebDriver>((c, o) => browserDriver());
+            };
+        }
+
+        public static void Bootstrap(params Browser[] browsers)
+        {
+            if (browsers.Length == 1)
+            {
+                Bootstrap(browsers.First());
+                return;
+            }
+
+            FluentAutomation.Settings.Registration = (container) =>
+            {
+                var webDrivers = new List<Func<IWebDriver>>();
+                browsers.Distinct().ToList().ForEach(x => webDrivers.Add(GenerateBrowserSpecificDriver(x)));
+
+                var commandProviders = new CommandProviderList(webDrivers.Select(x => new CommandProvider(x, new LocalFileStoreProvider())));
+                container.Register<CommandProviderList>(commandProviders);
+
+                container.Register<ICommandProvider, MultiCommandProvider>();
+                container.Register<IExpectProvider, MultiExpectProvider>();
+                container.Register<IFileStoreProvider, LocalFileStoreProvider>();
             };
         }
 
         /// <summary>
-        /// Bootstrap Selenium provider using a Remote web driver targetting the requested browser
+        /// Bootstrap Selenium provider using a Remote web driver targeting the requested browser
         /// </summary>
         /// <param name="driverUri"></param>
-        /// <param name="capabilities"></param>
+        /// <param name="browser"></param>
         public static void Bootstrap(Uri driverUri, Browser browser)
         {
-            SeleniumWebDriver.SelectedBrowser = browser;
-
             FluentAutomation.Settings.Registration = (container) =>
             {
                 container.Register<ICommandProvider, CommandProvider>();
                 container.Register<IExpectProvider, ExpectProvider>();
                 container.Register<IFileStoreProvider, LocalFileStoreProvider>();
 
-                DesiredCapabilities browserCapabilities = null;
-
-                switch (SeleniumWebDriver.SelectedBrowser)
-                {
-                    case Browser.InternetExplorer:
-                    case Browser.InternetExplorer64:
-                        browserCapabilities = DesiredCapabilities.InternetExplorer();
-                        break;
-                    case Browser.Firefox:
-                        browserCapabilities = DesiredCapabilities.Firefox();
-                        break;
-                    case Browser.Chrome:
-                        browserCapabilities = DesiredCapabilities.Chrome();
-                        break;
-                    case Browser.PhantomJs:
-                        browserCapabilities = DesiredCapabilities.PhantomJS();
-                        break;
-                }
-
-                container.Register<IWebDriver, RemoteWebDriver>(new RemoteWebDriver(driverUri, browserCapabilities));
+                DesiredCapabilities browserCapabilities = GenerateDesiredCapabilities(browser);
+                container.Register<IWebDriver, RemoteWebDriver>(new EnhancedRemoteWebDriver(driverUri, browserCapabilities));
             };
         }
 
@@ -141,6 +137,24 @@ namespace FluentAutomation
         /// </summary>
         /// <param name="driverUri"></param>
         /// <param name="capabilities"></param>
+        public static void Bootstrap(Uri driverUri, Browser browser, Dictionary<string, object> capabilities)
+        {
+            FluentAutomation.Settings.Registration = (container) =>
+            {
+                container.Register<ICommandProvider, CommandProvider>();
+                container.Register<IExpectProvider, ExpectProvider>();
+                container.Register<IFileStoreProvider, LocalFileStoreProvider>();
+
+                DesiredCapabilities browserCapabilities = GenerateDesiredCapabilities(browser);
+                foreach (var cap in capabilities)
+                {
+                    browserCapabilities.SetCapability(cap.Key, cap.Value);
+                }
+
+                container.Register<IWebDriver, RemoteWebDriver>(new EnhancedRemoteWebDriver(driverUri, browserCapabilities));
+            };
+        }
+
         public static void Bootstrap(Uri driverUri, Dictionary<string, object> capabilities)
         {
             FluentAutomation.Settings.Registration = (container) =>
@@ -149,39 +163,72 @@ namespace FluentAutomation
                 container.Register<IExpectProvider, ExpectProvider>();
                 container.Register<IFileStoreProvider, LocalFileStoreProvider>();
 
-                DesiredCapabilities browserCapabilities = null;
-
-                switch (SeleniumWebDriver.SelectedBrowser)
-                {
-                    case Browser.InternetExplorer:
-                    case Browser.InternetExplorer64:
-                        browserCapabilities = DesiredCapabilities.InternetExplorer();
-                        break;
-                    case Browser.Firefox:
-                        browserCapabilities = DesiredCapabilities.Firefox();
-                        break;
-                    case Browser.Chrome:
-                        browserCapabilities = DesiredCapabilities.Chrome();
-                        break;
-                    case Browser.PhantomJs:
-                        browserCapabilities = DesiredCapabilities.PhantomJS();
-                        break;
-                }
-
-                if (browserCapabilities == null)
-                {
-                    browserCapabilities = new DesiredCapabilities(capabilities);
-                }
-                else
-                {
-                    foreach (var cap in capabilities)
-                    {
-                        browserCapabilities.SetCapability(cap.Key, cap.Value);
-                    }
-                }
-
-                container.Register<IWebDriver, RemoteWebDriver>(new RemoteWebDriver(driverUri, browserCapabilities));
+                DesiredCapabilities browserCapabilities = new DesiredCapabilities(capabilities);
+                container.Register<IWebDriver, RemoteWebDriver>(new EnhancedRemoteWebDriver(driverUri, browserCapabilities));
             };
+        }
+
+        private static Func<IWebDriver> GenerateBrowserSpecificDriver(Browser browser)
+        {
+            string driverPath = string.Empty;
+            switch (browser)
+            {
+                case Browser.InternetExplorer:
+                    driverPath = EmbeddedResources.UnpackFromAssembly("IEDriverServer32.exe", "IEDriverServer.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
+                    return new Func<IWebDriver>(() => new Wrappers.IEDriverWrapper(Path.GetDirectoryName(driverPath)));
+                case Browser.InternetExplorer64:
+                    driverPath = EmbeddedResources.UnpackFromAssembly("IEDriverServer64.exe", "IEDriverServer.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
+                    return new Func<IWebDriver>(() => new Wrappers.IEDriverWrapper(Path.GetDirectoryName(driverPath)));
+                case Browser.Firefox:
+                    return new Func<IWebDriver>(() => new OpenQA.Selenium.Firefox.FirefoxDriver());
+                case Browser.Chrome:
+                    driverPath = EmbeddedResources.UnpackFromAssembly("chromedriver.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
+                    return new Func<IWebDriver>(() => new OpenQA.Selenium.Chrome.ChromeDriver(Path.GetDirectoryName(driverPath)));
+                case Browser.PhantomJs:
+                    driverPath = EmbeddedResources.UnpackFromAssembly("phantomjs.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
+                    return new Func<IWebDriver>(() => new OpenQA.Selenium.PhantomJS.PhantomJSDriver(Path.GetDirectoryName(driverPath)));
+            }
+
+            throw new NotImplementedException("Selected browser " + browser.ToString() + " is not supported yet.");
+        }
+
+        private static DesiredCapabilities GenerateDesiredCapabilities(Browser browser)
+        {
+            DesiredCapabilities browserCapabilities = null;
+
+            switch (browser)
+            {
+                case Browser.InternetExplorer:
+                case Browser.InternetExplorer64:
+                    browserCapabilities = DesiredCapabilities.InternetExplorer();
+                    break;
+                case Browser.Firefox:
+                    browserCapabilities = DesiredCapabilities.Firefox();
+                    break;
+                case Browser.Chrome:
+                    browserCapabilities = DesiredCapabilities.Chrome();
+                    break;
+                case Browser.PhantomJs:
+                    browserCapabilities = DesiredCapabilities.PhantomJS();
+                    break;
+                case Browser.Safari:
+                    browserCapabilities = DesiredCapabilities.Safari();
+                    break;
+                case Browser.iPad:
+                    browserCapabilities = DesiredCapabilities.IPad();
+                    break;
+                case Browser.iPhone:
+                    browserCapabilities = DesiredCapabilities.IPhone();
+                    break;
+                case Browser.Android:
+                    browserCapabilities = DesiredCapabilities.Android();
+                    break;
+                default:
+                    throw new FluentException("Selected browser [{0}] not supported. Unable to determine appropriate capabilities.", browser.ToString());
+            }
+
+            browserCapabilities.IsJavaScriptEnabled = true;
+            return browserCapabilities;
         }
     }
 }

@@ -400,15 +400,15 @@ namespace FluentAutomation
                 // wait before typing in the field
                 var task = Task.Factory.StartNew(() =>
                 {
-                    switch (SeleniumWebDriver.SelectedBrowser)
-                    {
-                        case SeleniumWebDriver.Browser.Firefox:
-                            this.Wait(TimeSpan.FromMilliseconds(1000));
-                            break;
-                        case SeleniumWebDriver.Browser.Chrome:
-                            this.Wait(TimeSpan.FromMilliseconds(1500));
-                            break;
-                    }
+                    //switch (SeleniumWebDriver.SelectedBrowser)
+                    //{
+                    //    case SeleniumWebDriver.Browser.Firefox:
+                    //        this.Wait(TimeSpan.FromMilliseconds(1000));
+                    //        break;
+                    //    case SeleniumWebDriver.Browser.Chrome:
+                    //        this.Wait(TimeSpan.FromMilliseconds(1500));
+                    //        break;
+                    //}
 
                     this.Type(fileName);
                 });

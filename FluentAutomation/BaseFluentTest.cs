@@ -8,28 +8,17 @@ namespace FluentAutomation
 {
     public class BaseFluentTest : IDisposable
     {
-        private TinyIoC.TinyIoCContainer container = null;
-        public TinyIoC.TinyIoCContainer Container
-        {
-            get
-            {
-                if (container == null)
-                {
-                    container = new TinyIoC.TinyIoCContainer();
-                    if (Settings.MinimizeAllWindowsOnTestStart) Win32Magic.MinimizeAllWindows();
-                }
-
-                return container;
-            }
-        }
-
-        protected IDisposable syntaxProvider = null;
+        public ISyntaxProvider SyntaxProvider { get; set; }
 
         public void Dispose()
         {
             try
             {
-                if (this.syntaxProvider != null) this.syntaxProvider.Dispose();
+                if (FluentSession.Current == null && this.SyntaxProvider != null)
+                {
+                    this.SyntaxProvider.Dispose();
+                }
+
                 if (Settings.MinimizeAllWindowsOnTestStart) Win32Magic.RestoreAllWindows();
             }
             catch { };

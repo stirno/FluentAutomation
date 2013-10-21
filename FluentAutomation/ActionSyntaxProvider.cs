@@ -184,6 +184,26 @@ namespace FluentAutomation
         {
             this.commandProvider.WaitUntil(conditionAction);
         }
+        
+        public void WaitUntil(Expression<Func<bool>> conditionFunc, int secondsToWait)
+        {
+            this.WaitUntil(conditionFunc, TimeSpan.FromSeconds(secondsToWait));
+        }
+
+        public void WaitUntil(Expression<Func<bool>> conditionFunc, TimeSpan timeout)
+        {
+            this.commandProvider.WaitUntil(conditionFunc, timeout);
+        }
+
+        public void WaitUntil(Expression<Action> conditionAction, int secondsToWait)
+        {
+            this.WaitUntil(conditionAction, TimeSpan.FromSeconds(secondsToWait));
+        }
+
+        public void WaitUntil(Expression<Action> conditionAction, TimeSpan timeout)
+        {
+            this.commandProvider.WaitUntil(conditionAction, timeout);
+        }
 
         public void Upload(string selector, string fileName)
         {
