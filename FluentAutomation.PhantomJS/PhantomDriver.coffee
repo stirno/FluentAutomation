@@ -285,6 +285,22 @@ class PhantomBrowserController
 
 	Type: (text) ->
 		@owner.throw "NotImplementedException"
+		
+	EnterText: (command) ->
+		selector = command.selector if command.selector?
+		text = command.text if command.text?
+		
+		fn = ->
+			opt = $('SELECTOR')			
+			opt.val('VALUE')			
+			if opt.length > 0 then true else false			
+			
+		success = page.evaluate fn.toString().replace( 'SELECTOR', selector ).replace( 'VALUE', text )		
+		
+		if !success 
+			@owner.throw "Could not find element '" + selector + "'"			
+			
+		@CompleteAction()
 
 	IncludeJQuery: () ->
 		page.includeJs "http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"
