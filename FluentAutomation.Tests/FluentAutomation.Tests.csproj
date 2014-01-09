@@ -63,6 +63,7 @@
     <Compile Include="Native\WatiN.cs" />
     <Compile Include="Remote\Node.cs" />
     <Compile Include="Remote\RemoteTest.cs" />
+    <Compile Include="BingSearchPage.cs" />
     <Compile Include="WaitUntilTests.cs" />
   </ItemGroup>
   <ItemGroup>
