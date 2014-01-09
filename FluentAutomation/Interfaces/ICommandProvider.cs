@@ -33,6 +33,7 @@ namespace FluentAutomation.Interfaces
 
         void DragAndDrop(int sourceX, int sourceY, int destinationX, int destinationY);
         void DragAndDrop(Func<IElement> source, Func<IElement> target);
+        void DragAndDrop(Func<IElement> source, int sourceOffsetX, int sourceOffsetY, Func<IElement> target, int targetOffsetX, int targetOffsetY);
         void EnterText(Func<IElement> element, string text);
         void EnterTextWithoutEvents(Func<IElement> element, string text);
         void AppendText(Func<IElement> element, string text);

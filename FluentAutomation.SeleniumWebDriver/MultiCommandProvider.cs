@@ -96,6 +96,11 @@ namespace FluentAutomation
             Parallel.ForEach(this.commandProviders, x => x.DragAndDrop(sourceX, sourceY, destinationX, destinationY));
         }
 
+        public void DragAndDrop(Func<IElement> source, int sourceOffsetX, int sourceOffsetY, Func<IElement> target, int targetOffsetX, int targetOffsetY)
+        {
+            Parallel.ForEach(this.commandProviders, x => x.DragAndDrop(source, sourceOffsetX, sourceOffsetY, target, targetOffsetX, targetOffsetY));
+        }
+
         public void DragAndDrop(Func<IElement> source, Func<IElement> target)
         {
             Parallel.ForEach(this.commandProviders, xx => xx.DragAndDrop(xx.Find(source().Selector), xx.Find(target().Selector)));

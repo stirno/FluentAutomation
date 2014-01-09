@@ -242,6 +242,21 @@ namespace FluentAutomation
             });
         }
 
+        public void DragAndDrop(Func<IElement> source, int sourceOffsetX, int sourceOffsetY, Func<IElement> target, int targetOffsetX, int targetOffsetY)
+        {
+            this.Act(() =>
+            {
+                var element = source() as Element;
+                var targetElement = target() as Element;
+                new Actions(this.webDriver)
+                    .MoveToElement(element.WebElement, sourceOffsetX, sourceOffsetY)
+                    .ClickAndHold()
+                    .MoveToElement(targetElement.WebElement, targetOffsetX, targetOffsetY)
+                    .Release()
+                    .Perform();
+            });
+        }
+
         public void DragAndDrop(Func<IElement> source, Func<IElement> target)
         {
             this.Act(() =>

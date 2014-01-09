@@ -167,6 +167,22 @@ namespace FluentAutomation
             MouseControl.MouseEvent(MouseControl.MouseEvent_LeftButtonUp, targetEl.PosX, targetEl.PosY, 0, 0);
         }
 
+        public void DragAndDrop(Func<IElement> source, int sourceOffsetX, int sourceOffsetY, Func<IElement> target, int targetOffsetX, int targetOffsetY)
+        {
+            var sourceEl = source() as Element;
+            var targetEl = target() as Element;
+
+            var sourceX = sourceEl.PosX + sourceOffsetX;
+            var sourceY = sourceEl.PosY + sourceOffsetY;
+            var targetX = targetEl.PosX + targetOffsetX;
+            var targetY = targetEl.PosY + targetOffsetY;
+
+            MouseControl.SetPosition(sourceX, sourceY);
+            MouseControl.MouseEvent(MouseControl.MouseEvent_LeftButtonDown, sourceX, sourceY, 0, 0);
+            MouseControl.SetPosition(targetX, targetY);
+            MouseControl.MouseEvent(MouseControl.MouseEvent_LeftButtonUp, targetX, targetY, 0, 0);
+        }
+
         public void EnterText(Func<IElement> element, string text)
         {
             var el = element() as Element;

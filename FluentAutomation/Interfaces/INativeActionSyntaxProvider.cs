@@ -48,6 +48,15 @@ namespace FluentAutomation.Interfaces
         ActionSyntaxProvider.DragDropSyntaxProvider Drag(Func<IElement> element);
 
         /// <summary>
+        /// Begin a Drag/Drop operation starting with the specified element and an offset.
+        /// </summary>
+        /// <param name="element"><see cref="IElement"/> factory function.</param>
+        /// <param name="offsetX"></param>
+        /// <param name="offsetY"></param>
+        /// <returns><c>DragDropSyntaxProvider</c></returns>
+        ActionSyntaxProvider.DragDropSyntaxProvider Drag(Func<IElement> element, int offsetX, int offsetY);
+
+        /// <summary>
         /// Begin a Drag/Drop operation using coordinates.
         /// </summary>
         /// <param name="sourceX"></param>

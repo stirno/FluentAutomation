@@ -236,6 +236,11 @@ namespace FluentAutomation
         {
             return new DragDropSyntaxProvider(this, element);
         }
+        
+        public DragDropSyntaxProvider Drag(Func<IElement> element, int sourceX, int sourceY)
+        {
+            return new DragDropSyntaxProvider(this, element, sourceX, sourceY);
+        }
 
         public DragDropByPositionSyntaxProvider Drag(int sourceX, int sourceY)
         {
@@ -246,11 +251,21 @@ namespace FluentAutomation
         {
             protected readonly ActionSyntaxProvider syntaxProvider = null;
             protected readonly Func<IElement> sourceElement = null;
+            protected readonly int offsetX = 0;
+            protected readonly int offsetY = 0;
 
             public DragDropSyntaxProvider(ActionSyntaxProvider syntaxProvider, Func<IElement> element)
             {
                 this.syntaxProvider = syntaxProvider;
                 this.sourceElement = element;
+            }
+
+            public DragDropSyntaxProvider(ActionSyntaxProvider syntaxProvider, Func<IElement> element, int offsetX, int offsetY)
+            {
+                this.syntaxProvider = syntaxProvider;
+                this.sourceElement = element;
+                this.offsetX = offsetX;
+                this.offsetY = offsetY;
             }
 
             /// <summary>
@@ -268,7 +283,25 @@ namespace FluentAutomation
             /// <param name="targetElement">IElement factory function.</param>
             public void To(Func<IElement> targetElement)
             {
-                this.syntaxProvider.commandProvider.DragAndDrop(this.sourceElement, targetElement);
+                if (this.offsetX != 0 || this.offsetY != 0)
+                {
+                    this.syntaxProvider.commandProvider.DragAndDrop(this.sourceElement, offsetX, offsetY, targetElement, 0, 0);
+                }
+                else
+                {
+                    this.syntaxProvider.commandProvider.DragAndDrop(this.sourceElement, targetElement);
+                }
+            }
+
+            /// <summary>
+            /// End Drag/Drop operation at specified <paramref name="targetElement"/>.
+            /// </summary>
+            /// <param name="targetElement">IElement factory function.</param>
+            /// <param name="targetOffsetX">X-offset for drop.</param>
+            /// <param name="targetOffsetY">Y-offset for drop.</param>
+            public void To(Func<IElement> targetElement, int targetOffsetX, int targetOffsetY)
+            {
+                this.syntaxProvider.commandProvider.DragAndDrop(this.sourceElement, offsetX, offsetY, targetElement, targetOffsetX, targetOffsetY);
             }
         }
 
@@ -293,6 +326,26 @@ namespace FluentAutomation
             public void To(int destinationX, int destinationY)
             {
                 this.syntaxProvider.commandProvider.DragAndDrop(this.sourceX, this.sourceY, destinationX, destinationY);
+            }
+
+            /// <summary>
+            /// End Drag/Drop operation at specified <paramref name="targetElement"/>.
+            /// </summary>
+            /// <param name="targetElement">IElement factory function.</param>
+            public void To(Func<IElement> targetElement)
+            {
+                this.syntaxProvider.commandProvider.DragAndDrop(this.syntaxProvider.commandProvider.Find("html"), this.sourceX, this.sourceY, targetElement, 0, 0);
+            }
+
+            /// <summary>
+            /// End Drag/Drop operation at specified <paramref name="targetElement"/>.
+            /// </summary>
+            /// <param name="targetElement">IElement factory function.</param>
+            /// <param name="targetOffsetX">X-offset for drop.</param>
+            /// <param name="targetOffsetY">Y-offset for drop.</param>
+            public void To(Func<IElement> targetElement, int targetOffsetX, int targetOffsetY)
+            {
+                this.syntaxProvider.commandProvider.DragAndDrop(this.syntaxProvider.commandProvider.Find("html"), this.sourceX, this.sourceY, targetElement, targetOffsetX, targetOffsetY);
             }
         }
         #endregion
