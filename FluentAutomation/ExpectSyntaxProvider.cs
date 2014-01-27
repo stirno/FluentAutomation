@@ -22,15 +22,15 @@ namespace FluentAutomation
         /// <returns><c>ExpectCountSyntaxProvider</c></returns>
         public ExpectCountSyntaxProvider Count(int count)
         {
-            return new ExpectCountSyntaxProvider(this.commandProvider, this.expectProvider, count);
+            return new ExpectCountSyntaxProvider(this.commandProvider, this.expectProvider, this.expectSyntaxProvider, count);
         }
 
         public class ExpectCountSyntaxProvider : BaseExpectSyntaxProvider
         {
             private readonly int count = 0;
 
-            public ExpectCountSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider, int count) 
-                : base(commandProvider, expectProvider)
+            public ExpectCountSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider, ExpectSyntaxProvider expectSyntaxProvider, int count)
+                : base(commandProvider, expectProvider, expectSyntaxProvider)
             {
                 this.count = count;
             }
@@ -39,18 +39,20 @@ namespace FluentAutomation
             /// Elements matching <paramref name="selector"/> to be counted.
             /// </summary>
             /// <param name="selector">Sizzle selector.</param>
-            public void Of(string selector)
+            public ExpectSyntaxProvider Of(string selector)
             {
                 this.expectProvider.Count(selector, this.count);
+                return this.expectSyntaxProvider;
             }
 
             /// <summary>
             /// Specified <paramref name="elements"/> to be counted.
             /// </summary>
             /// <param name="elements">IElement collection factory function.</param>
-            public void Of(Func<IEnumerable<IElement>> elements)
+            public ExpectSyntaxProvider Of(Func<IEnumerable<IElement>> elements)
             {
                 this.expectProvider.Count(elements, this.count);
+                return this.expectSyntaxProvider;
             }
         }
         #endregion
@@ -63,15 +65,15 @@ namespace FluentAutomation
         /// <returns><c>ExpectClassSyntaxProvider</c></returns>
         public ExpectClassSyntaxProvider Class(string className)
         {
-            return new ExpectClassSyntaxProvider(this.commandProvider, this.expectProvider, className);
+            return new ExpectClassSyntaxProvider(this.commandProvider, this.expectProvider, this.expectSyntaxProvider, className);
         }
 
         public class ExpectClassSyntaxProvider : BaseExpectSyntaxProvider
         {
             private readonly string className = null;
 
-            public ExpectClassSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider, string className)
-                : base(commandProvider, expectProvider)
+            public ExpectClassSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider, ExpectSyntaxProvider expectSyntaxProvider, string className)
+                : base(commandProvider, expectProvider, expectSyntaxProvider)
             {
                 this.className = className;
             }
@@ -80,18 +82,20 @@ namespace FluentAutomation
             /// Element matching <paramref name="selector"/> that should have matching CSS class.
             /// </summary>
             /// <param name="selector">Sizzle selector.</param>
-            public void On(string selector)
+            public ExpectSyntaxProvider On(string selector)
             {
                 this.expectProvider.CssClass(selector, this.className);
+                return this.expectSyntaxProvider;
             }
 
             /// <summary>
             /// Specified <paramref name="element"/> that should have matching CSS class.
             /// </summary>
             /// <param name="element">IElement factory function.</param>
-            public void On(Func<IElement> element)
+            public ExpectSyntaxProvider On(Func<IElement> element)
             {
                 this.expectProvider.CssClass(element, this.className);
+                return this.expectSyntaxProvider;
             }
         }
         #endregion
@@ -104,7 +108,7 @@ namespace FluentAutomation
         /// <returns><c>ExpectTextSyntaxProvider</c></returns>
         public ExpectTextSyntaxProvider Text(string text)
         {
-            return new ExpectTextSyntaxProvider(this.commandProvider, this.expectProvider, text);
+            return new ExpectTextSyntaxProvider(this.commandProvider, this.expectProvider, this.expectSyntaxProvider, text);
         }
 
         /// <summary>
@@ -114,7 +118,7 @@ namespace FluentAutomation
         /// <returns><c>ExpectTextSyntaxProvider</c></returns>
         public ExpectTextSyntaxProvider Text(Expression<Func<string, bool>> matchFunc)
         {
-            return new ExpectTextSyntaxProvider(this.commandProvider, this.expectProvider, matchFunc);
+            return new ExpectTextSyntaxProvider(this.commandProvider, this.expectProvider, this.expectSyntaxProvider, matchFunc);
         }
 
         public class ExpectTextSyntaxProvider : BaseExpectSyntaxProvider
@@ -122,14 +126,14 @@ namespace FluentAutomation
             private readonly string text = null;
             private readonly Expression<Func<string, bool>> matchFunc = null;
 
-            public ExpectTextSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider, string text) 
-                : base(commandProvider, expectProvider)
+            public ExpectTextSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider, ExpectSyntaxProvider expectSyntaxProvider, string text)
+                : base(commandProvider, expectProvider, expectSyntaxProvider)
             {
                 this.text = text;
             }
 
-            public ExpectTextSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider, Expression<Func<string, bool>> matchFunc)
-                : base(commandProvider, expectProvider)
+            public ExpectTextSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider, ExpectSyntaxProvider expectSyntaxProvider, Expression<Func<string, bool>> matchFunc)
+                : base(commandProvider, expectProvider, expectSyntaxProvider)
             {
                 this.matchFunc = matchFunc;
             }
@@ -138,7 +142,7 @@ namespace FluentAutomation
             /// Element matching <paramref name="selector"/> that should match Text.
             /// </summary>
             /// <param name="selector">Sizzle selector.</param>
-            public void In(string selector)
+            public ExpectSyntaxProvider In(string selector)
             {
                 if (!string.IsNullOrEmpty(this.text))
                 {
@@ -148,13 +152,15 @@ namespace FluentAutomation
                 {
                     this.expectProvider.Text(selector, this.matchFunc);
                 }
+
+                return this.expectSyntaxProvider;
             }
 
             /// <summary>
             /// Specified <paramref name="element"/> that should match Text.
             /// </summary>
             /// <param name="element">IElement factory function.</param>
-            public void In(Func<IElement> element)
+            public ExpectSyntaxProvider In(Func<IElement> element)
             {
                 if (!string.IsNullOrEmpty(this.text))
                 {
@@ -164,6 +170,8 @@ namespace FluentAutomation
                 {
                     this.expectProvider.Text(element, this.matchFunc);
                 }
+
+                return this.expectSyntaxProvider;
             }
         }
         #endregion
@@ -186,7 +194,7 @@ namespace FluentAutomation
         /// <returns><c>ExpectValueSyntaxProvider</c></returns>
         public ExpectValueSyntaxProvider Value(string value)
         {
-            return new ExpectValueSyntaxProvider(this.commandProvider, this.expectProvider, value);
+            return new ExpectValueSyntaxProvider(this.commandProvider, this.expectProvider, this.expectSyntaxProvider, value);
         }
 
         /// <summary>
@@ -196,7 +204,7 @@ namespace FluentAutomation
         /// <returns><c>ExpectValueSyntaxProvider</c></returns>
         public ExpectValueSyntaxProvider Value(Expression<Func<string, bool>> matchFunc)
         {
-            return new ExpectValueSyntaxProvider(this.commandProvider, this.expectProvider, matchFunc);
+            return new ExpectValueSyntaxProvider(this.commandProvider, this.expectProvider, this.expectSyntaxProvider, matchFunc);
         }
 
         public class ExpectValueSyntaxProvider : BaseExpectSyntaxProvider
@@ -204,14 +212,14 @@ namespace FluentAutomation
             private readonly string value = null;
             private readonly Expression<Func<string, bool>> matchFunc = null;
 
-            public ExpectValueSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider, string value)
-                : base(commandProvider, expectProvider)
+            public ExpectValueSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider, ExpectSyntaxProvider expectSyntaxProvider, string value)
+                : base(commandProvider, expectProvider, expectSyntaxProvider)
             {
                 this.value = value;
             }
 
-            public ExpectValueSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider, Expression<Func<string, bool>> matchFunc)
-                : base(commandProvider, expectProvider)
+            public ExpectValueSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider, ExpectSyntaxProvider expectSyntaxProvider, Expression<Func<string, bool>> matchFunc)
+                : base(commandProvider, expectProvider, expectSyntaxProvider)
             {
                 this.matchFunc = matchFunc;
             }
@@ -220,7 +228,7 @@ namespace FluentAutomation
             /// Element matching <paramref name="selector"/> that should have a matching Value.
             /// </summary>
             /// <param name="selector"></param>
-            public void In(string selector)
+            public ExpectSyntaxProvider In(string selector)
             {
                 if (!string.IsNullOrEmpty(this.value))
                 {
@@ -230,13 +238,15 @@ namespace FluentAutomation
                 {
                     this.expectProvider.Value(selector, this.matchFunc);
                 }
+
+                return this.expectSyntaxProvider;
             }
 
             /// <summary>
             /// Specified <paramref name="element"/> that should have a matching Value.
             /// </summary>
             /// <param name="element"></param>
-            public void In(Func<IElement> element)
+            public ExpectSyntaxProvider In(Func<IElement> element)
             {
                 if (!string.IsNullOrEmpty(this.value))
                 {
@@ -246,6 +256,8 @@ namespace FluentAutomation
                 {
                     this.expectProvider.Value(element, this.matchFunc);
                 }
+
+                return this.expectSyntaxProvider;
             }
         }
         #endregion
@@ -255,27 +267,29 @@ namespace FluentAutomation
         /// Expect the current web browser's URL to match <paramref name="expectedUrl"/>.
         /// </summary>
         /// <param name="expectedUrl">Fully-qualified URL to be matched on.</param>
-        public void Url(string expectedUrl)
+        public ExpectSyntaxProvider Url(string expectedUrl)
         {
-            Url(new Uri(expectedUrl, UriKind.Absolute));
+            return Url(new Uri(expectedUrl, UriKind.Absolute));
         }
 
         /// <summary>
         /// Expect the current web browser's URI to match <paramref name="expectedUri"/>.
         /// </summary>
         /// <param name="expectedUri">Absolute URI to be matched on.</param>
-        public void Url(Uri expectedUri)
+        public ExpectSyntaxProvider Url(Uri expectedUri)
         {
             this.expectProvider.Url(expectedUri);
+            return this.expectSyntaxProvider;
         }
 
         /// <summary>
         /// Expect the current web browser's URI provided to the specified <paramref name="uriExpression">URI expression</paramref> to return true;
         /// </summary>
         /// <param name="uriExpression">URI expression to be matched on.</param>
-        public void Url(Expression<Func<Uri, bool>> uriExpression)
+        public ExpectSyntaxProvider Url(Expression<Func<Uri, bool>> uriExpression)
         {
             this.expectProvider.Url(uriExpression);
+            return this.expectSyntaxProvider;
         }
         #endregion
 
@@ -284,36 +298,42 @@ namespace FluentAutomation
         /// Expect that an arbitrary <paramref name="matchFunc">matching function</paramref> returns true.
         /// </summary>
         /// <param name="matchFunc"></param>
-        public void True(Expression<Func<bool>> matchFunc)
+        public ExpectSyntaxProvider True(Expression<Func<bool>> matchFunc)
         {
             this.commandProvider.Act(() =>
             {
                 this.expectProvider.True(matchFunc);
             });
+
+            return this.expectSyntaxProvider;
         }
 
         /// <summary>
         /// Expect that an arbitrary <paramref name="matchFunc">matching function</paramref> returns false.
         /// </summary>
         /// <param name="matchFunc"></param>
-        public void False(Expression<Func<bool>> matchFunc)
+        public ExpectSyntaxProvider False(Expression<Func<bool>> matchFunc)
         {
             this.commandProvider.Act(() =>
             {
                 this.expectProvider.False(matchFunc);
             });
+
+            return this.expectSyntaxProvider;
         }
 
         /// <summary>
         /// Expect that an arbitrary <paramref name="matchAction">action</paramref> throws an Exception.
         /// </summary>
         /// <param name="matchAction"></param>
-        public void Throws(Expression<Action> matchAction)
+        public ExpectSyntaxProvider Throws(Expression<Action> matchAction)
         {
             this.commandProvider.Act(() =>
             {
                 this.expectProvider.Throws(matchAction);
             });
+
+            return this.expectSyntaxProvider;
         }
         #endregion
 
@@ -321,9 +341,10 @@ namespace FluentAutomation
         /// Expect the element specified exists.
         /// </summary>
         /// <param name="selector">Element selector.</param>
-        public void Exists(string selector)
+        public ExpectSyntaxProvider Exists(string selector)
         {
             this.expectProvider.Exists(selector);
+            return this.expectSyntaxProvider;
         }
     }
 
@@ -331,11 +352,18 @@ namespace FluentAutomation
     {
         internal readonly ICommandProvider commandProvider = null;
         internal readonly IExpectProvider expectProvider = null;
+        internal readonly ExpectSyntaxProvider expectSyntaxProvider = null;
 
         public BaseExpectSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider)
+            : this(commandProvider, expectProvider, null)
+        {
+        }
+
+        public BaseExpectSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider, ExpectSyntaxProvider expectSyntaxProvider)
         {
             this.commandProvider = commandProvider;
             this.expectProvider = expectProvider;
+            this.expectSyntaxProvider = expectSyntaxProvider == null ? (ExpectSyntaxProvider)this : expectSyntaxProvider;
         }
     }
 }

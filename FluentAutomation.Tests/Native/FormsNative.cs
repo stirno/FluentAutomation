@@ -60,8 +60,15 @@ namespace FluentAutomation.Tests
         {
             I.Open(testUrl);
 
-            this.Provider.Navigate().GoToUrl("http://google.com/");
-            this.Provider.Navigate().GoToUrl(testUrl);
+
+            I.Open(testUrl)
+                .Select("Motorcycles").From(".liveExample tr select:eq(0)")
+                .Select(2).From(".liveExample tr select:eq(1)")
+                .Enter(6).In(".liveExample td.quantity input:eq(0)")
+                .Expect
+                    .Text("$197.70").In(".liveExample tr span:eq(1)")
+                    .Text("blah").In("wat");
+
 
             I.Select("Motorcycles").From(".liveExample tr select:eq(0)"); // Select by value/text
             I.Select(2).From(".liveExample tr select:eq(1)"); // Select by index
