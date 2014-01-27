@@ -24,9 +24,17 @@ namespace FluentAutomation
 
         public CommandProvider(Func<WatiNCore.IE> browserFactory)
         {
+            FluentTest.ProviderInstance = null;
+
             this.lazyBrowser = new Lazy<WatiNCore.IE>(() => {
                 var bf = browserFactory();
                 ((SHDocVw.WebBrowser)bf.InternetExplorer).FullScreen = true;
+
+                if (FluentTest.ProviderInstance == null)
+                    FluentTest.ProviderInstance = bf;
+                else
+                    FluentTest.IsMultiBrowserTest = true;
+
                 return bf;
             });
         }

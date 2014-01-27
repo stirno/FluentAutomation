@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenQA.Selenium;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using Xunit;
 
 namespace FluentAutomation.Tests
 {
-    public class FormsNative : FluentTest
+    public class FormsNative : FluentTest<IWebDriver>
     {
         public FormsNative()
         {
@@ -58,6 +59,10 @@ namespace FluentAutomation.Tests
         public void CartEditor_BuyMotorcycles()
         {
             I.Open(testUrl);
+
+            this.Provider.Navigate().GoToUrl("http://google.com/");
+            this.Provider.Navigate().GoToUrl(testUrl);
+
             I.Select("Motorcycles").From(".liveExample tr select:eq(0)"); // Select by value/text
             I.Select(2).From(".liveExample tr select:eq(1)"); // Select by index
             I.Enter(6).In(".liveExample td.quantity input:eq(0)");
