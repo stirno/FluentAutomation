@@ -342,15 +342,6 @@ namespace FluentAutomation
             }
 
             /// <summary>
-            /// [deprecated] Use WithoutEvents() instead. To be removed in the future.
-            /// </summary>
-            /// <returns><c>TextEntrySyntaxProvider</c></returns>
-            public TextEntrySyntaxProvider Quickly()
-            {
-                return this.WithoutEvents();
-            }
-
-            /// <summary>
             /// Enter text into input or textarea element matching <paramref name="selector"/>.
             /// </summary>
             /// <param name="selector">Sizzle selector.</param>
