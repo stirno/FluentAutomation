@@ -9,6 +9,9 @@ namespace FluentAutomation.Interfaces
 {
     public interface IExpectProvider
     {
+        bool ThrowExceptions { get; set; }
+        IExpectProvider EnableExceptions();
+
         void Count(string selector, int count);
         void Count(Func<IEnumerable<IElement>> elements, int count);
 

@@ -7,7 +7,7 @@ using FluentAutomation.Interfaces;
 
 namespace FluentAutomation
 {
-    public class ExpectSyntaxProvider : BaseExpectSyntaxProvider
+    public class ExpectSyntaxProvider : BaseAssertSyntaxProvider
     {
         public ExpectSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider)
             : base(commandProvider, expectProvider)
@@ -16,20 +16,20 @@ namespace FluentAutomation
 
         #region Count
         /// <summary>
-        /// Expect a specific count.
+        /// Assert a specific count.
         /// </summary>
         /// <param name="count">Number of elements found.</param>
-        /// <returns><c>ExpectCountSyntaxProvider</c></returns>
-        public ExpectCountSyntaxProvider Count(int count)
+        /// <returns><c>AssertCountSyntaxProvider</c></returns>
+        public AssertCountSyntaxProvider Count(int count)
         {
-            return new ExpectCountSyntaxProvider(this.commandProvider, this.expectProvider, this.expectSyntaxProvider, count);
+            return new AssertCountSyntaxProvider(this.commandProvider, this.expectProvider, this.expectSyntaxProvider, count);
         }
 
-        public class ExpectCountSyntaxProvider : BaseExpectSyntaxProvider
+        public class AssertCountSyntaxProvider : BaseAssertSyntaxProvider
         {
             private readonly int count = 0;
 
-            public ExpectCountSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider, ExpectSyntaxProvider expectSyntaxProvider, int count)
+            public AssertCountSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider, ExpectSyntaxProvider expectSyntaxProvider, int count)
                 : base(commandProvider, expectProvider, expectSyntaxProvider)
             {
                 this.count = count;
@@ -59,20 +59,20 @@ namespace FluentAutomation
 
         #region CSS Class
         /// <summary>
-        /// Expect that a matching CSS class is found.
+        /// Assert that a matching CSS class is found.
         /// </summary>
         /// <param name="className">CSS class name. Example: .row</param>
-        /// <returns><c>ExpectClassSyntaxProvider</c></returns>
-        public ExpectClassSyntaxProvider Class(string className)
+        /// <returns><c>AssertClassSyntaxProvider</c></returns>
+        public AssertClassSyntaxProvider Class(string className)
         {
-            return new ExpectClassSyntaxProvider(this.commandProvider, this.expectProvider, this.expectSyntaxProvider, className);
+            return new AssertClassSyntaxProvider(this.commandProvider, this.expectProvider, this.expectSyntaxProvider, className);
         }
 
-        public class ExpectClassSyntaxProvider : BaseExpectSyntaxProvider
+        public class AssertClassSyntaxProvider : BaseAssertSyntaxProvider
         {
             private readonly string className = null;
 
-            public ExpectClassSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider, ExpectSyntaxProvider expectSyntaxProvider, string className)
+            public AssertClassSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider, ExpectSyntaxProvider expectSyntaxProvider, string className)
                 : base(commandProvider, expectProvider, expectSyntaxProvider)
             {
                 this.className = className;
@@ -102,37 +102,37 @@ namespace FluentAutomation
 
         #region Text
         /// <summary>
-        /// Expect that Text matches specified <paramref name="text"/>.
+        /// Assert that Text matches specified <paramref name="text"/>.
         /// </summary>
         /// <param name="text">Text that must be exactly matched.</param>
-        /// <returns><c>ExpectTextSyntaxProvider</c></returns>
-        public ExpectTextSyntaxProvider Text(string text)
+        /// <returns><c>AssertTextSyntaxProvider</c></returns>
+        public AssertTextSyntaxProvider Text(string text)
         {
-            return new ExpectTextSyntaxProvider(this.commandProvider, this.expectProvider, this.expectSyntaxProvider, text);
+            return new AssertTextSyntaxProvider(this.commandProvider, this.expectProvider, this.expectSyntaxProvider, text);
         }
 
         /// <summary>
-        /// Expect that Text provided to specified <paramref name="matchFunc">match function</paramref> returns true.
+        /// Assert that Text provided to specified <paramref name="matchFunc">match function</paramref> returns true.
         /// </summary>
         /// <param name="matchFunc">Function to evaluate if Text matches. Example: (text) => text.Contains("Hello")</param>
-        /// <returns><c>ExpectTextSyntaxProvider</c></returns>
-        public ExpectTextSyntaxProvider Text(Expression<Func<string, bool>> matchFunc)
+        /// <returns><c>AssertTextSyntaxProvider</c></returns>
+        public AssertTextSyntaxProvider Text(Expression<Func<string, bool>> matchFunc)
         {
-            return new ExpectTextSyntaxProvider(this.commandProvider, this.expectProvider, this.expectSyntaxProvider, matchFunc);
+            return new AssertTextSyntaxProvider(this.commandProvider, this.expectProvider, this.expectSyntaxProvider, matchFunc);
         }
 
-        public class ExpectTextSyntaxProvider : BaseExpectSyntaxProvider
+        public class AssertTextSyntaxProvider : BaseAssertSyntaxProvider
         {
             private readonly string text = null;
             private readonly Expression<Func<string, bool>> matchFunc = null;
 
-            public ExpectTextSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider, ExpectSyntaxProvider expectSyntaxProvider, string text)
+            public AssertTextSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider, ExpectSyntaxProvider expectSyntaxProvider, string text)
                 : base(commandProvider, expectProvider, expectSyntaxProvider)
             {
                 this.text = text;
             }
 
-            public ExpectTextSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider, ExpectSyntaxProvider expectSyntaxProvider, Expression<Func<string, bool>> matchFunc)
+            public AssertTextSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider, ExpectSyntaxProvider expectSyntaxProvider, Expression<Func<string, bool>> matchFunc)
                 : base(commandProvider, expectProvider, expectSyntaxProvider)
             {
                 this.matchFunc = matchFunc;
@@ -178,47 +178,47 @@ namespace FluentAutomation
 
         #region Value
         /// <summary>
-        /// Expect a specific integer <paramref name="value"/>
+        /// Assert a specific integer <paramref name="value"/>
         /// </summary>
         /// <param name="value">Int32 value expected.</param>
-        /// <returns><c>ExpectValueSyntaxProvider</c></returns>
-        public ExpectValueSyntaxProvider Value(int value)
+        /// <returns><c>AssertValueSyntaxProvider</c></returns>
+        public AssertValueSyntaxProvider Value(int value)
         {
             return this.Value(value.ToString());
         }
 
         /// <summary>
-        /// Expect a specific string <paramref name="value"/>.
+        /// Assert a specific string <paramref name="value"/>.
         /// </summary>
         /// <param name="value">String value.</param>
-        /// <returns><c>ExpectValueSyntaxProvider</c></returns>
-        public ExpectValueSyntaxProvider Value(string value)
+        /// <returns><c>AssertValueSyntaxProvider</c></returns>
+        public AssertValueSyntaxProvider Value(string value)
         {
-            return new ExpectValueSyntaxProvider(this.commandProvider, this.expectProvider, this.expectSyntaxProvider, value);
+            return new AssertValueSyntaxProvider(this.commandProvider, this.expectProvider, this.expectSyntaxProvider, value);
         }
 
         /// <summary>
-        /// Expect that value provided to specified <paramref name="matchFunc">match function</paramref> returns true.
+        /// Assert that value provided to specified <paramref name="matchFunc">match function</paramref> returns true.
         /// </summary>
         /// <param name="matchFunc">Function to evaluate if Value matches. Example: (value) => value != "Hello" && value != "World"</param>
-        /// <returns><c>ExpectValueSyntaxProvider</c></returns>
-        public ExpectValueSyntaxProvider Value(Expression<Func<string, bool>> matchFunc)
+        /// <returns><c>AssertValueSyntaxProvider</c></returns>
+        public AssertValueSyntaxProvider Value(Expression<Func<string, bool>> matchFunc)
         {
-            return new ExpectValueSyntaxProvider(this.commandProvider, this.expectProvider, this.expectSyntaxProvider, matchFunc);
+            return new AssertValueSyntaxProvider(this.commandProvider, this.expectProvider, this.expectSyntaxProvider, matchFunc);
         }
 
-        public class ExpectValueSyntaxProvider : BaseExpectSyntaxProvider
+        public class AssertValueSyntaxProvider : BaseAssertSyntaxProvider
         {
             private readonly string value = null;
             private readonly Expression<Func<string, bool>> matchFunc = null;
 
-            public ExpectValueSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider, ExpectSyntaxProvider expectSyntaxProvider, string value)
+            public AssertValueSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider, ExpectSyntaxProvider expectSyntaxProvider, string value)
                 : base(commandProvider, expectProvider, expectSyntaxProvider)
             {
                 this.value = value;
             }
 
-            public ExpectValueSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider, ExpectSyntaxProvider expectSyntaxProvider, Expression<Func<string, bool>> matchFunc)
+            public AssertValueSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider, ExpectSyntaxProvider expectSyntaxProvider, Expression<Func<string, bool>> matchFunc)
                 : base(commandProvider, expectProvider, expectSyntaxProvider)
             {
                 this.matchFunc = matchFunc;
@@ -264,7 +264,7 @@ namespace FluentAutomation
 
         #region Url
         /// <summary>
-        /// Expect the current web browser's URL to match <paramref name="expectedUrl"/>.
+        /// Assert the current web browser's URL to match <paramref name="expectedUrl"/>.
         /// </summary>
         /// <param name="expectedUrl">Fully-qualified URL to be matched on.</param>
         public ExpectSyntaxProvider Url(string expectedUrl)
@@ -273,7 +273,7 @@ namespace FluentAutomation
         }
 
         /// <summary>
-        /// Expect the current web browser's URI to match <paramref name="expectedUri"/>.
+        /// Assert the current web browser's URI to match <paramref name="expectedUri"/>.
         /// </summary>
         /// <param name="expectedUri">Absolute URI to be matched on.</param>
         public ExpectSyntaxProvider Url(Uri expectedUri)
@@ -283,7 +283,7 @@ namespace FluentAutomation
         }
 
         /// <summary>
-        /// Expect the current web browser's URI provided to the specified <paramref name="uriExpression">URI expression</paramref> to return true;
+        /// Assert the current web browser's URI provided to the specified <paramref name="uriExpression">URI expression</paramref> to return true;
         /// </summary>
         /// <param name="uriExpression">URI expression to be matched on.</param>
         public ExpectSyntaxProvider Url(Expression<Func<Uri, bool>> uriExpression)
@@ -295,7 +295,7 @@ namespace FluentAutomation
 
         #region Boolean / Throws
         /// <summary>
-        /// Expect that an arbitrary <paramref name="matchFunc">matching function</paramref> returns true.
+        /// Assert that an arbitrary <paramref name="matchFunc">matching function</paramref> returns true.
         /// </summary>
         /// <param name="matchFunc"></param>
         public ExpectSyntaxProvider True(Expression<Func<bool>> matchFunc)
@@ -309,7 +309,7 @@ namespace FluentAutomation
         }
 
         /// <summary>
-        /// Expect that an arbitrary <paramref name="matchFunc">matching function</paramref> returns false.
+        /// Assert that an arbitrary <paramref name="matchFunc">matching function</paramref> returns false.
         /// </summary>
         /// <param name="matchFunc"></param>
         public ExpectSyntaxProvider False(Expression<Func<bool>> matchFunc)
@@ -323,7 +323,7 @@ namespace FluentAutomation
         }
 
         /// <summary>
-        /// Expect that an arbitrary <paramref name="matchAction">action</paramref> throws an Exception.
+        /// Assert that an arbitrary <paramref name="matchAction">action</paramref> throws an Exception.
         /// </summary>
         /// <param name="matchAction"></param>
         public ExpectSyntaxProvider Throws(Expression<Action> matchAction)
@@ -338,7 +338,7 @@ namespace FluentAutomation
         #endregion
 
         /// <summary>
-        /// Expect the element specified exists.
+        /// Assert the element specified exists.
         /// </summary>
         /// <param name="selector">Element selector.</param>
         public ExpectSyntaxProvider Exists(string selector)
@@ -348,18 +348,18 @@ namespace FluentAutomation
         }
     }
 
-    public class BaseExpectSyntaxProvider
+    public class BaseAssertSyntaxProvider
     {
         internal readonly ICommandProvider commandProvider = null;
         internal readonly IExpectProvider expectProvider = null;
         internal readonly ExpectSyntaxProvider expectSyntaxProvider = null;
 
-        public BaseExpectSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider)
+        public BaseAssertSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider)
             : this(commandProvider, expectProvider, null)
         {
         }
 
-        public BaseExpectSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider, ExpectSyntaxProvider expectSyntaxProvider)
+        public BaseAssertSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider, ExpectSyntaxProvider expectSyntaxProvider)
         {
             this.commandProvider = commandProvider;
             this.expectProvider = expectProvider;

@@ -11,12 +11,12 @@ namespace FluentAutomation
     public class ActionSyntaxProvider : INativeActionSyntaxProvider, IDisposable
     {
         private readonly ICommandProvider commandProvider = null;
-        private readonly IExpectProvider expectProvder = null;
+        private readonly IExpectProvider expectProvider = null;
 
         public ActionSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider)
         {
             this.commandProvider = commandProvider;
-            this.expectProvder = expectProvider;
+            this.expectProvider = expectProvider;
         }
 
         #region Direct Execution Actions
@@ -550,10 +550,24 @@ namespace FluentAutomation
             {
                 if (this.expect == null)
                 {
-                    this.expect = new ExpectSyntaxProvider(this.commandProvider, this.expectProvder);
+                    this.expect = new ExpectSyntaxProvider(this.commandProvider, FluentAutomation.Settings.ExpectIsAssert ? this.expectProvider.EnableExceptions() : this.expectProvider);
                 }
 
                 return this.expect;
+            }
+        }
+
+        private ExpectSyntaxProvider assert = null;
+        public ExpectSyntaxProvider Assert
+        {
+            get
+            {
+                if (this.assert == null)
+                {
+                    this.assert = new ExpectSyntaxProvider(this.commandProvider, this.expectProvider.EnableExceptions());
+                }
+
+                return this.assert;
             }
         }
 

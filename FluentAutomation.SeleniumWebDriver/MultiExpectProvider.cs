@@ -9,10 +9,12 @@ namespace FluentAutomation
 {
     public class MultiExpectProvider : IExpectProvider
     {
+        private readonly CommandProviderList commandProviders = null;
         private readonly List<KeyValuePair<IExpectProvider, ICommandProvider>> providers = null;
 
         public MultiExpectProvider(CommandProviderList commandProviders)
         {
+            this.commandProviders = commandProviders; // Easier than recomposing it for EnableExceptions() call, so storing it
             this.providers = commandProviders.Select(x => new KeyValuePair<IExpectProvider, ICommandProvider>(new ExpectProvider(x), x)).ToList();
         }
 
@@ -104,6 +106,16 @@ namespace FluentAutomation
         public void Exists(string selector)
         {
             Parallel.ForEach(this.providers, x => x.Key.Exists(selector));
+        }
+
+        public bool ThrowExceptions { get; set; }
+
+        public IExpectProvider EnableExceptions()
+        {
+            var provider = new MultiExpectProvider(this.commandProviders);
+            provider.ThrowExceptions = true;
+
+            return provider;
         }
     }
 }

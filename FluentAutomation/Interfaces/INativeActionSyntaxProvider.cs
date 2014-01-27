@@ -332,8 +332,14 @@ namespace FluentAutomation.Interfaces
         INativeActionSyntaxProvider Wait(TimeSpan timeSpan);
 
         /// <summary>
-        /// Expects - Fluent's assertion functionality.
+        /// Expects - Fluent's passive expect functionality. Defaults to Assert mode (fail on exception) for backwards compatibility. This will change
+        /// in a future release. Can be set to passively expect by setting FluentAutomation.Settings.ExpectIsAssert = false
         /// </summary>
         ExpectSyntaxProvider Expect { get; }
+
+        /// <summary>
+        /// Asserts - Fluent's assertion functionality.
+        /// </summary>
+        ExpectSyntaxProvider Assert { get; }
     }
 }
