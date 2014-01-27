@@ -48,6 +48,7 @@
     <Compile Include="ActionSyntaxProvider.cs" />
     <Compile Include="FluentSession.cs" />
     <Compile Include="Interfaces\ISyntaxProvider.cs" />
+    <Compile Include="PageObject.cs" />
     <Compile Include="Properties\AssemblyGlobal.cs" />
     <Compile Include="BaseCommandProvider.cs" />
     <Compile Include="BaseFluentTest.cs" />

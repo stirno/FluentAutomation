@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAutomation.Interfaces;
+using FluentAutomation.Exceptions;
 
 namespace FluentAutomation
 {
@@ -30,6 +31,31 @@ namespace FluentAutomation
             }
         }
 
+        public static bool IsMultiBrowserTest = false;
+
+        private static object providerInstance = null;
+
+        public static object ProviderInstance
+        {
+            get
+            {
+                if (IsMultiBrowserTest)
+                    throw new FluentException("Accessing the Provider while using multiple browsers in a single test is unsupported.");
+
+                return providerInstance;
+            }
+
+            set
+            {
+                providerInstance = value;
+            }
+        }
+
+        public object Provider
+        {
+            get { return FluentTest.ProviderInstance; }
+        }
+
         private FluentSession session = null;
         public FluentSession Session
         {
@@ -44,5 +70,10 @@ namespace FluentAutomation
                 return session;
             }
         }
+    }
+
+    public class FluentTest<T> : FluentTest where T : class
+    {
+        public new T Provider { get { return FluentTest.ProviderInstance as T; } }
     }
 }

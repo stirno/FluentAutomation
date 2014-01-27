@@ -29,9 +29,16 @@ namespace FluentAutomation
 
         public CommandProvider(Func<IWebDriver> webDriverFactory, IFileStoreProvider fileStoreProvider)
         {
+            FluentTest.ProviderInstance = null;
+
             this.lazyWebDriver = new Lazy<IWebDriver>(() =>
             {
                 var webDriver = webDriverFactory();
+                if (FluentTest.ProviderInstance == null)
+                    FluentTest.ProviderInstance = webDriver;
+                else
+                    FluentTest.IsMultiBrowserTest = true;
+
                 webDriver.Manage().Cookies.DeleteAllCookies();
                 webDriver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(10));
 
@@ -287,7 +294,7 @@ namespace FluentAutomation
             {
                 var unwrappedElement = element() as Element;
 
-                ((IJavaScriptExecutor)this.webDriver).ExecuteScript(string.Format("if (typeof jQuery != 'undefined') {{ jQuery(\"{0}\").val(\"{1}\").trigger('change'); }}", unwrappedElement.Selector.Replace("\"", ""), text.Replace("\"", "")));
+                ((IJavaScriptExecutor)this.webDriver).ExecuteScript(string.Format("if (typeof fluentjQuery != 'undefined') {{ fluentjQuery(\"{0}\").val(\"{1}\").trigger('change'); }}", unwrappedElement.Selector.Replace("\"", ""), text.Replace("\"", "")));
             });
         }
 
@@ -305,7 +312,7 @@ namespace FluentAutomation
             this.Act(() =>
             {
                 var unwrappedElement = element() as Element;
-                ((IJavaScriptExecutor)this.webDriver).ExecuteScript(string.Format("if (typeof jQuery != 'undefined') {{ jQuery(\"{0}\").val(jQuery(\"{0}\").val() + \"{1}\").trigger('change'); }}", unwrappedElement.Selector.Replace("\"", ""), text.Replace("\"", "")));
+                ((IJavaScriptExecutor)this.webDriver).ExecuteScript(string.Format("if (typeof fluentjQuery != 'undefined') {{ fluentjQuery(\"{0}\").val(fluentjQuery(\"{0}\").val() + \"{1}\").trigger('change'); }}", unwrappedElement.Selector.Replace("\"", ""), text.Replace("\"", "")));
             });
         }
 

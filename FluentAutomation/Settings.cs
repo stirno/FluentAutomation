@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FluentAutomation.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,15 @@ namespace FluentAutomation
     public static class Settings
     {
         public static Action<TinyIoC.TinyIoCContainer> Registration = (c) => { };
+
+        public static Action<FluentExpectFailedException> ExpectFailedCallback = (c) =>
+        {
+            var fluentException = c.InnerException as FluentException;
+            if (fluentException != null)
+                System.Diagnostics.Trace.WriteLine(fluentException.Message);
+            else
+                System.Diagnostics.Trace.WriteLine(c.Message);
+        };
 
         private static Dictionary<string, object> providerData = new Dictionary<string, object>();
         internal static Dictionary<string, object> ProviderData
@@ -202,6 +212,23 @@ namespace FluentAutomation
             set
             {
                 windowWidth = value;
+            }
+        }
+
+        private static bool expectIsAssert = true;
+        /// <summary>
+        /// Determines if I.Expect will behave the same as I.Assert. Defaults to true but this will change in a future release.
+        /// </summary>
+        public static bool ExpectIsAssert
+        {
+            get
+            {
+                return expectIsAssert;
+            }
+
+            set
+            {
+                expectIsAssert = value;
             }
         }
     }
