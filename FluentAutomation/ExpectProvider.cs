@@ -301,7 +301,7 @@ namespace FluentAutomation
 
         private bool IsTextMatch(string elementText, string text)
         {
-            return elementText.Equals(text, StringComparison.InvariantCultureIgnoreCase);
+            return String.Equals(elementText, text, StringComparison.InvariantCultureIgnoreCase);
         }
         #endregion
 
