@@ -35,7 +35,7 @@ namespace FluentAutomation
                     {
                         var screenshotName = string.Format(CultureInfo.CurrentCulture, "ExpectFailed_{0}", DateTimeOffset.Now.Date.ToFileTime());
                         ex.ScreenshotPath = System.IO.Path.Combine(Settings.ScreenshotPath, screenshotName);
-                        this.TakeScreenshot(screenshotName);
+                        this.TakeScreenshot(ex.ScreenshotPath);
                     }
 
                     throw;
@@ -46,7 +46,7 @@ namespace FluentAutomation
                     {
                         var screenshotName = string.Format(CultureInfo.CurrentCulture, "ActionFailed_{0}", DateTimeOffset.Now.Date.ToFileTime());
                         ex.ScreenshotPath = System.IO.Path.Combine(Settings.ScreenshotPath, screenshotName);
-                        this.TakeScreenshot(screenshotName);
+                        this.TakeScreenshot(ex.ScreenshotPath);
                     }
 
                     throw;
@@ -124,7 +124,7 @@ namespace FluentAutomation
                 // If func is still not valid, assume we've hit the timeout.
                 if (isFuncValid == false)
                 {
-                    throw new FluentException("Conditional wait passed the timeout [{0}ms] for expression [{1}].", lastException, timeout.TotalMilliseconds, conditionFunc.ToExpressionString());
+                    throw new FluentException("Conditional wait passed the timeout [{0}ms] for expression [{1}]. See InnerException for details of the last FluentException thrown.", lastException, timeout.TotalMilliseconds, conditionFunc.ToExpressionString());
                 }
             }, false);
         }
@@ -171,7 +171,7 @@ namespace FluentAutomation
                 // If an exception was thrown the last loop, assume we hit the timeout
                 if (threwException == true)
                 {
-                    throw new FluentException("Conditional wait passed the timeout [{0}ms]. See InnerException for details of the last FluentException thrown.", lastFluentException, timeout.TotalMilliseconds);
+                    throw new FluentException("Conditional wait passed the timeout [{0}ms] for expression [{1}]. See InnerException for details of the last FluentException thrown.", lastFluentException, timeout.TotalMilliseconds, conditionAction.ToExpressionString());
                 }
             }, false);
         }
