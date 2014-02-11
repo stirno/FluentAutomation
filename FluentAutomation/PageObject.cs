@@ -80,7 +80,7 @@ namespace FluentAutomation
             {
                 try
                 {
-                    this.At();
+                    newPage.At();
                 }
                 catch (FluentException ex)
                 {
