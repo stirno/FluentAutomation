@@ -339,6 +339,14 @@ namespace FluentAutomation
             this.browser.Dispose();
         }
 
+        public void ExecWithElement(string selector, Action<ICommandProvider, Func<IElement>> action)
+        {
+            this.Act(() =>
+            {
+                action(this, this.Find(selector));
+            });
+        }
+
         private void fireOnChange(WatiNCore.Element element)
         {
             this.browser.DomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).change(); }}", element.GetJavascriptElementReference()));

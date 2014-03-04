@@ -553,7 +553,41 @@ namespace FluentAutomation
             /// <param name="selector">Sizzle selector.</param>
             public INativeActionSyntaxProvider From(string selector)
             {
-                return this.From(this.syntaxProvider.Find(selector));
+                this.syntaxProvider.commandProvider.ExecWithElement(selector, (x, element) =>
+                {
+                    if (this.mode == Option.Value)
+                    {
+                        if (this.value is string)
+                        {
+                            this.syntaxProvider.commandProvider.SelectValue(element, this.value);
+                        }
+                        else if (this.value is string[])
+                        {
+                            this.syntaxProvider.commandProvider.MultiSelectValue(element, this.value);
+                        }
+                    }
+                    else if (this.mode == Option.Text)
+                    {
+                        if (this.value is string)
+                        {
+                            this.syntaxProvider.commandProvider.SelectText(element, this.value);
+                        }
+                        else if (this.value is string[])
+                        {
+                            this.syntaxProvider.commandProvider.MultiSelectText(element, this.value);
+                        }
+                    }
+                    else if (this.value is int)
+                    {
+                        this.syntaxProvider.commandProvider.SelectIndex(element, this.value);
+                    }
+                    else if (this.value is int[])
+                    {
+                        this.syntaxProvider.commandProvider.MultiSelectIndex(element, this.value);
+                    }
+                });
+
+                return this.syntaxProvider;
             }
 
             /// <summary>

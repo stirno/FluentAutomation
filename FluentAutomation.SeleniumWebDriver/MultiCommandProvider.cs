@@ -36,6 +36,11 @@ namespace FluentAutomation
             throw new NotImplementedException("Find commands don't work with multi-browser testing");
         }
 
+        public void ExecWithElement(string selector, Action<ICommandProvider, Func<IElement>> action)
+        {
+            Parallel.ForEach(this.commandProviders, x => action(x, x.Find(selector)));
+        }
+
         public void Click(int x, int y)
         {
             Parallel.ForEach(this.commandProviders, xx => xx.Click(x, y));

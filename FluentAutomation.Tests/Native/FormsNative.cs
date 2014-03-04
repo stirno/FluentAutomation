@@ -14,6 +14,9 @@ namespace FluentAutomation.Tests
             Settings.ScreenshotOnFailedAction = true;
             Settings.ScreenshotOnFailedExpect = true;
             Settings.ExpectIsAssert = false;
+
+            FluentSession.EnableStickySession();
+            FluentSession.DisableStickySession();
         }
 
         private static string testUrl = "http://automation.apphb.com/forms";

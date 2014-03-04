@@ -58,6 +58,7 @@ namespace FluentAutomation.Interfaces
         void WaitUntil(Expression<Action> conditionAction);
         void WaitUntil(Expression<Action> conditionAction, TimeSpan timeout);
 
+        void ExecWithElement(string selector, Action<ICommandProvider, Func<IElement>> action);
         void Press(string keys);
         void Type(string text);
     }

@@ -465,6 +465,13 @@ namespace FluentAutomation
                 }
             });
         }
+        public void ExecWithElement(string selector, Action<ICommandProvider, Func<IElement>> action)
+        {
+            this.Act(() =>
+            {
+                action(this, this.Find(selector));
+            });
+        }
 
         public void Dispose()
         {
