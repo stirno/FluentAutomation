@@ -23,9 +23,12 @@ namespace FluentAutomation
             Parallel.ForEach(this.providers, x => x.Key.Count(selector, count));
         }
 
-        public void Count(Func<IEnumerable<IElement>> elements, int count)
+        public void Count(ElementProxy element, int count)
         {
-            Parallel.ForEach(this.providers, x => x.Key.Count(x.Value.FindMultiple(elements().First().Selector), count));
+            Parallel.ForEach(element.Elements, e =>
+            {
+                new ExpectProvider(e.Key).Count(new ElementProxy(e.Key, e.Value), count);
+            });
         }
 
         public void CssClass(string selector, string className)
@@ -33,9 +36,12 @@ namespace FluentAutomation
             Parallel.ForEach(this.providers, x => x.Key.CssClass(selector, className));
         }
 
-        public void CssClass(Func<IElement> element, string className)
+        public void CssClass(ElementProxy element, string className)
         {
-            Parallel.ForEach(this.providers, x => x.Key.CssClass(x.Value.Find(element().Selector), className));
+            Parallel.ForEach(element.Elements, e =>
+            {
+                new ExpectProvider(e.Key).CssClass(new ElementProxy(e.Key, e.Value), className);
+            });
         }
 
         public void Text(string selector, string text)
@@ -43,9 +49,12 @@ namespace FluentAutomation
             Parallel.ForEach(this.providers, x => x.Key.Text(selector, text));
         }
 
-        public void Text(Func<IElement> element, string text)
+        public void Text(ElementProxy element, string text)
         {
-            Parallel.ForEach(this.providers, x => x.Key.Text(x.Value.Find(element().Selector), text));
+            Parallel.ForEach(element.Elements, e =>
+            {
+                new ExpectProvider(e.Key).Text(new ElementProxy(e.Key, e.Value), text);
+            });
         }
 
         public void Text(string selector, System.Linq.Expressions.Expression<Func<string, bool>> matchFunc)
@@ -53,9 +62,12 @@ namespace FluentAutomation
             Parallel.ForEach(this.providers, x => x.Key.Text(selector, matchFunc));
         }
 
-        public void Text(Func<IElement> element, System.Linq.Expressions.Expression<Func<string, bool>> matchFunc)
+        public void Text(ElementProxy element, System.Linq.Expressions.Expression<Func<string, bool>> matchFunc)
         {
-            Parallel.ForEach(this.providers, x => x.Key.Text(x.Value.Find(element().Selector), matchFunc));
+            Parallel.ForEach(element.Elements, e =>
+            {
+                new ExpectProvider(e.Key).Text(new ElementProxy(e.Key, e.Value), matchFunc);
+            });
         }
 
         public void Value(string selector, string value)
@@ -63,9 +75,12 @@ namespace FluentAutomation
             Parallel.ForEach(this.providers, x => x.Key.Value(selector, value));
         }
 
-        public void Value(Func<IElement> element, string value)
+        public void Value(ElementProxy element, string value)
         {
-            Parallel.ForEach(this.providers, x => x.Key.Value(x.Value.Find(element().Selector), value));
+            Parallel.ForEach(element.Elements, e =>
+            {
+                new ExpectProvider(e.Key).Value(new ElementProxy(e.Key, e.Value), value);
+            });
         }
 
         public void Value(string selector, System.Linq.Expressions.Expression<Func<string, bool>> matchFunc)
@@ -73,9 +88,12 @@ namespace FluentAutomation
             Parallel.ForEach(this.providers, x => x.Key.Value(selector, matchFunc));
         }
 
-        public void Value(Func<IElement> element, System.Linq.Expressions.Expression<Func<string, bool>> matchFunc)
+        public void Value(ElementProxy element, System.Linq.Expressions.Expression<Func<string, bool>> matchFunc)
         {
-            Parallel.ForEach(this.providers, x => x.Key.Value(x.Value.Find(element().Selector), matchFunc));
+            Parallel.ForEach(element.Elements, e =>
+            {
+                new ExpectProvider(e.Key).Value(new ElementProxy(e.Key, e.Value), matchFunc);
+            });
         }
 
         public void Url(Uri expectedUrl)

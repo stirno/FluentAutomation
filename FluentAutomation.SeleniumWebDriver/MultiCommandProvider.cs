@@ -26,19 +26,31 @@ namespace FluentAutomation
             Parallel.ForEach(this.commandProviders, x => x.Navigate(url));
         }
 
-        public Func<IElement> Find(string selector)
+        public ElementProxy Find(string selector)
         {
-            throw new NotImplementedException("Find commands don't work with multi-browser testing");
+            var result = new ElementProxy();
+
+            Parallel.ForEach(this.commandProviders, x =>
+            {
+                result.Elements.Add(x, x.Find(selector).Elements.First().Value);
+            });
+
+            return result;
         }
 
-        public Func<IEnumerable<IElement>> FindMultiple(string selector)
+        public ElementProxy FindMultiple(string selector)
         {
-            throw new NotImplementedException("Find commands don't work with multi-browser testing");
-        }
+            var result = new ElementProxy();
 
-        public void ExecWithElement(string selector, Action<ICommandProvider, Func<IElement>> action)
-        {
-            Parallel.ForEach(this.commandProviders, x => action(x, x.Find(selector)));
+            Parallel.ForEach(this.commandProviders, x =>
+            {
+                foreach (var element in x.FindMultiple(selector).Elements)
+                {
+                    result.Elements.Add(x, element.Value);
+                }
+            });
+
+            return result;
         }
 
         public void Click(int x, int y)
@@ -46,14 +58,17 @@ namespace FluentAutomation
             Parallel.ForEach(this.commandProviders, xx => xx.Click(x, y));
         }
 
-        public void Click(Func<IElement> element, int x, int y)
+        public void Click(ElementProxy element, int x, int y)
         {
-            Parallel.ForEach(this.commandProviders, xx => xx.Click(xx.Find(element().Selector), x, y));
+            Parallel.ForEach(this.commandProviders, xx => xx.Click(xx.Find(element.Element.Selector), x, y));
         }
 
-        public void Click(Func<IElement> element)
+        public void Click(ElementProxy element)
         {
-            Parallel.ForEach(this.commandProviders, x => x.Click(x.Find(element().Selector)));
+            Parallel.ForEach(element.Elements, e =>
+            {
+                e.Key.Click(new ElementProxy(e.Key, e.Value));
+            });
         }
 
         public void DoubleClick(int x, int y)
@@ -61,19 +76,28 @@ namespace FluentAutomation
             Parallel.ForEach(this.commandProviders, xx => xx.DoubleClick(x, y));
         }
 
-        public void DoubleClick(Func<IElement> element, int x, int y)
+        public void DoubleClick(ElementProxy element, int x, int y)
         {
-            Parallel.ForEach(this.commandProviders, xx => xx.DoubleClick(xx.Find(element().Selector), x, y));
+            Parallel.ForEach(element.Elements, e =>
+            {
+                e.Key.DoubleClick(new ElementProxy(e.Key, e.Value), x, y);
+            });
         }
 
-        public void DoubleClick(Func<IElement> element)
+        public void DoubleClick(ElementProxy element)
         {
-            Parallel.ForEach(this.commandProviders, x => x.DoubleClick(x.Find(element().Selector)));
+            Parallel.ForEach(element.Elements, e =>
+            {
+                e.Key.DoubleClick(new ElementProxy(e.Key, e.Value));
+            });
         }
 
-        public void RightClick(Func<IElement> element)
+        public void RightClick(ElementProxy element)
         {
-            Parallel.ForEach(this.commandProviders, x => x.RightClick(x.Find(element().Selector)));
+            Parallel.ForEach(element.Elements, e =>
+            {
+                e.Key.RightClick(new ElementProxy(e.Key, e.Value));
+            });
         }
 
         public void Hover(int x, int y)
@@ -81,19 +105,28 @@ namespace FluentAutomation
             Parallel.ForEach(this.commandProviders, xx => xx.Hover(x, y));
         }
 
-        public void Hover(Func<IElement> element, int x, int y)
+        public void Hover(ElementProxy element, int x, int y)
         {
-            Parallel.ForEach(this.commandProviders, xx => xx.Hover(xx.Find(element().Selector), x, y));
+            Parallel.ForEach(element.Elements, e =>
+            {
+                e.Key.Hover(new ElementProxy(e.Key, e.Value), x, y);
+            });
         }
 
-        public void Hover(Func<IElement> element)
+        public void Hover(ElementProxy element)
         {
-            Parallel.ForEach(this.commandProviders, x => x.Hover(x.Find(element().Selector)));
+            Parallel.ForEach(element.Elements, e =>
+            {
+                e.Key.Hover(new ElementProxy(e.Key, e.Value));
+            });
         }
 
-        public void Focus(Func<IElement> element)
+        public void Focus(ElementProxy element)
         {
-            Parallel.ForEach(this.commandProviders, x => x.Focus(x.Find(element().Selector)));
+            Parallel.ForEach(element.Elements, e =>
+            {
+                e.Key.Focus(new ElementProxy(e.Key, e.Value));
+            });
         }
 
         public void DragAndDrop(int sourceX, int sourceY, int destinationX, int destinationY)
@@ -101,64 +134,106 @@ namespace FluentAutomation
             Parallel.ForEach(this.commandProviders, x => x.DragAndDrop(sourceX, sourceY, destinationX, destinationY));
         }
 
-        public void DragAndDrop(Func<IElement> source, int sourceOffsetX, int sourceOffsetY, Func<IElement> target, int targetOffsetX, int targetOffsetY)
+        public void DragAndDrop(ElementProxy source, int sourceOffsetX, int sourceOffsetY, ElementProxy target, int targetOffsetX, int targetOffsetY)
         {
-            Parallel.ForEach(this.commandProviders, x => x.DragAndDrop(source, sourceOffsetX, sourceOffsetY, target, targetOffsetX, targetOffsetY));
+            Parallel.ForEach(source.Elements, e =>
+            {
+                e.Key.DragAndDrop(
+                    new ElementProxy(e.Key, e.Value), sourceOffsetX, sourceOffsetY,
+                    new ElementProxy(e.Key, target.Elements[e.Key]), targetOffsetX, targetOffsetY
+                );
+            });
         }
 
-        public void DragAndDrop(Func<IElement> source, Func<IElement> target)
+        public void DragAndDrop(ElementProxy source, ElementProxy target)
         {
-            Parallel.ForEach(this.commandProviders, xx => xx.DragAndDrop(xx.Find(source().Selector), xx.Find(target().Selector)));
+            Parallel.ForEach(source.Elements, e =>
+            {
+                e.Key.DragAndDrop(
+                    new ElementProxy(e.Key, e.Value),
+                    new ElementProxy(e.Key, target.Elements[e.Key])
+                );
+            });
         }
 
-        public void EnterText(Func<IElement> element, string text)
+        public void EnterText(ElementProxy element, string text)
         {
-            Parallel.ForEach(this.commandProviders, x => x.EnterText(x.Find(element().Selector), text));
+            Parallel.ForEach(element.Elements, e =>
+            {
+                e.Key.EnterText(new ElementProxy(e.Key, e.Value), text);
+            });
         }
 
-        public void EnterTextWithoutEvents(Func<IElement> element, string text)
+        public void EnterTextWithoutEvents(ElementProxy element, string text)
         {
-            Parallel.ForEach(this.commandProviders, x => x.EnterTextWithoutEvents(x.Find(element().Selector), text));
+            Parallel.ForEach(element.Elements, e =>
+            {
+                e.Key.EnterTextWithoutEvents(new ElementProxy(e.Key, e.Value), text);
+            });
         }
 
-        public void AppendText(Func<IElement> element, string text)
+        public void AppendText(ElementProxy element, string text)
         {
-            Parallel.ForEach(this.commandProviders, x => x.AppendText(x.Find(element().Selector), text));
+            Parallel.ForEach(element.Elements, e =>
+            {
+                e.Key.AppendText(new ElementProxy(e.Key, e.Value), text);
+            });
         }
 
-        public void AppendTextWithoutEvents(Func<IElement> element, string text)
+        public void AppendTextWithoutEvents(ElementProxy element, string text)
         {
-            Parallel.ForEach(this.commandProviders, x => x.AppendTextWithoutEvents(x.Find(element().Selector), text));
+            Parallel.ForEach(element.Elements, e =>
+            {
+                e.Key.AppendTextWithoutEvents(new ElementProxy(e.Key, e.Value), text);
+            });
         }
 
-        public void SelectText(Func<IElement> element, string optionText)
+        public void SelectText(ElementProxy element, string optionText)
         {
-            Parallel.ForEach(this.commandProviders, x => x.SelectText(x.Find(element().Selector), optionText));
+            Parallel.ForEach(element.Elements, e =>
+            {
+                e.Key.SelectText(new ElementProxy(e.Key, e.Value), optionText);
+            });
         }
 
-        public void SelectValue(Func<IElement> element, string optionValue)
+        public void SelectValue(ElementProxy element, string optionValue)
         {
-            Parallel.ForEach(this.commandProviders, x => x.SelectValue(x.Find(element().Selector), optionValue));
+            Parallel.ForEach(element.Elements, e =>
+            {
+                e.Key.SelectValue(new ElementProxy(e.Key, e.Value), optionValue);
+            });
         }
 
-        public void SelectIndex(Func<IElement> element, int optionIndex)
+        public void SelectIndex(ElementProxy element, int optionIndex)
         {
-            Parallel.ForEach(this.commandProviders, x => x.SelectIndex(x.Find(element().Selector), optionIndex));
+            Parallel.ForEach(element.Elements, e =>
+            {
+                e.Key.SelectIndex(new ElementProxy(e.Key, e.Value), optionIndex);
+            });
         }
 
-        public void MultiSelectText(Func<IElement> element, string[] optionTextCollection)
+        public void MultiSelectText(ElementProxy element, string[] optionTextCollection)
         {
-            Parallel.ForEach(this.commandProviders, xx => xx.MultiSelectText(xx.Find(element().Selector), optionTextCollection));
+            Parallel.ForEach(element.Elements, e =>
+            {
+                e.Key.MultiSelectText(new ElementProxy(e.Key, e.Value), optionTextCollection);
+            });
         }
 
-        public void MultiSelectValue(Func<IElement> element, string[] optionValues)
+        public void MultiSelectValue(ElementProxy element, string[] optionValues)
         {
-            Parallel.ForEach(this.commandProviders, x => x.MultiSelectValue(x.Find(element().Selector), optionValues));
+            Parallel.ForEach(element.Elements, e =>
+            {
+                e.Key.MultiSelectValue(new ElementProxy(e.Key, e.Value), optionValues);
+            });
         }
 
-        public void MultiSelectIndex(Func<IElement> element, int[] optionIndices)
+        public void MultiSelectIndex(ElementProxy element, int[] optionIndices)
         {
-            Parallel.ForEach(this.commandProviders, x => x.MultiSelectIndex(x.Find(element().Selector), optionIndices));
+            Parallel.ForEach(element.Elements, e =>
+            {
+                e.Key.MultiSelectIndex(new ElementProxy(e.Key, e.Value), optionIndices);
+            });
         }
 
         public void TakeScreenshot(string screenshotName)
@@ -166,9 +241,12 @@ namespace FluentAutomation
             Parallel.ForEach(this.commandProviders, x => x.TakeScreenshot(screenshotName));
         }
 
-        public void UploadFile(Func<IElement> element, int x, int y, string fileName)
+        public void UploadFile(ElementProxy element, int x, int y, string fileName)
         {
-            Parallel.ForEach(this.commandProviders, xx => xx.UploadFile(xx.Find(element().Selector), x, y, fileName));
+            Parallel.ForEach(element.Elements, e =>
+            {
+                e.Key.UploadFile(new ElementProxy(e.Key, e.Value), x, y, fileName);
+            });
         }
 
         public void Wait()

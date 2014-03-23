@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="3rdPartyLib\TinyIoC.cs" />
     <Compile Include="ActionSyntaxProvider.cs" />
+    <Compile Include="ElementProxy.cs" />
     <Compile Include="FluentSession.cs" />
     <Compile Include="Interfaces\ISyntaxProvider.cs" />
     <Compile Include="PageObject.cs" />

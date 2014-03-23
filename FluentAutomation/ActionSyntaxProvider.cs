@@ -31,12 +31,12 @@ namespace FluentAutomation
             return this;
         }
 
-        public Func<IElement> Find(string selector)
+        public ElementProxy Find(string selector)
         {
             return this.commandProvider.Find(selector);
         }
 
-        public Func<IEnumerable<IElement>> FindMultiple(string selector)
+        public ElementProxy FindMultiple(string selector)
         {
             return this.commandProvider.FindMultiple(selector);
         }
@@ -52,7 +52,7 @@ namespace FluentAutomation
             return this.Click(this.Find(selector), x, y);
         }
 
-        public INativeActionSyntaxProvider Click(Func<IElement> element, int x, int y)
+        public INativeActionSyntaxProvider Click(ElementProxy element, int x, int y)
         {
             this.commandProvider.Click(element, x, y);
             return this;
@@ -63,7 +63,7 @@ namespace FluentAutomation
             return this.Click(this.Find(selector));
         }
 
-        public INativeActionSyntaxProvider Click(Func<IElement> element)
+        public INativeActionSyntaxProvider Click(ElementProxy element)
         {
             this.commandProvider.Click(element);
             return this;
@@ -81,7 +81,7 @@ namespace FluentAutomation
             return this;
         }
 
-        public INativeActionSyntaxProvider Scroll(Func<IElement> element)
+        public INativeActionSyntaxProvider Scroll(ElementProxy element)
         {
             this.commandProvider.Hover(element);
             return this;
@@ -98,7 +98,7 @@ namespace FluentAutomation
             return this.DoubleClick(this.Find(selector), x, y);
         }
 
-        public INativeActionSyntaxProvider DoubleClick(Func<IElement> element, int x, int y)
+        public INativeActionSyntaxProvider DoubleClick(ElementProxy element, int x, int y)
         {
             this.commandProvider.DoubleClick(element, x, y);
             return this;
@@ -109,7 +109,7 @@ namespace FluentAutomation
             return this.DoubleClick(this.Find(selector));
         }
 
-        public INativeActionSyntaxProvider DoubleClick(Func<IElement> element)
+        public INativeActionSyntaxProvider DoubleClick(ElementProxy element)
         {
             this.commandProvider.DoubleClick(element);
             return this;
@@ -120,7 +120,7 @@ namespace FluentAutomation
             return this.RightClick(this.Find(selector));
         }
 
-        public INativeActionSyntaxProvider RightClick(Func<IElement> element)
+        public INativeActionSyntaxProvider RightClick(ElementProxy element)
         {
             this.commandProvider.RightClick(element);
             return this;
@@ -137,7 +137,7 @@ namespace FluentAutomation
             return this.Hover(this.Find(selector), x, y);
         }
 
-        public INativeActionSyntaxProvider Hover(Func<IElement> element, int x, int y)
+        public INativeActionSyntaxProvider Hover(ElementProxy element, int x, int y)
         {
             this.commandProvider.Hover(element, x, y);
             return this;
@@ -148,7 +148,7 @@ namespace FluentAutomation
             return this.Hover(this.Find(selector));
         }
 
-        public INativeActionSyntaxProvider Hover(Func<IElement> element)
+        public INativeActionSyntaxProvider Hover(ElementProxy element)
         {
             this.commandProvider.Hover(element);
             return this;
@@ -159,7 +159,7 @@ namespace FluentAutomation
             return this.Focus(this.Find(selector));
         }
 
-        public INativeActionSyntaxProvider Focus(Func<IElement> element)
+        public INativeActionSyntaxProvider Focus(ElementProxy element)
         {
             this.commandProvider.Focus(element);
             return this;
@@ -238,12 +238,12 @@ namespace FluentAutomation
             return this.Upload(this.Find(selector), x, y, fileName);
         }
 
-        public INativeActionSyntaxProvider Upload(Func<IElement> element, string fileName)
+        public INativeActionSyntaxProvider Upload(ElementProxy element, string fileName)
         {
             return this.Upload(element, 0, 0, fileName);
         }
 
-        public INativeActionSyntaxProvider Upload(Func<IElement> element, int x, int y, string fileName)
+        public INativeActionSyntaxProvider Upload(ElementProxy element, int x, int y, string fileName)
         {
             this.commandProvider.UploadFile(element, x, y, fileName);
             return this;
@@ -256,12 +256,12 @@ namespace FluentAutomation
             return this.Drag(this.Find(selector));
         }
 
-        public DragDropSyntaxProvider Drag(Func<IElement> element)
+        public DragDropSyntaxProvider Drag(ElementProxy element)
         {
             return new DragDropSyntaxProvider(this, element);
         }
         
-        public DragDropSyntaxProvider Drag(Func<IElement> element, int sourceX, int sourceY)
+        public DragDropSyntaxProvider Drag(ElementProxy element, int sourceX, int sourceY)
         {
             return new DragDropSyntaxProvider(this, element, sourceX, sourceY);
         }
@@ -274,17 +274,17 @@ namespace FluentAutomation
         public class DragDropSyntaxProvider
         {
             protected readonly ActionSyntaxProvider syntaxProvider = null;
-            protected readonly Func<IElement> sourceElement = null;
+            protected readonly ElementProxy sourceElement = null;
             protected readonly int offsetX = 0;
             protected readonly int offsetY = 0;
 
-            public DragDropSyntaxProvider(ActionSyntaxProvider syntaxProvider, Func<IElement> element)
+            public DragDropSyntaxProvider(ActionSyntaxProvider syntaxProvider, ElementProxy element)
             {
                 this.syntaxProvider = syntaxProvider;
                 this.sourceElement = element;
             }
 
-            public DragDropSyntaxProvider(ActionSyntaxProvider syntaxProvider, Func<IElement> element, int offsetX, int offsetY)
+            public DragDropSyntaxProvider(ActionSyntaxProvider syntaxProvider, ElementProxy element, int offsetX, int offsetY)
             {
                 this.syntaxProvider = syntaxProvider;
                 this.sourceElement = element;
@@ -305,7 +305,7 @@ namespace FluentAutomation
             /// End Drag/Drop operation at specified <paramref name="targetElement"/>.
             /// </summary>
             /// <param name="targetElement">IElement factory function.</param>
-            public INativeActionSyntaxProvider To(Func<IElement> targetElement)
+            public INativeActionSyntaxProvider To(ElementProxy targetElement)
             {
                 if (this.offsetX != 0 || this.offsetY != 0)
                 {
@@ -325,7 +325,7 @@ namespace FluentAutomation
             /// <param name="targetElement">IElement factory function.</param>
             /// <param name="targetOffsetX">X-offset for drop.</param>
             /// <param name="targetOffsetY">Y-offset for drop.</param>
-            public INativeActionSyntaxProvider To(Func<IElement> targetElement, int targetOffsetX, int targetOffsetY)
+            public INativeActionSyntaxProvider To(ElementProxy targetElement, int targetOffsetX, int targetOffsetY)
             {
                 this.syntaxProvider.commandProvider.DragAndDrop(this.sourceElement, offsetX, offsetY, targetElement, targetOffsetX, targetOffsetY);
                 return this.syntaxProvider;
@@ -360,7 +360,7 @@ namespace FluentAutomation
             /// End Drag/Drop operation at specified <paramref name="targetElement"/>.
             /// </summary>
             /// <param name="targetElement">IElement factory function.</param>
-            public void To(Func<IElement> targetElement)
+            public void To(ElementProxy targetElement)
             {
                 this.syntaxProvider.commandProvider.DragAndDrop(this.syntaxProvider.commandProvider.Find("html"), this.sourceX, this.sourceY, targetElement, 0, 0);
             }
@@ -371,7 +371,7 @@ namespace FluentAutomation
             /// <param name="targetElement">IElement factory function.</param>
             /// <param name="targetOffsetX">X-offset for drop.</param>
             /// <param name="targetOffsetY">Y-offset for drop.</param>
-            public void To(Func<IElement> targetElement, int targetOffsetX, int targetOffsetY)
+            public void To(ElementProxy targetElement, int targetOffsetX, int targetOffsetY)
             {
                 this.syntaxProvider.commandProvider.DragAndDrop(this.syntaxProvider.commandProvider.Find("html"), this.sourceX, this.sourceY, targetElement, targetOffsetX, targetOffsetY);
             }
@@ -435,7 +435,7 @@ namespace FluentAutomation
             /// Enter text into specified <paramref name="element"/>.
             /// </summary>
             /// <param name="element">IElement factory function.</param>
-            public INativeActionSyntaxProvider In(Func<IElement> element)
+            public INativeActionSyntaxProvider In(ElementProxy element)
             {
                 if (this.eventsEnabled)
                 {
@@ -487,7 +487,7 @@ namespace FluentAutomation
             /// Enter text into specified <paramref name="element"/>.
             /// </summary>
             /// <param name="element">IElement factory function.</param>
-            public INativeActionSyntaxProvider To(Func<IElement> element)
+            public INativeActionSyntaxProvider To(ElementProxy element)
             {
                 if (this.eventsEnabled)
                 {
@@ -553,48 +553,14 @@ namespace FluentAutomation
             /// <param name="selector">Sizzle selector.</param>
             public INativeActionSyntaxProvider From(string selector)
             {
-                this.syntaxProvider.commandProvider.ExecWithElement(selector, (x, element) =>
-                {
-                    if (this.mode == Option.Value)
-                    {
-                        if (this.value is string)
-                        {
-                            this.syntaxProvider.commandProvider.SelectValue(element, this.value);
-                        }
-                        else if (this.value is string[])
-                        {
-                            this.syntaxProvider.commandProvider.MultiSelectValue(element, this.value);
-                        }
-                    }
-                    else if (this.mode == Option.Text)
-                    {
-                        if (this.value is string)
-                        {
-                            this.syntaxProvider.commandProvider.SelectText(element, this.value);
-                        }
-                        else if (this.value is string[])
-                        {
-                            this.syntaxProvider.commandProvider.MultiSelectText(element, this.value);
-                        }
-                    }
-                    else if (this.value is int)
-                    {
-                        this.syntaxProvider.commandProvider.SelectIndex(element, this.value);
-                    }
-                    else if (this.value is int[])
-                    {
-                        this.syntaxProvider.commandProvider.MultiSelectIndex(element, this.value);
-                    }
-                });
-
-                return this.syntaxProvider;
+                return this.From(this.syntaxProvider.Find(selector));
             }
 
             /// <summary>
             /// Select from specified <paramref name="element"/>.
             /// </summary>
             /// <param name="element">IElement factory function.</param>
-            public INativeActionSyntaxProvider From(Func<IElement> element)
+            public INativeActionSyntaxProvider From(ElementProxy element)
             {
                 if (this.mode == Option.Value)
                 {

@@ -12,43 +12,43 @@ namespace FluentAutomation.Interfaces
         Uri Url { get; }
 
         void Navigate(Uri url);
-        Func<IElement> Find(string selector);
-        Func<IEnumerable<IElement>> FindMultiple(string selector);
+        ElementProxy Find(string selector);
+        ElementProxy FindMultiple(string selector);
 
         void Click(int x, int y);
-        void Click(Func<IElement> element, int x, int y);
-        void Click(Func<IElement> element);
+        void Click(ElementProxy element, int x, int y);
+        void Click(ElementProxy element);
 
         void DoubleClick(int x, int y);
-        void DoubleClick(Func<IElement> element, int x, int y);
-        void DoubleClick(Func<IElement> element);
+        void DoubleClick(ElementProxy element, int x, int y);
+        void DoubleClick(ElementProxy element);
 
-        void RightClick(Func<IElement> element);
+        void RightClick(ElementProxy element);
 
         void Hover(int x, int y);
-        void Hover(Func<IElement> element, int x, int y);
-        void Hover(Func<IElement> element);
+        void Hover(ElementProxy element, int x, int y);
+        void Hover(ElementProxy element);
 
-        void Focus(Func<IElement> element);
+        void Focus(ElementProxy element);
 
         void DragAndDrop(int sourceX, int sourceY, int destinationX, int destinationY);
-        void DragAndDrop(Func<IElement> source, Func<IElement> target);
-        void DragAndDrop(Func<IElement> source, int sourceOffsetX, int sourceOffsetY, Func<IElement> target, int targetOffsetX, int targetOffsetY);
-        void EnterText(Func<IElement> element, string text);
-        void EnterTextWithoutEvents(Func<IElement> element, string text);
-        void AppendText(Func<IElement> element, string text);
-        void AppendTextWithoutEvents(Func<IElement> element, string text);
+        void DragAndDrop(ElementProxy source, ElementProxy target);
+        void DragAndDrop(ElementProxy source, int sourceOffsetX, int sourceOffsetY, ElementProxy target, int targetOffsetX, int targetOffsetY);
+        void EnterText(ElementProxy element, string text);
+        void EnterTextWithoutEvents(ElementProxy element, string text);
+        void AppendText(ElementProxy element, string text);
+        void AppendTextWithoutEvents(ElementProxy element, string text);
 
-        void SelectText(Func<IElement> element, string optionText);
-        void SelectValue(Func<IElement> element, string optionValue);
-        void SelectIndex(Func<IElement> element, int optionIndex);
+        void SelectText(ElementProxy element, string optionText);
+        void SelectValue(ElementProxy element, string optionValue);
+        void SelectIndex(ElementProxy element, int optionIndex);
 
-        void MultiSelectText(Func<IElement> element, string[] optionTextCollection);
-        void MultiSelectValue(Func<IElement> element, string[] optionValues);
-        void MultiSelectIndex(Func<IElement> element, int[] optionIndices);
+        void MultiSelectText(ElementProxy element, string[] optionTextCollection);
+        void MultiSelectValue(ElementProxy element, string[] optionValues);
+        void MultiSelectIndex(ElementProxy element, int[] optionIndices);
 
         void TakeScreenshot(string screenshotName);
-        void UploadFile(Func<IElement> element, int x, int y, string fileName);
+        void UploadFile(ElementProxy element, int x, int y, string fileName);
 
         void Wait();
         void Wait(int seconds);
@@ -58,7 +58,6 @@ namespace FluentAutomation.Interfaces
         void WaitUntil(Expression<Action> conditionAction);
         void WaitUntil(Expression<Action> conditionAction, TimeSpan timeout);
 
-        void ExecWithElement(string selector, Action<ICommandProvider, Func<IElement>> action);
         void Press(string keys);
         void Type(string text);
     }

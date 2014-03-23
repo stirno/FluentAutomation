@@ -10,7 +10,7 @@ namespace FluentAutomation.Interfaces
         /// Click a specified element.
         /// </summary>
         /// <param name="element"><see cref="IElement"/> factory function.</param>
-        INativeActionSyntaxProvider Click(Func<IElement> element);
+        INativeActionSyntaxProvider Click(ElementProxy element);
 
         /// <summary>
         /// Click a specified coordinate, starting from the position of the provided <paramref name="element"/>.
@@ -18,13 +18,13 @@ namespace FluentAutomation.Interfaces
         /// <param name="element"><see cref="IElement"/> factory function.</param>
         /// <param name="x">X-coordinate offset.</param>
         /// <param name="y">Y-coordinate offset.</param>
-        INativeActionSyntaxProvider Click(Func<IElement> element, int x, int y);
+        INativeActionSyntaxProvider Click(ElementProxy element, int x, int y);
 
         /// <summary>
         /// DoubleClick a specified element.
         /// </summary>
         /// <param name="element"><see cref="IElement"/> factory function.</param>
-        INativeActionSyntaxProvider DoubleClick(Func<IElement> element);
+        INativeActionSyntaxProvider DoubleClick(ElementProxy element);
 
         /// <summary>
         /// DoubleClick a specified coordinate, starting from the position of the provided <paramref name="element"/>.
@@ -32,20 +32,20 @@ namespace FluentAutomation.Interfaces
         /// <param name="element"><see cref="IElement"/> factory function.</param>
         /// <param name="x">X-coordinate offset.</param>
         /// <param name="y">Y-coordinate offset.</param>
-        INativeActionSyntaxProvider DoubleClick(Func<IElement> element, int x, int y);
+        INativeActionSyntaxProvider DoubleClick(ElementProxy element, int x, int y);
 
         /// <summary>
         /// RightClick a specified element.
         /// </summary>
         /// <param name="element"><see cref="IElement"/> factory function.</param>
-        INativeActionSyntaxProvider RightClick(Func<IElement> element);
+        INativeActionSyntaxProvider RightClick(ElementProxy element);
 
         /// <summary>
         /// Begin a Drag/Drop operation starting with the specified element.
         /// </summary>
         /// <param name="element"><see cref="IElement"/> factory function.</param>
         /// <returns><c>DragDropSyntaxProvider</c></returns>
-        ActionSyntaxProvider.DragDropSyntaxProvider Drag(Func<IElement> element);
+        ActionSyntaxProvider.DragDropSyntaxProvider Drag(ElementProxy element);
 
         /// <summary>
         /// Begin a Drag/Drop operation starting with the specified element and an offset.
@@ -54,7 +54,7 @@ namespace FluentAutomation.Interfaces
         /// <param name="offsetX"></param>
         /// <param name="offsetY"></param>
         /// <returns><c>DragDropSyntaxProvider</c></returns>
-        ActionSyntaxProvider.DragDropSyntaxProvider Drag(Func<IElement> element, int offsetX, int offsetY);
+        ActionSyntaxProvider.DragDropSyntaxProvider Drag(ElementProxy element, int offsetX, int offsetY);
 
         /// <summary>
         /// Begin a Drag/Drop operation using coordinates.
@@ -69,26 +69,26 @@ namespace FluentAutomation.Interfaces
         /// </summary>
         /// <param name="selector">Sizzle DOM selector.</param>
         /// <returns>IElement factory function for lazy access to elements.</returns>
-        Func<IElement> Find(string selector);
+        ElementProxy Find(string selector);
 
         /// <summary>
         /// Find a set of elements matching <paramref name="selector"/>.
         /// </summary>
         /// <param name="selector"></param>
         /// <returns>IElement factory function for lazy access to a collection of elements.</returns>
-        Func<System.Collections.Generic.IEnumerable<IElement>> FindMultiple(string selector);
+        ElementProxy FindMultiple(string selector);
 
         /// <summary>
         /// Sets the focus to a specific element.
         /// </summary>
         /// <param name="element">IElement factory function.</param>
-        INativeActionSyntaxProvider Focus(Func<IElement> element);
+        INativeActionSyntaxProvider Focus(ElementProxy element);
 
         /// <summary>
         /// Causes the mouse to hover over a specified element.
         /// </summary>
         /// <param name="element">IElement factory function.</param>
-        INativeActionSyntaxProvider Hover(Func<IElement> element);
+        INativeActionSyntaxProvider Hover(ElementProxy element);
 
         /// <summary>
         /// Causes the mouse to hover over a specific coordinate, starting from the position of the provided <paramref name="element"/>.
@@ -96,7 +96,7 @@ namespace FluentAutomation.Interfaces
         /// <param name="element">IElement factory function.</param>
         /// <param name="x">X-coordinate offset.</param>
         /// <param name="y">Y-coordinate offset.</param>
-        INativeActionSyntaxProvider Hover(Func<IElement> element, int x, int y);
+        INativeActionSyntaxProvider Hover(ElementProxy element, int x, int y);
 
         /// <summary>
         /// Upload a file via a standard <c><input type='file'></input></c> DOM element. Triggers a click event at the specified coordinate, starting from the position of the provided <paramref name="element"/>.
@@ -105,14 +105,14 @@ namespace FluentAutomation.Interfaces
         /// <param name="x">X-coordinate offset.</param>
         /// <param name="y">Y-coordinate offset.</param>
         /// <param name="fileName">Path to the local file to be uploaded. Example: <c>C:\Users\Public\Pictures\Sample Pictures\Chrysanthemum.jpg</c></param>
-        INativeActionSyntaxProvider Upload(Func<IElement> element, int x, int y, string fileName);
+        INativeActionSyntaxProvider Upload(ElementProxy element, int x, int y, string fileName);
 
         /// <summary>
         /// Upload a file via a standard <c><input type='file'></input></c> DOM element.
         /// </summary>
         /// <param name="element"></param>
         /// <param name="fileName">Path to the local file to be uploaded. Example: <c>C:\Users\Public\Pictures\Sample Pictures\Chrysanthemum.jpg</c></param>
-        INativeActionSyntaxProvider Upload(Func<IElement> element, string fileName);
+        INativeActionSyntaxProvider Upload(ElementProxy element, string fileName);
 
         /// <summary>
         /// Upload a file via a standard <c><input type='file'></input></c> DOM element. Triggers a click event at the specified coordinate, starting from the position of the element matching <paramref name="selector"/>.

@@ -52,9 +52,9 @@ namespace FluentAutomation
             this.browser.GoTo(uri);
         }
         
-        public Func<IElement> Find(string selector)
+        public ElementProxy Find(string selector)
         {
-            return new Func<IElement>(() =>
+            return new ElementProxy(this, () =>
             {
                 try
                 {
@@ -70,24 +70,32 @@ namespace FluentAutomation
             });
         }
 
-        public Func<IEnumerable<IElement>> FindMultiple(string selector)
+        public ElementProxy FindMultiple(string selector)
         {
-            return new Func<IEnumerable<IElement>>(() =>
+            var finalResult = new ElementProxy();
+
+            finalResult.Children.Add(new Func<ElementProxy>(() =>
             {
                 try
                 {
                     var automationElements = this.browser.Elements.Filter(WatiNCore.Find.BySelector(selector));
                     if (automationElements.Count == 0) throw new KeyNotFoundException();
 
-                    List<Element> resultSet = new List<Element>();
-                    automationElements.ToList().ForEach(x => resultSet.Add(new Element(x, selector)));
-                    return resultSet;
+                    var result = new ElementProxy();
+                    foreach (var element in automationElements)
+                    {
+                        result.Elements.Add(this, () => new Element(element, selector));
+                    }
+
+                    return result;
                 }
                 catch (KeyNotFoundException)
                 {
                     throw new FluentException("Unable to find element with selector: {0}", selector);
                 }
-            });
+            }));
+
+            return finalResult;
         }
 
         public void Click(int x, int y)
@@ -95,15 +103,15 @@ namespace FluentAutomation
             FluentAutomation.MouseControl.Click(x, y);
         }
 
-        public void Click(Func<IElement> element, int x, int y)
+        public void Click(ElementProxy element, int x, int y)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             FluentAutomation.MouseControl.Click(el.PosX + x, el.PosY + y);
         }
 
-        public void Click(Func<IElement> element)
+        public void Click(ElementProxy element)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             el.AutomationElement.Click();
         }
 
@@ -114,23 +122,23 @@ namespace FluentAutomation
             FluentAutomation.MouseControl.Click(x, y);
         }
 
-        public void DoubleClick(Func<IElement> element, int x, int y)
+        public void DoubleClick(ElementProxy element, int x, int y)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             FluentAutomation.MouseControl.Click(el.PosX + x, el.PosY + y);
             System.Threading.Thread.Sleep(30);
             FluentAutomation.MouseControl.Click(el.PosX + x, el.PosY + y);
         }
 
-        public void DoubleClick(Func<IElement> element)
+        public void DoubleClick(ElementProxy element)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             this.browser.DomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).dblclick(); }}", el.AutomationElement.GetJavascriptElementReference()));
         }
 
-        public void RightClick(Func<IElement> element)
+        public void RightClick(ElementProxy element)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             this.browser.DomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).trigger('contextmenu'); }}", el.AutomationElement.GetJavascriptElementReference()));
         }
 
@@ -139,19 +147,19 @@ namespace FluentAutomation
             FluentAutomation.MouseControl.SetPosition(x, y);
         }
 
-        public void Hover(Func<IElement> element, int x, int y)
+        public void Hover(ElementProxy element, int x, int y)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             FluentAutomation.MouseControl.SetPosition(el.PosX + x, el.PosY + y);
         }
 
-        public void Hover(Func<IElement> element)
+        public void Hover(ElementProxy element)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             FluentAutomation.MouseControl.SetPosition(el.PosX, el.PosY);            
         }
 
-        public void Focus(Func<IElement> element)
+        public void Focus(ElementProxy element)
         {
             throw new NotImplementedException();
         }
@@ -164,10 +172,10 @@ namespace FluentAutomation
             MouseControl.MouseEvent(MouseControl.MouseEvent_LeftButtonUp, destinationX, destinationY, 0, 0);
         }
 
-        public void DragAndDrop(Func<IElement> source, Func<IElement> target)
+        public void DragAndDrop(ElementProxy source, ElementProxy target)
         {
-            var sourceEl = source() as Element;
-            var targetEl = target() as Element;
+            var sourceEl = source.Element as Element;
+            var targetEl = target.Element as Element;
 
             MouseControl.SetPosition(sourceEl.PosX, sourceEl.PosY);
             MouseControl.MouseEvent(MouseControl.MouseEvent_LeftButtonDown, sourceEl.PosX, sourceEl.PosY, 0, 0);
@@ -175,10 +183,10 @@ namespace FluentAutomation
             MouseControl.MouseEvent(MouseControl.MouseEvent_LeftButtonUp, targetEl.PosX, targetEl.PosY, 0, 0);
         }
 
-        public void DragAndDrop(Func<IElement> source, int sourceOffsetX, int sourceOffsetY, Func<IElement> target, int targetOffsetX, int targetOffsetY)
+        public void DragAndDrop(ElementProxy source, int sourceOffsetX, int sourceOffsetY, ElementProxy target, int targetOffsetX, int targetOffsetY)
         {
-            var sourceEl = source() as Element;
-            var targetEl = target() as Element;
+            var sourceEl = source.Element as Element;
+            var targetEl = target.Element as Element;
 
             var sourceX = sourceEl.PosX + sourceOffsetX;
             var sourceY = sourceEl.PosY + sourceOffsetY;
@@ -191,9 +199,9 @@ namespace FluentAutomation
             MouseControl.MouseEvent(MouseControl.MouseEvent_LeftButtonUp, targetX, targetY, 0, 0);
         }
 
-        public void EnterText(Func<IElement> element, string text)
+        public void EnterText(ElementProxy element, string text)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             if (el.IsText)
             {
                 var txt = new WatiNCore.TextField(this.browser.DomContainer, el.AutomationElement.NativeElement);
@@ -201,9 +209,9 @@ namespace FluentAutomation
             }
         }
 
-        public void EnterTextWithoutEvents(Func<IElement> element, string text)
+        public void EnterTextWithoutEvents(ElementProxy element, string text)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             if (el.IsText)
             {
                 var txt = new WatiNCore.TextField(this.browser.DomContainer, el.AutomationElement.NativeElement);
@@ -212,9 +220,9 @@ namespace FluentAutomation
             }
         }
 
-        public void AppendText(Func<IElement> element, string text)
+        public void AppendText(ElementProxy element, string text)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             if (el.IsText)
             {
                 var txt = new WatiNCore.TextField(this.browser.DomContainer, el.AutomationElement.NativeElement);
@@ -222,9 +230,9 @@ namespace FluentAutomation
             }
         }
 
-        public void AppendTextWithoutEvents(Func<IElement> element, string text)
+        public void AppendTextWithoutEvents(ElementProxy element, string text)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             if (el.IsText)
             {
                 var txt = new WatiNCore.TextField(this.browser.DomContainer, el.AutomationElement.NativeElement);
@@ -233,9 +241,9 @@ namespace FluentAutomation
             }
         }
 
-        public void SelectText(Func<IElement> element, string optionText)
+        public void SelectText(ElementProxy element, string optionText)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             if (el.IsSelect)
             {
                 var sl = new WatiNCore.SelectList(this.browser.DomContainer, el.AutomationElement.NativeElement);
@@ -244,9 +252,9 @@ namespace FluentAutomation
             }
         }
 
-        public void SelectValue(Func<IElement> element, string optionValue)
+        public void SelectValue(ElementProxy element, string optionValue)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             if (el.IsSelect)
             {
                 var sl = new WatiNCore.SelectList(this.browser.DomContainer, el.AutomationElement.NativeElement);
@@ -255,9 +263,9 @@ namespace FluentAutomation
             }
         }
 
-        public void SelectIndex(Func<IElement> element, int optionIndex)
+        public void SelectIndex(ElementProxy element, int optionIndex)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             if (el.IsSelect)
             {
                 var sl = new WatiNCore.SelectList(this.browser.DomContainer, el.AutomationElement.NativeElement);
@@ -266,9 +274,9 @@ namespace FluentAutomation
             }
         }
 
-        public void MultiSelectText(Func<IElement> element, string[] optionTextCollection)
+        public void MultiSelectText(ElementProxy element, string[] optionTextCollection)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             if (el.IsSelect && el.IsMultipleSelect)
             {
                 var sl = new WatiNCore.SelectList(this.browser.DomContainer, el.AutomationElement.NativeElement);
@@ -280,9 +288,9 @@ namespace FluentAutomation
             }
         }
 
-        public void MultiSelectValue(Func<IElement> element, string[] optionValues)
+        public void MultiSelectValue(ElementProxy element, string[] optionValues)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             if (el.IsSelect && el.IsMultipleSelect)
             {
                 var sl = new WatiNCore.SelectList(this.browser.DomContainer, el.AutomationElement.NativeElement);
@@ -294,9 +302,9 @@ namespace FluentAutomation
             }
         }
 
-        public void MultiSelectIndex(Func<IElement> element, int[] optionIndices)
+        public void MultiSelectIndex(ElementProxy element, int[] optionIndices)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             if (el.IsSelect && el.IsMultipleSelect)
             {
                 var sl = new WatiNCore.SelectList(this.browser.DomContainer, el.AutomationElement.NativeElement);
@@ -313,7 +321,7 @@ namespace FluentAutomation
             this.browser.CaptureWebPageToFile(screenshotName);
         }
 
-        public void UploadFile(Func<IElement> element, int x, int y, string fileName)
+        public void UploadFile(ElementProxy element, int x, int y, string fileName)
         {
             throw new NotImplementedException();
         }
@@ -337,14 +345,6 @@ namespace FluentAutomation
             ((SHDocVw.WebBrowser)this.browser.InternetExplorer).Quit();
             this.browser.Close();
             this.browser.Dispose();
-        }
-
-        public void ExecWithElement(string selector, Action<ICommandProvider, Func<IElement>> action)
-        {
-            this.Act(() =>
-            {
-                action(this, this.Find(selector));
-            });
         }
 
         private void fireOnChange(WatiNCore.Element element)

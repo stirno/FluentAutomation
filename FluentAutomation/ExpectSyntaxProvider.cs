@@ -49,7 +49,7 @@ namespace FluentAutomation
             /// Specified <paramref name="elements"/> to be counted.
             /// </summary>
             /// <param name="elements">IElement collection factory function.</param>
-            public ExpectSyntaxProvider Of(Func<IEnumerable<IElement>> elements)
+            public ExpectSyntaxProvider Of(ElementProxy elements)
             {
                 this.expectProvider.Count(elements, this.count);
                 return this.expectSyntaxProvider;
@@ -92,7 +92,7 @@ namespace FluentAutomation
             /// Specified <paramref name="element"/> that should have matching CSS class.
             /// </summary>
             /// <param name="element">IElement factory function.</param>
-            public ExpectSyntaxProvider On(Func<IElement> element)
+            public ExpectSyntaxProvider On(ElementProxy element)
             {
                 this.expectProvider.CssClass(element, this.className);
                 return this.expectSyntaxProvider;
@@ -160,7 +160,7 @@ namespace FluentAutomation
             /// Specified <paramref name="element"/> that should match Text.
             /// </summary>
             /// <param name="element">IElement factory function.</param>
-            public ExpectSyntaxProvider In(Func<IElement> element)
+            public ExpectSyntaxProvider In(ElementProxy element)
             {
                 if (!string.IsNullOrEmpty(this.text))
                 {
@@ -246,7 +246,7 @@ namespace FluentAutomation
             /// Specified <paramref name="element"/> that should have a matching Value.
             /// </summary>
             /// <param name="element"></param>
-            public ExpectSyntaxProvider In(Func<IElement> element)
+            public ExpectSyntaxProvider In(ElementProxy element)
             {
                 if (!string.IsNullOrEmpty(this.value))
                 {

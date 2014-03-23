@@ -23,22 +23,21 @@ namespace FluentAutomation
         {
             this.commandProvider.Act(() =>
             {
-                var unwrappedElements = this.commandProvider.FindMultiple(selector)() as IEnumerable<IElement>;
-                if (unwrappedElements.Count() != count)
+                var elements = this.commandProvider.FindMultiple(selector).Elements;
+                if (elements.Count() != count)
                 {
-                    this.Throw(new FluentExpectFailedException("Expected count of elements matching selector [{0}] to be [{1}] but instead it was [{2}]", selector, count, unwrappedElements.Count()));
+                    this.Throw(new FluentExpectFailedException("Expected count of elements matching selector [{0}] to be [{1}] but instead it was [{2}]", selector, count, elements.Count()));
                 }
             });
         }
 
-        public void Count(Func<IEnumerable<IElement>> elements, int count)
+        public void Count(ElementProxy elements, int count)
         {
             this.commandProvider.Act(() =>
             {
-                var unwrappedElements = elements() as IEnumerable<IElement>;
-                if (unwrappedElements.Count() != count)
+                if (elements.Elements.Count() != count)
                 {
-                    this.Throw(new FluentExpectFailedException("Expected count of elements in collection to be [{1}] but instead it was [{2}]", count, unwrappedElements.Count()));
+                    this.Throw(new FluentExpectFailedException("Expected count of elements in collection to be [{1}] but instead it was [{2}]", count, elements.Elements.Count()));
                 }
             });
         }
@@ -49,7 +48,7 @@ namespace FluentAutomation
         {
             this.commandProvider.Act(() =>
             {
-                var unwrappedElement = this.commandProvider.Find(selector)();
+                var unwrappedElement = this.commandProvider.Find(selector).Element;
                 var elementClassAttributeValue = unwrappedElement.Attributes.Get("class").Trim();
                 if (!HasCssClass(className, elementClassAttributeValue))
                 {
@@ -58,11 +57,11 @@ namespace FluentAutomation
             });
         }
 
-        public void CssClass(Func<IElement> element, string className)
+        public void CssClass(ElementProxy element, string className)
         {
             this.commandProvider.Act(() =>
             {
-                var unwrappedElement = element();
+                var unwrappedElement = element.Element;
                 var elementClassAttributeValue = unwrappedElement.Attributes.Get("class").Trim();
                 if (!HasCssClass(className, elementClassAttributeValue))
                 {
@@ -105,7 +104,7 @@ namespace FluentAutomation
         {
             this.commandProvider.Act(() =>
             {
-                var unwrappedElement = this.commandProvider.Find(selector)();
+                var unwrappedElement = this.commandProvider.Find(selector).Element;
                 if (unwrappedElement.IsText)
                 {
                     if (!IsTextMatch(unwrappedElement.Text, text))
@@ -150,11 +149,11 @@ namespace FluentAutomation
             });
         }
 
-        public void Text(Func<IElement> element, string text)
+        public void Text(ElementProxy element, string text)
         {
             this.commandProvider.Act(() =>
             {
-                var unwrappedElement = element();
+                var unwrappedElement = element.Element;
                 if (unwrappedElement.IsText)
                 {
                     if (!IsTextMatch(unwrappedElement.Text, text))
@@ -204,7 +203,7 @@ namespace FluentAutomation
             this.commandProvider.Act(() =>
             {
                 var compiledFunc = matchFunc.Compile();
-                var unwrappedElement = this.commandProvider.Find(selector)();
+                var unwrappedElement = this.commandProvider.Find(selector).Element;
                 if (unwrappedElement.IsText)
                 {
                     if (!compiledFunc(unwrappedElement.Text))
@@ -249,12 +248,12 @@ namespace FluentAutomation
             });
         }
 
-        public void Text(Func<IElement> element, Expression<Func<string, bool>> matchFunc)
+        public void Text(ElementProxy element, Expression<Func<string, bool>> matchFunc)
         {
             this.commandProvider.Act(() =>
             {
                 var compiledFunc = matchFunc.Compile();
-                var unwrappedElement = element();
+                var unwrappedElement = element.Element;
                 if (unwrappedElement.IsText)
                 {
                     if (!compiledFunc(unwrappedElement.Text))
@@ -310,7 +309,7 @@ namespace FluentAutomation
         {
             this.commandProvider.Act(() =>
             {
-                var unwrappedElement = this.commandProvider.Find(selector)();
+                var unwrappedElement = this.commandProvider.Find(selector).Element;
                 if (unwrappedElement.IsText)
                 {
                     if (!IsTextMatch(unwrappedElement.Value, value))
@@ -357,7 +356,7 @@ namespace FluentAutomation
             this.commandProvider.Act(() =>
             {
                 var compiledFunc = matchFunc.Compile();
-                var unwrappedElement = this.commandProvider.Find(selector)();
+                var unwrappedElement = this.commandProvider.Find(selector).Element;
                 if (unwrappedElement.IsText)
                 {
                     if (!compiledFunc(unwrappedElement.Value))
@@ -402,11 +401,11 @@ namespace FluentAutomation
             });
         }
 
-        public void Value(Func<IElement> element, string value)
+        public void Value(ElementProxy element, string value)
         {
             this.commandProvider.Act(() =>
             {
-                var unwrappedElement = element();
+                var unwrappedElement = element.Element;
                 if (unwrappedElement.IsText)
                 {
                     if (!IsTextMatch(unwrappedElement.Value, value))
@@ -451,12 +450,12 @@ namespace FluentAutomation
             });
         }
 
-        public void Value(Func<IElement> element, Expression<Func<string, bool>> matchFunc)
+        public void Value(ElementProxy element, Expression<Func<string, bool>> matchFunc)
         {
             this.commandProvider.Act(() =>
             {
                 var compiledFunc = matchFunc.Compile();
-                var unwrappedElement = element();
+                var unwrappedElement = element.Element;
                 if (unwrappedElement.IsText)
                 {
                     if (!compiledFunc(unwrappedElement.Value))
@@ -578,7 +577,7 @@ namespace FluentAutomation
         {
             this.commandProvider.Act(() =>
             {
-                var unwrappedElement = this.commandProvider.Find(selector)() as IElement;
+                var unwrappedElement = this.commandProvider.Find(selector).Element as IElement;
                 if (unwrappedElement == null)
                 {
                     this.Throw(new FluentExpectFailedException("Expected element matching selector [{0}] to exist.", selector));

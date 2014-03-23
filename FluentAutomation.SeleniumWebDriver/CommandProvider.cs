@@ -66,9 +66,9 @@ namespace FluentAutomation
             this.Act(() => this.webDriver.Navigate().GoToUrl(url));
         }
 
-        public Func<IElement> Find(string selector)
+        public ElementProxy Find(string selector)
         {
-            return new Func<IElement>(() =>
+            return new ElementProxy(this, () =>
             {
                 try
                 {
@@ -82,29 +82,37 @@ namespace FluentAutomation
             });
         }
 
-        public Func<IEnumerable<IElement>> FindMultiple(string selector)
+        public ElementProxy FindMultiple(string selector)
         {
-            return new Func<IEnumerable<IElement>>(() =>
+            var finalResult = new ElementProxy();
+
+            finalResult.Children.Add(new Func<ElementProxy>(() =>
             {
                 try
                 {
+                    var result = new ElementProxy();
                     var webElements = this.webDriver.FindElements(Sizzle.Find(selector));
-                    List<Element> resultSet = new List<Element>();
-                    webElements.ToList().ForEach(x => resultSet.Add(new Element(x, selector)));
-                    return resultSet;
+                    foreach (var element in webElements)
+                    {
+                        result.Elements.Add(this, () => new Element(element, selector));
+                    }
+
+                    return result;
                 }
                 catch (NoSuchElementException)
                 {
                     throw new FluentException("Unable to find element with selector [{0}]", selector);
                 }
-            });
+            }));
+
+            return finalResult;
         }
 
         public void Click(int x, int y)
         {
             this.Act(() =>
             {
-                var rootElement = this.Find("html")() as Element;
+                var rootElement = this.Find("html").Element as Element;
                 new Actions(this.webDriver)
                     .MoveToElement(rootElement.WebElement, x, y)
                     .Click()
@@ -112,11 +120,11 @@ namespace FluentAutomation
             });
         }
 
-        public void Click(Func<IElement> element, int x, int y)
+        public void Click(ElementProxy element, int x, int y)
         {
             this.Act(() =>
             {
-                var containerElement = element() as Element;
+                var containerElement = element.Element as Element;
                 new Actions(this.webDriver)
                     .MoveToElement(containerElement.WebElement, x, y)
                     .Click()
@@ -124,11 +132,11 @@ namespace FluentAutomation
             });
         }
 
-        public void Click(Func<IElement> element)
+        public void Click(ElementProxy element)
         {
             this.Act(() =>
             {
-                var containerElement = element() as Element;
+                var containerElement = element.Element as Element;
                 new Actions(this.webDriver)
                     .Click(containerElement.WebElement)
                     .Perform();
@@ -139,7 +147,7 @@ namespace FluentAutomation
         {
             this.Act(() =>
             {
-                var rootElement = this.Find("html")() as Element;
+                var rootElement = this.Find("html").Element as Element;
                 new Actions(this.webDriver)
                     .MoveToElement(rootElement.WebElement, x, y)
                     .DoubleClick()
@@ -147,11 +155,11 @@ namespace FluentAutomation
             });
         }
 
-        public void DoubleClick(Func<IElement> element, int x, int y)
+        public void DoubleClick(ElementProxy element, int x, int y)
         {
             this.Act(() =>
             {
-                var containerElement = element() as Element;
+                var containerElement = element.Element as Element;
                 new Actions(this.webDriver)
                     .MoveToElement(containerElement.WebElement, x, y)
                     .DoubleClick()
@@ -159,22 +167,22 @@ namespace FluentAutomation
             });
         }
 
-        public void DoubleClick(Func<IElement> element)
+        public void DoubleClick(ElementProxy element)
         {
             this.Act(() =>
             {
-                var containerElement = element() as Element;
+                var containerElement = element.Element as Element;
                 new Actions(this.webDriver)
                     .DoubleClick(containerElement.WebElement)
                     .Perform();
             });
         }
         
-        public void RightClick(Func<IElement> element)
+        public void RightClick(ElementProxy element)
         {
             this.Act(() =>
             {
-                var containerElement = element() as Element;
+                var containerElement = element.Element as Element;
                 new Actions(this.webDriver)
                     .ContextClick(containerElement.WebElement)
                     .Perform();
@@ -185,40 +193,40 @@ namespace FluentAutomation
         {
             this.Act(() =>
             {
-                var rootElement = this.Find("html")() as Element;
+                var rootElement = this.Find("html").Element as Element;
                 new Actions(this.webDriver)
                     .MoveToElement(rootElement.WebElement, x, y)
                     .Perform();
             });
         }
 
-        public void Hover(Func<IElement> element, int x, int y)
+        public void Hover(ElementProxy element, int x, int y)
         {
             this.Act(() =>
             {
-                var containerElement = element() as Element;
+                var containerElement = element.Element as Element;
                 new Actions(this.webDriver)
                     .MoveToElement(containerElement.WebElement, x, y)
                     .Perform();
             });
         }
 
-        public void Hover(Func<IElement> element)
+        public void Hover(ElementProxy element)
         {
             this.Act(() =>
             {
-                var unwrappedElement = element() as Element;
+                var unwrappedElement = element.Element as Element;
                 new Actions(this.webDriver)
                     .MoveToElement(unwrappedElement.WebElement)
                     .Perform();
             });
         }
 
-        public void Focus(Func<IElement> element)
+        public void Focus(ElementProxy element)
         {
             this.Act(() =>
             {
-                var unwrappedElement = element() as Element;
+                var unwrappedElement = element.Element as Element;
 
                 switch (unwrappedElement.WebElement.TagName)
                 {
@@ -239,7 +247,7 @@ namespace FluentAutomation
         {
             this.Act(() =>
             {
-                var rootElement = this.Find("html")() as Element;
+                var rootElement = this.Find("html").Element as Element;
                 new Actions(this.webDriver)
                     .MoveToElement(rootElement.WebElement, sourceX, sourceY)
                     .ClickAndHold()
@@ -249,12 +257,12 @@ namespace FluentAutomation
             });
         }
 
-        public void DragAndDrop(Func<IElement> source, int sourceOffsetX, int sourceOffsetY, Func<IElement> target, int targetOffsetX, int targetOffsetY)
+        public void DragAndDrop(ElementProxy source, int sourceOffsetX, int sourceOffsetY, ElementProxy target, int targetOffsetX, int targetOffsetY)
         {
             this.Act(() =>
             {
-                var element = source() as Element;
-                var targetElement = target() as Element;
+                var element = source.Element as Element;
+                var targetElement = target.Element as Element;
                 new Actions(this.webDriver)
                     .MoveToElement(element.WebElement, sourceOffsetX, sourceOffsetY)
                     .ClickAndHold()
@@ -264,12 +272,12 @@ namespace FluentAutomation
             });
         }
 
-        public void DragAndDrop(Func<IElement> source, Func<IElement> target)
+        public void DragAndDrop(ElementProxy source, ElementProxy target)
         {
             this.Act(() =>
             {
-                var unwrappedSource = source() as Element;
-                var unwrappedTarget = target() as Element;
+                var unwrappedSource = source.Element as Element;
+                var unwrappedTarget = target.Element as Element;
 
                 new Actions(this.webDriver)
                     .DragAndDrop(unwrappedSource.WebElement, unwrappedTarget.WebElement)
@@ -277,50 +285,50 @@ namespace FluentAutomation
             });
         }
 
-        public void EnterText(Func<IElement> element, string text)
+        public void EnterText(ElementProxy element, string text)
         {
             this.Act(() =>
             {
-                var unwrappedElement = element() as Element;
+                var unwrappedElement = element.Element as Element;
 
                 unwrappedElement.WebElement.Clear();
                 unwrappedElement.WebElement.SendKeys(text);
             });
         }
 
-        public void EnterTextWithoutEvents(Func<IElement> element, string text)
+        public void EnterTextWithoutEvents(ElementProxy element, string text)
         {
             this.Act(() =>  
             {
-                var unwrappedElement = element() as Element;
+                var unwrappedElement = element.Element as Element;
 
                 ((IJavaScriptExecutor)this.webDriver).ExecuteScript(string.Format("if (typeof fluentjQuery != 'undefined') {{ fluentjQuery(\"{0}\").val(\"{1}\").trigger('change'); }}", unwrappedElement.Selector.Replace("\"", ""), text.Replace("\"", "")));
             });
         }
 
-        public void AppendText(Func<IElement> element, string text)
+        public void AppendText(ElementProxy element, string text)
         {
             this.Act(() =>
             {
-                var unwrappedElement = element() as Element;
+                var unwrappedElement = element.Element as Element;
                 unwrappedElement.WebElement.SendKeys(text);
             });
         }
 
-        public void AppendTextWithoutEvents(Func<IElement> element, string text)
+        public void AppendTextWithoutEvents(ElementProxy element, string text)
         {
             this.Act(() =>
             {
-                var unwrappedElement = element() as Element;
+                var unwrappedElement = element.Element as Element;
                 ((IJavaScriptExecutor)this.webDriver).ExecuteScript(string.Format("if (typeof fluentjQuery != 'undefined') {{ fluentjQuery(\"{0}\").val(fluentjQuery(\"{0}\").val() + \"{1}\").trigger('change'); }}", unwrappedElement.Selector.Replace("\"", ""), text.Replace("\"", "")));
             });
         }
 
-        public void SelectText(Func<IElement> element, string optionText)
+        public void SelectText(ElementProxy element, string optionText)
         {
             this.Act(() =>
             {
-                var unwrappedElement = element() as Element;
+                var unwrappedElement = element.Element as Element;
 
                 SelectElement selectElement = new SelectElement(unwrappedElement.WebElement);
                 if (selectElement.IsMultiple) selectElement.DeselectAll();
@@ -328,11 +336,11 @@ namespace FluentAutomation
             });
         }
 
-        public void MultiSelectValue(Func<IElement> element, string[] optionValues)
+        public void MultiSelectValue(ElementProxy element, string[] optionValues)
         {
             this.Act(() =>
             {
-                var unwrappedElement = element() as Element;
+                var unwrappedElement = element.Element as Element;
 
                 SelectElement selectElement = new SelectElement(unwrappedElement.WebElement);
                 if (selectElement.IsMultiple) selectElement.DeselectAll();
@@ -344,11 +352,11 @@ namespace FluentAutomation
             });
         }
 
-        public void MultiSelectIndex(Func<IElement> element, int[] optionIndices)
+        public void MultiSelectIndex(ElementProxy element, int[] optionIndices)
         {
             this.Act(() =>
             {
-                var unwrappedElement = element() as Element;
+                var unwrappedElement = element.Element as Element;
 
                 SelectElement selectElement = new SelectElement(unwrappedElement.WebElement);
                 if (selectElement.IsMultiple) selectElement.DeselectAll();
@@ -360,11 +368,11 @@ namespace FluentAutomation
             });
         }
 
-        public void MultiSelectText(Func<IElement> element, string[] optionTextCollection)
+        public void MultiSelectText(ElementProxy element, string[] optionTextCollection)
         {
             this.Act(() =>
             {
-                var unwrappedElement = element() as Element;
+                var unwrappedElement = element.Element as Element;
 
                 SelectElement selectElement = new SelectElement(unwrappedElement.WebElement);
                 if (selectElement.IsMultiple) selectElement.DeselectAll();
@@ -376,11 +384,11 @@ namespace FluentAutomation
             });
         }
 
-        public void SelectValue(Func<IElement> element, string optionValue)
+        public void SelectValue(ElementProxy element, string optionValue)
         {
             this.Act(() =>
             {
-                var unwrappedElement = element() as Element;
+                var unwrappedElement = element.Element as Element;
 
                 SelectElement selectElement = new SelectElement(unwrappedElement.WebElement);
                 if (selectElement.IsMultiple) selectElement.DeselectAll();
@@ -388,11 +396,11 @@ namespace FluentAutomation
             });
         }
 
-        public void SelectIndex(Func<IElement> element, int optionIndex)
+        public void SelectIndex(ElementProxy element, int optionIndex)
         {
             this.Act(() =>
             {
-                var unwrappedElement = element() as Element;
+                var unwrappedElement = element.Element as Element;
 
                 SelectElement selectElement = new SelectElement(unwrappedElement.WebElement);
                 if (selectElement.IsMultiple) selectElement.DeselectAll();
@@ -415,7 +423,7 @@ namespace FluentAutomation
             });
         }
 
-        public void UploadFile(Func<IElement> element, int x, int y, string fileName)
+        public void UploadFile(ElementProxy element, int x, int y, string fileName)
         {
             this.Act(() =>
             {
@@ -463,13 +471,6 @@ namespace FluentAutomation
                     System.Windows.Forms.SendKeys.SendWait(character.ToString());
                     this.Wait(TimeSpan.FromMilliseconds(20));
                 }
-            });
-        }
-        public void ExecWithElement(string selector, Action<ICommandProvider, Func<IElement>> action)
-        {
-            this.Act(() =>
-            {
-                action(this, this.Find(selector));
             });
         }
 
