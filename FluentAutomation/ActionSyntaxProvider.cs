@@ -279,15 +279,34 @@ namespace FluentAutomation
                 this.syntaxProvider = syntaxProvider;
             }
 
+            /// <summary>
+            /// Switch to a window by name
+            /// </summary>
+            /// <param name="windowName"></param>
             public IActionSyntaxProvider Window(string windowName)
             {
                 this.syntaxProvider.commandProvider.SwitchToWindow(windowName);
                 return this.syntaxProvider;
             }
 
-            public IActionSyntaxProvider Frame(string frameName)
+            /// <summary>
+            /// Switch to a frame/iframe via page selector or ID
+            /// </summary>
+            /// <param name="frameSelector"></param>
+            public IActionSyntaxProvider Frame(string frameSelector)
             {
-                this.syntaxProvider.commandProvider.SwitchToFrame(frameName);
+                this.syntaxProvider.commandProvider.SwitchToFrame(frameSelector);
+                return this.syntaxProvider;
+            }
+
+            /// <summary>
+            /// Switch focus to a previously selected frame/iframe
+            /// </summary>
+            /// <param name="frameElement"></param>
+            /// <returns></returns>
+            public IActionSyntaxProvider Frame(ElementProxy frameElement)
+            {
+                this.syntaxProvider.commandProvider.SwitchToFrame(frameElement);
                 return this.syntaxProvider;
             }
         }

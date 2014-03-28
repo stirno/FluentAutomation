@@ -356,5 +356,10 @@ namespace FluentAutomation.Interfaces
         /// Asserts - Fluent's assertion functionality.
         /// </summary>
         AssertSyntaxProvider Assert { get; }
+
+        /// <summary>
+        /// Switch to another window or frame.
+        /// </summary>
+        ActionSyntaxProvider.SwitchSyntaxProvider Switch { get; }
     }
 }

@@ -62,6 +62,7 @@ namespace FluentAutomation.Interfaces
         void Type(string text);
 
         void SwitchToFrame(string frameName);
+        void SwitchToFrame(ElementProxy frameElement);
         void SwitchToWindow(string windowName);
         void AlertClick(Alert accessor);
         void AlertText(Action<string> matchFunc);

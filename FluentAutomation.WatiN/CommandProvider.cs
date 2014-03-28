@@ -8,6 +8,7 @@ using FluentAutomation.Exceptions;
 using FluentAutomation.Interfaces;
 using WatiNCore = global::WatiN.Core;
 using WatiN.Core.DialogHandlers;
+using WatiN.Core.Exceptions;
 
 namespace FluentAutomation
 {
@@ -427,11 +428,33 @@ namespace FluentAutomation
             });
         }
 
-        public void SwitchToFrame(string frameName)
+        public void SwitchToFrame(string frameNameOrSelector)
         {
             this.Act(CommandType.Action, () =>
             {
-                this.ActiveDomContainer = this.browser.Frame(frameName).DomContainer;
+                // try to locate frame using argument as a selector, if that fails try finding
+                // frame by name
+                WatiNCore.Frame frame = null;
+                try
+                {
+                    frame = this.browser.Frame(WatiNCore.Find.BySelector(frameNameOrSelector));
+                }
+                catch (FrameNotFoundException)
+                {
+                }
+
+                if (frame == null)
+                    frame = this.browser.Frame(WatiNCore.Find.ByName(frameNameOrSelector));
+
+                this.ActiveDomContainer = frame.DomContainer;
+            });
+        }
+
+        public void SwitchToFrame(ElementProxy frameElement)
+        {
+            this.Act(CommandType.Action, () =>
+            {
+                this.ActiveDomContainer = this.browser.Frame(WatiNCore.Find.BySelector(frameElement.Element.Selector)).DomContainer;
             });
         }
 

@@ -472,11 +472,33 @@ namespace FluentAutomation
             });
         }
 
-        public void SwitchToFrame(string frameName)
+        public void SwitchToFrame(string frameNameOrSelector)
         {
             this.Act(CommandType.Action, () =>
             {
-                this.webDriver.SwitchTo().Frame(frameName);
+                // try to locate frame using argument as a selector, if that fails pass it into Frame so it can be
+                // evaluated as a name by Selenium
+                IWebElement frameBySelector = null;
+                try
+                {
+                    frameBySelector = this.webDriver.FindElement(Sizzle.Find(frameNameOrSelector));
+                }
+                catch (NoSuchElementException)
+                {
+                }
+
+                if (frameBySelector == null)
+                    this.webDriver.SwitchTo().Frame(frameNameOrSelector);
+                else
+                    this.webDriver.SwitchTo().Frame(frameBySelector);
+            });
+        }
+
+        public void SwitchToFrame(ElementProxy frameElement)
+        {
+            this.Act(CommandType.Action, () =>
+            {
+                this.webDriver.SwitchTo().Frame((frameElement.Element as Element).WebElement);
             });
         }
 

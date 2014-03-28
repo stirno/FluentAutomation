@@ -300,6 +300,11 @@ namespace FluentAutomation
             Parallel.ForEach(this.commandProviders, x => x.SwitchToFrame(frameName));
         }
 
+        public void SwitchToFrame(ElementProxy frameElement)
+        {
+            Parallel.ForEach(this.commandProviders, x => x.SwitchToFrame(frameElement));
+        }
+
         public void SwitchToWindow(string windowName)
         {
             Parallel.ForEach(this.commandProviders, x => x.SwitchToWindow(windowName));

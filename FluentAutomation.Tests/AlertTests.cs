@@ -20,11 +20,8 @@ namespace FluentAutomation.Tests
         public void CanHandleAlert()
         {
             I.Open("http://localhost:1474/Home/Index");
-            I.Assert.Text("what is the answer to everything?").In(Alert.Message);
-            I.Enter("this is a test").In(Alert.Input);
-            I.Click(Alert.OK);
-
-            I.Assert.Text("ASP.NET").In("h1");
+            I.Switch.Frame("iframe");
+            I.Assert.Text("Contact.").In("h2");
         }
     }
 }
