@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FluentAutomation.Interfaces
 {
-    public interface ICommandProvider : IActionProvider, IDisposable
+    public interface ICommandProvider : IDisposable
     {
         Uri Url { get; }
 
@@ -60,5 +60,13 @@ namespace FluentAutomation.Interfaces
 
         void Press(string keys);
         void Type(string text);
+
+        void SwitchToFrame(string frameName);
+        void SwitchToWindow(string windowName);
+        void AlertClick(Alert accessor);
+        void AlertText(Action<string> matchFunc);
+        void AlertEnterText(string text);
+
+        void Act(CommandType commandType, Action action);
     }
 }

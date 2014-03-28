@@ -45,9 +45,9 @@ namespace FluentAutomation
         {
             WatiN.SelectedBrowser = browser;
 
-            FluentAutomation.Settings.Registration = (container) =>
+            FluentSettings.Current.ContainerRegistration = (container) =>
             {
-                container.Register<IExpectProvider, ExpectProvider>();
+                container.Register<IAssertProvider, AssertProvider>();
                 container.Register<ICommandProvider, CommandProvider>();
                 container.Register<IFileStoreProvider, LocalFileStoreProvider>();
                 container.Register<WatiNCore.IE>().UsingConstructor(() => new WatiNCore.IE());

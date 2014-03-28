@@ -37,7 +37,7 @@ namespace FluentAutomation
             this.TestObject = test;
         }
 
-        public INativeActionSyntaxProvider I
+        public IActionSyntaxProvider I
         {
             get { return this.TestObject.I; }
         }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -294,9 +295,34 @@ namespace FluentAutomation
             throw new NotImplementedException("Win32 based events are not currently functioning in multi-browser tests");
         }
 
-        public void Act(Action action, bool waitableAction = true)
+        public void SwitchToFrame(string frameName)
         {
-            Parallel.ForEach(this.commandProviders, x => x.Act(action, waitableAction));
+            Parallel.ForEach(this.commandProviders, x => x.SwitchToFrame(frameName));
+        }
+
+        public void SwitchToWindow(string windowName)
+        {
+            Parallel.ForEach(this.commandProviders, x => x.SwitchToWindow(windowName));
+        }
+
+        public void AlertClick(Alert accessor)
+        {
+            Parallel.ForEach(this.commandProviders, x => x.AlertClick(accessor));
+        }
+
+        public void AlertText(Action<string> matchFunc)
+        {
+            Parallel.ForEach(this.commandProviders, x => x.AlertText(matchFunc));
+        }
+
+        public void AlertEnterText(string text)
+        {
+            Parallel.ForEach(this.commandProviders, x => x.AlertEnterText(text));
+        }
+
+        public void Act(CommandType commandType, Action action)
+        {
+            Parallel.ForEach(this.commandProviders, x => x.Act(commandType, action));
         }
 
         public void Dispose()

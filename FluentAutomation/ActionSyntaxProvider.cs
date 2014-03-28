@@ -5,27 +5,28 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAutomation.Interfaces;
+using FluentAutomation.Exceptions;
 
 namespace FluentAutomation
 {
-    public class ActionSyntaxProvider : INativeActionSyntaxProvider, IDisposable
+    public class ActionSyntaxProvider : IActionSyntaxProvider, IDisposable
     {
         private readonly ICommandProvider commandProvider = null;
-        private readonly IExpectProvider expectProvider = null;
+        private readonly IAssertProvider expectProvider = null;
 
-        public ActionSyntaxProvider(ICommandProvider commandProvider, IExpectProvider expectProvider)
+        public ActionSyntaxProvider(ICommandProvider commandProvider, IAssertProvider expectProvider)
         {
             this.commandProvider = commandProvider;
             this.expectProvider = expectProvider;
         }
 
         #region Direct Execution Actions
-        public INativeActionSyntaxProvider Open(string url)
+        public IActionSyntaxProvider Open(string url)
         {
             return this.Open(new Uri(url, UriKind.Absolute));
         }
 
-        public INativeActionSyntaxProvider Open(Uri url)
+        public IActionSyntaxProvider Open(Uri url)
         {
             this.commandProvider.Navigate(url);
             return this;
@@ -41,213 +42,256 @@ namespace FluentAutomation
             return this.commandProvider.FindMultiple(selector);
         }
 
-        public INativeActionSyntaxProvider Click(int x, int y)
+        public IActionSyntaxProvider Click(int x, int y)
         {
             this.commandProvider.Click(x, y);
             return this;
         }
 
-        public INativeActionSyntaxProvider Click(string selector, int x, int y)
+        public IActionSyntaxProvider Click(string selector, int x, int y)
         {
             return this.Click(this.Find(selector), x, y);
         }
 
-        public INativeActionSyntaxProvider Click(ElementProxy element, int x, int y)
+        public IActionSyntaxProvider Click(ElementProxy element, int x, int y)
         {
             this.commandProvider.Click(element, x, y);
             return this;
         }
 
-        public INativeActionSyntaxProvider Click(string selector)
+        public IActionSyntaxProvider Click(string selector)
         {
             return this.Click(this.Find(selector));
         }
 
-        public INativeActionSyntaxProvider Click(ElementProxy element)
+        public IActionSyntaxProvider Click(ElementProxy element)
         {
             this.commandProvider.Click(element);
             return this;
         }
 
-        public INativeActionSyntaxProvider Scroll(int x, int y)
+        public IActionSyntaxProvider Click(Alert alertAccessor)
+        {
+            this.commandProvider.AlertClick(alertAccessor);
+            return this;
+        }
+
+        public IActionSyntaxProvider Scroll(int x, int y)
         {
             this.commandProvider.Hover(x, y);
             return this;
         }
 
-        public INativeActionSyntaxProvider Scroll(string selector)
+        public IActionSyntaxProvider Scroll(string selector)
         {
             this.commandProvider.Hover(this.Find(selector));
             return this;
         }
 
-        public INativeActionSyntaxProvider Scroll(ElementProxy element)
+        public IActionSyntaxProvider Scroll(ElementProxy element)
         {
             this.commandProvider.Hover(element);
             return this;
         }
 
-        public INativeActionSyntaxProvider DoubleClick(int x, int y)
+        public IActionSyntaxProvider DoubleClick(int x, int y)
         {
             this.commandProvider.DoubleClick(x, y);
             return this;
         }
 
-        public INativeActionSyntaxProvider DoubleClick(string selector, int x, int y)
+        public IActionSyntaxProvider DoubleClick(string selector, int x, int y)
         {
             return this.DoubleClick(this.Find(selector), x, y);
         }
 
-        public INativeActionSyntaxProvider DoubleClick(ElementProxy element, int x, int y)
+        public IActionSyntaxProvider DoubleClick(ElementProxy element, int x, int y)
         {
             this.commandProvider.DoubleClick(element, x, y);
             return this;
         }
 
-        public INativeActionSyntaxProvider DoubleClick(string selector)
+        public IActionSyntaxProvider DoubleClick(string selector)
         {
             return this.DoubleClick(this.Find(selector));
         }
 
-        public INativeActionSyntaxProvider DoubleClick(ElementProxy element)
+        public IActionSyntaxProvider DoubleClick(ElementProxy element)
         {
             this.commandProvider.DoubleClick(element);
             return this;
         }
 
-        public INativeActionSyntaxProvider RightClick(string selector)
+        public IActionSyntaxProvider RightClick(string selector)
         {
             return this.RightClick(this.Find(selector));
         }
 
-        public INativeActionSyntaxProvider RightClick(ElementProxy element)
+        public IActionSyntaxProvider RightClick(ElementProxy element)
         {
             this.commandProvider.RightClick(element);
             return this;
         }
 
-        public INativeActionSyntaxProvider Hover(int x, int y)
+        public IActionSyntaxProvider Hover(int x, int y)
         {
             this.commandProvider.Hover(x, y);
             return this;
         }
 
-        public INativeActionSyntaxProvider Hover(string selector, int x, int y)
+        public IActionSyntaxProvider Hover(string selector, int x, int y)
         {
             return this.Hover(this.Find(selector), x, y);
         }
 
-        public INativeActionSyntaxProvider Hover(ElementProxy element, int x, int y)
+        public IActionSyntaxProvider Hover(ElementProxy element, int x, int y)
         {
             this.commandProvider.Hover(element, x, y);
             return this;
         }
 
-        public INativeActionSyntaxProvider Hover(string selector)
+        public IActionSyntaxProvider Hover(string selector)
         {
             return this.Hover(this.Find(selector));
         }
 
-        public INativeActionSyntaxProvider Hover(ElementProxy element)
+        public IActionSyntaxProvider Hover(ElementProxy element)
         {
             this.commandProvider.Hover(element);
             return this;
         }
 
-        public INativeActionSyntaxProvider Focus(string selector)
+        public IActionSyntaxProvider Focus(string selector)
         {
             return this.Focus(this.Find(selector));
         }
 
-        public INativeActionSyntaxProvider Focus(ElementProxy element)
+        public IActionSyntaxProvider Focus(ElementProxy element)
         {
             this.commandProvider.Focus(element);
             return this;
         }
 
-        public INativeActionSyntaxProvider Press(string keys)
+        public IActionSyntaxProvider Press(string keys)
         {
             this.commandProvider.Press(keys);
             return this;
         }
 
-        public INativeActionSyntaxProvider TakeScreenshot(string screenshotName)
+        public IActionSyntaxProvider TakeScreenshot(string screenshotName)
         {
             this.commandProvider.TakeScreenshot(screenshotName);
             return this;
         }
 
-        public INativeActionSyntaxProvider Type(string text)
+        public IActionSyntaxProvider Type(string text)
         {
             this.commandProvider.Type(text);
             return this;
         }
 
-        public INativeActionSyntaxProvider Wait(int seconds)
+        public IActionSyntaxProvider Wait(int seconds)
         {
             return this.Wait(TimeSpan.FromSeconds(seconds));
         }
 
-        public INativeActionSyntaxProvider Wait(TimeSpan timeSpan)
+        public IActionSyntaxProvider Wait(TimeSpan timeSpan)
         {
             this.commandProvider.Wait(timeSpan);
             return this;
         }
 
-        public INativeActionSyntaxProvider WaitUntil(Expression<Func<bool>> conditionFunc)
+        public IActionSyntaxProvider WaitUntil(Expression<Func<bool>> conditionFunc)
         {
             this.commandProvider.WaitUntil(conditionFunc);
             return this;
         }
 
-        public INativeActionSyntaxProvider WaitUntil(Expression<Action> conditionAction)
+        public IActionSyntaxProvider WaitUntil(Expression<Action> conditionAction)
         {
             this.commandProvider.WaitUntil(conditionAction);
             return this;
         }
 
-        public INativeActionSyntaxProvider WaitUntil(Expression<Func<bool>> conditionFunc, int secondsToWait)
+        public IActionSyntaxProvider WaitUntil(Expression<Func<bool>> conditionFunc, int secondsToWait)
         {
             return this.WaitUntil(conditionFunc, TimeSpan.FromSeconds(secondsToWait));
         }
 
-        public INativeActionSyntaxProvider WaitUntil(Expression<Func<bool>> conditionFunc, TimeSpan timeout)
+        public IActionSyntaxProvider WaitUntil(Expression<Func<bool>> conditionFunc, TimeSpan timeout)
         {
             this.commandProvider.WaitUntil(conditionFunc, timeout);
             return this;
         }
 
-        public INativeActionSyntaxProvider WaitUntil(Expression<Action> conditionAction, int secondsToWait)
+        public IActionSyntaxProvider WaitUntil(Expression<Action> conditionAction, int secondsToWait)
         {
             return this.WaitUntil(conditionAction, TimeSpan.FromSeconds(secondsToWait));
         }
 
-        public INativeActionSyntaxProvider WaitUntil(Expression<Action> conditionAction, TimeSpan timeout)
+        public IActionSyntaxProvider WaitUntil(Expression<Action> conditionAction, TimeSpan timeout)
         {
             this.commandProvider.WaitUntil(conditionAction, timeout);
             return this;
         }
 
-        public INativeActionSyntaxProvider Upload(string selector, string fileName)
+        public IActionSyntaxProvider Upload(string selector, string fileName)
         {
             return this.Upload(selector, 0, 0, fileName);
         }
 
-        public INativeActionSyntaxProvider Upload(string selector, int x, int y, string fileName)
+        public IActionSyntaxProvider Upload(string selector, int x, int y, string fileName)
         {
             return this.Upload(this.Find(selector), x, y, fileName);
         }
 
-        public INativeActionSyntaxProvider Upload(ElementProxy element, string fileName)
+        public IActionSyntaxProvider Upload(ElementProxy element, string fileName)
         {
             return this.Upload(element, 0, 0, fileName);
         }
 
-        public INativeActionSyntaxProvider Upload(ElementProxy element, int x, int y, string fileName)
+        public IActionSyntaxProvider Upload(ElementProxy element, int x, int y, string fileName)
         {
             this.commandProvider.UploadFile(element, x, y, fileName);
             return this;
         }
+
+        private SwitchSyntaxProvider switchProvider = null;
+        public SwitchSyntaxProvider Switch
+        {
+            get
+            {
+                if (switchProvider == null)
+                {
+                    switchProvider = new SwitchSyntaxProvider(this);
+                }
+
+                return switchProvider;
+            }
+        }
+
+        public class SwitchSyntaxProvider
+        {
+            private readonly ActionSyntaxProvider syntaxProvider = null;
+
+            public SwitchSyntaxProvider(ActionSyntaxProvider syntaxProvider)
+            {
+                this.syntaxProvider = syntaxProvider;
+            }
+
+            public IActionSyntaxProvider Window(string windowName)
+            {
+                this.syntaxProvider.commandProvider.SwitchToWindow(windowName);
+                return this.syntaxProvider;
+            }
+
+            public IActionSyntaxProvider Frame(string frameName)
+            {
+                this.syntaxProvider.commandProvider.SwitchToFrame(frameName);
+                return this.syntaxProvider;
+            }
+        }
+    
         #endregion
 
         #region Drag/Drop
@@ -296,7 +340,7 @@ namespace FluentAutomation
             /// End Drag/Drop operation at element matching <paramref name="selector"/>.
             /// </summary>
             /// <param name="selector">Sizzle selector.</param>
-            public INativeActionSyntaxProvider To(string selector)
+            public IActionSyntaxProvider To(string selector)
             {
                 return this.To(this.syntaxProvider.Find(selector));
             }
@@ -305,7 +349,7 @@ namespace FluentAutomation
             /// End Drag/Drop operation at specified <paramref name="targetElement"/>.
             /// </summary>
             /// <param name="targetElement">IElement factory function.</param>
-            public INativeActionSyntaxProvider To(ElementProxy targetElement)
+            public IActionSyntaxProvider To(ElementProxy targetElement)
             {
                 if (this.offsetX != 0 || this.offsetY != 0)
                 {
@@ -325,7 +369,7 @@ namespace FluentAutomation
             /// <param name="targetElement">IElement factory function.</param>
             /// <param name="targetOffsetX">X-offset for drop.</param>
             /// <param name="targetOffsetY">Y-offset for drop.</param>
-            public INativeActionSyntaxProvider To(ElementProxy targetElement, int targetOffsetX, int targetOffsetY)
+            public IActionSyntaxProvider To(ElementProxy targetElement, int targetOffsetX, int targetOffsetY)
             {
                 this.syntaxProvider.commandProvider.DragAndDrop(this.sourceElement, offsetX, offsetY, targetElement, targetOffsetX, targetOffsetY);
                 return this.syntaxProvider;
@@ -350,7 +394,7 @@ namespace FluentAutomation
             /// </summary>
             /// <param name="destinationX">X coordinate</param>
             /// <param name="destinationY">Y coordinate</param>
-            public INativeActionSyntaxProvider To(int destinationX, int destinationY)
+            public IActionSyntaxProvider To(int destinationX, int destinationY)
             {
                 this.syntaxProvider.commandProvider.DragAndDrop(this.sourceX, this.sourceY, destinationX, destinationY);
                 return this.syntaxProvider;
@@ -426,7 +470,7 @@ namespace FluentAutomation
             /// Enter text into input or textarea element matching <paramref name="selector"/>.
             /// </summary>
             /// <param name="selector">Sizzle selector.</param>
-            public INativeActionSyntaxProvider In(string selector)
+            public IActionSyntaxProvider In(string selector)
             {
                 return this.In(this.syntaxProvider.Find(selector));
             }
@@ -435,7 +479,7 @@ namespace FluentAutomation
             /// Enter text into specified <paramref name="element"/>.
             /// </summary>
             /// <param name="element">IElement factory function.</param>
-            public INativeActionSyntaxProvider In(ElementProxy element)
+            public IActionSyntaxProvider In(ElementProxy element)
             {
                 if (this.eventsEnabled)
                 {
@@ -446,6 +490,19 @@ namespace FluentAutomation
                     this.syntaxProvider.commandProvider.EnterTextWithoutEvents(element, text);
                 }
 
+                return this.syntaxProvider;
+            }
+
+            /// <summary>
+            /// Enter text into the active prompt
+            /// </summary>
+            /// <param name="accessor"></param>
+            public IActionSyntaxProvider In(Alert accessor)
+            {
+                if (accessor.Field != AlertField.Text)
+                    throw new FluentException("FluentAutomation only supports entering text in the text field of a prompt.");
+
+                this.syntaxProvider.commandProvider.AlertEnterText(text);
                 return this.syntaxProvider;
             }
         }
@@ -478,7 +535,7 @@ namespace FluentAutomation
             /// Enter text into input or textarea element matching <paramref name="selector"/>.
             /// </summary>
             /// <param name="selector">Sizzle selector.</param>
-            public INativeActionSyntaxProvider To(string selector)
+            public IActionSyntaxProvider To(string selector)
             {
                 return this.To(this.syntaxProvider.Find(selector));
             }
@@ -487,7 +544,7 @@ namespace FluentAutomation
             /// Enter text into specified <paramref name="element"/>.
             /// </summary>
             /// <param name="element">IElement factory function.</param>
-            public INativeActionSyntaxProvider To(ElementProxy element)
+            public IActionSyntaxProvider To(ElementProxy element)
             {
                 if (this.eventsEnabled)
                 {
@@ -551,7 +608,7 @@ namespace FluentAutomation
             /// Select from element matching <paramref name="selector"/>.
             /// </summary>
             /// <param name="selector">Sizzle selector.</param>
-            public INativeActionSyntaxProvider From(string selector)
+            public IActionSyntaxProvider From(string selector)
             {
                 return this.From(this.syntaxProvider.Find(selector));
             }
@@ -560,7 +617,7 @@ namespace FluentAutomation
             /// Select from specified <paramref name="element"/>.
             /// </summary>
             /// <param name="element">IElement factory function.</param>
-            public INativeActionSyntaxProvider From(ElementProxy element)
+            public IActionSyntaxProvider From(ElementProxy element)
             {
                 if (this.mode == Option.Value)
                 {
@@ -598,28 +655,28 @@ namespace FluentAutomation
         }
         #endregion
 
-        private ExpectSyntaxProvider expect = null;
-        public ExpectSyntaxProvider Expect
+        private AssertSyntaxProvider expect = null;
+        public AssertSyntaxProvider Expect
         {
             get
             {
                 if (this.expect == null)
                 {
-                    this.expect = new ExpectSyntaxProvider(this.commandProvider, FluentAutomation.Settings.ExpectIsAssert ? this.expectProvider.EnableExceptions() : this.expectProvider);
+                    this.expect = new AssertSyntaxProvider(this.commandProvider, FluentSettings.Current.ExpectIsAssert ? this.expectProvider.EnableExceptions() : this.expectProvider);
                 }
 
                 return this.expect;
             }
         }
 
-        private ExpectSyntaxProvider assert = null;
-        public ExpectSyntaxProvider Assert
+        private AssertSyntaxProvider assert = null;
+        public AssertSyntaxProvider Assert
         {
             get
             {
                 if (this.assert == null)
                 {
-                    this.assert = new ExpectSyntaxProvider(this.commandProvider, this.expectProvider.EnableExceptions());
+                    this.assert = new AssertSyntaxProvider(this.commandProvider, this.expectProvider.EnableExceptions());
                 }
 
                 return this.assert;

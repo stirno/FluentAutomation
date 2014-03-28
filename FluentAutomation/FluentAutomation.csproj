@@ -46,28 +46,30 @@
   <ItemGroup>
     <Compile Include="3rdPartyLib\TinyIoC.cs" />
     <Compile Include="ActionSyntaxProvider.cs" />
+    <Compile Include="CommandType.cs" />
     <Compile Include="ElementProxy.cs" />
     <Compile Include="FluentSession.cs" />
+    <Compile Include="FluentConfig.cs" />
     <Compile Include="Interfaces\ISyntaxProvider.cs" />
     <Compile Include="PageObject.cs" />
     <Compile Include="Properties\AssemblyGlobal.cs" />
     <Compile Include="BaseCommandProvider.cs" />
     <Compile Include="BaseFluentTest.cs" />
     <Compile Include="EmbeddedResources.cs" />
-    <Compile Include="ExpectProvider.cs" />
+    <Compile Include="AssertProvider.cs" />
     <Compile Include="Exceptions\FluentException.cs" />
     <Compile Include="Exceptions\FluentExpectFailedException.cs" />
-    <Compile Include="ExpectSyntaxProvider.cs" />
-    <Compile Include="Interfaces\IActionProvider.cs" />
-    <Compile Include="Interfaces\INativeActionSyntaxProvider.cs" />
+    <Compile Include="AssertSyntaxProvider.cs" />
+    <Compile Include="Interfaces\IActionSyntaxProvider.cs" />
     <Compile Include="Interfaces\IFileStoreProvider.cs" />
     <Compile Include="Interfaces\IElement.cs" />
     <Compile Include="FluentTest.cs" />
     <Compile Include="Interfaces\ICommandProvider.cs" />
-    <Compile Include="Interfaces\IExpectProvider.cs" />
+    <Compile Include="Interfaces\IAssertProvider.cs" />
     <Compile Include="LocalFileStoreProvider.cs" />
-    <Compile Include="Settings.cs" />
+    <Compile Include="FluentSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Alert.cs" />
     <Compile Include="Win32Magic.cs" />
   </ItemGroup>
   <ItemGroup>

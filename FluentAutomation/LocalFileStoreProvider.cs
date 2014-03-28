@@ -18,7 +18,7 @@ namespace FluentAutomation
                     fileName += ".png";
                 }
 
-                File.WriteAllBytes(Path.Combine(Settings.ScreenshotPath, fileName), contents);
+                File.WriteAllBytes(Path.Combine(FluentSettings.Current.ScreenshotPath, fileName), contents);
                 return true;
             }
             catch (Exception)

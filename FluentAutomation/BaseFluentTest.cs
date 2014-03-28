@@ -19,7 +19,7 @@ namespace FluentAutomation
                     this.SyntaxProvider.Dispose();
                 }
 
-                if (Settings.MinimizeAllWindowsOnTestStart) Win32Magic.RestoreAllWindows();
+                if (FluentSettings.Current.MinimizeAllWindowsOnTestStart) Win32Magic.RestoreAllWindows();
             }
             catch { };
         }

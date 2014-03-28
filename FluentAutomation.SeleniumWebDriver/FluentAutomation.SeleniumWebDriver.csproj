@@ -64,7 +64,7 @@
     <Compile Include="Element.cs" />
     <Compile Include="CommandProviderList.cs" />
     <Compile Include="MultiCommandProvider.cs" />
-    <Compile Include="MultiExpectProvider.cs" />
+    <Compile Include="MultiAssertProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SeleniumWebDriver.cs" />
     <Compile Include="Sizzle.cs" />

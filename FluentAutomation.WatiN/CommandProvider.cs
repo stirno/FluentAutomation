@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using FluentAutomation.Exceptions;
 using FluentAutomation.Interfaces;
 using WatiNCore = global::WatiN.Core;
+using WatiN.Core.DialogHandlers;
 
 namespace FluentAutomation
 {
@@ -22,6 +23,71 @@ namespace FluentAutomation
             }
         }
 
+        private AlertDialogHandler alertHandler = null;
+        internal AlertDialogHandler AlertHandler
+        {
+            get
+            {
+                if (alertHandler == null)
+                {
+                    alertHandler = new AlertDialogHandler();
+                    lazyBrowser.Value.AddDialogHandler(alertHandler);
+                }
+
+                return alertHandler;
+            }
+
+            set
+            {
+                if (value == null)
+                    lazyBrowser.Value.RemoveDialogHandler(alertHandler);
+            }
+        }
+
+        private ConfirmDialogHandler confirmHandler = null;
+        internal ConfirmDialogHandler ConfirmHandler
+        {
+            get
+            {
+                if (confirmHandler == null)
+                {
+                    confirmHandler = new ConfirmDialogHandler();
+                    lazyBrowser.Value.AddDialogHandler(alertHandler);
+                }
+
+                return confirmHandler;
+            }
+
+            set
+            {
+                if (value == null)
+                    lazyBrowser.Value.RemoveDialogHandler(confirmHandler);
+            }
+        }
+
+        private PromptDialogHandler promptHandler = null;
+        internal PromptDialogHandler PromptHandler
+        {
+            get
+            {
+                if (promptHandler == null)
+                {
+                    promptHandler = new PromptDialogHandler("");
+                    lazyBrowser.Value.AddDialogHandler(alertHandler);
+                }
+
+                return promptHandler;
+            }
+
+            set
+            {
+                if (value == null)
+                    lazyBrowser.Value.RemoveDialogHandler(promptHandler);
+            }
+        }
+
+        private WatiNCore.DomContainer ActiveDomContainer { get; set; }
+
         public CommandProvider(Func<WatiNCore.IE> browserFactory)
         {
             FluentTest.ProviderInstance = null;
@@ -34,6 +100,11 @@ namespace FluentAutomation
                     FluentTest.ProviderInstance = bf;
                 else
                     FluentTest.IsMultiBrowserTest = true;
+
+                // force init handler
+                var hack = this.alertHandler;
+                var hack2 = this.confirmHandler;
+                this.ActiveDomContainer = bf.DomContainer;
 
                 return bf;
             });
@@ -133,13 +204,13 @@ namespace FluentAutomation
         public void DoubleClick(ElementProxy element)
         {
             var el = element.Element as Element;
-            this.browser.DomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).dblclick(); }}", el.AutomationElement.GetJavascriptElementReference()));
+            this.ActiveDomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).dblclick(); }}", el.AutomationElement.GetJavascriptElementReference()));
         }
 
         public void RightClick(ElementProxy element)
         {
             var el = element.Element as Element;
-            this.browser.DomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).trigger('contextmenu'); }}", el.AutomationElement.GetJavascriptElementReference()));
+            this.ActiveDomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).trigger('contextmenu'); }}", el.AutomationElement.GetJavascriptElementReference()));
         }
 
         public void Hover(int x, int y)
@@ -204,7 +275,7 @@ namespace FluentAutomation
             var el = element.Element as Element;
             if (el.IsText)
             {
-                var txt = new WatiNCore.TextField(this.browser.DomContainer, el.AutomationElement.NativeElement);
+                var txt = new WatiNCore.TextField(this.ActiveDomContainer, el.AutomationElement.NativeElement);
                 txt.TypeText(text);
             }
         }
@@ -214,9 +285,9 @@ namespace FluentAutomation
             var el = element.Element as Element;
             if (el.IsText)
             {
-                var txt = new WatiNCore.TextField(this.browser.DomContainer, el.AutomationElement.NativeElement);
+                var txt = new WatiNCore.TextField(this.ActiveDomContainer, el.AutomationElement.NativeElement);
                 txt.Value = text;
-                this.browser.DomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).trigger('keyup'); }}", el.AutomationElement.GetJavascriptElementReference()));
+                this.ActiveDomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).trigger('keyup'); }}", el.AutomationElement.GetJavascriptElementReference()));
             }
         }
 
@@ -225,7 +296,7 @@ namespace FluentAutomation
             var el = element.Element as Element;
             if (el.IsText)
             {
-                var txt = new WatiNCore.TextField(this.browser.DomContainer, el.AutomationElement.NativeElement);
+                var txt = new WatiNCore.TextField(this.ActiveDomContainer, el.AutomationElement.NativeElement);
                 txt.AppendText(text);
             }
         }
@@ -235,9 +306,9 @@ namespace FluentAutomation
             var el = element.Element as Element;
             if (el.IsText)
             {
-                var txt = new WatiNCore.TextField(this.browser.DomContainer, el.AutomationElement.NativeElement);
+                var txt = new WatiNCore.TextField(this.ActiveDomContainer, el.AutomationElement.NativeElement);
                 txt.Value = text;
-                this.browser.DomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).trigger('keyup'); }}", el.AutomationElement.GetJavascriptElementReference()));
+                this.ActiveDomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).trigger('keyup'); }}", el.AutomationElement.GetJavascriptElementReference()));
             }
         }
 
@@ -246,7 +317,7 @@ namespace FluentAutomation
             var el = element.Element as Element;
             if (el.IsSelect)
             {
-                var sl = new WatiNCore.SelectList(this.browser.DomContainer, el.AutomationElement.NativeElement);
+                var sl = new WatiNCore.SelectList(this.ActiveDomContainer, el.AutomationElement.NativeElement);
                 sl.Select(optionText);
                 fireOnChange(el.AutomationElement);
             }
@@ -257,7 +328,7 @@ namespace FluentAutomation
             var el = element.Element as Element;
             if (el.IsSelect)
             {
-                var sl = new WatiNCore.SelectList(this.browser.DomContainer, el.AutomationElement.NativeElement);
+                var sl = new WatiNCore.SelectList(this.ActiveDomContainer, el.AutomationElement.NativeElement);
                 sl.SelectByValue(optionValue);
                 fireOnChange(el.AutomationElement);
             }
@@ -268,7 +339,7 @@ namespace FluentAutomation
             var el = element.Element as Element;
             if (el.IsSelect)
             {
-                var sl = new WatiNCore.SelectList(this.browser.DomContainer, el.AutomationElement.NativeElement);
+                var sl = new WatiNCore.SelectList(this.ActiveDomContainer, el.AutomationElement.NativeElement);
                 sl.Options[optionIndex].Select();
                 fireOnChange(el.AutomationElement);
             }
@@ -279,7 +350,7 @@ namespace FluentAutomation
             var el = element.Element as Element;
             if (el.IsSelect && el.IsMultipleSelect)
             {
-                var sl = new WatiNCore.SelectList(this.browser.DomContainer, el.AutomationElement.NativeElement);
+                var sl = new WatiNCore.SelectList(this.ActiveDomContainer, el.AutomationElement.NativeElement);
                 foreach (var text in optionTextCollection)
                 {
                     sl.Select(text);
@@ -293,7 +364,8 @@ namespace FluentAutomation
             var el = element.Element as Element;
             if (el.IsSelect && el.IsMultipleSelect)
             {
-                var sl = new WatiNCore.SelectList(this.browser.DomContainer, el.AutomationElement.NativeElement);
+                new WatiNCore.SelectList(this.browser.Frame("").DomContainer, el.AutomationElement.NativeElement);
+                var sl = new WatiNCore.SelectList(this.ActiveDomContainer, el.AutomationElement.NativeElement);
                 foreach (var val in optionValues)
                 {
                     sl.SelectByValue(val);
@@ -307,7 +379,7 @@ namespace FluentAutomation
             var el = element.Element as Element;
             if (el.IsSelect && el.IsMultipleSelect)
             {
-                var sl = new WatiNCore.SelectList(this.browser.DomContainer, el.AutomationElement.NativeElement);
+                var sl = new WatiNCore.SelectList(this.ActiveDomContainer, el.AutomationElement.NativeElement);
                 foreach (var i in optionIndices)
                 {
                     sl.Options[i].Select();
@@ -347,9 +419,52 @@ namespace FluentAutomation
             this.browser.Dispose();
         }
 
+        public void SwitchToWindow(string windowName)
+        {
+            this.Act(CommandType.Action, () =>
+            {
+                this.ActiveDomContainer = WatiNCore.Browser.AttachTo<WatiNCore.IE>(WatiNCore.Find.ByTitle(windowName)).DomContainer;
+            });
+        }
+
+        public void SwitchToFrame(string frameName)
+        {
+            this.Act(CommandType.Action, () =>
+            {
+                this.ActiveDomContainer = this.browser.Frame(frameName).DomContainer;
+            });
+        }
+
+        public void AlertClick(Alert accessor)
+        {
+            if (accessor.Field == AlertField.OKButton)
+            {
+                this.AlertHandler.WaitUntilExists((int)FluentSettings.Current.DefaultWaitTimeout.TotalSeconds);
+                this.AlertHandler.OKButton.Click();
+            }
+            else if (accessor.Field == AlertField.CancelButton)
+            {
+                this.ConfirmHandler.WaitUntilExists((int)FluentSettings.Current.DefaultWaitTimeout.TotalSeconds);
+                this.ConfirmHandler.CancelButton.Click();
+            }
+            else
+                throw new FluentException("FluentAutomation only supports clicking on OK or Cancel in alerts or prompts.");
+        }
+
+        public void AlertText(Action<string> matchFunc)
+        {
+            this.ConfirmHandler.WaitUntilExists((int)FluentSettings.Current.DefaultWaitTimeout.TotalSeconds);
+            matchFunc(this.ConfirmHandler.Message);
+        }
+
+        public void AlertEnterText(string text)
+        {
+            throw new FluentException("Due to inconsistent behavior, handling of prompts that accept text entry is disabled when using WatiN with FluentAutomation.");
+        }
+
         private void fireOnChange(WatiNCore.Element element)
         {
-            this.browser.DomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).change(); }}", element.GetJavascriptElementReference()));
+            this.ActiveDomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).change(); }}", element.GetJavascriptElementReference()));
         }
     }
 }

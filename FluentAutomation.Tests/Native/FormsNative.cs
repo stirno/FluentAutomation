@@ -11,9 +11,10 @@ namespace FluentAutomation.Tests
     {
         public FormsNative()
         {
-            Settings.ScreenshotOnFailedAction = true;
-            Settings.ScreenshotOnFailedExpect = true;
-            Settings.ExpectIsAssert = false;
+            Config
+                    .ScreenshotOnFailedAction(true)
+                    .ScreenshotOnFailedExpect(true)
+                    .ExpectIsAssert(false);
 
             FluentSession.EnableStickySession();
             FluentSession.DisableStickySession();

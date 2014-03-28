@@ -16,18 +16,18 @@ namespace FluentAutomation
         /// <summary>
         /// Actions - Fluent's action functionality.
         /// </summary>
-        public INativeActionSyntaxProvider I
+        public IActionSyntaxProvider I
         {
             get
             {
-                var provider = SyntaxProvider as INativeActionSyntaxProvider;
+                var provider = SyntaxProvider as IActionSyntaxProvider;
                 if (provider == null || provider.IsDisposed())
                 {
-                    this.Session.BootstrapTypeRegistration(FluentAutomation.Settings.Registration);
+                    this.Session.BootstrapTypeRegistration(FluentSettings.Current.ContainerRegistration);
                     SyntaxProvider = this.Session.GetSyntaxProvider();
                 }
 
-                return SyntaxProvider as INativeActionSyntaxProvider;
+                return SyntaxProvider as IActionSyntaxProvider;
             }
         }
 
@@ -68,6 +68,14 @@ namespace FluentAutomation
                 }
 
                 return session;
+            }
+        }
+
+        public FluentConfig Config
+        {
+            get
+            {
+                return FluentConfig.Current;
             }
         }
     }

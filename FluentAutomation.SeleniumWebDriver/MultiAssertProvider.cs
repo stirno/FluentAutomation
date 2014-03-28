@@ -2,20 +2,21 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace FluentAutomation
 {
-    public class MultiExpectProvider : IExpectProvider
+    public class MultiAssertProvider : IAssertProvider
     {
         private readonly CommandProviderList commandProviders = null;
-        private readonly List<KeyValuePair<IExpectProvider, ICommandProvider>> providers = null;
+        private readonly List<KeyValuePair<IAssertProvider, ICommandProvider>> providers = null;
 
-        public MultiExpectProvider(CommandProviderList commandProviders)
+        public MultiAssertProvider(CommandProviderList commandProviders)
         {
             this.commandProviders = commandProviders; // Easier than recomposing it for EnableExceptions() call, so storing it
-            this.providers = commandProviders.Select(x => new KeyValuePair<IExpectProvider, ICommandProvider>(new ExpectProvider(x), x)).ToList();
+            this.providers = commandProviders.Select(x => new KeyValuePair<IAssertProvider, ICommandProvider>(new AssertProvider(x), x)).ToList();
         }
 
         public void Count(string selector, int count)
@@ -27,7 +28,7 @@ namespace FluentAutomation
         {
             Parallel.ForEach(element.Elements, e =>
             {
-                new ExpectProvider(e.Key).Count(new ElementProxy(e.Key, e.Value), count);
+                new AssertProvider(e.Key).Count(new ElementProxy(e.Key, e.Value), count);
             });
         }
 
@@ -40,7 +41,7 @@ namespace FluentAutomation
         {
             Parallel.ForEach(element.Elements, e =>
             {
-                new ExpectProvider(e.Key).CssClass(new ElementProxy(e.Key, e.Value), className);
+                new AssertProvider(e.Key).CssClass(new ElementProxy(e.Key, e.Value), className);
             });
         }
 
@@ -53,7 +54,7 @@ namespace FluentAutomation
         {
             Parallel.ForEach(element.Elements, e =>
             {
-                new ExpectProvider(e.Key).Text(new ElementProxy(e.Key, e.Value), text);
+                new AssertProvider(e.Key).Text(new ElementProxy(e.Key, e.Value), text);
             });
         }
 
@@ -66,7 +67,7 @@ namespace FluentAutomation
         {
             Parallel.ForEach(element.Elements, e =>
             {
-                new ExpectProvider(e.Key).Text(new ElementProxy(e.Key, e.Value), matchFunc);
+                new AssertProvider(e.Key).Text(new ElementProxy(e.Key, e.Value), matchFunc);
             });
         }
 
@@ -79,7 +80,7 @@ namespace FluentAutomation
         {
             Parallel.ForEach(element.Elements, e =>
             {
-                new ExpectProvider(e.Key).Value(new ElementProxy(e.Key, e.Value), value);
+                new AssertProvider(e.Key).Value(new ElementProxy(e.Key, e.Value), value);
             });
         }
 
@@ -92,7 +93,7 @@ namespace FluentAutomation
         {
             Parallel.ForEach(element.Elements, e =>
             {
-                new ExpectProvider(e.Key).Value(new ElementProxy(e.Key, e.Value), matchFunc);
+                new AssertProvider(e.Key).Value(new ElementProxy(e.Key, e.Value), matchFunc);
             });
         }
 
@@ -126,11 +127,21 @@ namespace FluentAutomation
             Parallel.ForEach(this.providers, x => x.Key.Exists(selector));
         }
 
+        public void AlertText(string text)
+        {
+            Parallel.ForEach(this.providers, x => x.Key.AlertText(text));
+        }
+
+        public void AlertText(Expression<Func<string, bool>> matchFunc)
+        {
+            Parallel.ForEach(this.providers, x => x.Key.AlertText(matchFunc));
+        }
+
         public bool ThrowExceptions { get; set; }
 
-        public IExpectProvider EnableExceptions()
+        public IAssertProvider EnableExceptions()
         {
-            var provider = new MultiExpectProvider(this.commandProviders);
+            var provider = new MultiAssertProvider(this.commandProviders);
             provider.ThrowExceptions = true;
 
             return provider;

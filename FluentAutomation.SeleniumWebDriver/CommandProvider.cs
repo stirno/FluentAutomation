@@ -42,9 +42,9 @@ namespace FluentAutomation
                 webDriver.Manage().Cookies.DeleteAllCookies();
                 webDriver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(10));
 
-                if (FluentAutomation.Settings.WindowHeight.HasValue && FluentAutomation.Settings.WindowWidth.HasValue)
+                if (FluentSettings.Current.WindowHeight.HasValue && FluentSettings.Current.WindowWidth.HasValue)
                 {
-                    webDriver.Manage().Window.Size = new Size(FluentAutomation.Settings.WindowWidth.Value, FluentAutomation.Settings.WindowHeight.Value);
+                    webDriver.Manage().Window.Size = new Size(FluentSettings.Current.WindowWidth.Value, FluentSettings.Current.WindowHeight.Value);
                 }
 
                 return webDriver;
@@ -63,7 +63,7 @@ namespace FluentAutomation
 
         public void Navigate(Uri url)
         {
-            this.Act(() => this.webDriver.Navigate().GoToUrl(url));
+            this.Act(CommandType.Action, () => this.webDriver.Navigate().GoToUrl(url));
         }
 
         public ElementProxy Find(string selector)
@@ -110,7 +110,7 @@ namespace FluentAutomation
 
         public void Click(int x, int y)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
                 var rootElement = this.Find("html").Element as Element;
                 new Actions(this.webDriver)
@@ -122,7 +122,7 @@ namespace FluentAutomation
 
         public void Click(ElementProxy element, int x, int y)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
                 var containerElement = element.Element as Element;
                 new Actions(this.webDriver)
@@ -134,7 +134,7 @@ namespace FluentAutomation
 
         public void Click(ElementProxy element)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
                 var containerElement = element.Element as Element;
                 new Actions(this.webDriver)
@@ -145,7 +145,7 @@ namespace FluentAutomation
 
         public void DoubleClick(int x, int y)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
                 var rootElement = this.Find("html").Element as Element;
                 new Actions(this.webDriver)
@@ -157,7 +157,7 @@ namespace FluentAutomation
 
         public void DoubleClick(ElementProxy element, int x, int y)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
                 var containerElement = element.Element as Element;
                 new Actions(this.webDriver)
@@ -169,7 +169,7 @@ namespace FluentAutomation
 
         public void DoubleClick(ElementProxy element)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
                 var containerElement = element.Element as Element;
                 new Actions(this.webDriver)
@@ -180,7 +180,7 @@ namespace FluentAutomation
         
         public void RightClick(ElementProxy element)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
                 var containerElement = element.Element as Element;
                 new Actions(this.webDriver)
@@ -191,7 +191,7 @@ namespace FluentAutomation
 
         public void Hover(int x, int y)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
                 var rootElement = this.Find("html").Element as Element;
                 new Actions(this.webDriver)
@@ -202,7 +202,7 @@ namespace FluentAutomation
 
         public void Hover(ElementProxy element, int x, int y)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
                 var containerElement = element.Element as Element;
                 new Actions(this.webDriver)
@@ -213,7 +213,7 @@ namespace FluentAutomation
 
         public void Hover(ElementProxy element)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
                 var unwrappedElement = element.Element as Element;
                 new Actions(this.webDriver)
@@ -224,7 +224,7 @@ namespace FluentAutomation
 
         public void Focus(ElementProxy element)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
                 var unwrappedElement = element.Element as Element;
 
@@ -245,7 +245,7 @@ namespace FluentAutomation
 
         public void DragAndDrop(int sourceX, int sourceY, int destinationX, int destinationY)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
                 var rootElement = this.Find("html").Element as Element;
                 new Actions(this.webDriver)
@@ -259,7 +259,7 @@ namespace FluentAutomation
 
         public void DragAndDrop(ElementProxy source, int sourceOffsetX, int sourceOffsetY, ElementProxy target, int targetOffsetX, int targetOffsetY)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
                 var element = source.Element as Element;
                 var targetElement = target.Element as Element;
@@ -274,7 +274,7 @@ namespace FluentAutomation
 
         public void DragAndDrop(ElementProxy source, ElementProxy target)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
                 var unwrappedSource = source.Element as Element;
                 var unwrappedTarget = target.Element as Element;
@@ -287,7 +287,7 @@ namespace FluentAutomation
 
         public void EnterText(ElementProxy element, string text)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
                 var unwrappedElement = element.Element as Element;
 
@@ -298,7 +298,7 @@ namespace FluentAutomation
 
         public void EnterTextWithoutEvents(ElementProxy element, string text)
         {
-            this.Act(() =>  
+            this.Act(CommandType.Action, () =>  
             {
                 var unwrappedElement = element.Element as Element;
 
@@ -308,7 +308,7 @@ namespace FluentAutomation
 
         public void AppendText(ElementProxy element, string text)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
                 var unwrappedElement = element.Element as Element;
                 unwrappedElement.WebElement.SendKeys(text);
@@ -317,7 +317,7 @@ namespace FluentAutomation
 
         public void AppendTextWithoutEvents(ElementProxy element, string text)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
                 var unwrappedElement = element.Element as Element;
                 ((IJavaScriptExecutor)this.webDriver).ExecuteScript(string.Format("if (typeof fluentjQuery != 'undefined') {{ fluentjQuery(\"{0}\").val(fluentjQuery(\"{0}\").val() + \"{1}\").trigger('change'); }}", unwrappedElement.Selector.Replace("\"", ""), text.Replace("\"", "")));
@@ -326,7 +326,7 @@ namespace FluentAutomation
 
         public void SelectText(ElementProxy element, string optionText)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
                 var unwrappedElement = element.Element as Element;
 
@@ -338,7 +338,7 @@ namespace FluentAutomation
 
         public void MultiSelectValue(ElementProxy element, string[] optionValues)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
                 var unwrappedElement = element.Element as Element;
 
@@ -354,7 +354,7 @@ namespace FluentAutomation
 
         public void MultiSelectIndex(ElementProxy element, int[] optionIndices)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
                 var unwrappedElement = element.Element as Element;
 
@@ -370,7 +370,7 @@ namespace FluentAutomation
 
         public void MultiSelectText(ElementProxy element, string[] optionTextCollection)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
                 var unwrappedElement = element.Element as Element;
 
@@ -386,7 +386,7 @@ namespace FluentAutomation
 
         public void SelectValue(ElementProxy element, string optionValue)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
                 var unwrappedElement = element.Element as Element;
 
@@ -398,7 +398,7 @@ namespace FluentAutomation
 
         public void SelectIndex(ElementProxy element, int optionIndex)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
                 var unwrappedElement = element.Element as Element;
 
@@ -410,11 +410,11 @@ namespace FluentAutomation
 
         public override void TakeScreenshot(string screenshotName)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
                 // get raw screenshot
                 var screenshotDriver = (ITakesScreenshot)this.webDriver;
-                var tmpImagePath = Path.Combine(Settings.UserTempDirectory, screenshotName);
+                var tmpImagePath = Path.Combine(FluentSettings.Current.UserTempDirectory, screenshotName);
                 screenshotDriver.GetScreenshot().SaveAsFile(tmpImagePath, ImageFormat.Png);
 
                 // save to file store
@@ -425,21 +425,11 @@ namespace FluentAutomation
 
         public void UploadFile(ElementProxy element, int x, int y, string fileName)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
                 // wait before typing in the field
                 var task = Task.Factory.StartNew(() =>
                 {
-                    //switch (SeleniumWebDriver.SelectedBrowser)
-                    //{
-                    //    case SeleniumWebDriver.Browser.Firefox:
-                    //        this.Wait(TimeSpan.FromMilliseconds(1000));
-                    //        break;
-                    //    case SeleniumWebDriver.Browser.Chrome:
-                    //        this.Wait(TimeSpan.FromMilliseconds(1500));
-                    //        break;
-                    //}
-
                     this.Type(fileName);
                 });
 
@@ -459,12 +449,12 @@ namespace FluentAutomation
 
         public void Press(string keys)
         {
-            this.Act(() => System.Windows.Forms.SendKeys.SendWait(keys));
+            this.Act(CommandType.Action, () => System.Windows.Forms.SendKeys.SendWait(keys));
         }
 
         public void Type(string text)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
                 foreach (var character in text)
                 {
@@ -472,6 +462,46 @@ namespace FluentAutomation
                     this.Wait(TimeSpan.FromMilliseconds(20));
                 }
             });
+        }
+
+        public void SwitchToWindow(string windowName)
+        {
+            this.Act(CommandType.Action, () =>
+            {
+                this.webDriver.SwitchTo().Window(windowName);
+            });
+        }
+
+        public void SwitchToFrame(string frameName)
+        {
+            this.Act(CommandType.Action, () =>
+            {
+                this.webDriver.SwitchTo().Frame(frameName);
+            });
+        }
+
+        public void AlertClick(Alert accessor)
+        {
+            var alert = this.webDriver.SwitchTo().Alert();
+
+            if (accessor.Field == AlertField.OKButton)
+                alert.Accept();
+            else if (accessor.Field == AlertField.CancelButton)
+                alert.Dismiss();
+            else
+                throw new FluentException("FluentAutomation only supports clicking on OK or Cancel in alerts or prompts.");
+        }
+
+        public void AlertText(Action<string> matchFunc)
+        {
+            var alert = this.webDriver.SwitchTo().Alert();
+            matchFunc(alert.Text);
+        }
+
+        public void AlertEnterText(string text)
+        {
+            var alert = this.webDriver.SwitchTo().Alert();
+            alert.SendKeys(text);
         }
 
         public void Dispose()

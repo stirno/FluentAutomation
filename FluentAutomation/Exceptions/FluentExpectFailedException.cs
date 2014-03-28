@@ -19,4 +19,12 @@ namespace FluentAutomation.Exceptions
         {
         }
     }
+
+    public class FluentAssertFailedException : FluentExpectFailedException
+    {
+        public FluentAssertFailedException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
+    }
 }

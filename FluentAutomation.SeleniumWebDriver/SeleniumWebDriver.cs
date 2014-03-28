@@ -81,10 +81,10 @@ namespace FluentAutomation
         /// <param name="browser"></param>
         public static void Bootstrap(Browser browser)
         {
-            FluentAutomation.Settings.Registration = (container) =>
+            FluentSettings.Current.ContainerRegistration = (container) =>
             {
                 container.Register<ICommandProvider, CommandProvider>();
-                container.Register<IExpectProvider, ExpectProvider>();
+                container.Register<IAssertProvider, AssertProvider>();
                 container.Register<IFileStoreProvider, LocalFileStoreProvider>();
 
                 var browserDriver = GenerateBrowserSpecificDriver(browser);
@@ -100,7 +100,7 @@ namespace FluentAutomation
                 return;
             }
 
-            FluentAutomation.Settings.Registration = (container) =>
+            FluentSettings.Current.ContainerRegistration = (container) =>
             {
                 var webDrivers = new List<Func<IWebDriver>>();
                 browsers.Distinct().ToList().ForEach(x => webDrivers.Add(GenerateBrowserSpecificDriver(x)));
@@ -109,7 +109,7 @@ namespace FluentAutomation
                 container.Register<CommandProviderList>(commandProviders);
 
                 container.Register<ICommandProvider, MultiCommandProvider>();
-                container.Register<IExpectProvider, MultiExpectProvider>();
+                container.Register<IAssertProvider, MultiAssertProvider>();
                 container.Register<IFileStoreProvider, LocalFileStoreProvider>();
             };
         }
@@ -121,10 +121,10 @@ namespace FluentAutomation
         /// <param name="browser"></param>
         public static void Bootstrap(Uri driverUri, Browser browser)
         {
-            FluentAutomation.Settings.Registration = (container) =>
+            FluentSettings.Current.ContainerRegistration = (container) =>
             {
                 container.Register<ICommandProvider, CommandProvider>();
-                container.Register<IExpectProvider, ExpectProvider>();
+                container.Register<IAssertProvider, AssertProvider>();
                 container.Register<IFileStoreProvider, LocalFileStoreProvider>();
 
                 DesiredCapabilities browserCapabilities = GenerateDesiredCapabilities(browser);
@@ -139,10 +139,10 @@ namespace FluentAutomation
         /// <param name="capabilities"></param>
         public static void Bootstrap(Uri driverUri, Browser browser, Dictionary<string, object> capabilities)
         {
-            FluentAutomation.Settings.Registration = (container) =>
+            FluentSettings.Current.ContainerRegistration = (container) =>
             {
                 container.Register<ICommandProvider, CommandProvider>();
-                container.Register<IExpectProvider, ExpectProvider>();
+                container.Register<IAssertProvider, AssertProvider>();
                 container.Register<IFileStoreProvider, LocalFileStoreProvider>();
 
                 DesiredCapabilities browserCapabilities = GenerateDesiredCapabilities(browser);
@@ -157,10 +157,10 @@ namespace FluentAutomation
 
         public static void Bootstrap(Uri driverUri, Dictionary<string, object> capabilities)
         {
-            FluentAutomation.Settings.Registration = (container) =>
+            FluentSettings.Current.ContainerRegistration = (container) =>
             {
                 container.Register<ICommandProvider, CommandProvider>();
-                container.Register<IExpectProvider, ExpectProvider>();
+                container.Register<IAssertProvider, AssertProvider>();
                 container.Register<IFileStoreProvider, LocalFileStoreProvider>();
 
                 DesiredCapabilities browserCapabilities = new DesiredCapabilities(capabilities);

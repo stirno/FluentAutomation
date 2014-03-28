@@ -50,7 +50,7 @@ namespace FluentAutomation.Tests
     {
         public SampleTest()
         {
-            FluentAutomation.Settings.DefaultWaitUntilTimeout = TimeSpan.FromMilliseconds(1500);
+            Config.DefaultWaitUntilTimeout(TimeSpan.FromMilliseconds(1500));
             SeleniumWebDriver.Bootstrap(SeleniumWebDriver.Browser.Chrome);
         }
 
@@ -60,7 +60,7 @@ namespace FluentAutomation.Tests
             new BingSearchPage(this)
                 .Go()
                 .Search("FluentAutomation")
-                .FindResultUrl("http://fluent.stirno.com/blog/FluentAutomation-scriptcs/");
+                .FindResultUrl("http://fluent.stirno.com/");
         }
     }
 }
