@@ -4,13 +4,14 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using FluentAutomation.Interfaces;
+using FluentAutomation.Exceptions;
 
 namespace FluentAutomation
 {
     public class AssertSyntaxProvider : BaseAssertSyntaxProvider
     {
-        public AssertSyntaxProvider(ICommandProvider commandProvider, IAssertProvider expectProvider)
-            : base(commandProvider, expectProvider)
+        public AssertSyntaxProvider(ICommandProvider commandProvider, IAssertProvider assertProvider)
+            : base(commandProvider, assertProvider)
         {
         }
 
@@ -22,15 +23,15 @@ namespace FluentAutomation
         /// <returns><c>AssertCountSyntaxProvider</c></returns>
         public AssertCountSyntaxProvider Count(int count)
         {
-            return new AssertCountSyntaxProvider(this.commandProvider, this.expectProvider, this.expectSyntaxProvider, count);
+            return new AssertCountSyntaxProvider(this.commandProvider, this.assertProvider, this.assertSyntaxProvider, count);
         }
 
         public class AssertCountSyntaxProvider : BaseAssertSyntaxProvider
         {
             private readonly int count = 0;
 
-            public AssertCountSyntaxProvider(ICommandProvider commandProvider, IAssertProvider expectProvider, AssertSyntaxProvider expectSyntaxProvider, int count)
-                : base(commandProvider, expectProvider, expectSyntaxProvider)
+            public AssertCountSyntaxProvider(ICommandProvider commandProvider, IAssertProvider assertProvider, AssertSyntaxProvider assertSyntaxProvider, int count)
+                : base(commandProvider, assertProvider, assertSyntaxProvider)
             {
                 this.count = count;
             }
@@ -41,8 +42,8 @@ namespace FluentAutomation
             /// <param name="selector">Sizzle selector.</param>
             public AssertSyntaxProvider Of(string selector)
             {
-                this.expectProvider.Count(selector, this.count);
-                return this.expectSyntaxProvider;
+                this.assertProvider.Count(selector, this.count);
+                return this.assertSyntaxProvider;
             }
 
             /// <summary>
@@ -51,8 +52,8 @@ namespace FluentAutomation
             /// <param name="elements">IElement collection factory function.</param>
             public AssertSyntaxProvider Of(ElementProxy elements)
             {
-                this.expectProvider.Count(elements, this.count);
-                return this.expectSyntaxProvider;
+                this.assertProvider.Count(elements, this.count);
+                return this.assertSyntaxProvider;
             }
         }
         #endregion
@@ -65,15 +66,15 @@ namespace FluentAutomation
         /// <returns><c>AssertClassSyntaxProvider</c></returns>
         public AssertClassSyntaxProvider Class(string className)
         {
-            return new AssertClassSyntaxProvider(this.commandProvider, this.expectProvider, this.expectSyntaxProvider, className);
+            return new AssertClassSyntaxProvider(this.commandProvider, this.assertProvider, this.assertSyntaxProvider, className);
         }
 
         public class AssertClassSyntaxProvider : BaseAssertSyntaxProvider
         {
             private readonly string className = null;
 
-            public AssertClassSyntaxProvider(ICommandProvider commandProvider, IAssertProvider expectProvider, AssertSyntaxProvider expectSyntaxProvider, string className)
-                : base(commandProvider, expectProvider, expectSyntaxProvider)
+            public AssertClassSyntaxProvider(ICommandProvider commandProvider, IAssertProvider assertProvider, AssertSyntaxProvider assertSyntaxProvider, string className)
+                : base(commandProvider, assertProvider, assertSyntaxProvider)
             {
                 this.className = className;
             }
@@ -84,8 +85,8 @@ namespace FluentAutomation
             /// <param name="selector">Sizzle selector.</param>
             public AssertSyntaxProvider On(string selector)
             {
-                this.expectProvider.CssClass(selector, this.className);
-                return this.expectSyntaxProvider;
+                this.assertProvider.CssClass(selector, this.className);
+                return this.assertSyntaxProvider;
             }
 
             /// <summary>
@@ -94,8 +95,8 @@ namespace FluentAutomation
             /// <param name="element">IElement factory function.</param>
             public AssertSyntaxProvider On(ElementProxy element)
             {
-                this.expectProvider.CssClass(element, this.className);
-                return this.expectSyntaxProvider;
+                this.assertProvider.CssClass(element, this.className);
+                return this.assertSyntaxProvider;
             }
         }
         #endregion
@@ -108,7 +109,7 @@ namespace FluentAutomation
         /// <returns><c>AssertTextSyntaxProvider</c></returns>
         public AssertTextSyntaxProvider Text(string text)
         {
-            return new AssertTextSyntaxProvider(this.commandProvider, this.expectProvider, this.expectSyntaxProvider, text);
+            return new AssertTextSyntaxProvider(this.commandProvider, this.assertProvider, this.assertSyntaxProvider, text);
         }
 
         /// <summary>
@@ -118,7 +119,7 @@ namespace FluentAutomation
         /// <returns><c>AssertTextSyntaxProvider</c></returns>
         public AssertTextSyntaxProvider Text(Expression<Func<string, bool>> matchFunc)
         {
-            return new AssertTextSyntaxProvider(this.commandProvider, this.expectProvider, this.expectSyntaxProvider, matchFunc);
+            return new AssertTextSyntaxProvider(this.commandProvider, this.assertProvider, this.assertSyntaxProvider, matchFunc);
         }
 
         public class AssertTextSyntaxProvider : BaseAssertSyntaxProvider
@@ -126,14 +127,14 @@ namespace FluentAutomation
             private readonly string text = null;
             private readonly Expression<Func<string, bool>> matchFunc = null;
 
-            public AssertTextSyntaxProvider(ICommandProvider commandProvider, IAssertProvider expectProvider, AssertSyntaxProvider expectSyntaxProvider, string text)
-                : base(commandProvider, expectProvider, expectSyntaxProvider)
+            public AssertTextSyntaxProvider(ICommandProvider commandProvider, IAssertProvider assertProvider, AssertSyntaxProvider assertSyntaxProvider, string text)
+                : base(commandProvider, assertProvider, assertSyntaxProvider)
             {
                 this.text = text;
             }
 
-            public AssertTextSyntaxProvider(ICommandProvider commandProvider, IAssertProvider expectProvider, AssertSyntaxProvider expectSyntaxProvider, Expression<Func<string, bool>> matchFunc)
-                : base(commandProvider, expectProvider, expectSyntaxProvider)
+            public AssertTextSyntaxProvider(ICommandProvider commandProvider, IAssertProvider assertProvider, AssertSyntaxProvider assertSyntaxProvider, Expression<Func<string, bool>> matchFunc)
+                : base(commandProvider, assertProvider, assertSyntaxProvider)
             {
                 this.matchFunc = matchFunc;
             }
@@ -146,14 +147,14 @@ namespace FluentAutomation
             {
                 if (!string.IsNullOrEmpty(this.text))
                 {
-                    this.expectProvider.Text(selector, this.text);
+                    this.assertProvider.Text(selector, this.text);
                 }
                 else if (this.matchFunc != null)
                 {
-                    this.expectProvider.Text(selector, this.matchFunc);
+                    this.assertProvider.Text(selector, this.matchFunc);
                 }
 
-                return this.expectSyntaxProvider;
+                return this.assertSyntaxProvider;
             }
 
             /// <summary>
@@ -164,32 +165,32 @@ namespace FluentAutomation
             {
                 if (!string.IsNullOrEmpty(this.text))
                 {
-                    this.expectProvider.Text(element, this.text);
+                    this.assertProvider.Text(element, this.text);
                 }
                 else if (this.matchFunc != null)
                 {
-                    this.expectProvider.Text(element, this.matchFunc);
+                    this.assertProvider.Text(element, this.matchFunc);
                 }
 
-                return this.expectSyntaxProvider;
+                return this.assertSyntaxProvider;
             }
 
             /// <summary>
-            /// Look in the active Alert/Prompt for the specified text.
+            /// Look in the active Alert/Prompt for the specified text. If the text does not match the prompt will be cleanly exited to allow clean failure or continuation of the test.
             /// </summary>
             /// <param name="accessor"></param>
             public AssertSyntaxProvider In(Alert accessor)
             {
                 if (this.matchFunc == null)
                 {
-                    this.expectProvider.AlertText(this.text);
+                    this.assertProvider.AlertText(this.text);
                 }
                 else
                 {
-                    this.expectProvider.AlertText(this.matchFunc);
+                    this.assertProvider.AlertText(this.matchFunc);
                 }
 
-                return this.expectSyntaxProvider;
+                return this.assertSyntaxProvider;
             }
         }
         #endregion
@@ -212,7 +213,7 @@ namespace FluentAutomation
         /// <returns><c>AssertValueSyntaxProvider</c></returns>
         public AssertValueSyntaxProvider Value(string value)
         {
-            return new AssertValueSyntaxProvider(this.commandProvider, this.expectProvider, this.expectSyntaxProvider, value);
+            return new AssertValueSyntaxProvider(this.commandProvider, this.assertProvider, this.assertSyntaxProvider, value);
         }
 
         /// <summary>
@@ -222,7 +223,7 @@ namespace FluentAutomation
         /// <returns><c>AssertValueSyntaxProvider</c></returns>
         public AssertValueSyntaxProvider Value(Expression<Func<string, bool>> matchFunc)
         {
-            return new AssertValueSyntaxProvider(this.commandProvider, this.expectProvider, this.expectSyntaxProvider, matchFunc);
+            return new AssertValueSyntaxProvider(this.commandProvider, this.assertProvider, this.assertSyntaxProvider, matchFunc);
         }
 
         public class AssertValueSyntaxProvider : BaseAssertSyntaxProvider
@@ -230,14 +231,14 @@ namespace FluentAutomation
             private readonly string value = null;
             private readonly Expression<Func<string, bool>> matchFunc = null;
 
-            public AssertValueSyntaxProvider(ICommandProvider commandProvider, IAssertProvider expectProvider, AssertSyntaxProvider expectSyntaxProvider, string value)
-                : base(commandProvider, expectProvider, expectSyntaxProvider)
+            public AssertValueSyntaxProvider(ICommandProvider commandProvider, IAssertProvider assertProvider, AssertSyntaxProvider assertSyntaxProvider, string value)
+                : base(commandProvider, assertProvider, assertSyntaxProvider)
             {
                 this.value = value;
             }
 
-            public AssertValueSyntaxProvider(ICommandProvider commandProvider, IAssertProvider expectProvider, AssertSyntaxProvider expectSyntaxProvider, Expression<Func<string, bool>> matchFunc)
-                : base(commandProvider, expectProvider, expectSyntaxProvider)
+            public AssertValueSyntaxProvider(ICommandProvider commandProvider, IAssertProvider assertProvider, AssertSyntaxProvider assertSyntaxProvider, Expression<Func<string, bool>> matchFunc)
+                : base(commandProvider, assertProvider, assertSyntaxProvider)
             {
                 this.matchFunc = matchFunc;
             }
@@ -250,14 +251,14 @@ namespace FluentAutomation
             {
                 if (!string.IsNullOrEmpty(this.value))
                 {
-                    this.expectProvider.Value(selector, this.value);
+                    this.assertProvider.Value(selector, this.value);
                 }
                 else if (this.matchFunc != null)
                 {
-                    this.expectProvider.Value(selector, this.matchFunc);
+                    this.assertProvider.Value(selector, this.matchFunc);
                 }
 
-                return this.expectSyntaxProvider;
+                return this.assertSyntaxProvider;
             }
 
             /// <summary>
@@ -268,14 +269,14 @@ namespace FluentAutomation
             {
                 if (!string.IsNullOrEmpty(this.value))
                 {
-                    this.expectProvider.Value(element, this.value);
+                    this.assertProvider.Value(element, this.value);
                 }
                 else if (this.matchFunc != null)
                 {
-                    this.expectProvider.Value(element, this.matchFunc);
+                    this.assertProvider.Value(element, this.matchFunc);
                 }
 
-                return this.expectSyntaxProvider;
+                return this.assertSyntaxProvider;
             }
 
             /// <summary>
@@ -284,16 +285,19 @@ namespace FluentAutomation
             /// <param name="accessor"></param>
             public AssertSyntaxProvider In(Alert accessor)
             {
+                if (accessor.Field != AlertField.Message)
+                    throw new FluentException("FluentAutomation only supports checking the message in an alert/prompt/confirmation.");
+
                 if (this.matchFunc == null)
                 {
-                    this.expectProvider.AlertText(this.value.ToString());
+                    this.assertProvider.AlertText(this.value.ToString());
                 }
                 else
                 {
-                    this.expectProvider.AlertText(this.matchFunc);
+                    this.assertProvider.AlertText(this.matchFunc);
                 }
 
-                return this.expectSyntaxProvider;
+                return this.assertSyntaxProvider;
             }
         }
         #endregion
@@ -314,8 +318,8 @@ namespace FluentAutomation
         /// <param name="expectedUri">Absolute URI to be matched on.</param>
         public AssertSyntaxProvider Url(Uri expectedUri)
         {
-            this.expectProvider.Url(expectedUri);
-            return this.expectSyntaxProvider;
+            this.assertProvider.Url(expectedUri);
+            return this.assertSyntaxProvider;
         }
 
         /// <summary>
@@ -324,8 +328,8 @@ namespace FluentAutomation
         /// <param name="uriExpression">URI expression to be matched on.</param>
         public AssertSyntaxProvider Url(Expression<Func<Uri, bool>> uriExpression)
         {
-            this.expectProvider.Url(uriExpression);
-            return this.expectSyntaxProvider;
+            this.assertProvider.Url(uriExpression);
+            return this.assertSyntaxProvider;
         }
         #endregion
 
@@ -338,10 +342,10 @@ namespace FluentAutomation
         {
             this.commandProvider.Act(CommandType.Expect, () =>
             {
-                this.expectProvider.True(matchFunc);
+                this.assertProvider.True(matchFunc);
             });
 
-            return this.expectSyntaxProvider;
+            return this.assertSyntaxProvider;
         }
 
         /// <summary>
@@ -352,10 +356,10 @@ namespace FluentAutomation
         {
             this.commandProvider.Act(CommandType.Expect, () =>
             {
-                this.expectProvider.False(matchFunc);
+                this.assertProvider.False(matchFunc);
             });
 
-            return this.expectSyntaxProvider;
+            return this.assertSyntaxProvider;
         }
 
         /// <summary>
@@ -366,10 +370,10 @@ namespace FluentAutomation
         {
             this.commandProvider.Act(CommandType.Expect, () =>
             {
-                this.expectProvider.Throws(matchAction);
+                this.assertProvider.Throws(matchAction);
             });
 
-            return this.expectSyntaxProvider;
+            return this.assertSyntaxProvider;
         }
         #endregion
 
@@ -379,27 +383,27 @@ namespace FluentAutomation
         /// <param name="selector">Element selector.</param>
         public AssertSyntaxProvider Exists(string selector)
         {
-            this.expectProvider.Exists(selector);
-            return this.expectSyntaxProvider;
+            this.assertProvider.Exists(selector);
+            return this.assertSyntaxProvider;
         }
     }
 
     public class BaseAssertSyntaxProvider
     {
         internal readonly ICommandProvider commandProvider = null;
-        internal readonly IAssertProvider expectProvider = null;
-        internal readonly AssertSyntaxProvider expectSyntaxProvider = null;
+        internal readonly IAssertProvider assertProvider = null;
+        internal readonly AssertSyntaxProvider assertSyntaxProvider = null;
 
-        public BaseAssertSyntaxProvider(ICommandProvider commandProvider, IAssertProvider expectProvider)
-            : this(commandProvider, expectProvider, null)
+        public BaseAssertSyntaxProvider(ICommandProvider commandProvider, IAssertProvider assertProvider)
+            : this(commandProvider, assertProvider, null)
         {
         }
 
-        public BaseAssertSyntaxProvider(ICommandProvider commandProvider, IAssertProvider expectProvider, AssertSyntaxProvider expectSyntaxProvider)
+        public BaseAssertSyntaxProvider(ICommandProvider commandProvider, IAssertProvider assertProvider, AssertSyntaxProvider assertSyntaxProvider)
         {
             this.commandProvider = commandProvider;
-            this.expectProvider = expectProvider;
-            this.expectSyntaxProvider = expectSyntaxProvider == null ? (AssertSyntaxProvider)this : expectSyntaxProvider;
+            this.assertProvider = assertProvider;
+            this.assertSyntaxProvider = assertSyntaxProvider == null ? (AssertSyntaxProvider)this : assertSyntaxProvider;
         }
     }
 }

@@ -10,6 +10,7 @@ namespace FluentAutomation
         Action,
         Expect,
         Assert,
-        Wait
+        Wait,
+        NoRetry
     }
 }

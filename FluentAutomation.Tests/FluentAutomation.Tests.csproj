@@ -53,6 +53,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="AlertTests.cs" />
     <Compile Include="Native\SeleniumChrome.cs" />
     <Compile Include="Native\SeleniumFirefox.cs" />
     <Compile Include="Native\FormsNative.cs" />

@@ -12,7 +12,7 @@ namespace FluentAutomation
     public class AssertProvider : IAssertProvider
     {
         private readonly ICommandProvider commandProvider = null;
-        private CommandType commandType { get { return this.ThrowExceptions ? CommandType.Assert : commandType; } }
+        private CommandType commandType { get { return this.ThrowExceptions ? CommandType.Assert : CommandType.Expect; } }
 
         public AssertProvider(ICommandProvider commandProvider)
         {
@@ -27,7 +27,7 @@ namespace FluentAutomation
                 var elements = this.commandProvider.FindMultiple(selector).Elements;
                 if (elements.Count() != count)
                 {
-                    this.Throw(new FluentExpectFailedException("Expected count of elements matching selector [{0}] to be [{1}] but instead it was [{2}]", selector, count, elements.Count()));
+                    this.ReportError("Expected count of elements matching selector [{0}] to be [{1}] but instead it was [{2}]", selector, count, elements.Count());
                 }
             });
         }
@@ -38,7 +38,7 @@ namespace FluentAutomation
             {
                 if (elements.Elements.Count() != count)
                 {
-                    this.Throw(new FluentExpectFailedException("Expected count of elements in collection to be [{1}] but instead it was [{2}]", count, elements.Elements.Count()));
+                    this.ReportError("Expected count of elements in collection to be [{1}] but instead it was [{2}]", count, elements.Elements.Count());
                 }
             });
         }
@@ -53,7 +53,7 @@ namespace FluentAutomation
                 var elementClassAttributeValue = unwrappedElement.Attributes.Get("class").Trim();
                 if (!HasCssClass(className, elementClassAttributeValue))
                 {
-                    this.Throw(new FluentExpectFailedException("Expected element [{0}] to include CSS class [{1}] but current class attribute is [{2}].", selector, className, elementClassAttributeValue));
+                    this.ReportError("Expected element [{0}] to include CSS class [{1}] but current class attribute is [{2}].", selector, className, elementClassAttributeValue);
                 }
             });
         }
@@ -66,7 +66,7 @@ namespace FluentAutomation
                 var elementClassAttributeValue = unwrappedElement.Attributes.Get("class").Trim();
                 if (!HasCssClass(className, elementClassAttributeValue))
                 {
-                    this.Throw(new FluentExpectFailedException("Expected element to include CSS class [{0}] but current class attribute is [{1}].", className, elementClassAttributeValue));
+                    this.ReportError("Expected element to include CSS class [{0}] but current class attribute is [{1}].", className, elementClassAttributeValue);
                 }
             });
         }
@@ -110,7 +110,7 @@ namespace FluentAutomation
                 {
                     if (!IsTextMatch(unwrappedElement.Text, text))
                     {
-                        this.Throw(new FluentExpectFailedException("Expected TextElement [{0}] text to be [{1}] but it was actually [{2}].", selector, text, unwrappedElement.Text));
+                        this.ReportError("Expected TextElement [{0}] text to be [{1}] but it was actually [{2}].", selector, text, unwrappedElement.Text);
                     }
                 }
                 else if (unwrappedElement.IsSelect)
@@ -129,14 +129,14 @@ namespace FluentAutomation
 
                         if (!foundMatch)
                         {
-                            this.Throw(new FluentExpectFailedException("Expected SelectElement [{0}] selected options to have at least one option with text of [{1}]. Selected option text values include [{2}]", selector, text, string.Join(",", unwrappedElement.SelectedOptionTextCollection)));
+                            this.ReportError("Expected SelectElement [{0}] selected options to have at least one option with text of [{1}]. Selected option text values include [{2}]", selector, text, string.Join(",", unwrappedElement.SelectedOptionTextCollection));
                         }
                     }
                     else
                     {
                         if (!IsTextMatch(unwrappedElement.Text, text))
                         {
-                            this.Throw(new FluentExpectFailedException("Expected SelectElement [{0}] selected option text to be [{1}] but it was actually [{2}].", selector, text, unwrappedElement.Text));
+                            this.ReportError("Expected SelectElement [{0}] selected option text to be [{1}] but it was actually [{2}].", selector, text, unwrappedElement.Text);
                         }
                     }
                 }
@@ -144,7 +144,7 @@ namespace FluentAutomation
                 {
                     if (!IsTextMatch(unwrappedElement.Text, text))
                     {
-                        this.Throw(new FluentExpectFailedException("Expected DOM Element [{0}] text to be [{1}] but it was actually [{2}].", selector, text, unwrappedElement.Text));
+                        this.ReportError("Expected DOM Element [{0}] text to be [{1}] but it was actually [{2}].", selector, text, unwrappedElement.Text);
                     }
                 }
             });
@@ -159,7 +159,7 @@ namespace FluentAutomation
                 {
                     if (!IsTextMatch(unwrappedElement.Text, text))
                     {
-                        this.Throw(new FluentExpectFailedException("Expected TextElement text to be [{1}] but it was actually [{2}].", text, unwrappedElement.Text));
+                        this.ReportError("Expected TextElement text to be [{1}] but it was actually [{2}].", text, unwrappedElement.Text);
                     }
                 }
                 else if (unwrappedElement.IsSelect)
@@ -178,14 +178,14 @@ namespace FluentAutomation
 
                         if (!foundMatch)
                         {
-                            this.Throw(new FluentExpectFailedException("Expected SelectElement selected options to have at least one option with text of [{0}]. Selected option text values include [{1}]", text, string.Join(",", unwrappedElement.SelectedOptionTextCollection)));
+                            this.ReportError("Expected SelectElement selected options to have at least one option with text of [{0}]. Selected option text values include [{1}]", text, string.Join(",", unwrappedElement.SelectedOptionTextCollection));
                         }
                     }
                     else
                     {
                         if (!IsTextMatch(unwrappedElement.Text, text))
                         {
-                            this.Throw(new FluentExpectFailedException("Expected SelectElement selected option text to be [{1}] but it was actually [{2}].", text, unwrappedElement.Text));
+                            this.ReportError("Expected SelectElement selected option text to be [{1}] but it was actually [{2}].", text, unwrappedElement.Text);
                         }
                     }
                 }
@@ -193,7 +193,7 @@ namespace FluentAutomation
                 {
                     if (!IsTextMatch(unwrappedElement.Text, text))
                     {
-                        this.Throw(new FluentExpectFailedException("Expected DOM Element text to be [{1}] but it was actually [{2}].", text, unwrappedElement.Text));
+                        this.ReportError("Expected DOM Element text to be [{1}] but it was actually [{2}].", text, unwrappedElement.Text);
                     }
                 }
             });
@@ -209,7 +209,7 @@ namespace FluentAutomation
                 {
                     if (!compiledFunc(unwrappedElement.Text))
                     {
-                        this.Throw(new FluentExpectFailedException("Expected TextElement [{0}] text to match expression [{1}] but it was actually [{2}].", selector, matchFunc.ToExpressionString(), unwrappedElement.Text));
+                        this.ReportError("Expected TextElement [{0}] text to match expression [{1}] but it was actually [{2}].", selector, matchFunc.ToExpressionString(), unwrappedElement.Text);
                     }
                 }
                 else if (unwrappedElement.IsSelect)
@@ -228,14 +228,14 @@ namespace FluentAutomation
 
                         if (!foundMatch)
                         {
-                            this.Throw(new FluentExpectFailedException("Expected SelectElement [{0}] selected options to have at least one option with text matching expression[{1}]. Selected option text values include [{2}]", selector, matchFunc.ToExpressionString(), string.Join(",", unwrappedElement.SelectedOptionTextCollection)));
+                            this.ReportError("Expected SelectElement [{0}] selected options to have at least one option with text matching expression[{1}]. Selected option text values include [{2}]", selector, matchFunc.ToExpressionString(), string.Join(",", unwrappedElement.SelectedOptionTextCollection));
                         }
                     }
                     else
                     {
                         if (!compiledFunc(unwrappedElement.Text))
                         {
-                            this.Throw(new FluentExpectFailedException("Expected SelectElement [{0}] selected option text to match expression [{1}] but it was actually [{2}].", selector, matchFunc.ToExpressionString(), unwrappedElement.Text));
+                            this.ReportError("Expected SelectElement [{0}] selected option text to match expression [{1}] but it was actually [{2}].", selector, matchFunc.ToExpressionString(), unwrappedElement.Text);
                         }
                     }
                 }
@@ -243,7 +243,7 @@ namespace FluentAutomation
                 {
                     if (!compiledFunc(unwrappedElement.Text))
                     {
-                        this.Throw(new FluentExpectFailedException("Expected DOM Element [{0}] text to match expression [{1}] but it was actually [{2}].", selector, matchFunc.ToExpressionString(), unwrappedElement.Text));
+                        this.ReportError("Expected DOM Element [{0}] text to match expression [{1}] but it was actually [{2}].", selector, matchFunc.ToExpressionString(), unwrappedElement.Text);
                     }
                 }
             });
@@ -259,7 +259,7 @@ namespace FluentAutomation
                 {
                     if (!compiledFunc(unwrappedElement.Text))
                     {
-                        this.Throw(new FluentExpectFailedException("Expected TextElement text to match expression [{0}] but it was actually [{1}].", matchFunc.ToExpressionString(), unwrappedElement.Text));
+                        this.ReportError("Expected TextElement text to match expression [{0}] but it was actually [{1}].", matchFunc.ToExpressionString(), unwrappedElement.Text);
                     }
                 }
                 else if (unwrappedElement.IsSelect)
@@ -278,14 +278,14 @@ namespace FluentAutomation
 
                         if (!foundMatch)
                         {
-                            this.Throw(new FluentExpectFailedException("Expected SelectElement selected options to have at least one option with text matching expression [{0}]. Selected option text values include [{1}]", matchFunc.ToExpressionString(), string.Join(",", unwrappedElement.SelectedOptionTextCollection)));
+                            this.ReportError("Expected SelectElement selected options to have at least one option with text matching expression [{0}]. Selected option text values include [{1}]", matchFunc.ToExpressionString(), string.Join(",", unwrappedElement.SelectedOptionTextCollection));
                         }
                     }
                     else
                     {
                         if (!compiledFunc(unwrappedElement.Text))
                         {
-                            this.Throw(new FluentExpectFailedException("Expected SelectElement selected option text to match expression [{0}] but it was actually [{1}].", matchFunc.ToExpressionString(), unwrappedElement.Text));
+                            this.ReportError("Expected SelectElement selected option text to match expression [{0}] but it was actually [{1}].", matchFunc.ToExpressionString(), unwrappedElement.Text);
                         }
                     }
                 }
@@ -293,7 +293,7 @@ namespace FluentAutomation
                 {
                     if (!compiledFunc(unwrappedElement.Text))
                     {
-                        this.Throw(new FluentExpectFailedException("Expected DOM Element text to match expression [{0}] but it was actually [{1}].", matchFunc.ToExpressionString(), unwrappedElement.Text));
+                        this.ReportError("Expected DOM Element text to match expression [{0}] but it was actually [{1}].", matchFunc.ToExpressionString(), unwrappedElement.Text);
                     }
                 }
             });
@@ -315,7 +315,7 @@ namespace FluentAutomation
                 {
                     if (!IsTextMatch(unwrappedElement.Value, value))
                     {
-                        this.Throw(new FluentExpectFailedException("Expected TextElement [{0}] selected option value to be [{1}] but it was actually [{2}].", selector, value, unwrappedElement.Text));
+                        this.ReportError("Expected TextElement [{0}] selected option value to be [{1}] but it was actually [{2}].", selector, value, unwrappedElement.Text);
                     }
                 }
                 else if (unwrappedElement.IsSelect)
@@ -334,11 +334,11 @@ namespace FluentAutomation
                     {
                         if (unwrappedElement.IsMultipleSelect)
                         {
-                            this.Throw(new FluentExpectFailedException("Expected SelectElement [{0}] selected options to have at least one option with value of [{1}]. Selected option text values include [{2}]", selector, value, unwrappedElement.Value));
+                            this.ReportError("Expected SelectElement [{0}] selected options to have at least one option with value of [{1}]. Selected option text values include [{2}]", selector, value, unwrappedElement.Value);
                         }
                         else
                         {
-                            this.Throw(new FluentExpectFailedException("Expected SelectElement [{0}] selected option value to be [{1}] but it was actually [{2}].", selector, value, unwrappedElement.Value));
+                            this.ReportError("Expected SelectElement [{0}] selected option value to be [{1}] but it was actually [{2}].", selector, value, unwrappedElement.Value);
                         }
                     }
                 }
@@ -346,7 +346,7 @@ namespace FluentAutomation
                 {
                     if (!IsTextMatch(unwrappedElement.Value, value))
                     {
-                        this.Throw(new FluentExpectFailedException("Expected element [{0}] value to be [{1}] but it was actually [{2}].", selector, value, unwrappedElement.Value));
+                        this.ReportError("Expected element [{0}] value to be [{1}] but it was actually [{2}].", selector, value, unwrappedElement.Value);
                     }
                 }
             });
@@ -362,7 +362,7 @@ namespace FluentAutomation
                 {
                     if (!compiledFunc(unwrappedElement.Value))
                     {
-                        this.Throw(new FluentExpectFailedException("Expected TextElement [{0}] value to match expression [{1}] but it was actually [{2}].", selector, matchFunc.ToExpressionString(), unwrappedElement.Value));
+                        this.ReportError("Expected TextElement [{0}] value to match expression [{1}] but it was actually [{2}].", selector, matchFunc.ToExpressionString(), unwrappedElement.Value);
                     }
                 }
                 else if (unwrappedElement.IsSelect)
@@ -381,14 +381,14 @@ namespace FluentAutomation
 
                         if (!foundMatch)
                         {
-                            this.Throw(new FluentExpectFailedException("Expected SelectElement [{0}] selected options to have at least one option with value matching expression [{1}]. Selected option values include [{2}]", selector, matchFunc.ToExpressionString(), string.Join(",", unwrappedElement.SelectedOptionValues)));
+                            this.ReportError("Expected SelectElement [{0}] selected options to have at least one option with value matching expression [{1}]. Selected option values include [{2}]", selector, matchFunc.ToExpressionString(), string.Join(",", unwrappedElement.SelectedOptionValues));
                         }
                     }
                     else
                     {
                         if (!compiledFunc(unwrappedElement.Text))
                         {
-                            this.Throw(new FluentExpectFailedException("Expected SelectElement [{0}] selected option value to match expression [{1}] but it was actually [{2}].", selector, matchFunc.ToExpressionString(), unwrappedElement.Value));
+                            this.ReportError("Expected SelectElement [{0}] selected option value to match expression [{1}] but it was actually [{2}].", selector, matchFunc.ToExpressionString(), unwrappedElement.Value);
                         }
                     }
                 }
@@ -396,7 +396,7 @@ namespace FluentAutomation
                 {
                     if (!compiledFunc(unwrappedElement.Value))
                     {
-                        this.Throw(new FluentExpectFailedException("Expected element [{0}] value to match expression [{1}] but it was actually [{2}].", selector, matchFunc.ToExpressionString(), unwrappedElement.Value));
+                        this.ReportError("Expected element [{0}] value to match expression [{1}] but it was actually [{2}].", selector, matchFunc.ToExpressionString(), unwrappedElement.Value);
                     }
                 }
             });
@@ -411,7 +411,7 @@ namespace FluentAutomation
                 {
                     if (!IsTextMatch(unwrappedElement.Value, value))
                     {
-                        this.Throw(new FluentExpectFailedException("Expected TextElement selected option value to be [{0}] but it was actually [{1}].", value, unwrappedElement.Text));
+                        this.ReportError("Expected TextElement selected option value to be [{0}] but it was actually [{1}].", value, unwrappedElement.Text);
                     }
                 }
                 else if (unwrappedElement.IsSelect)
@@ -430,14 +430,14 @@ namespace FluentAutomation
 
                         if (!foundMatch)
                         {
-                            this.Throw(new FluentExpectFailedException("Expected SelectElement selected options to have at least one option with value of [{0}]. Selected option text values include [{1}]", value, string.Join(",", unwrappedElement.SelectedOptionValues)));
+                            this.ReportError("Expected SelectElement selected options to have at least one option with value of [{0}]. Selected option text values include [{1}]", value, string.Join(",", unwrappedElement.SelectedOptionValues));
                         }
                     }
                     else
                     {
                         if (!IsTextMatch(unwrappedElement.Value, value))
                         {
-                            this.Throw(new FluentExpectFailedException("Expected SelectElement selected option value to be [{0}] but it was actually [{1}].", value, unwrappedElement.Text));
+                            this.ReportError("Expected SelectElement selected option value to be [{0}] but it was actually [{1}].", value, unwrappedElement.Text);
                         }
                     }
                 }
@@ -445,7 +445,7 @@ namespace FluentAutomation
                 {
                     if (!IsTextMatch(unwrappedElement.Value, value))
                     {
-                        this.Throw(new FluentExpectFailedException("Expected element value to be [{0}] but it was actually [{1}].", value, unwrappedElement.Value));
+                        this.ReportError("Expected element value to be [{0}] but it was actually [{1}].", value, unwrappedElement.Value);
                     }
                 }
             });
@@ -461,7 +461,7 @@ namespace FluentAutomation
                 {
                     if (!compiledFunc(unwrappedElement.Value))
                     {
-                        this.Throw(new FluentExpectFailedException("Expected TextElement value to match expression [{0}] but it was actually [{1}].", matchFunc.ToExpressionString(), unwrappedElement.Value));
+                        this.ReportError("Expected TextElement value to match expression [{0}] but it was actually [{1}].", matchFunc.ToExpressionString(), unwrappedElement.Value);
                     }
                 }
                 else if (unwrappedElement.IsSelect)
@@ -480,14 +480,14 @@ namespace FluentAutomation
 
                         if (!foundMatch)
                         {
-                            this.Throw(new FluentExpectFailedException("Expected SelectElement selected options to have at least one option with value matching expression [{0}]. Selected option values include [{1}]", matchFunc.ToExpressionString(), string.Join(",", unwrappedElement.SelectedOptionTextCollection)));
+                            this.ReportError("Expected SelectElement selected options to have at least one option with value matching expression [{0}]. Selected option values include [{1}]", matchFunc.ToExpressionString(), string.Join(",", unwrappedElement.SelectedOptionTextCollection));
                         }
                     }
                     else
                     {
                         if (!compiledFunc(unwrappedElement.Text))
                         {
-                            this.Throw(new FluentExpectFailedException("Expected SelectElement selected option value to match expression [{0}] but it was actually [{1}].", matchFunc.ToExpressionString(), unwrappedElement.Value));
+                            this.ReportError("Expected SelectElement selected option value to match expression [{0}] but it was actually [{1}].", matchFunc.ToExpressionString(), unwrappedElement.Value);
                         }
                     }
                 }
@@ -495,7 +495,7 @@ namespace FluentAutomation
                 {
                     if (!compiledFunc(unwrappedElement.Value))
                     {
-                        this.Throw(new FluentExpectFailedException("Expected element value to match expression [{0}] but it was actually [{1}].", matchFunc.ToExpressionString(), unwrappedElement.Value));
+                        this.ReportError("Expected element value to match expression [{0}] but it was actually [{1}].", matchFunc.ToExpressionString(), unwrappedElement.Value);
                     }
                 }
             });
@@ -508,7 +508,7 @@ namespace FluentAutomation
             {
                 if (!expectedUrl.ToString().Equals(this.commandProvider.Url.ToString(), StringComparison.InvariantCultureIgnoreCase))
                 {
-                    this.Throw(new FluentExpectFailedException("Expected URL to match [{0}] but it was actually [{1}].", expectedUrl.ToString(), this.commandProvider.Url.ToString()));
+                    this.ReportError("Expected URL to match [{0}] but it was actually [{1}].", expectedUrl.ToString(), this.commandProvider.Url.ToString());
                 }
             });
         }
@@ -521,7 +521,7 @@ namespace FluentAutomation
 
                 if (compiledExpr(this.commandProvider.Url) != true)
                 {
-                    this.Throw(new FluentExpectFailedException("Expected expression [{0}] to return true.", urlExpression.ToExpressionString()));
+                    this.ReportError("Expected expression [{0}] to return true.", urlExpression.ToExpressionString());
                 }
             });
         }
@@ -534,7 +534,7 @@ namespace FluentAutomation
                 var compiledFunc = matchFunc.Compile();
                 if (!compiledFunc())
                 {
-                    this.Throw(new FluentExpectFailedException("Expected expression [{0}] to return false.", matchFunc.ToExpressionString()));
+                    this.ReportError("Expected expression [{0}] to return false.", matchFunc.ToExpressionString());
                 }
             });
         }
@@ -546,7 +546,7 @@ namespace FluentAutomation
                 var compiledFunc = matchFunc.Compile();
                 if (compiledFunc())
                 {
-                    this.Throw(new FluentExpectFailedException("Expected expression [{0}] to return false.", matchFunc.ToExpressionString()));
+                    this.ReportError("Expected expression [{0}] to return false.", matchFunc.ToExpressionString());
                 }
             });
         }
@@ -562,14 +562,14 @@ namespace FluentAutomation
                 {
                     compiledAction();
                 }
-                catch (FluentExpectFailedException)
+                catch (FluentAssertFailedException)
                 {
                     threwException = true;
                 }
 
                 if (!threwException)
                 {
-                    this.Throw(new FluentExpectFailedException("Expected expression [{0}] to throw an exception.", matchAction.ToExpressionString()));
+                    this.ReportError("Expected expression [{0}] to throw an exception.", matchAction.ToExpressionString());
                 }
             });
         }
@@ -582,20 +582,22 @@ namespace FluentAutomation
                 var unwrappedElement = this.commandProvider.Find(selector).Element as IElement;
                 if (unwrappedElement == null)
                 {
-                    this.Throw(new FluentExpectFailedException("Expected element matching selector [{0}] to exist.", selector));
+                    this.ReportError("Expected element matching selector [{0}] to exist.", selector);
                 }
             });
         }
 
         public void AlertText(string text)
         {
-            this.commandProvider.Act(commandType, () =>
+            this.commandProvider.Act(CommandType.NoRetry, () =>
             {
                 this.commandProvider.AlertText((alertText) =>
                 {
                     if (!IsTextMatch(alertText, text))
                     {
-                        this.Throw(new FluentExpectFailedException("Expected alert text to be [{0}] but it was actually [{1}].", text, alertText));
+                        // because the browser blocks, we dismiss the alert when a failure happens so we can cleanly shutdown.
+                        this.commandProvider.AlertClick(Alert.Cancel);
+                        this.ReportError("Expected alert text to be [{0}] but it was actually [{1}].", text, alertText);
                     }
                 });
             });
@@ -603,14 +605,16 @@ namespace FluentAutomation
 
         public void AlertText(Expression<Func<string, bool>> matchFunc)
         {
-            this.commandProvider.Act(commandType, () =>
+            this.commandProvider.Act(CommandType.NoRetry, () =>
             {
                 var compiledFunc = matchFunc.Compile();
                 this.commandProvider.AlertText((alertText) =>
                 {
                     if (!compiledFunc(alertText))
                     {
-                        this.Throw(new FluentExpectFailedException("Expected alert text to match expression [{0}] but it was actually [{1}].", matchFunc.ToExpressionString(), alertText));
+                        // because the browser blocks, we dismiss the alert when a failure happens so we can cleanly shutdown.
+                        this.commandProvider.AlertClick(Alert.Cancel);
+                        this.ReportError("Expected alert text to match expression [{0}] but it was actually [{1}].", matchFunc.ToExpressionString(), alertText);
                     }
                 });
             });
@@ -626,16 +630,18 @@ namespace FluentAutomation
             return provider;
         }
 
-        public virtual void Throw(FluentExpectFailedException exception)
+        public virtual void ReportError(string message, params object[] formatParams)
         {
             if (this.ThrowExceptions)
             {
-                FluentSettings.Current.OnAssertFailed((FluentAssertFailedException)exception);
-                throw exception;
+                var assertException = new FluentAssertFailedException(message, formatParams);
+                FluentSettings.Current.OnAssertFailed(assertException);
+                throw assertException;
             }
             else
             {
-                FluentSettings.Current.OnExpectFailed(exception);
+                var expectException = new FluentExpectFailedException(message, formatParams);
+                FluentSettings.Current.OnExpectFailed(expectException);
             }
         }
     }

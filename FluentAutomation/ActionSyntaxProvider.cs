@@ -12,12 +12,12 @@ namespace FluentAutomation
     public class ActionSyntaxProvider : IActionSyntaxProvider, IDisposable
     {
         private readonly ICommandProvider commandProvider = null;
-        private readonly IAssertProvider expectProvider = null;
+        private readonly IAssertProvider assertProvider = null;
 
-        public ActionSyntaxProvider(ICommandProvider commandProvider, IAssertProvider expectProvider)
+        public ActionSyntaxProvider(ICommandProvider commandProvider, IAssertProvider assertProvider)
         {
             this.commandProvider = commandProvider;
-            this.expectProvider = expectProvider;
+            this.assertProvider = assertProvider;
         }
 
         #region Direct Execution Actions
@@ -499,8 +499,8 @@ namespace FluentAutomation
             /// <param name="accessor"></param>
             public IActionSyntaxProvider In(Alert accessor)
             {
-                if (accessor.Field != AlertField.Text)
-                    throw new FluentException("FluentAutomation only supports entering text in the text field of a prompt.");
+                if (accessor.Field != AlertField.Input)
+                    throw new FluentException("FluentAutomation only supports entering text in text input of a prompt.");
 
                 this.syntaxProvider.commandProvider.AlertEnterText(text);
                 return this.syntaxProvider;
@@ -662,7 +662,7 @@ namespace FluentAutomation
             {
                 if (this.expect == null)
                 {
-                    this.expect = new AssertSyntaxProvider(this.commandProvider, FluentSettings.Current.ExpectIsAssert ? this.expectProvider.EnableExceptions() : this.expectProvider);
+                    this.expect = new AssertSyntaxProvider(this.commandProvider, FluentSettings.Current.ExpectIsAssert ? this.assertProvider.EnableExceptions() : this.assertProvider);
                 }
 
                 return this.expect;
@@ -676,7 +676,7 @@ namespace FluentAutomation
             {
                 if (this.assert == null)
                 {
-                    this.assert = new AssertSyntaxProvider(this.commandProvider, this.expectProvider.EnableExceptions());
+                    this.assert = new AssertSyntaxProvider(this.commandProvider, this.assertProvider.EnableExceptions());
                 }
 
                 return this.assert;

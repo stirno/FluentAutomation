@@ -21,6 +21,12 @@ namespace FluentAutomation.Interfaces
         IActionSyntaxProvider Click(ElementProxy element, int x, int y);
 
         /// <summary>
+        /// Click a specified button within an alert.
+        /// </summary>
+        /// <param name="accessor"></param>
+        IActionSyntaxProvider Click(Alert accessor);
+
+        /// <summary>
         /// DoubleClick a specified element.
         /// </summary>
         /// <param name="element"><see cref="IElement"/> factory function.</param>

@@ -58,7 +58,7 @@
     <Compile Include="EmbeddedResources.cs" />
     <Compile Include="AssertProvider.cs" />
     <Compile Include="Exceptions\FluentException.cs" />
-    <Compile Include="Exceptions\FluentExpectFailedException.cs" />
+    <Compile Include="Exceptions\FluentAssertFailedException.cs" />
     <Compile Include="AssertSyntaxProvider.cs" />
     <Compile Include="Interfaces\IActionSyntaxProvider.cs" />
     <Compile Include="Interfaces\IFileStoreProvider.cs" />

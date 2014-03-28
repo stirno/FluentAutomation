@@ -43,22 +43,8 @@ namespace FluentAutomation
             this.ContainerRegistration = (c) => { };
 
             // events
-            this.OnExpectFailed = (c) =>
-            {
-                var fluentException = c.InnerException as FluentException;
-                if (fluentException != null)
-                    System.Diagnostics.Trace.WriteLine(fluentException.Message);
-                else
-                    System.Diagnostics.Trace.WriteLine(c.Message);
-            };
-            this.OnAssertFailed = (c) =>
-            {
-                var fluentException = c.InnerException as FluentException;
-                if (fluentException != null)
-                    System.Diagnostics.Trace.WriteLine(fluentException.Message);
-                else
-                    System.Diagnostics.Trace.WriteLine(c.Message);
-            };
+            this.OnExpectFailed = (c) => {};
+            this.OnAssertFailed = (c) => {};
         }
 
         public bool WaitOnAllExpects { get; set; }

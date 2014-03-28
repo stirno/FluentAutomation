@@ -9,7 +9,8 @@ namespace FluentAutomation
     {
         public static Alert Cancel = new Alert(AlertField.CancelButton);
         public static Alert OK = new Alert(AlertField.OKButton);
-        public static Alert Text = new Alert(AlertField.Text);
+        public static Alert Message = new Alert(AlertField.Message);
+        public static Alert Input = new Alert(AlertField.Input);
 
         public readonly AlertField Field;
 
@@ -23,6 +24,7 @@ namespace FluentAutomation
     {
         OKButton,
         CancelButton,
-        Text
+        Message,
+        Input
     }
 }
