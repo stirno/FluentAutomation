@@ -23,6 +23,7 @@ namespace FluentAutomation
             this.WaitOnAllActions = true;
             this.MinimizeAllWindowsOnTestStart = false;
             this.ScreenshotOnFailedExpect = false;
+            this.ScreenshotOnFailedAssert = false;
             this.ScreenshotOnFailedAction = false;
             this.ExpectIsAssert = false; // determine if Expects are treated as Asserts (v2.x behavior)
 
@@ -43,8 +44,23 @@ namespace FluentAutomation
             this.ContainerRegistration = (c) => { };
 
             // events
-            this.OnExpectFailed = (c) => {};
-            this.OnAssertFailed = (c) => {};
+            this.OnExpectFailed = (ex, state) =>
+            {
+                var fluentException = ex.InnerException as FluentException;
+                if (fluentException != null)
+                    System.Diagnostics.Trace.WriteLine("[EXPECT FAIL] " + fluentException.Message);
+                else
+                    System.Diagnostics.Trace.WriteLine("[EXPECT FAIL] " + ex.Message);
+            };
+
+            this.OnAssertFailed = (ex, state) =>
+            {
+                var fluentException = ex.InnerException as FluentException;
+                if (fluentException != null)
+                    System.Diagnostics.Trace.WriteLine("[ASSERT FAIL] " + fluentException.Message);
+                else
+                    System.Diagnostics.Trace.WriteLine("[ASSERT FAIL] " + ex.Message);
+            };
         }
 
         public bool WaitOnAllExpects { get; set; }
@@ -53,6 +69,7 @@ namespace FluentAutomation
         public bool MinimizeAllWindowsOnTestStart { get; set; }
         public bool ExpectIsAssert { get; set; }
         public bool ScreenshotOnFailedExpect { get; set; }
+        public bool ScreenshotOnFailedAssert { get; set; }
         public bool ScreenshotOnFailedAction { get; set; }
         public int? WindowHeight { get; set; }
         public int? WindowWidth { get; set; }
@@ -62,7 +79,7 @@ namespace FluentAutomation
         public string ScreenshotPath { get; set; }
         public string UserTempDirectory { get; set; }
         public Action<TinyIoC.TinyIoCContainer> ContainerRegistration { get; set; }
-        public Action<FluentExpectFailedException> OnExpectFailed { get; set; }
-        public Action<FluentAssertFailedException> OnAssertFailed { get; set; }
+        public Action<FluentExpectFailedException, WindowState> OnExpectFailed { get; set; }
+        public Action<FluentAssertFailedException, WindowState> OnAssertFailed { get; set; }
     }
 }

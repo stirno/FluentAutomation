@@ -1,4 +1,5 @@
-﻿using FluentAutomation.Interfaces;
+﻿using FluentAutomation.Exceptions;
+using FluentAutomation.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,9 @@ namespace FluentAutomation
     {
         private readonly CommandProviderList commandProviders = null;
 
+        public Tuple<FluentAssertFailedException, WindowState> PendingAssertFailedExceptionNotification { get; set; }
+        public Tuple<FluentExpectFailedException, WindowState> PendingExpectFailedExceptionNotification { get; set; }
+
         public MultiCommandProvider(CommandProviderList commandProviders)
         {
             this.commandProviders = commandProviders;
@@ -20,6 +24,11 @@ namespace FluentAutomation
         public Uri Url
         {
             get { return this.commandProviders.First().Url; }
+        }
+
+        public string Source
+        {
+            get { return this.commandProviders.First().Source; }
         }
 
         public void Navigate(Uri url)

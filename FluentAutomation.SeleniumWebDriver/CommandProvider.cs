@@ -65,6 +65,14 @@ namespace FluentAutomation
             }
         }
 
+        public string Source
+        {
+            get
+            {
+                return this.webDriver.PageSource;
+            }
+        }
+
         public void Navigate(Uri url)
         {
             this.Act(CommandType.Action, () => this.webDriver.Navigate().GoToUrl(url));
@@ -501,6 +509,12 @@ namespace FluentAutomation
         {
             this.Act(CommandType.Action, () =>
             {
+                if (frameNameOrSelector == string.Empty)
+                {
+                    this.webDriver.SwitchTo().DefaultContent();
+                    return;
+                }
+
                 // try to locate frame using argument as a selector, if that fails pass it into Frame so it can be
                 // evaluated as a name by Selenium
                 IWebElement frameBySelector = null;

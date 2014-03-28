@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FluentAutomation.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -9,7 +10,10 @@ namespace FluentAutomation.Interfaces
 {
     public interface ICommandProvider : IDisposable
     {
+        Tuple<FluentAssertFailedException, WindowState> PendingAssertFailedExceptionNotification { get; set; }
+        Tuple<FluentExpectFailedException, WindowState> PendingExpectFailedExceptionNotification { get; set; }
         Uri Url { get; }
+        string Source { get; }
 
         void Navigate(Uri url);
         ElementProxy Find(string selector);

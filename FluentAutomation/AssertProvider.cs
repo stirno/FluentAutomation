@@ -635,13 +635,22 @@ namespace FluentAutomation
             if (this.ThrowExceptions)
             {
                 var assertException = new FluentAssertFailedException(message, formatParams);
-                FluentSettings.Current.OnAssertFailed(assertException);
+                this.commandProvider.PendingAssertFailedExceptionNotification = new Tuple<FluentAssertFailedException, WindowState>(assertException, new WindowState
+                {
+                    Source = this.commandProvider.Source,
+                    Url = this.commandProvider.Url
+                });
+
                 throw assertException;
             }
             else
             {
                 var expectException = new FluentExpectFailedException(message, formatParams);
-                FluentSettings.Current.OnExpectFailed(expectException);
+                this.commandProvider.PendingExpectFailedExceptionNotification = new Tuple<FluentExpectFailedException, WindowState>(expectException, new WindowState
+                {
+                    Source = this.commandProvider.Source,
+                    Url = this.commandProvider.Url
+                });
             }
         }
     }

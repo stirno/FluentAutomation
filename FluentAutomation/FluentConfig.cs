@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FluentAutomation.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -43,6 +44,12 @@ namespace FluentAutomation
         public FluentConfig ScreenshotOnFailedAction(bool screenshotOnFail)
         {
             this.Settings.ScreenshotOnFailedAction = screenshotOnFail;
+            return this;
+        }
+
+        public FluentConfig ScreenshotOnFailedAssert(bool screenshotOnFail)
+        {
+            this.Settings.ScreenshotOnFailedAssert = screenshotOnFail;
             return this;
         }
 
@@ -97,6 +104,18 @@ namespace FluentAutomation
         public FluentConfig ContainerRegistration(Action<TinyIoC.TinyIoCContainer> registrationMethod)
         {
             this.Settings.ContainerRegistration = registrationMethod;
+            return this;
+        }
+
+        public FluentConfig OnAssertFailed(Action<FluentAssertFailedException, WindowState> action)
+        {
+            this.Settings.OnAssertFailed = action;
+            return this;
+        }
+
+        public FluentConfig OnExpectFailed(Action<FluentExpectFailedException, WindowState> action)
+        {
+            this.Settings.OnExpectFailed = action;
             return this;
         }
     }

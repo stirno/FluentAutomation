@@ -30,6 +30,9 @@ namespace FluentAutomation
             }
         }
 
+        public Tuple<FluentAssertFailedException, WindowState> PendingAssertFailedExceptionNotification { get; set; }
+        public Tuple<FluentExpectFailedException, WindowState> PendingExpectFailedExceptionNotification { get; set; }
+
         public void Act(CommandType commandType, Action action)
         {
             bool originalWaitOnActions = FluentSettings.Current.WaitOnAllActions;
@@ -49,13 +52,20 @@ namespace FluentAutomation
                     action();
                 }
             }
-            catch (Exceptions.FluentExpectFailedException ex)
+            catch (Exceptions.FluentAssertFailedException ex)
             {
                 if (FluentSettings.Current.ScreenshotOnFailedExpect)
                 {
                     var screenshotName = string.Format(CultureInfo.CurrentCulture, "ExpectFailed_{0}", DateTimeOffset.Now.Date.ToFileTime());
                     ex.ScreenshotPath = System.IO.Path.Combine(FluentSettings.Current.ScreenshotPath, screenshotName);
                     this.TakeScreenshot(ex.ScreenshotPath);
+                }
+
+                // fire related event before throwing/breaking
+                if (this.PendingAssertFailedExceptionNotification != null)
+                {
+                    FluentSettings.Current.OnAssertFailed(this.PendingAssertFailedExceptionNotification.Item1, this.PendingAssertFailedExceptionNotification.Item2);
+                    this.PendingAssertFailedExceptionNotification = null;
                 }
 
                 throw;
@@ -69,10 +79,59 @@ namespace FluentAutomation
                     this.TakeScreenshot(ex.ScreenshotPath);
                 }
 
+                if (ex.InnerException != null)
+                {
+                    if (ex.InnerException.GetType() == typeof(FluentExpectFailedException))
+                    {
+                        if (FluentSettings.Current.ScreenshotOnFailedExpect)
+                        {
+                            var screenshotName = string.Format(CultureInfo.CurrentCulture, "ExpectFailed_{0}", DateTimeOffset.Now.Date.ToFileTime());
+                            ex.ScreenshotPath = System.IO.Path.Combine(FluentSettings.Current.ScreenshotPath, screenshotName);
+                            this.TakeScreenshot(ex.ScreenshotPath);
+                        }
+
+                        if (this.PendingAssertFailedExceptionNotification != null)
+                        {
+                            FluentSettings.Current.OnAssertFailed(this.PendingAssertFailedExceptionNotification.Item1, this.PendingAssertFailedExceptionNotification.Item2);
+                            this.PendingAssertFailedExceptionNotification = null;
+                        }
+                    }
+                    else if (ex.InnerException.GetType() == typeof(FluentAssertFailedException))
+                    {
+                        if (FluentSettings.Current.ScreenshotOnFailedAssert)
+                        {
+                            var screenshotName = string.Format(CultureInfo.CurrentCulture, "AssertFailed_{0}", DateTimeOffset.Now.Date.ToFileTime());
+                            ex.ScreenshotPath = System.IO.Path.Combine(FluentSettings.Current.ScreenshotPath, screenshotName);
+                            this.TakeScreenshot(ex.ScreenshotPath);
+                        }
+
+                        // fire related event before throwing/breaking
+                        if (this.PendingAssertFailedExceptionNotification != null)
+                        {
+                            FluentSettings.Current.OnAssertFailed(this.PendingAssertFailedExceptionNotification.Item1, this.PendingAssertFailedExceptionNotification.Item2);
+                            this.PendingAssertFailedExceptionNotification = null;
+                        }
+                    }
+                }
+
+                // fire related event before throwing/breaking
+                if (this.PendingAssertFailedExceptionNotification != null)
+                {
+                    FluentSettings.Current.OnAssertFailed(this.PendingAssertFailedExceptionNotification.Item1, this.PendingAssertFailedExceptionNotification.Item2);
+                    this.PendingAssertFailedExceptionNotification = null;
+                }
+
                 throw;
             }
             finally
             {
+                // fire off event for expect failures
+                if (this.PendingExpectFailedExceptionNotification != null)
+                {
+                    FluentSettings.Current.OnExpectFailed(this.PendingExpectFailedExceptionNotification.Item1, this.PendingExpectFailedExceptionNotification.Item2);
+                    this.PendingExpectFailedExceptionNotification = null;
+                }
+
                 // restore WaitOnAllActions settings in all cases (protection for future cases where above catches dont rethrow)
                 FluentSettings.Current.WaitOnAllActions = originalWaitOnActions;
             }

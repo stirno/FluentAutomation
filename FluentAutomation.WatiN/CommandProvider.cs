@@ -119,6 +119,14 @@ namespace FluentAutomation
             }
         }
 
+        public string Source
+        {
+            get
+            {
+                return this.browser.Body.Parent.OuterHtml;
+            }
+        }
+
         public void Navigate(Uri uri)
         {
             this.browser.GoTo(uri);

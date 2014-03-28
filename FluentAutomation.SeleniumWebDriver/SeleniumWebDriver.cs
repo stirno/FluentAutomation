@@ -2,6 +2,7 @@
 using FluentAutomation.Interfaces;
 using FluentAutomation.Wrappers;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Remote;
 using System;
 using System.Collections.Generic;
@@ -183,7 +184,14 @@ namespace FluentAutomation
                     return new Func<IWebDriver>(() => new OpenQA.Selenium.Firefox.FirefoxDriver());
                 case Browser.Chrome:
                     driverPath = EmbeddedResources.UnpackFromAssembly("chromedriver.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
-                    return new Func<IWebDriver>(() => new OpenQA.Selenium.Chrome.ChromeDriver(Path.GetDirectoryName(driverPath)));
+
+                    var chromeService = ChromeDriverService.CreateDefaultService(Path.GetDirectoryName(driverPath));
+                    chromeService.SuppressInitialDiagnosticInformation = true;
+
+                    var options = new ChromeOptions();
+                    options.AddArgument("--log-level=3");
+
+                    return new Func<IWebDriver>(() => new OpenQA.Selenium.Chrome.ChromeDriver(chromeService, options));
                 case Browser.PhantomJs:
                     driverPath = EmbeddedResources.UnpackFromAssembly("phantomjs.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
                     return new Func<IWebDriver>(() => new OpenQA.Selenium.PhantomJS.PhantomJSDriver(Path.GetDirectoryName(driverPath)));

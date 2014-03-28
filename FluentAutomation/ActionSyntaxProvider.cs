@@ -308,6 +308,15 @@ namespace FluentAutomation
             }
 
             /// <summary>
+            /// Switch back to the top-level document
+            /// </summary>
+            /// <returns></returns>
+            public IActionSyntaxProvider Frame()
+            {
+                return this.Frame(string.Empty);
+            }
+
+            /// <summary>
             /// Switch focus to a previously selected frame/iframe
             /// </summary>
             /// <param name="frameElement"></param>
