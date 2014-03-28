@@ -290,6 +290,14 @@ namespace FluentAutomation
             }
 
             /// <summary>
+            /// Switch back to the primary window
+            /// </summary>
+            public IActionSyntaxProvider Window()
+            {
+                return this.Window(string.Empty);
+            }
+
+            /// <summary>
             /// Switch to a frame/iframe via page selector or ID
             /// </summary>
             /// <param name="frameSelector"></param>

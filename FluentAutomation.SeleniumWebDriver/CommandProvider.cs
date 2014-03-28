@@ -27,6 +27,8 @@ namespace FluentAutomation
             }
         }
 
+        private string mainWindowHandle = null;
+
         public CommandProvider(Func<IWebDriver> webDriverFactory, IFileStoreProvider fileStoreProvider)
         {
             FluentTest.ProviderInstance = null;
@@ -46,6 +48,8 @@ namespace FluentAutomation
                 {
                     webDriver.Manage().Window.Size = new Size(FluentSettings.Current.WindowWidth.Value, FluentSettings.Current.WindowHeight.Value);
                 }
+
+                this.mainWindowHandle = webDriver.CurrentWindowHandle;
 
                 return webDriver;
             });
@@ -468,7 +472,28 @@ namespace FluentAutomation
         {
             this.Act(CommandType.Action, () =>
             {
-                this.webDriver.SwitchTo().Window(windowName);
+                if (windowName == string.Empty)
+                {
+                    this.webDriver.SwitchTo().Window(this.mainWindowHandle);
+                    return;
+                }
+
+                var matchFound = false;
+                foreach (var windowHandle in this.webDriver.WindowHandles)
+                {
+                    this.webDriver.SwitchTo().Window(windowHandle);
+
+                    if (this.webDriver.Title == windowName || this.webDriver.Url.EndsWith(windowName))
+                    {
+                        matchFound = true;
+                        break;
+                    }
+                }
+
+                if (!matchFound)
+                {
+                    throw new FluentException("No window with a title or URL matching [{0}] could be found.", windowName);
+                }
             });
         }
 

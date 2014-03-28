@@ -20,8 +20,12 @@ namespace FluentAutomation.Tests
         public void CanHandleAlert()
         {
             I.Open("http://localhost:1474/Home/Index");
-            I.Switch.Frame("iframe");
+            //I.Switch.Frame("iframe");
+            I.Click("a[href='/Home/Contact']");
+            I.Switch.Window("Contact - My ASP.NET Application");
             I.Assert.Text("Contact.").In("h2");
+            I.Switch.Window();
+            I.Assert.Text("ASP.NET1").In("h1");
         }
     }
 }
