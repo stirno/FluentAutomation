@@ -161,7 +161,8 @@ namespace FluentAutomation
         {
             var hasText = false;
             var unwrappedElement = element.Element;
-            if (unwrappedElement.IsMultipleSelect)
+            var actualText = unwrappedElement.Text;
+            if (unwrappedElement.IsSelect)
             {
                 foreach (var optionText in unwrappedElement.SelectedOptionTextCollection)
                 {
@@ -171,6 +172,8 @@ namespace FluentAutomation
                         break;
                     }
                 }
+
+                actualText = string.Join(", ", unwrappedElement.SelectedOptionTextCollection.Select(x => x).ToArray());
             }
             else
             {
@@ -191,7 +194,7 @@ namespace FluentAutomation
             return new ElementHasTextResult
             {
                 HasText = hasText,
-                ActualText = unwrappedElement.Text,
+                ActualText = actualText,
                 ElementType = elementType,
                 Selector = element.Element.Selector
             };
