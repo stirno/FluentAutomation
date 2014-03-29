@@ -35,6 +35,12 @@ namespace FluentAutomation
             return this;
         }
 
+        public FluentConfig ScreenshotPrefix(string prefix)
+        {
+            this.Settings.ScreenshotPrefix = prefix;
+            return this;
+        }
+
         public FluentConfig ScreenshotOnFailedExpect(bool screenshotOnFail)
         {
             this.Settings.ScreenshotOnFailedExpect = screenshotOnFail;

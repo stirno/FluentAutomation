@@ -13,10 +13,11 @@ namespace FluentAutomation
         {
             try
             {
+                if (!string.IsNullOrEmpty(settings.ScreenshotPrefix))
+                    fileName = settings.ScreenshotPrefix + fileName;
+
                 if (fileName.Substring(0, fileName.Length - 4) != ".png")
-                {
                     fileName += ".png";
-                }
 
                 File.WriteAllBytes(Path.Combine(settings.ScreenshotPath, fileName), contents);
                 return true;

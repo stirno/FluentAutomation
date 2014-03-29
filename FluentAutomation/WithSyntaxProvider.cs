@@ -28,6 +28,54 @@ namespace FluentAutomation
             return this;
         }
 
+        public WithSyntaxProvider WaitOnAllActions(bool wait)
+        {
+            this.inlineSettings.WaitOnAllActions = wait;
+            return this;
+        }
+
+        public WithSyntaxProvider WaitOnAllExpects(bool wait)
+        {
+            this.inlineSettings.WaitOnAllExpects = wait;
+            return this;
+        }
+
+        public WithSyntaxProvider WaitOnAllAsserts(bool wait)
+        {
+            this.inlineSettings.WaitOnAllAsserts = wait;
+            return this;
+        }
+
+        public WithSyntaxProvider ScreenshotPath(string screenshotPath)
+        {
+            this.inlineSettings.ScreenshotPath = screenshotPath;
+            return this;
+        }
+
+        public WithSyntaxProvider ScreenshotPrefix(string prefix)
+        {
+            this.inlineSettings.ScreenshotPrefix = prefix;
+            return this;
+        }
+
+        public WithSyntaxProvider ScreenshotOnFailedAction(bool screenshotOnFail)
+        {
+            this.inlineSettings.ScreenshotOnFailedAction = screenshotOnFail;
+            return this;
+        }
+
+        public WithSyntaxProvider ScreenshotOnFailedExpect(bool screenshotOnFail)
+        {
+            this.inlineSettings.ScreenshotOnFailedExpect = screenshotOnFail;
+            return this;
+        }
+
+        public WithSyntaxProvider ScreenshotOnFailedAssert(bool screenshotOnFail)
+        {
+            this.inlineSettings.ScreenshotOnFailedAssert = screenshotOnFail;
+            return this;
+        }
+
         public WithSyntaxProvider WindowSize(int width, int height)
         {
             this.inlineSettings.WindowHeight = height;

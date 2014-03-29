@@ -82,6 +82,7 @@ namespace FluentAutomation
         public TimeSpan WaitUntilTimeout { get; set; }
         public TimeSpan WaitUntilInterval { get; set; }
         public string ScreenshotPath { get; set; }
+        public string ScreenshotPrefix { get; set; }
         public string UserTempDirectory { get; set; }
         public Action<TinyIoC.TinyIoCContainer> ContainerRegistration { get; set; }
         public Action<FluentExpectFailedException, WindowState> OnExpectFailed { get; set; }
