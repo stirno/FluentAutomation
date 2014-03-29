@@ -1,0 +1,22 @@
+<ul class="menu">
+	<li class="heading">Documentation</li>
+	{{#each DocLinks}}
+	<li{{{html}}}><a href="{{href}}">{{text}}</a></li>
+	{{/each}}
+
+	<li class="heading" style="margin-top: 15px">API</li>
+	{{#each APILinks}}
+	<li{{{html}}}><a href="{{href}}">{{text}}</a></li>
+	{{/each}}
+</ul>
+
+<section class="doc_content">
+	
+	{{#each Pages}}
+	<div class="doc_page" id="{{id}}">
+		<h4>{{title}}</h4>
+		{{{content}}}
+	</div>
+	{{/each}}
+
+</section>
