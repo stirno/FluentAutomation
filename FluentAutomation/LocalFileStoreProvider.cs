@@ -9,7 +9,7 @@ namespace FluentAutomation
 {
     public class LocalFileStoreProvider : IFileStoreProvider
     {
-        public bool SaveScreenshot(byte[] contents, string fileName)
+        public bool SaveScreenshot(FluentSettings settings, byte[] contents, string fileName)
         {
             try
             {
@@ -18,7 +18,7 @@ namespace FluentAutomation
                     fileName += ".png";
                 }
 
-                File.WriteAllBytes(Path.Combine(FluentSettings.Current.ScreenshotPath, fileName), contents);
+                File.WriteAllBytes(Path.Combine(settings.ScreenshotPath, fileName), contents);
                 return true;
             }
             catch (Exception)

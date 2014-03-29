@@ -13,24 +13,6 @@ namespace FluentAutomation
     /// </summary>
     public class FluentTest : BaseFluentTest
     {
-        /// <summary>
-        /// Actions - Fluent's action functionality.
-        /// </summary>
-        public IActionSyntaxProvider I
-        {
-            get
-            {
-                var provider = SyntaxProvider as IActionSyntaxProvider;
-                if (provider == null || provider.IsDisposed())
-                {
-                    this.Session.BootstrapTypeRegistration(FluentSettings.Current.ContainerRegistration);
-                    SyntaxProvider = this.Session.GetSyntaxProvider();
-                }
-
-                return SyntaxProvider as IActionSyntaxProvider;
-            }
-        }
-
         public static bool IsMultiBrowserTest = false;
 
         private static object providerInstance = null;
@@ -41,9 +23,6 @@ namespace FluentAutomation
             {
                 if (IsMultiBrowserTest)
                     throw new FluentException("Accessing the Provider while using multiple browsers in a single test is unsupported.");
-
-                if (providerInstance == null)
-                    throw new FluentException("Provider is not available yet. Open a page with I.Open to create the provider.");
 
                 return providerInstance;
             }
@@ -56,7 +35,13 @@ namespace FluentAutomation
 
         public object Provider
         {
-            get { return FluentTest.ProviderInstance; }
+            get
+            {
+                if (FluentTest.ProviderInstance == null)
+                    throw new FluentException("Provider is not available yet. Open a page with I.Open to create the provider.");
+
+                return FluentTest.ProviderInstance;
+            }
         }
 
         private FluentSession session = null;
@@ -74,6 +59,29 @@ namespace FluentAutomation
             }
         }
 
+        /// <summary>
+        /// Actions - Fluent's action functionality.
+        /// </summary>
+        public IActionSyntaxProvider I
+        {
+            get
+            {
+                var provider = SyntaxProvider as IActionSyntaxProvider;
+                if (provider == null || provider.IsDisposed())
+                {
+                    this.Session.BootstrapTypeRegistration(FluentSettings.Current.ContainerRegistration);
+                    SyntaxProvider = this.Session.GetSyntaxProvider();
+                }
+
+                // set the CommandProvider settings each time I is accessed, this allows reversion of
+                // per step configuration values
+                var actionSyntaxProvider = (ActionSyntaxProvider)SyntaxProvider;
+                actionSyntaxProvider.WithConfig(FluentSettings.Current);
+
+                return SyntaxProvider as IActionSyntaxProvider;
+            }
+        }
+
         public FluentConfig Config
         {
             get
@@ -81,10 +89,27 @@ namespace FluentAutomation
                 return FluentConfig.Current;
             }
         }
+
+        public WithSyntaxProvider With
+        {
+            get
+            {
+                return new WithSyntaxProvider(I);
+            }
+        }
     }
 
     public class FluentTest<T> : FluentTest where T : class
     {
-        public new T Provider { get { return FluentTest.ProviderInstance as T; } }
+        public new T Provider
+        {
+            get
+            {
+                if (FluentTest.ProviderInstance == null)
+                    throw new FluentException("Provider is not available yet. Open a page with I.Open to create the provider.");
+
+                return FluentTest.ProviderInstance as T;
+            }
+        }
     }
 }

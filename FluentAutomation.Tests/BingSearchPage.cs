@@ -50,7 +50,7 @@ namespace FluentAutomation.Tests
     {
         public SampleTest()
         {
-            Config.DefaultWaitUntilTimeout(TimeSpan.FromMilliseconds(1500));
+            Config.WaitUntilTimeout(TimeSpan.FromMilliseconds(1500));
             SeleniumWebDriver.Bootstrap(SeleniumWebDriver.Browser.Chrome);
         }
 

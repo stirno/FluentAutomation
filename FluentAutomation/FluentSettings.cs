@@ -63,6 +63,11 @@ namespace FluentAutomation
             };
         }
 
+        internal FluentSettings Clone()
+        {
+            return (FluentSettings)this.MemberwiseClone();
+        }
+
         public bool WaitOnAllExpects { get; set; }
         public bool WaitOnAllAsserts { get; set; }
         public bool WaitOnAllActions { get; set; }

@@ -470,12 +470,12 @@ namespace FluentAutomation
         {
             if (accessor.Field == AlertField.OKButton)
             {
-                this.AlertHandler.WaitUntilExists((int)FluentSettings.Current.WaitTimeout.TotalSeconds);
+                this.AlertHandler.WaitUntilExists((int)this.Settings.WaitTimeout.TotalSeconds);
                 this.AlertHandler.OKButton.Click();
             }
             else if (accessor.Field == AlertField.CancelButton)
             {
-                this.ConfirmHandler.WaitUntilExists((int)FluentSettings.Current.WaitTimeout.TotalSeconds);
+                this.ConfirmHandler.WaitUntilExists((int)this.Settings.WaitTimeout.TotalSeconds);
                 this.ConfirmHandler.CancelButton.Click();
             }
             else
@@ -484,7 +484,7 @@ namespace FluentAutomation
 
         public void AlertText(Action<string> matchFunc)
         {
-            this.ConfirmHandler.WaitUntilExists((int)FluentSettings.Current.WaitTimeout.TotalSeconds);
+            this.ConfirmHandler.WaitUntilExists((int)this.Settings.WaitTimeout.TotalSeconds);
             matchFunc(this.ConfirmHandler.Message);
         }
 
@@ -503,6 +503,17 @@ namespace FluentAutomation
             }
             catch (JavaScriptException) { }
             action(isVisible);
+        }
+
+        public ICommandProvider WithConfig(FluentSettings settings)
+        {
+            this.Settings = settings;
+
+            // If the browser size has changed since the last config change, update it
+            if (settings.WindowWidth.HasValue && settings.WindowHeight.HasValue)
+                this.browser.SizeWindow(settings.WindowWidth.Value, settings.WindowHeight.Value);
+
+            return this;
         }
 
         private void fireOnChange(WatiNCore.Element element)

@@ -344,6 +344,12 @@ namespace FluentAutomation
             Parallel.ForEach(this.commandProviders, x => x.Act(commandType, action));
         }
 
+        public ICommandProvider WithConfig(FluentSettings settings)
+        {
+            Parallel.ForEach(this.commandProviders, x => x.WithConfig(settings));
+            return this;
+        }
+
         public void Dispose()
         {
             Parallel.ForEach(this.commandProviders, x => x.Dispose());

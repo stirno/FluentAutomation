@@ -74,5 +74,7 @@ namespace FluentAutomation.Interfaces
         void Visible(ElementProxy element, Action<bool> action);
 
         void Act(CommandType commandType, Action action);
+
+        ICommandProvider WithConfig(FluentSettings settings);
     }
 }

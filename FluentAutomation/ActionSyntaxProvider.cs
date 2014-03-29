@@ -11,13 +11,27 @@ namespace FluentAutomation
 {
     public class ActionSyntaxProvider : IActionSyntaxProvider, IDisposable
     {
-        private readonly ICommandProvider commandProvider = null;
-        private readonly IAssertProvider assertProvider = null;
+        internal readonly ICommandProvider commandProvider = null;
+        internal readonly IAssertProvider assertProvider = null;
+        internal FluentSettings settings = null;
 
         public ActionSyntaxProvider(ICommandProvider commandProvider, IAssertProvider assertProvider)
+            : this(commandProvider, assertProvider, FluentSettings.Current)
         {
-            this.commandProvider = commandProvider;
+        }
+
+        public ActionSyntaxProvider(ICommandProvider commandProvider, IAssertProvider assertProvider, FluentSettings settings)
+        {
+            this.commandProvider = commandProvider.WithConfig(settings);
             this.assertProvider = assertProvider;
+            this.settings = settings;
+        }
+
+        internal ActionSyntaxProvider WithConfig(FluentSettings settings)
+        {
+            this.commandProvider.WithConfig(settings);
+            this.settings = settings;
+            return this;
         }
 
         #region Direct Execution Actions
@@ -691,6 +705,7 @@ namespace FluentAutomation
         }
         #endregion
 
+        #region Assert / Expect
         private AssertSyntaxProvider expect = null;
         public AssertSyntaxProvider Expect
         {
@@ -698,7 +713,7 @@ namespace FluentAutomation
             {
                 if (this.expect == null)
                 {
-                    this.expect = new AssertSyntaxProvider(this.commandProvider, FluentSettings.Current.ExpectIsAssert ? this.assertProvider.EnableExceptions() : this.assertProvider);
+                    this.expect = new AssertSyntaxProvider(this.commandProvider, this.settings.ExpectIsAssert ? this.assertProvider.EnableExceptions() : this.assertProvider);
                 }
 
                 return this.expect;
@@ -718,6 +733,7 @@ namespace FluentAutomation
                 return this.assert;
             }
         }
+        #endregion
 
         private bool isDisposed = false;
         public bool IsDisposed()

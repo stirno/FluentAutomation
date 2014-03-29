@@ -15,12 +15,9 @@ namespace FluentAutomation.Tests
         public AlertTests()
         {
             FluentAutomation.SeleniumWebDriver.Bootstrap(SeleniumWebDriver.Browser.Chrome);
-            Config.OnAssertFailed((ex, state) =>
-            {
-                Trace.WriteLine("Error in assert, source looks like:");
-                Trace.WriteLine("");
-                Trace.WriteLine(state.Source);
-            });
+            Config
+            .OnAssertFailed((ex, state) =>
+            {});
         }
 
         [TestMethod]
@@ -34,18 +31,26 @@ namespace FluentAutomation.Tests
             I.Assert.Text("ASP.NET1").Not.In("h1");
             I.Assert.Text("ASP.NET").In("h1");
 
-            I.Expect.Class("red").Not.On("#id");
-            I.Expect.Count(1).Not.Of("li");
+            //I.Expect.Class("red").Not.On("#id");
+            //I.Expect.Count(1).Not.Of("li");
 
-            I.Assert.Not.Visible("#hiddenthing");
+            With
+                .WaitUntil(1)
+                .WindowSize(800, 600)
+            .Then
+                .Wait(3)
+                .Assert
+                    .Not.Visible("#hiddenthing")
+                    .Not.Exists("#halp");
 
-            I.Assert.Not.Exists("#halp");
             I.Assert.Not.True(() => false);
             I.Assert.Not.False(() => true);
             I.Assert.Not.Url("http://google.com");
             I.Assert.Not.Throws(() => "".ToString());
 
-            I.Wait(2).For.Assert.Exists("#wat");
+            I.Wait(5);
+
+            //With.WaitUntil(2).Then.Assert.Exists("#wat");
         }
     }
 }

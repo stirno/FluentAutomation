@@ -72,6 +72,7 @@
     <Compile Include="Alert.cs" />
     <Compile Include="Win32Magic.cs" />
     <Compile Include="WindowState.cs" />
+    <Compile Include="WithSyntaxProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FluentAutomation.Core.nuspec" />

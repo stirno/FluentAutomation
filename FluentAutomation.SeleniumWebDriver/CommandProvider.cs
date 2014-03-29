@@ -44,9 +44,15 @@ namespace FluentAutomation
                 webDriver.Manage().Cookies.DeleteAllCookies();
                 webDriver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(10));
 
-                if (FluentSettings.Current.WindowHeight.HasValue && FluentSettings.Current.WindowWidth.HasValue)
+                if (this.Settings.WindowHeight.HasValue && this.Settings.WindowWidth.HasValue)
                 {
-                    webDriver.Manage().Window.Size = new Size(FluentSettings.Current.WindowWidth.Value, FluentSettings.Current.WindowHeight.Value);
+                    webDriver.Manage().Window.Size = new Size(this.Settings.WindowWidth.Value, this.Settings.WindowHeight.Value);
+                }
+                else
+                {
+                    var windowSize = webDriver.Manage().Window.Size;
+                    this.Settings.WindowHeight = windowSize.Height;
+                    this.Settings.WindowWidth = windowSize.Width;
                 }
 
                 this.mainWindowHandle = webDriver.CurrentWindowHandle;
@@ -426,11 +432,11 @@ namespace FluentAutomation
             {
                 // get raw screenshot
                 var screenshotDriver = (ITakesScreenshot)this.webDriver;
-                var tmpImagePath = Path.Combine(FluentSettings.Current.UserTempDirectory, screenshotName);
+                var tmpImagePath = Path.Combine(this.Settings.UserTempDirectory, screenshotName);
                 screenshotDriver.GetScreenshot().SaveAsFile(tmpImagePath, ImageFormat.Png);
 
                 // save to file store
-                this.fileStoreProvider.SaveScreenshot(File.ReadAllBytes(tmpImagePath), screenshotName);
+                this.fileStoreProvider.SaveScreenshot(this.Settings, File.ReadAllBytes(tmpImagePath), screenshotName);
                 File.Delete(tmpImagePath);
             });
         }
@@ -569,6 +575,17 @@ namespace FluentAutomation
         {
             var isVisible = (element.Element as Element).WebElement.Displayed;
             action(isVisible);
+        }
+
+        public ICommandProvider WithConfig(FluentSettings settings)
+        {
+            this.Settings = settings;
+
+            // If the browser size has changed since the last config change, update it
+            if (settings.WindowWidth.HasValue && settings.WindowHeight.HasValue)
+                this.webDriver.Manage().Window.Size = new Size(settings.WindowWidth.Value, settings.WindowHeight.Value);
+
+            return this;
         }
 
         public void Dispose()
