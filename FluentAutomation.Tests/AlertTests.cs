@@ -34,7 +34,9 @@ namespace FluentAutomation.Tests
             I.Assert.Text("ASP.NET1").Not.In("h1");
             I.Assert.Text("ASP.NET").In("h1");
 
-            I.Assert.Not.Exists("h1");
+            I.Assert.Not.Visible("#hiddenthing");
+
+            I.Assert.Not.Exists("#halp");
             I.Assert.Not.True(() => false);
             I.Assert.Not.False(() => true);
             I.Assert.Not.Url("http://google.com");

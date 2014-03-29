@@ -492,6 +492,18 @@ namespace FluentAutomation
         {
             throw new FluentException("Due to inconsistent behavior, handling of prompts that accept text entry is disabled when using WatiN with FluentAutomation.");
         }
+        
+        public void Visible(ElementProxy element, Action<bool> action)
+        {
+            var el = (element.Element as Element).AutomationElement;
+            var isVisible = false;
+            try
+            {
+                isVisible = bool.Parse(this.ActiveDomContainer.Eval(string.Format("jQuery({0}).is(':visible');", el.GetJavascriptElementReference())));
+            }
+            catch (JavaScriptException) { }
+            action(isVisible);
+        }
 
         private void fireOnChange(WatiNCore.Element element)
         {

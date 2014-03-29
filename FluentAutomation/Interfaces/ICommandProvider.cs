@@ -71,6 +71,7 @@ namespace FluentAutomation.Interfaces
         void AlertClick(Alert accessor);
         void AlertText(Action<string> matchFunc);
         void AlertEnterText(string text);
+        void Visible(ElementProxy element, Action<bool> action);
 
         void Act(CommandType commandType, Action action);
     }

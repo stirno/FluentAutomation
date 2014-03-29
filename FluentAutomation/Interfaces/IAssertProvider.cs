@@ -49,8 +49,13 @@ namespace FluentAutomation.Interfaces
         void False(Expression<Func<bool>> matchFunc);
         void Throws(Expression<Action> matchAction);
         void NotThrows(Expression<Action> matchAction);
+
         void Exists(string selector);
         void NotExists(string selector);
+        void Visible(string selector);
+        void NotVisible(string selector);
+        void Visible(ElementProxy element);
+        void NotVisible(ElementProxy element);
 
         void AlertText(string text);
         void AlertNotText(string text);

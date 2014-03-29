@@ -565,6 +565,12 @@ namespace FluentAutomation
             alert.SendKeys(text);
         }
 
+        public void Visible(ElementProxy element, Action<bool> action)
+        {
+            var isVisible = (element.Element as Element).WebElement.Displayed;
+            action(isVisible);
+        }
+
         public void Dispose()
         {
             try

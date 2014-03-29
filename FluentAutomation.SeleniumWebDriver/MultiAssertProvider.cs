@@ -240,6 +240,26 @@ namespace FluentAutomation
             Parallel.ForEach(this.providers, x => x.Key.AlertNotText(matchFunc));
         }
 
+        public void Visible(string selector)
+        {
+            Parallel.ForEach(this.providers, x => x.Key.Visible(selector));
+        }
+
+        public void NotVisible(string selector)
+        {
+            Parallel.ForEach(this.providers, x => x.Key.NotVisible(selector));
+        }
+
+        public void Visible(ElementProxy element)
+        {
+            Parallel.ForEach(this.providers, x => x.Key.Visible(element));
+        }
+
+        public void NotVisible(ElementProxy element)
+        {
+            Parallel.ForEach(this.providers, x => x.Key.NotVisible(element));
+        }
+
         public bool ThrowExceptions { get; set; }
 
         public IAssertProvider EnableExceptions()

@@ -334,6 +334,11 @@ namespace FluentAutomation
             Parallel.ForEach(this.commandProviders, x => x.AlertEnterText(text));
         }
 
+        public void Visible(ElementProxy element, Action<bool> action)
+        {
+            Parallel.ForEach(this.commandProviders, x => x.Visible(element, action));
+        }
+
         public void Act(CommandType commandType, Action action)
         {
             Parallel.ForEach(this.commandProviders, x => x.Act(commandType, action));

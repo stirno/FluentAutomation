@@ -101,6 +101,26 @@ namespace FluentAutomation
                 this.assertProvider.NotExists(selector);
                 return this.assertSyntaxProvider;
             }
+
+            /// <summary>
+            /// Assert that the element matching the selector is not visible and cannot be interacted with.
+            /// </summary>
+            /// <param name="selector"></param>
+            public AssertSyntaxProvider Visible(string selector)
+            {
+                this.assertProvider.NotVisible(selector);
+                return this.assertSyntaxProvider;
+            }
+
+            /// <summary>
+            /// Assert that the element is not visible and cannot be interacted with.
+            /// </summary>
+            /// <param name="selector"></param>
+            public AssertSyntaxProvider Visible(ElementProxy element)
+            {
+                this.assertProvider.NotVisible(element);
+                return this.assertSyntaxProvider;
+            }
         }
 
         #region Count
@@ -605,6 +625,26 @@ namespace FluentAutomation
         {
             this.assertProvider.Exists(selector);
             return this.assertSyntaxProvider;
+        }
+
+        /// <summary>
+        /// Assert that the element matching the selector is visible and can be interacted with.
+        /// </summary>
+        /// <param name="selector"></param>
+        public AssertSyntaxProvider Visible(string selector)
+        {
+            this.assertProvider.Visible(selector);
+            return this;
+        }
+
+        /// <summary>
+        /// Assert that the element is visible and can be interacted with.
+        /// </summary>
+        /// <param name="selector"></param>
+        public AssertSyntaxProvider Visible(ElementProxy element)
+        {
+            this.assertProvider.Visible(element);
+            return this;
         }
     }
 

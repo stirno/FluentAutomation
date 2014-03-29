@@ -629,6 +629,40 @@ namespace FluentAutomation
             });
         }
 
+        public void Visible(string selector)
+        {
+            this.Visible(this.commandProvider.Find(selector));
+        }
+
+        public void NotVisible(string selector)
+        {
+            this.NotVisible(this.commandProvider.Find(selector));
+        }
+
+        public void Visible(ElementProxy element)
+        {
+            this.commandProvider.Act(commandType, () =>
+            {
+                this.commandProvider.Visible(element, (isVisible) =>
+                {
+                    if (!isVisible)
+                        this.ReportError("Expected element [{0}] to be visible.", element.Element.Selector);
+                });
+            });
+        }
+
+        public void NotVisible(ElementProxy element)
+        {
+            this.commandProvider.Act(commandType, () =>
+            {
+                this.commandProvider.Visible(element, (isVisible) =>
+                {
+                    if (isVisible)
+                        this.ReportError("Expected element [{0}] not to be visible.", element.Element.Selector);
+                });
+            });
+        }
+
         public void AlertText(string text)
         {
             this.commandProvider.Act(CommandType.NoRetry, () =>
