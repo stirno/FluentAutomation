@@ -40,7 +40,7 @@ namespace FluentAutomation
             {
                 if (this.WaitOnAction(commandType))
                 {
-                    this.WaitUntil(() => action(), FluentSettings.Current.DefaultWaitUntilTimeout);
+                    this.WaitUntil(() => action(), FluentSettings.Current.WaitUntilTimeout);
                 }
                 else
                 {
@@ -144,7 +144,7 @@ namespace FluentAutomation
 
         public void Wait()
         {
-            this.Wait(FluentSettings.Current.DefaultWaitTimeout);
+            this.Wait(FluentSettings.Current.WaitTimeout);
         }
 
         public void Wait(TimeSpan timeSpan)
@@ -154,7 +154,7 @@ namespace FluentAutomation
 
         public void WaitUntil(Expression<Func<bool>> conditionFunc)
         {
-            this.WaitUntil(conditionFunc, FluentSettings.Current.DefaultWaitUntilTimeout);
+            this.WaitUntil(conditionFunc, FluentSettings.Current.WaitUntilTimeout);
         }
 
         public void WaitUntil(Expression<Func<bool>> conditionFunc, TimeSpan timeout)
@@ -176,7 +176,7 @@ namespace FluentAutomation
                             break;
                         }
 
-                        System.Threading.Thread.Sleep(FluentSettings.Current.DefaultWaitUntilThreadSleep);
+                        System.Threading.Thread.Sleep(FluentSettings.Current.WaitUntilInterval);
                     }
                     catch (FluentException ex)
                     {
@@ -198,7 +198,7 @@ namespace FluentAutomation
 
         public void WaitUntil(Expression<Action> conditionAction)
         {
-            this.WaitUntil(conditionAction, FluentSettings.Current.DefaultWaitUntilTimeout);
+            this.WaitUntil(conditionAction, FluentSettings.Current.WaitUntilTimeout);
         }
 
         public void WaitUntil(Expression<Action> conditionAction, TimeSpan timeout)
@@ -232,7 +232,7 @@ namespace FluentAutomation
                         break;
                     }
 
-                    System.Threading.Thread.Sleep(FluentSettings.Current.DefaultWaitUntilThreadSleep);
+                    System.Threading.Thread.Sleep(FluentSettings.Current.WaitUntilInterval);
                 }
 
                 // If an exception was thrown the last loop, assume we hit the timeout

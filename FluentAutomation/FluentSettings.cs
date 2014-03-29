@@ -32,9 +32,9 @@ namespace FluentAutomation
             this.WindowWidth = null;
 
             // timeouts
-            this.DefaultWaitTimeout = TimeSpan.FromSeconds(1);
-            this.DefaultWaitUntilTimeout = TimeSpan.FromSeconds(5);
-            this.DefaultWaitUntilThreadSleep = TimeSpan.FromMilliseconds(100);
+            this.WaitTimeout = TimeSpan.FromSeconds(1);
+            this.WaitUntilTimeout = TimeSpan.FromSeconds(5);
+            this.WaitUntilInterval = TimeSpan.FromMilliseconds(100);
 
             // paths
             this.UserTempDirectory = System.IO.Path.GetTempPath();
@@ -73,9 +73,9 @@ namespace FluentAutomation
         public bool ScreenshotOnFailedAction { get; set; }
         public int? WindowHeight { get; set; }
         public int? WindowWidth { get; set; }
-        public TimeSpan DefaultWaitTimeout { get; set; }
-        public TimeSpan DefaultWaitUntilTimeout { get; set; }
-        public TimeSpan DefaultWaitUntilThreadSleep { get; set; }
+        public TimeSpan WaitTimeout { get; set; }
+        public TimeSpan WaitUntilTimeout { get; set; }
+        public TimeSpan WaitUntilInterval { get; set; }
         public string ScreenshotPath { get; set; }
         public string UserTempDirectory { get; set; }
         public Action<TinyIoC.TinyIoCContainer> ContainerRegistration { get; set; }

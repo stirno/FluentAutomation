@@ -34,6 +34,9 @@ namespace FluentAutomation.Tests
             I.Assert.Text("ASP.NET1").Not.In("h1");
             I.Assert.Text("ASP.NET").In("h1");
 
+            I.Expect.Class("red").Not.On("#id");
+            I.Expect.Count(1).Not.Of("li");
+
             I.Assert.Not.Visible("#hiddenthing");
 
             I.Assert.Not.Exists("#halp");
@@ -41,6 +44,8 @@ namespace FluentAutomation.Tests
             I.Assert.Not.False(() => true);
             I.Assert.Not.Url("http://google.com");
             I.Assert.Not.Throws(() => "".ToString());
+
+            I.Wait(2).For.Assert.Exists("#wat");
         }
     }
 }

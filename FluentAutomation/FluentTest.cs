@@ -42,6 +42,9 @@ namespace FluentAutomation
                 if (IsMultiBrowserTest)
                     throw new FluentException("Accessing the Provider while using multiple browsers in a single test is unsupported.");
 
+                if (providerInstance == null)
+                    throw new FluentException("Provider is not available yet. Open a page with I.Open to create the provider.");
+
                 return providerInstance;
             }
 

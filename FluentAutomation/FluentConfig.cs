@@ -84,20 +84,20 @@ namespace FluentAutomation
             return this;
         }
 
-        public FluentConfig DefaultWaitTimeout(TimeSpan timeout)
+        public FluentConfig WaitTimeout(TimeSpan timeout)
         {
-            this.Settings.DefaultWaitTimeout = timeout;
+            this.Settings.WaitTimeout = timeout;
             return this;
         }
 
-        public FluentConfig DefaultWaitUntilTimeout(TimeSpan timeout)
+        public FluentConfig WaitUntilTimeout(TimeSpan timeout)
         {
-            this.Settings.DefaultWaitUntilTimeout = timeout;
+            this.Settings.WaitUntilTimeout = timeout;
             return this;
         }
 
-        public FluentConfig DefaultWaitUntilThreadSleep(TimeSpan sleep) {
-            this.Settings.DefaultWaitUntilThreadSleep = sleep;
+        public FluentConfig WaitUntilInterval(TimeSpan sleep) {
+            this.Settings.WaitUntilInterval = sleep;
             return this;
         }
 

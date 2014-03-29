@@ -470,12 +470,12 @@ namespace FluentAutomation
         {
             if (accessor.Field == AlertField.OKButton)
             {
-                this.AlertHandler.WaitUntilExists((int)FluentSettings.Current.DefaultWaitTimeout.TotalSeconds);
+                this.AlertHandler.WaitUntilExists((int)FluentSettings.Current.WaitTimeout.TotalSeconds);
                 this.AlertHandler.OKButton.Click();
             }
             else if (accessor.Field == AlertField.CancelButton)
             {
-                this.ConfirmHandler.WaitUntilExists((int)FluentSettings.Current.DefaultWaitTimeout.TotalSeconds);
+                this.ConfirmHandler.WaitUntilExists((int)FluentSettings.Current.WaitTimeout.TotalSeconds);
                 this.ConfirmHandler.CancelButton.Click();
             }
             else
@@ -484,7 +484,7 @@ namespace FluentAutomation
 
         public void AlertText(Action<string> matchFunc)
         {
-            this.ConfirmHandler.WaitUntilExists((int)FluentSettings.Current.DefaultWaitTimeout.TotalSeconds);
+            this.ConfirmHandler.WaitUntilExists((int)FluentSettings.Current.WaitTimeout.TotalSeconds);
             matchFunc(this.ConfirmHandler.Message);
         }
 
