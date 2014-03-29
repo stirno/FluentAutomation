@@ -31,7 +31,14 @@ namespace FluentAutomation.Tests
             I.Switch.Window("Contact - My ASP.NET Application");
             I.Assert.Text("Contact.").In("h2");
             I.Switch.Window();
-            I.Assert.Not.Text("ASP.NET").In("h1");
+            I.Assert.Text("ASP.NET1").Not.In("h1");
+            I.Assert.Text("ASP.NET").In("h1");
+
+            I.Assert.Not.Exists("h1");
+            I.Assert.Not.True(() => false);
+            I.Assert.Not.False(() => true);
+            I.Assert.Not.Url("http://google.com");
+            I.Assert.Not.Throws(() => "".ToString());
         }
     }
 }
