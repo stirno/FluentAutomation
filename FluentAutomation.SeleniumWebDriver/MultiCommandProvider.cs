@@ -339,6 +339,11 @@ namespace FluentAutomation
             Parallel.ForEach(this.commandProviders, x => x.Visible(element, action));
         }
 
+        public void CssPropertyValue(ElementProxy element, string propertyName, Action<bool, string> action)
+        {
+            Parallel.ForEach(this.commandProviders, x => x.CssPropertyValue(element, propertyName, action));
+        }
+
         public void Act(CommandType commandType, Action action)
         {
             Parallel.ForEach(this.commandProviders, x => x.Act(commandType, action));

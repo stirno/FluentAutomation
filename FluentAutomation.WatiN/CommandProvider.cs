@@ -495,14 +495,33 @@ namespace FluentAutomation
         
         public void Visible(ElementProxy element, Action<bool> action)
         {
-            var el = (element.Element as Element).AutomationElement;
-            var isVisible = false;
-            try
+            this.Act(CommandType.Action, () =>
             {
-                isVisible = bool.Parse(this.ActiveDomContainer.Eval(string.Format("jQuery({0}).is(':visible');", el.GetJavascriptElementReference())));
-            }
-            catch (JavaScriptException) { }
-            action(isVisible);
+                var el = (element.Element as Element).AutomationElement;
+                var isVisible = false;
+                try
+                {
+                    isVisible = bool.Parse(this.ActiveDomContainer.Eval(string.Format("jQuery({0}).is(':visible');", el.GetJavascriptElementReference())));
+                }
+                catch (JavaScriptException) { }
+                action(isVisible);
+            });
+        }
+
+        public void CssPropertyValue(ElementProxy element, string propertyName, Action<bool, string> action)
+        {
+            this.Act(CommandType.Action, () =>
+            {
+                var el = (element.Element as Element).AutomationElement;
+                object cssPropertyValue = null;
+                try
+                {
+                    cssPropertyValue = bool.Parse(this.ActiveDomContainer.Eval(string.Format("jQuery({0}).css('{1}');", el.GetJavascriptElementReference(), propertyName)));
+                }
+                catch (JavaScriptException) { }
+
+                action(cssPropertyValue != null, cssPropertyValue.ToString());
+            });
         }
 
         public ICommandProvider WithConfig(FluentSettings settings)

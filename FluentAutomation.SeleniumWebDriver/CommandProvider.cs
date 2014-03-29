@@ -573,8 +573,23 @@ namespace FluentAutomation
 
         public void Visible(ElementProxy element, Action<bool> action)
         {
-            var isVisible = (element.Element as Element).WebElement.Displayed;
-            action(isVisible);
+            this.Act(CommandType.Action, () =>
+            {
+                var isVisible = (element.Element as Element).WebElement.Displayed;
+                action(isVisible);
+            });
+        }
+        
+        public void CssPropertyValue(ElementProxy element, string propertyName, Action<bool, string> action)
+        {
+            this.Act(CommandType.Action, () =>
+            {
+                var propertyValue = ((IJavaScriptExecutor)this.webDriver).ExecuteScript(string.Format("return fluentjQuery(\"{0}\").css(\"{1}\")", element.Element.Selector, propertyName));
+                if (propertyValue == null)
+                    action(false, string.Empty);
+                else
+                    action(true, propertyValue.ToString());
+            });
         }
 
         public ICommandProvider WithConfig(FluentSettings settings)

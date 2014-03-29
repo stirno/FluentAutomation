@@ -57,6 +57,16 @@ namespace FluentAutomation.Interfaces
         void Visible(ElementProxy element);
         void NotVisible(ElementProxy element);
 
+        void CssProperty(string selector, string propertyName, string propertyValue);
+        void NotCssProperty(string selector, string propertyName, string propertyValue);
+        void CssProperty(ElementProxy element, string propertyName, string propertyValue);
+        void NotCssProperty(ElementProxy element, string propertyName, string propertyValue);
+
+        void Attribute(string selector, string attributeName, string attributeValue);
+        void NotAttribute(string selector, string attributeName, string attributeValue);
+        void Attribute(ElementProxy element, string attributeName, string attributeValue);
+        void NotAttribute(ElementProxy element, string attributeName, string attributeValue);
+
         void AlertText(string text);
         void AlertNotText(string text);
         void AlertText(Expression<Func<string, bool>> matchFunc);

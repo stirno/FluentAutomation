@@ -145,6 +145,127 @@ namespace FluentAutomation
         }
         #endregion
 
+        #region CSS Property Value
+
+        private class ElementHasCssPropertyResult
+        {
+            public bool HasProperty { get; set; }
+
+            public bool PropertyMatches { get; set; }
+
+            public string PropertyValue { get; set; }
+        }
+
+        private ElementHasCssPropertyResult elementHasCssProperty(ElementProxy element, string propertyName, string propertyValue)
+        {
+            var result = new ElementHasCssPropertyResult();
+
+            this.commandProvider.CssPropertyValue(element, propertyName, (hasProperty, actualPropertyValue) =>
+            {
+                if (!hasProperty) return;
+
+                result.HasProperty = true;
+                result.PropertyValue = actualPropertyValue;
+
+                if (propertyValue != null && IsTextMatch(actualPropertyValue, propertyValue))
+                {
+                    result.PropertyMatches = true;
+                }
+            });
+
+            return result;
+        }
+
+        public void CssProperty(string selector, string propertyName, string propertyValue)
+        {
+            this.CssProperty(this.commandProvider.Find(selector), propertyName, propertyValue);
+        }
+
+        public void NotCssProperty(string selector, string propertyName, string propertyValue)
+        {
+            this.NotCssProperty(this.commandProvider.Find(selector), propertyName, propertyValue);
+        }
+
+        public void CssProperty(ElementProxy element, string propertyName, string propertyValue)
+        {
+            this.commandProvider.Act(commandType, () =>
+            {
+                var result = this.elementHasCssProperty(element, propertyName, propertyValue);
+                if (!result.HasProperty)
+                {
+                    this.ReportError("Expected element [{0}] to have CSS property [{1}] but it did not.", element.Element.Selector, propertyName);
+                }
+                else if (propertyValue != null && !result.PropertyMatches)
+                {
+                    this.ReportError("Expected element [{0}]'s CSS property [{1}] to have a value of [{2}] but it was actually [{3}].", element.Element.Selector, propertyName, propertyValue, result.PropertyValue);
+                }
+            });
+        }
+
+        public void NotCssProperty(ElementProxy element, string propertyName, string propertyValue)
+        {
+            this.commandProvider.Act(commandType, () =>
+            {
+                var result = this.elementHasCssProperty(element, propertyName, propertyValue);
+                if (propertyValue == null && result.HasProperty)
+                {
+                    this.ReportError("Expected element [{0}] not to have CSS property [{1}] but it did.", element.Element.Selector, propertyName);
+                }
+                else if (result.PropertyMatches)
+                {
+                    this.ReportError("Expected element [{0}]'s CSS property [{1}] not to have a value of [{2}] but it did.", element.Element.Selector, propertyName, propertyValue);
+                }
+            });
+        }
+
+        #endregion
+
+        #region Attributes
+
+        public void Attribute(string selector, string attributeName, string attributeValue)
+        {
+            this.Attribute(this.commandProvider.Find(selector), attributeName, attributeValue);
+        }
+
+        public void NotAttribute(string selector, string attributeName, string attributeValue)
+        {
+            this.NotAttribute(this.commandProvider.Find(selector), attributeName, attributeValue);
+        }
+
+        public void Attribute(ElementProxy element, string attributeName, string attributeValue)
+        {
+            this.commandProvider.Act(commandType, () =>
+            {
+                var result = element.Element.Attributes.Get(attributeName);
+                if (result == null)
+                {
+                    this.ReportError("Expected element [{0}] to have attribute [{1}] but it did not.", element.Element.Selector, attributeName);
+                }
+                else if (!IsTextMatch(result, attributeValue))
+                {
+                    this.ReportError("Expected element [{0}]'s attribute [{1}] to have a value of [{2}] but it was actually [{3}].", element.Element.Selector, attributeName, attributeValue, result);
+                }
+            });
+        }
+
+        public void NotAttribute(ElementProxy element, string attributeName, string attributeValue)
+        {
+            this.commandProvider.Act(commandType, () =>
+            {
+                var result = element.Element.Attributes.Get(attributeName);
+                if (attributeValue == null && result != null)
+                {
+                    this.ReportError("Expected element [{0}] not to have attribute [{1}] but it did.", element.Element.Selector, attributeName);
+                }
+                else if (result != null && IsTextMatch(result, attributeValue))
+                {
+                    this.ReportError("Expected element [{0}]'s attribute [{1}] not to have a value of [{2}] but it did.", element.Element.Selector, attributeName, attributeValue);
+                }
+            });
+        }
+
+        #endregion
+
         #region Text
         private class ElementHasTextResult
         {
@@ -598,6 +719,7 @@ namespace FluentAutomation
         }
         #endregion
 
+        #region Exists
         private bool elementExists(string selector)
         {
             var exists = false;
@@ -631,7 +753,9 @@ namespace FluentAutomation
                 }
             });
         }
+        #endregion
 
+        #region Visible
         public void Visible(string selector)
         {
             this.Visible(this.commandProvider.Find(selector));
@@ -665,7 +789,9 @@ namespace FluentAutomation
                 });
             });
         }
+        #endregion
 
+        #region Alerts
         public void AlertText(string text)
         {
             this.commandProvider.Act(CommandType.NoRetry, () =>
@@ -731,6 +857,7 @@ namespace FluentAutomation
                 });
             });
         }
+        #endregion
 
         public bool ThrowExceptions { get; set; }
 

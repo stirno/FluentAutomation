@@ -261,6 +261,166 @@ namespace FluentAutomation
         }
         #endregion
 
+        #region CSS Property
+        /// <summary>
+        /// Assert that a matching CSS property is found.
+        /// </summary>
+        /// <param name="propertyName">CSS property name. Example: color</param>
+        public AssertCssPropertySyntaxProvider Css(string propertyName)
+        {
+            return this.Css(propertyName, null);
+        }
+
+        /// <summary>
+        /// Assert that a matching CSS property is found.
+        /// </summary>
+        /// <param name="propertyName">CSS property name. Example: color</param>
+        /// <param name="propertyValue">CSS property value. Example: red</param>
+        public AssertCssPropertySyntaxProvider Css(string propertyName, string propertyValue)
+        {
+            return new AssertCssPropertySyntaxProvider(this.commandProvider, this.assertProvider, this.assertSyntaxProvider, propertyName, propertyValue);
+        }
+
+        public class AssertCssPropertySyntaxProvider : BaseAssertSyntaxProvider
+        {
+            private readonly string propertyName = null;
+            private readonly string propertyValue = null;
+            private readonly bool notMode = false;
+
+            public AssertCssPropertySyntaxProvider(ICommandProvider commandProvider, IAssertProvider assertProvider, AssertSyntaxProvider assertSyntaxProvider, string propertyName, string propertyValue)
+                : this(commandProvider, assertProvider, assertSyntaxProvider, propertyName, propertyValue, false)
+            {
+            }
+
+            public AssertCssPropertySyntaxProvider(ICommandProvider commandProvider, IAssertProvider assertProvider, AssertSyntaxProvider assertSyntaxProvider, string propertyName, string propertyValue, bool notMode)
+                : base(commandProvider, assertProvider, assertSyntaxProvider)
+            {
+                this.propertyName = propertyName;
+                this.propertyValue = propertyValue;
+                this.notMode = notMode;
+            }
+
+            /// <summary>
+            /// Assert that CSS Class does not match - Reverses assertions in this chain.
+            /// </summary>
+            public AssertCssPropertySyntaxProvider Not
+            {
+                get
+                {
+                    return new AssertCssPropertySyntaxProvider(commandProvider, assertProvider, assertSyntaxProvider, propertyName, propertyValue, true);
+                }
+            }
+
+            /// <summary>
+            /// Element matching <paramref name="selector"/> that should have matching CSS class.
+            /// </summary>
+            /// <param name="selector">Sizzle selector.</param>
+            public AssertSyntaxProvider On(string selector)
+            {
+                if (this.notMode)
+                    this.assertProvider.NotCssProperty(selector, this.propertyName, this.propertyValue);
+                else
+                    this.assertProvider.CssProperty(selector, this.propertyName, this.propertyValue);
+
+                return this.assertSyntaxProvider;
+            }
+
+            /// <summary>
+            /// Specified <paramref name="element"/> that should have matching CSS class.
+            /// </summary>
+            /// <param name="element">IElement factory function.</param>
+            public AssertSyntaxProvider On(ElementProxy element)
+            {
+                if (this.notMode)
+                    this.assertProvider.NotCssProperty(element, this.propertyName, this.propertyValue);
+                else
+                    this.assertProvider.CssProperty(element, this.propertyName, this.propertyValue);
+
+                return this.assertSyntaxProvider;
+            }
+        }
+        #endregion
+
+        #region Attribute
+        /// <summary>
+        /// Assert that a matching attribute is found.
+        /// </summary>
+        /// <param name="attributeName">Attribute name. Example: src</param>
+        public AssertAttributeSyntaxProvider Attribute(string attributeName)
+        {
+            return this.Attribute(attributeName, null);
+        }
+
+        /// <summary>
+        /// Assert that a matching CSS property is found.
+        /// </summary>
+        /// <param name="attributeName">Attribute name. Example: src</param>
+        /// <param name="attributeValue">Attribute value. Example: image.jpg</param>
+        public AssertAttributeSyntaxProvider Attribute(string attributeName, string propertyValue)
+        {
+            return new AssertAttributeSyntaxProvider(this.commandProvider, this.assertProvider, this.assertSyntaxProvider, attributeName, propertyValue);
+        }
+
+        public class AssertAttributeSyntaxProvider : BaseAssertSyntaxProvider
+        {
+            private readonly string attributeName = null;
+            private readonly string attributeValue = null;
+            private readonly bool notMode = false;
+
+            public AssertAttributeSyntaxProvider(ICommandProvider commandProvider, IAssertProvider assertProvider, AssertSyntaxProvider assertSyntaxProvider, string attributeName, string attributeValue)
+                : this(commandProvider, assertProvider, assertSyntaxProvider, attributeName, attributeValue, false)
+            {
+            }
+
+            public AssertAttributeSyntaxProvider(ICommandProvider commandProvider, IAssertProvider assertProvider, AssertSyntaxProvider assertSyntaxProvider, string attributeName, string attributeValue, bool notMode)
+                : base(commandProvider, assertProvider, assertSyntaxProvider)
+            {
+                this.attributeName = attributeName;
+                this.attributeValue = attributeValue;
+                this.notMode = notMode;
+            }
+
+            /// <summary>
+            /// Assert that CSS Class does not match - Reverses assertions in this chain.
+            /// </summary>
+            public AssertAttributeSyntaxProvider Not
+            {
+                get
+                {
+                    return new AssertAttributeSyntaxProvider(commandProvider, assertProvider, assertSyntaxProvider, attributeName, attributeValue, true);
+                }
+            }
+
+            /// <summary>
+            /// Element matching <paramref name="selector"/> that should have matching CSS class.
+            /// </summary>
+            /// <param name="selector">Sizzle selector.</param>
+            public AssertSyntaxProvider On(string selector)
+            {
+                if (this.notMode)
+                    this.assertProvider.NotAttribute(selector, this.attributeName, this.attributeValue);
+                else
+                    this.assertProvider.Attribute(selector, this.attributeName, this.attributeValue);
+
+                return this.assertSyntaxProvider;
+            }
+
+            /// <summary>
+            /// Specified <paramref name="element"/> that should have matching CSS class.
+            /// </summary>
+            /// <param name="element">IElement factory function.</param>
+            public AssertSyntaxProvider On(ElementProxy element)
+            {
+                if (this.notMode)
+                    this.assertProvider.NotAttribute(element, this.attributeName, this.attributeValue);
+                else
+                    this.assertProvider.Attribute(element, this.attributeName, this.attributeValue);
+
+                return this.assertSyntaxProvider;
+            }
+        }
+        #endregion
+
         #region Text
         /// <summary>
         /// Assert that Text matches specified <paramref name="text"/>.

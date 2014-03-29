@@ -38,7 +38,6 @@ namespace FluentAutomation.Tests
                 .WaitUntil(1)
                 .WindowSize(800, 600)
             .Then
-                .Wait(3)
                 .Assert
                     .Not.Visible("#hiddenthing")
                     .Not.Exists("#halp");
@@ -48,7 +47,14 @@ namespace FluentAutomation.Tests
             I.Assert.Not.Url("http://google.com");
             I.Assert.Not.Throws(() => "".ToString());
 
-            I.Wait(5);
+            I.Assert.Attribute("halptwalf").Not.On("#hiddenthing");
+            I.Assert.Css("display", "block").On("#hiddenthing");
+
+            //I.Assert.Css("wat").On("#id");
+            //I.Assert.Css("halp").Not.On("#wat");
+            //I.Assert.Css("background-color", "red").Not.On("#wat");
+
+            //I.Wait(5);
 
             //With.WaitUntil(2).Then.Assert.Exists("#wat");
         }

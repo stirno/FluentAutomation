@@ -260,6 +260,46 @@ namespace FluentAutomation
             Parallel.ForEach(this.providers, x => x.Key.NotVisible(element));
         }
 
+        public void CssProperty(string selector, string propertyName, string propertyValue)
+        {
+            Parallel.ForEach(this.providers, x => x.Key.CssProperty(selector, propertyName, propertyValue));
+        }
+
+        public void NotCssProperty(string selector, string propertyName, string propertyValue)
+        {
+            Parallel.ForEach(this.providers, x => x.Key.NotCssProperty(selector, propertyName, propertyValue));
+        }
+
+        public void CssProperty(ElementProxy element, string propertyName, string propertyValue)
+        {
+            Parallel.ForEach(this.providers, x => x.Key.CssProperty(element, propertyName, propertyValue));
+        }
+
+        public void NotCssProperty(ElementProxy element, string propertyName, string propertyValue)
+        {
+            Parallel.ForEach(this.providers, x => x.Key.NotCssProperty(element, propertyName, propertyValue));
+        }
+
+        public void Attribute(string selector, string attributeName, string attributeValue)
+        {
+            Parallel.ForEach(this.providers, x => x.Key.Attribute(selector, attributeName, attributeValue));
+        }
+
+        public void NotAttribute(string selector, string attributeName, string attributeValue)
+        {
+            Parallel.ForEach(this.providers, x => x.Key.NotAttribute(selector, attributeName, attributeValue));
+        }
+
+        public void Attribute(ElementProxy element, string attributeName, string attributeValue)
+        {
+            Parallel.ForEach(this.providers, x => x.Key.Attribute(element, attributeName, attributeValue));
+        }
+
+        public void NotAttribute(ElementProxy element, string attributeName, string attributeValue)
+        {
+            Parallel.ForEach(this.providers, x => x.Key.NotAttribute(element, attributeName, attributeValue));
+        }
+
         public bool ThrowExceptions { get; set; }
 
         public IAssertProvider EnableExceptions()
