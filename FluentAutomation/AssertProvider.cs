@@ -32,6 +32,18 @@ namespace FluentAutomation
             });
         }
 
+        public void NotCount(string selector, int count)
+        {
+            this.commandProvider.Act(commandType, () =>
+            {
+                var elements = this.commandProvider.FindMultiple(selector).Elements;
+                if (elements.Count() == count)
+                {
+                    this.ReportError("Expected count of elements matching selector [{0}] not to be [{1}] but it was.", selector, count);
+                }
+            });
+        }
+
         public void Count(ElementProxy elements, int count)
         {
             this.commandProvider.Act(commandType, () =>
@@ -42,39 +54,34 @@ namespace FluentAutomation
                 }
             });
         }
+
+        public void NotCount(ElementProxy elements, int count)
+        {
+            this.commandProvider.Act(commandType, () =>
+            {
+                if (elements.Elements.Count() == count)
+                {
+                    this.ReportError("Expected count of elements in collection not to be [{1}] but it was.", count);
+                }
+            });
+        }
         #endregion
 
         #region CSS Class
-        public void CssClass(string selector, string className)
+        private class ElementHasClassResult
         {
-            this.commandProvider.Act(commandType, () =>
-            {
-                var unwrappedElement = this.commandProvider.Find(selector).Element;
-                var elementClassAttributeValue = unwrappedElement.Attributes.Get("class").Trim();
-                if (!HasCssClass(className, elementClassAttributeValue))
-                {
-                    this.ReportError("Expected element [{0}] to include CSS class [{1}] but current class attribute is [{2}].", selector, className, elementClassAttributeValue);
-                }
-            });
+            public bool HasClass { get; set; }
+
+            public string ActualClass { get; set; }
         }
 
-        public void CssClass(ElementProxy element, string className)
+        private ElementHasClassResult elementHasClass(ElementProxy element, string className)
         {
-            this.commandProvider.Act(commandType, () =>
-            {
-                var unwrappedElement = element.Element;
-                var elementClassAttributeValue = unwrappedElement.Attributes.Get("class").Trim();
-                if (!HasCssClass(className, elementClassAttributeValue))
-                {
-                    this.ReportError("Expected element to include CSS class [{0}] but current class attribute is [{1}].", className, elementClassAttributeValue);
-                }
-            });
-        }
-
-        private bool HasCssClass(string className, string elementClassAttributeValue)
-        {
-            className = className.Replace(".", "").Trim();
             var hasClass = false;
+            var unwrappedElement = element.Element;
+            var elementClassAttributeValue = unwrappedElement.Attributes.Get("class").Trim();
+
+            className = className.Replace(".", "").Trim();
 
             if (elementClassAttributeValue.Contains(' '))
             {
@@ -96,154 +103,161 @@ namespace FluentAutomation
                 }
             }
 
-            return hasClass;
+            return new ElementHasClassResult
+            {
+                HasClass = hasClass,
+                ActualClass = elementClassAttributeValue
+            };
+        }
+
+        public void NotCssClass(string selector, string className)
+        {
+            this.NotCssClass(this.commandProvider.Find(selector), className);
+        }
+
+        public void NotCssClass(ElementProxy element, string className)
+        {
+            this.commandProvider.Act(commandType, () =>
+            {
+                var result = elementHasClass(element, className);
+                if (result.HasClass)
+                {
+                    this.ReportError("Expected element [{0}] not to include CSS class [{1}] but current class attribute is [{2}].", element.Element.Selector, className, result.ActualClass);
+                }
+            });
+        }
+
+        public void CssClass(string selector, string className)
+        {
+            this.CssClass(this.commandProvider.Find(selector), className);
+        }
+
+        public void CssClass(ElementProxy element, string className)
+        {
+            this.commandProvider.Act(commandType, () =>
+            {
+                var result = elementHasClass(element, className);
+                if (!result.HasClass)
+                {
+                    this.ReportError("Expected element [{0}] to include CSS class [{1}] but current class attribute is [{2}].", element.Element.Selector, className, result.ActualClass);
+                }
+            });
         }
         #endregion
 
         #region Text
+        private class ElementHasTextResult
+        {
+            public bool HasText { get; set; }
+
+            public string ActualText { get; set; }
+
+            public string ElementType { get; set; }
+
+            public string Selector { get; set; }
+        }
+
+        private ElementHasTextResult elementHasText(ElementProxy element, Func<string, bool> textMatcher)
+        {
+            var hasText = false;
+            var unwrappedElement = element.Element;
+            if (unwrappedElement.IsMultipleSelect)
+            {
+                foreach (var optionText in unwrappedElement.SelectedOptionTextCollection)
+                {
+                    if (textMatcher(optionText))
+                    {
+                        hasText = true;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                if (textMatcher(unwrappedElement.Text))
+                {
+                    hasText = true;
+                }
+            }
+
+            var elementType = "DOM Element";
+            if (unwrappedElement.IsText)
+                elementType = "TextElement";
+            else if (unwrappedElement.IsMultipleSelect)
+                elementType = "MultipleSelectElement";
+            else if (unwrappedElement.IsSelect)
+                elementType = "SelectElement";
+
+            return new ElementHasTextResult
+            {
+                HasText = hasText,
+                ActualText = unwrappedElement.Text,
+                ElementType = elementType,
+                Selector = element.Element.Selector
+            };
+        }
+
         public void Text(string selector, string text)
         {
-            this.commandProvider.Act(commandType, () =>
-            {
-                var unwrappedElement = this.commandProvider.Find(selector).Element;
-                if (unwrappedElement.IsText)
-                {
-                    if (!IsTextMatch(unwrappedElement.Text, text))
-                    {
-                        this.ReportError("Expected TextElement [{0}] text to be [{1}] but it was actually [{2}].", selector, text, unwrappedElement.Text);
-                    }
-                }
-                else if (unwrappedElement.IsSelect)
-                {
-                    if (unwrappedElement.IsMultipleSelect)
-                    {
-                        var foundMatch = false;
-                        foreach (var optionText in unwrappedElement.SelectedOptionTextCollection)
-                        {
-                            if (IsTextMatch(optionText, text))
-                            {
-                                foundMatch = true;
-                                break;
-                            }
-                        }
+            this.Text(this.commandProvider.Find(selector), text);
+        }
 
-                        if (!foundMatch)
-                        {
-                            this.ReportError("Expected SelectElement [{0}] selected options to have at least one option with text of [{1}]. Selected option text values include [{2}]", selector, text, string.Join(",", unwrappedElement.SelectedOptionTextCollection));
-                        }
-                    }
-                    else
-                    {
-                        if (!IsTextMatch(unwrappedElement.Text, text))
-                        {
-                            this.ReportError("Expected SelectElement [{0}] selected option text to be [{1}] but it was actually [{2}].", selector, text, unwrappedElement.Text);
-                        }
-                    }
-                }
-                else
-                {
-                    if (!IsTextMatch(unwrappedElement.Text, text))
-                    {
-                        this.ReportError("Expected DOM Element [{0}] text to be [{1}] but it was actually [{2}].", selector, text, unwrappedElement.Text);
-                    }
-                }
-            });
+        public void NotText(string selector, string text)
+        {
+            this.NotText(this.commandProvider.Find(selector), text);
+        }
+
+        public void Text(string selector, Expression<Func<string, bool>> matchFunc)
+        {
+            this.Text(this.commandProvider.Find(selector), matchFunc);
+        }
+
+        public void NotText(string selector, Expression<Func<string, bool>> matchFunc)
+        {
+            this.NotText(this.commandProvider.Find(selector), matchFunc);
         }
 
         public void Text(ElementProxy element, string text)
         {
             this.commandProvider.Act(commandType, () =>
             {
-                var unwrappedElement = element.Element;
-                if (unwrappedElement.IsText)
+                var result = elementHasText(element, (elText) => IsTextMatch(elText, text));
+                if (!result.HasText)
                 {
-                    if (!IsTextMatch(unwrappedElement.Text, text))
+                    if (element.Element.IsMultipleSelect)
                     {
-                        this.ReportError("Expected TextElement text to be [{1}] but it was actually [{2}].", text, unwrappedElement.Text);
+                        this.ReportError("Expected SelectElement [{0}] selected options to have at least one option with text of [{1}]. Selected option text values include [{2}]", result.Selector, text, string.Join(",", element.Element.SelectedOptionTextCollection));
                     }
-                }
-                else if (unwrappedElement.IsSelect)
-                {
-                    if (unwrappedElement.IsMultipleSelect)
+                    else if (element.Element.IsSelect)
                     {
-                        var foundMatch = false;
-                        foreach (var optionText in unwrappedElement.SelectedOptionTextCollection)
-                        {
-                            if (IsTextMatch(optionText, text))
-                            {
-                                foundMatch = true;
-                                break;
-                            }
-                        }
-
-                        if (!foundMatch)
-                        {
-                            this.ReportError("Expected SelectElement selected options to have at least one option with text of [{0}]. Selected option text values include [{1}]", text, string.Join(",", unwrappedElement.SelectedOptionTextCollection));
-                        }
+                        this.ReportError("Expected SelectElement [{0}] selected option text to match expression [{1}] but it was actually [{2}].", result.Selector, text, result.ActualText);
                     }
                     else
                     {
-                        if (!IsTextMatch(unwrappedElement.Text, text))
-                        {
-                            this.ReportError("Expected SelectElement selected option text to be [{1}] but it was actually [{2}].", text, unwrappedElement.Text);
-                        }
-                    }
-                }
-                else
-                {
-                    if (!IsTextMatch(unwrappedElement.Text, text))
-                    {
-                        this.ReportError("Expected DOM Element text to be [{1}] but it was actually [{2}].", text, unwrappedElement.Text);
+                        this.ReportError("Expected {0} [{1}] text to be [{2}] but it was actually [{3}].", result.ElementType, result.Selector, text, result.ActualText);
                     }
                 }
             });
         }
 
-        public void Text(string selector, Expression<Func<string, bool>> matchFunc)
+        public void NotText(ElementProxy element, string text)
         {
             this.commandProvider.Act(commandType, () =>
             {
-                var compiledFunc = matchFunc.Compile();
-                var unwrappedElement = this.commandProvider.Find(selector).Element;
-                if (unwrappedElement.IsText)
+                var result = elementHasText(element, (elText) => IsTextMatch(elText, text));
+                if (result.HasText)
                 {
-                    if (!compiledFunc(unwrappedElement.Text))
+                    if (element.Element.IsMultipleSelect)
                     {
-                        this.ReportError("Expected TextElement [{0}] text to match expression [{1}] but it was actually [{2}].", selector, matchFunc.ToExpressionString(), unwrappedElement.Text);
+                        this.ReportError("Expected SelectElement [{0}] selected options to have no options with text of [{1}]. Selected option text values include [{2}]", result.Selector, text, string.Join(",", element.Element.SelectedOptionTextCollection));
                     }
-                }
-                else if (unwrappedElement.IsSelect)
-                {
-                    if (unwrappedElement.IsMultipleSelect)
+                    else if (element.Element.IsSelect)
                     {
-                        var foundMatch = false;
-                        foreach (var optionText in unwrappedElement.SelectedOptionTextCollection)
-                        {
-                            if (compiledFunc(optionText))
-                            {
-                                foundMatch = true;
-                                break;
-                            }
-                        }
-
-                        if (!foundMatch)
-                        {
-                            this.ReportError("Expected SelectElement [{0}] selected options to have at least one option with text matching expression[{1}]. Selected option text values include [{2}]", selector, matchFunc.ToExpressionString(), string.Join(",", unwrappedElement.SelectedOptionTextCollection));
-                        }
+                        this.ReportError("Expected SelectElement [{0}] selected option text not to be [{1}] but it was.", result.Selector, text);
                     }
                     else
                     {
-                        if (!compiledFunc(unwrappedElement.Text))
-                        {
-                            this.ReportError("Expected SelectElement [{0}] selected option text to match expression [{1}] but it was actually [{2}].", selector, matchFunc.ToExpressionString(), unwrappedElement.Text);
-                        }
-                    }
-                }
-                else
-                {
-                    if (!compiledFunc(unwrappedElement.Text))
-                    {
-                        this.ReportError("Expected DOM Element [{0}] text to match expression [{1}] but it was actually [{2}].", selector, matchFunc.ToExpressionString(), unwrappedElement.Text);
+                        this.ReportError("Expected {0} [{1}] text not to be [{2}] but it was.", result.ElementType, result.Selector, text);
                     }
                 }
             });
@@ -254,46 +268,44 @@ namespace FluentAutomation
             this.commandProvider.Act(commandType, () =>
             {
                 var compiledFunc = matchFunc.Compile();
-                var unwrappedElement = element.Element;
-                if (unwrappedElement.IsText)
+                var result = elementHasText(element, (elText) => compiledFunc(elText));
+                if (!result.HasText)
                 {
-                    if (!compiledFunc(unwrappedElement.Text))
+                    if (element.Element.IsMultipleSelect)
                     {
-                        this.ReportError("Expected TextElement text to match expression [{0}] but it was actually [{1}].", matchFunc.ToExpressionString(), unwrappedElement.Text);
+                        this.ReportError("Expected SelectElement [{0}] selected options to have at least one option with text matching expression [{1}]. Selected option text values include [{2}]", result.Selector, matchFunc.ToExpressionString(), string.Join(",", element.Element.SelectedOptionTextCollection));
                     }
-                }
-                else if (unwrappedElement.IsSelect)
-                {
-                    if (unwrappedElement.IsMultipleSelect)
+                    else if (element.Element.IsSelect)
                     {
-                        var foundMatch = false;
-                        foreach (var optionText in unwrappedElement.SelectedOptionTextCollection)
-                        {
-                            if (compiledFunc(optionText))
-                            {
-                                foundMatch = true;
-                                break;
-                            }
-                        }
-
-                        if (!foundMatch)
-                        {
-                            this.ReportError("Expected SelectElement selected options to have at least one option with text matching expression [{0}]. Selected option text values include [{1}]", matchFunc.ToExpressionString(), string.Join(",", unwrappedElement.SelectedOptionTextCollection));
-                        }
+                        this.ReportError("Expected SelectElement [{0}] selected option text to match expression [{1}] but it was actually [{2}].", result.Selector, matchFunc.ToExpressionString(), result.ActualText);
                     }
                     else
                     {
-                        if (!compiledFunc(unwrappedElement.Text))
-                        {
-                            this.ReportError("Expected SelectElement selected option text to match expression [{0}] but it was actually [{1}].", matchFunc.ToExpressionString(), unwrappedElement.Text);
-                        }
+                        this.ReportError("Expected {0} [{1}] text to match expression [{2}] but it was actually [{3}].", result.ElementType, result.Selector, matchFunc.ToExpressionString(), result.ActualText);
                     }
                 }
-                else
+            });
+        }
+
+        public void NotText(ElementProxy element, Expression<Func<string, bool>> matchFunc)
+        {
+            this.commandProvider.Act(commandType, () =>
+            {
+                var compiledFunc = matchFunc.Compile();
+                var result = elementHasText(element, (elText) => compiledFunc(elText));
+                if (result.HasText)
                 {
-                    if (!compiledFunc(unwrappedElement.Text))
+                    if (element.Element.IsMultipleSelect)
                     {
-                        this.ReportError("Expected DOM Element text to match expression [{0}] but it was actually [{1}].", matchFunc.ToExpressionString(), unwrappedElement.Text);
+                        this.ReportError("Expected SelectElement [{0}] selected options to have no options with text matching expression [{1}]. Selected option text values include [{2}]", result.Selector, matchFunc.ToExpressionString(), string.Join(",", element.Element.SelectedOptionTextCollection));
+                    }
+                    else if (element.Element.IsSelect)
+                    {
+                        this.ReportError("Expected SelectElement [{0}] selected option text not to match expression [{1}] but it did.", result.Selector, matchFunc.ToExpressionString());
+                    }
+                    else
+                    {
+                        this.ReportError("Expected {0} [{1}] text not to match expression [{2}] but it did.", result.ElementType, result.Selector, matchFunc.ToExpressionString());
                     }
                 }
             });
@@ -306,146 +318,118 @@ namespace FluentAutomation
         #endregion
 
         #region Value
-        public void Value(string selector, string value)
+        private class ElementHasValueResult
         {
-            this.commandProvider.Act(commandType, () =>
-            {
-                var unwrappedElement = this.commandProvider.Find(selector).Element;
-                if (unwrappedElement.IsText)
-                {
-                    if (!IsTextMatch(unwrappedElement.Value, value))
-                    {
-                        this.ReportError("Expected TextElement [{0}] selected option value to be [{1}] but it was actually [{2}].", selector, value, unwrappedElement.Text);
-                    }
-                }
-                else if (unwrappedElement.IsSelect)
-                {
-                    var foundMatch = false;
-                    foreach (var optionValue in unwrappedElement.SelectedOptionValues)
-                    {
-                        if (IsTextMatch(optionValue, value))
-                        {
-                            foundMatch = true;
-                            break;
-                        }
-                    }
+            public bool HasValue { get; set; }
 
-                    if (!foundMatch)
-                    {
-                        if (unwrappedElement.IsMultipleSelect)
-                        {
-                            this.ReportError("Expected SelectElement [{0}] selected options to have at least one option with value of [{1}]. Selected option text values include [{2}]", selector, value, unwrappedElement.Value);
-                        }
-                        else
-                        {
-                            this.ReportError("Expected SelectElement [{0}] selected option value to be [{1}] but it was actually [{2}].", selector, value, unwrappedElement.Value);
-                        }
-                    }
-                }
-                else
+            public string ElementType { get; set; }
+
+            public string ActualValue { get; set; }
+
+            public string Selector { get; set; }
+        }
+
+        private ElementHasValueResult elementHasValue(ElementProxy element, Func<string, bool> valueMatcher)
+        {
+            var hasValue = false;
+            var unwrappedElement = element.Element;
+            if (unwrappedElement.IsMultipleSelect)
+            {
+                foreach (var optionValue in unwrappedElement.SelectedOptionValues)
                 {
-                    if (!IsTextMatch(unwrappedElement.Value, value))
+                    if (valueMatcher(optionValue))
                     {
-                        this.ReportError("Expected element [{0}] value to be [{1}] but it was actually [{2}].", selector, value, unwrappedElement.Value);
+                        hasValue = true;
+                        break;
                     }
                 }
-            });
+            }
+            else
+            {
+                if (valueMatcher(unwrappedElement.Value))
+                {
+                    hasValue = true;
+                }
+            }
+
+            var elementType = "DOM Element";
+            if (unwrappedElement.IsText)
+                elementType = "TextElement";
+            else if (unwrappedElement.IsMultipleSelect)
+                elementType = "MultipleSelectElement";
+            else if (unwrappedElement.IsSelect)
+                elementType = "SelectElement";
+
+            return new ElementHasValueResult
+            {
+                HasValue = hasValue,
+                ElementType = elementType,
+                ActualValue = unwrappedElement.Value,
+                Selector = element.Element.Selector
+            };
+        }
+
+        public void Value(string selector, string text)
+        {
+            this.Value(this.commandProvider.Find(selector), text);
+        }
+
+        public void NotValue(string selector, string text)
+        {
+            this.NotValue(this.commandProvider.Find(selector), text);
         }
 
         public void Value(string selector, Expression<Func<string, bool>> matchFunc)
         {
-            this.commandProvider.Act(commandType, () =>
-            {
-                var compiledFunc = matchFunc.Compile();
-                var unwrappedElement = this.commandProvider.Find(selector).Element;
-                if (unwrappedElement.IsText)
-                {
-                    if (!compiledFunc(unwrappedElement.Value))
-                    {
-                        this.ReportError("Expected TextElement [{0}] value to match expression [{1}] but it was actually [{2}].", selector, matchFunc.ToExpressionString(), unwrappedElement.Value);
-                    }
-                }
-                else if (unwrappedElement.IsSelect)
-                {
-                    if (unwrappedElement.IsMultipleSelect)
-                    {
-                        var foundMatch = false;
-                        foreach (var optionValue in unwrappedElement.SelectedOptionValues)
-                        {
-                            if (compiledFunc(optionValue))
-                            {
-                                foundMatch = true;
-                                break;
-                            }
-                        }
+            this.Value(this.commandProvider.Find(selector), matchFunc);
+        }
 
-                        if (!foundMatch)
-                        {
-                            this.ReportError("Expected SelectElement [{0}] selected options to have at least one option with value matching expression [{1}]. Selected option values include [{2}]", selector, matchFunc.ToExpressionString(), string.Join(",", unwrappedElement.SelectedOptionValues));
-                        }
-                    }
-                    else
-                    {
-                        if (!compiledFunc(unwrappedElement.Text))
-                        {
-                            this.ReportError("Expected SelectElement [{0}] selected option value to match expression [{1}] but it was actually [{2}].", selector, matchFunc.ToExpressionString(), unwrappedElement.Value);
-                        }
-                    }
-                }
-                else
-                {
-                    if (!compiledFunc(unwrappedElement.Value))
-                    {
-                        this.ReportError("Expected element [{0}] value to match expression [{1}] but it was actually [{2}].", selector, matchFunc.ToExpressionString(), unwrappedElement.Value);
-                    }
-                }
-            });
+        public void NotValue(string selector, Expression<Func<string, bool>> matchFunc)
+        {
+            this.NotValue(this.commandProvider.Find(selector), matchFunc);
         }
 
         public void Value(ElementProxy element, string value)
         {
             this.commandProvider.Act(commandType, () =>
             {
-                var unwrappedElement = element.Element;
-                if (unwrappedElement.IsText)
+                var result = elementHasValue(element, (elValue) => IsTextMatch(elValue, value));
+                if (!result.HasValue)
                 {
-                    if (!IsTextMatch(unwrappedElement.Value, value))
+                    if (element.Element.IsMultipleSelect)
                     {
-                        this.ReportError("Expected TextElement selected option value to be [{0}] but it was actually [{1}].", value, unwrappedElement.Text);
+                        this.ReportError("Expected SelectElement [{0}] selected options to have at least one option with value of [{1}]. Selected option values include [{2}]", result.Selector, value, string.Join(",", element.Element.SelectedOptionValues));
                     }
-                }
-                else if (unwrappedElement.IsSelect)
-                {
-                    if (unwrappedElement.IsMultipleSelect)
+                    else if (element.Element.IsSelect)
                     {
-                        var foundMatch = false;
-                        foreach (var optionValue in unwrappedElement.SelectedOptionValues)
-                        {
-                            if (IsTextMatch(optionValue, value))
-                            {
-                                foundMatch = true;
-                                break;
-                            }
-                        }
-
-                        if (!foundMatch)
-                        {
-                            this.ReportError("Expected SelectElement selected options to have at least one option with value of [{0}]. Selected option text values include [{1}]", value, string.Join(",", unwrappedElement.SelectedOptionValues));
-                        }
+                        this.ReportError("Expected SelectElement [{0}] selected option value to match expression [{1}] but it was actually [{2}].", result.Selector, value, result.ActualValue);
                     }
                     else
                     {
-                        if (!IsTextMatch(unwrappedElement.Value, value))
-                        {
-                            this.ReportError("Expected SelectElement selected option value to be [{0}] but it was actually [{1}].", value, unwrappedElement.Text);
-                        }
+                        this.ReportError("Expected {0} [{1}] value to be [{2}] but it was actually [{3}].", result.ElementType, result.Selector, value, result.ActualValue);
                     }
                 }
-                else
+            });
+        }
+
+        public void NotValue(ElementProxy element, string value)
+        {
+            this.commandProvider.Act(commandType, () =>
+            {
+                var result = elementHasValue(element, (elValue) => IsTextMatch(elValue, value));
+                if (result.HasValue)
                 {
-                    if (!IsTextMatch(unwrappedElement.Value, value))
+                    if (element.Element.IsMultipleSelect)
                     {
-                        this.ReportError("Expected element value to be [{0}] but it was actually [{1}].", value, unwrappedElement.Value);
+                        this.ReportError("Expected SelectElement [{0}] selected options to have no options with value of [{1}]. Selected option values include [{2}]", result.Selector, value, string.Join(",", element.Element.SelectedOptionValues));
+                    }
+                    else if (element.Element.IsSelect)
+                    {
+                        this.ReportError("Expected SelectElement [{0}] selected option value not to be [{1}] but it was.", result.Selector, value);
+                    }
+                    else
+                    {
+                        this.ReportError("Expected {0} [{1}] value not to be [{2}] but it was.", result.ElementType, result.Selector, value);
                     }
                 }
             });
@@ -456,52 +440,51 @@ namespace FluentAutomation
             this.commandProvider.Act(commandType, () =>
             {
                 var compiledFunc = matchFunc.Compile();
-                var unwrappedElement = element.Element;
-                if (unwrappedElement.IsText)
+                var result = elementHasValue(element, (elValue) => compiledFunc(elValue));
+                if (!result.HasValue)
                 {
-                    if (!compiledFunc(unwrappedElement.Value))
+                    if (element.Element.IsMultipleSelect)
                     {
-                        this.ReportError("Expected TextElement value to match expression [{0}] but it was actually [{1}].", matchFunc.ToExpressionString(), unwrappedElement.Value);
+                        this.ReportError("Expected SelectElement [{0}] selected options to have at least one option with value matching expression [{1}]. Selected option values include [{2}]", result.Selector, matchFunc.ToExpressionString(), string.Join(",", element.Element.SelectedOptionValues));
                     }
-                }
-                else if (unwrappedElement.IsSelect)
-                {
-                    if (unwrappedElement.IsMultipleSelect)
+                    else if (element.Element.IsSelect)
                     {
-                        var foundMatch = false;
-                        foreach (var optionValue in unwrappedElement.SelectedOptionValues)
-                        {
-                            if (compiledFunc(optionValue))
-                            {
-                                foundMatch = true;
-                                break;
-                            }
-                        }
-
-                        if (!foundMatch)
-                        {
-                            this.ReportError("Expected SelectElement selected options to have at least one option with value matching expression [{0}]. Selected option values include [{1}]", matchFunc.ToExpressionString(), string.Join(",", unwrappedElement.SelectedOptionTextCollection));
-                        }
+                        this.ReportError("Expected SelectElement [{0}] selected option value to match expression [{1}] but it was actually [{2}].", result.Selector, matchFunc.ToExpressionString(), result.ActualValue);
                     }
                     else
                     {
-                        if (!compiledFunc(unwrappedElement.Text))
-                        {
-                            this.ReportError("Expected SelectElement selected option value to match expression [{0}] but it was actually [{1}].", matchFunc.ToExpressionString(), unwrappedElement.Value);
-                        }
+                        this.ReportError("Expected {0} [{1}] value to match expression [{2}] but it was actually [{3}].", result.ElementType, result.Selector, matchFunc.ToExpressionString(), result.ActualValue);
                     }
                 }
-                else
+            });
+        }
+
+        public void NotValue(ElementProxy element, Expression<Func<string, bool>> matchFunc)
+        {
+            this.commandProvider.Act(commandType, () =>
+            {
+                var compiledFunc = matchFunc.Compile();
+                var result = elementHasValue(element, (elValue) => compiledFunc(elValue));
+                if (result.HasValue)
                 {
-                    if (!compiledFunc(unwrappedElement.Value))
+                    if (element.Element.IsMultipleSelect)
                     {
-                        this.ReportError("Expected element value to match expression [{0}] but it was actually [{1}].", matchFunc.ToExpressionString(), unwrappedElement.Value);
+                        this.ReportError("Expected SelectElement [{0}] selected options to have no options with value matching expression [{1}]. Selected option values include [{2}]", result.Selector, matchFunc.ToExpressionString(), string.Join(",", element.Element.SelectedOptionValues));
+                    }
+                    else if (element.Element.IsSelect)
+                    {
+                        this.ReportError("Expected SelectElement [{0}] selected option value not to match expression [{1}] but it did.", result.Selector, matchFunc.ToExpressionString());
+                    }
+                    else
+                    {
+                        this.ReportError("Expected {0} [{1}] value not to match expression [{2}] but it did.", result.ElementType, result.Selector, matchFunc.ToExpressionString());
                     }
                 }
             });
         }
         #endregion
 
+        #region URL
         public void Url(Uri expectedUrl)
         {
             this.commandProvider.Act(commandType, () =>
@@ -513,18 +496,39 @@ namespace FluentAutomation
             });
         }
 
+        public void NotUrl(Uri expectedUrl)
+        {
+            this.commandProvider.Act(commandType, () =>
+            {
+                if (expectedUrl.ToString().Equals(this.commandProvider.Url.ToString(), StringComparison.InvariantCultureIgnoreCase))
+                {
+                    this.ReportError("Expected URL not to match [{0}] but it was actually [{1}].", expectedUrl.ToString(), this.commandProvider.Url.ToString());
+                }
+            });
+        }
+
         public void Url(Expression<Func<Uri, bool>> urlExpression)
         {
             this.commandProvider.Act(commandType, () =>
             {
-                var compiledExpr = urlExpression.Compile();
-
-                if (compiledExpr(this.commandProvider.Url) != true)
+                if (urlExpression.Compile()(this.commandProvider.Url) != true)
                 {
-                    this.ReportError("Expected expression [{0}] to return true.", urlExpression.ToExpressionString());
+                    this.ReportError("Expected expression [{0}] to return true. URL was [{1}].", urlExpression.ToExpressionString(), this.commandProvider.Url.ToString());
                 }
             });
         }
+
+        public void NotUrl(Expression<Func<Uri, bool>> urlExpression)
+        {
+            this.commandProvider.Act(commandType, () =>
+            {
+                if (urlExpression.Compile()(this.commandProvider.Url) == true)
+                {
+                    this.ReportError("Expected expression [{0}] to return false. URL was [{1}].", urlExpression.ToExpressionString(), this.commandProvider.Url.ToString());
+                }
+            });
+        }
+        #endregion
 
         #region Boolean / Throws
         public void True(Expression<Func<bool>> matchFunc)
@@ -551,36 +555,74 @@ namespace FluentAutomation
             });
         }
 
+        private bool throwsException(Expression<Action> matchAction)
+        {
+            bool threwException = false;
+            var compiledAction = matchAction.Compile();
+
+            try
+            {
+                compiledAction();
+            }
+            catch (FluentAssertFailedException)
+            {
+                threwException = true;
+            }
+
+            return threwException;
+        }
+
         public void Throws(Expression<Action> matchAction)
         {
             this.commandProvider.Act(commandType, () =>
             {
-                bool threwException = false;
-                var compiledAction = matchAction.Compile();
-
-                try
-                {
-                    compiledAction();
-                }
-                catch (FluentAssertFailedException)
-                {
-                    threwException = true;
-                }
-
-                if (!threwException)
+                if (!throwsException(matchAction))
                 {
                     this.ReportError("Expected expression [{0}] to throw an exception.", matchAction.ToExpressionString());
                 }
             });
         }
+
+        public void NotThrows(Expression<Action> matchAction)
+        {
+            this.commandProvider.Act(commandType, () =>
+            {
+                if (throwsException(matchAction))
+                {
+                    this.ReportError("Expected expression [{0}] not to throw an exception.", matchAction.ToExpressionString());
+                }
+            });
+        }
         #endregion
+
+        private bool elementExists(string selector)
+        {
+            var exists = false;
+            try
+            {
+                exists = this.commandProvider.Find(selector).Element != null;
+            }
+            catch (FluentException) { }
+
+            return exists;
+        }
 
         public void Exists(string selector)
         {
             this.commandProvider.Act(commandType, () =>
             {
-                var unwrappedElement = this.commandProvider.Find(selector).Element as IElement;
-                if (unwrappedElement == null)
+                if (!elementExists(selector))
+                {
+                    this.ReportError("Expected element matching selector [{0}] to exist.", selector);
+                }
+            });
+        }
+
+        public void NotExists(string selector)
+        {
+            this.commandProvider.Act(commandType, () =>
+            {
+                if (elementExists(selector))
                 {
                     this.ReportError("Expected element matching selector [{0}] to exist.", selector);
                 }
@@ -603,6 +645,22 @@ namespace FluentAutomation
             });
         }
 
+        public void AlertNotText(string text)
+        {
+            this.commandProvider.Act(CommandType.NoRetry, () =>
+            {
+                this.commandProvider.AlertText((alertText) =>
+                {
+                    if (IsTextMatch(alertText, text))
+                    {
+                        // because the browser blocks, we dismiss the alert when a failure happens so we can cleanly shutdown.
+                        this.commandProvider.AlertClick(Alert.Cancel);
+                        this.ReportError("Expected alert text not to be [{0}] but it was.", text);
+                    }
+                });
+            });
+        }
+
         public void AlertText(Expression<Func<string, bool>> matchFunc)
         {
             this.commandProvider.Act(CommandType.NoRetry, () =>
@@ -615,6 +673,23 @@ namespace FluentAutomation
                         // because the browser blocks, we dismiss the alert when a failure happens so we can cleanly shutdown.
                         this.commandProvider.AlertClick(Alert.Cancel);
                         this.ReportError("Expected alert text to match expression [{0}] but it was actually [{1}].", matchFunc.ToExpressionString(), alertText);
+                    }
+                });
+            });
+        }
+            
+        public void AlertNotText(Expression<Func<string, bool>> matchFunc)
+        {
+            this.commandProvider.Act(CommandType.NoRetry, () =>
+            {
+                var compiledFunc = matchFunc.Compile();
+                this.commandProvider.AlertText((alertText) =>
+                {
+                    if (compiledFunc(alertText))
+                    {
+                        // because the browser blocks, we dismiss the alert when a failure happens so we can cleanly shutdown.
+                        this.commandProvider.AlertClick(Alert.Cancel);
+                        this.ReportError("Expected alert text not to match expression [{0}] but it did.", matchFunc.ToExpressionString());
                     }
                 });
             });
