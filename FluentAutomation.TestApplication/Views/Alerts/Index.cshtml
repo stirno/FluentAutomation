@@ -1,0 +1,31 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Alerts Testbed</h2>
+
+<button id="trigger-alert">Trigger an Alert</button>
+<button id="trigger-confirm">Trigger a Confirmation</button>
+<button id="trigger-prompt">Trigger a Prompt</button>
+<div id="result"></div>
+
+<script type="text/javascript">
+    $(function () {
+        var $result = $('#result');
+        $('#trigger-alert').on('click', function () {
+            $result.text('');
+            alert("Alert box");
+            $result.text("Clicked Alert Cancel");
+        });
+        $('#trigger-confirm').on('click', function () {
+            $result.text('');
+            var response = confirm("Confirm box") ? "Clicked Confirm OK" : "Clicked Confirm Cancel";
+            $result.text(response);
+        });
+        $('#trigger-prompt').on('click', function () {
+            $result.text('');
+            var response = prompt("Prompt box");
+            $result.text(response ? "Clicked Prompt OK: " + response : "Clicked Prompt Cancel");
+        });
+    });
+</script>

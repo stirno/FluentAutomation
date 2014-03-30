@@ -89,6 +89,9 @@ namespace FluentAutomation
 
         public IActionSyntaxProvider Click(Alert alertAccessor)
         {
+            if (alertAccessor.Field != AlertField.OKButton && alertAccessor.Field != AlertField.CancelButton)
+                throw new FluentException("FluentAutomation only supports clicking the OK or Cancel buttons of an alert/prompt.");
+
             this.commandProvider.AlertClick(alertAccessor);
             return this;
         }

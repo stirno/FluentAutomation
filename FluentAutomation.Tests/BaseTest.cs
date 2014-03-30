@@ -20,6 +20,7 @@ namespace FluentAutomation.Tests
 
             // Create Page Objects
             this.InputsPage = new Pages.InputsPage(this);
+            this.AlertsPage = new Pages.AlertsPage(this);
 
             // Default tests use chrome and load the site
             FluentAutomation.SeleniumWebDriver.Bootstrap(SeleniumWebDriver.Browser.Chrome);
@@ -27,5 +28,6 @@ namespace FluentAutomation.Tests
         }
 
         public Pages.InputsPage InputsPage = null;
+        public Pages.AlertsPage AlertsPage = null;
     }
 }
