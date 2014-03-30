@@ -81,7 +81,18 @@ namespace FluentAutomation
 
         public void Navigate(Uri url)
         {
-            this.Act(CommandType.Action, () => this.webDriver.Navigate().GoToUrl(url));
+            this.Act(CommandType.Action, () =>
+            {
+                var currentUrl = new Uri(this.webDriver.Url);
+                var baseUrl = currentUrl.GetLeftPart(System.UriPartial.Authority);
+
+                if (!url.IsAbsoluteUri)
+                {
+                    url = new Uri(new Uri(baseUrl), url.ToString());
+                }
+
+                this.webDriver.Navigate().GoToUrl(url);
+            });
         }
 
         public ElementProxy Find(string selector)

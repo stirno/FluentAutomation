@@ -37,7 +37,10 @@ namespace FluentAutomation
         #region Direct Execution Actions
         public IActionSyntaxProvider Open(string url)
         {
-            return this.Open(new Uri(url, UriKind.Absolute));
+            if (url.StartsWith("/"))
+                return this.Open(new Uri(url, UriKind.Relative));
+            else
+                return this.Open(new Uri(url, UriKind.Absolute));
         }
 
         public IActionSyntaxProvider Open(Uri url)

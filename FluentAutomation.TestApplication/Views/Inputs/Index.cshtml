@@ -1,0 +1,98 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Input Controls Testbed</h2>
+
+<form action="/" onsubmit="setTimeout(function () { $('#button-clicked-text').text(''); }, 1500); return false" method="post" role="form">
+    <div class="form-group">
+        <label for="text-control">Text Input</label>
+        <input id="text-control" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label for="textarea-control">Text Input</label>
+        <textarea id="textarea-control" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="select-control">Select</label>
+        <select id="select-control" class="form-control">
+            <option></option>
+            <option value="AB">Alberta</option>
+            <option value="BC">Colombie-Britannique</option>
+            <option value="MB">Manitoba</option>
+            <option value="NB">Nouveau-Brunswick</option>
+            <option value="NL">Terre-Neuve</option>
+            <option value="NS">Nouvelle-&#201;cosse</option>
+            <option value="NT">Territoire du Nord Ouest</option>
+            <option value="NU">Nunavut</option>
+            <option value="ON">Ontario</option>
+            <option value="PE">&#206;le du Prince &#201;douard</option>
+            <option value="QC">Qu&#233;bec</option>
+            <option value="SK">Saskatchewan</option>
+            <option value="YT">Yukon</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Buttons <small>On click, #button-clicked-text will change then after 1500ms it will be reset to blank</small></label>
+
+        <div class="form-group">
+            <button id="button-control" type="submit" value="Button" class="btn btn-default">Button</button>
+            <input id="input-button-control" type="button" class="btn btn-primary" value="Input Button" />
+        </div>
+
+        <div class="form-group">
+            <span id="button-clicked-text"></span>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+    $(function () {
+        var clickedText = $('#button-clicked-text');
+        $('#button-control')
+            .on('click', function () {
+                clickedText.text('Button Clicked');
+            })
+            .on('dblclick', function () {
+                clickedText.text('Button Double Clicked');
+            })
+            .on('mousedown', function (e) {
+                e.stopPropagation();
+                if (e.which == 3) {
+                    clickedText.text('Button Right Clicked');
+                }
+            });
+
+        $('#input-button-control')
+            .on('click', function () {
+                clickedText.text('Input Button Clicked');
+            })
+            .on('dblclick', function () {
+                clickedText.text('Input Button Double Clicked');
+            })
+            .on('mousedown', function (e) {
+                e.stopPropagation();
+                if (e.which == 3) {
+                    clickedText.text('Input Button Right Clicked');
+                }
+            });
+
+        var timeoutHandle = null;
+        $('#button-control, #input-button-control')
+            .on('mousedown', function () {
+                if (timeoutHandle != null)
+                    clearTimeout(timeoutHandle);
+
+                timeoutHandle = setTimeout(function () {
+                    clickedText.text('');
+                }, 1500);
+            })
+            .on('contextmenu', function () {
+                return false;
+            });
+    });
+</script>
