@@ -16,6 +16,7 @@ namespace FluentAutomation
             {
                 this.Container = FluentSession.Current.Container;
                 this.SyntaxProviderRegisterOptions = FluentSession.Current.SyntaxProviderRegisterOptions;
+                this.HasBootstrappedTypes = FluentSession.Current.HasBootstrappedTypes;
             }
             else
             {
@@ -51,8 +52,9 @@ namespace FluentAutomation
             else if (FluentSession.Current.HasBootstrappedTypes == false)
             {
                 containerAction(this.Container);
-                FluentSession.Current.HasBootstrappedTypes = true;
             }
+
+            FluentSession.Current.HasBootstrappedTypes = true;
         }
 
         public static void EnableStickySession()
@@ -61,13 +63,24 @@ namespace FluentAutomation
             if (FluentSession.Current.SyntaxProviderRegisterOptions == null)
                 FluentSession.Current.RegisterSyntaxProvider<ActionSyntaxProvider>();
 
-            FluentSession.Current.SyntaxProviderRegisterOptions.AsSingleton();
+            if (FluentSession.Current.HasBootstrappedTypes == false)
+            {
+                FluentSession.Current.SyntaxProviderRegisterOptions.AsSingleton();
+                AppDomain.CurrentDomain.DomainUnload += CurrentDomain_DomainUnload;
+            }
+        }
+
+        static void CurrentDomain_DomainUnload(object sender, EventArgs e)
+        {
+            if (FluentSession.Current != null)
+                FluentSession.Current.Dispose();
         }
 
         public static void DisableStickySession()
         {
             FluentSession.Current.SyntaxProviderRegisterOptions.AsMultiInstance();
             FluentSession.Current = null;
+            AppDomain.CurrentDomain.DomainUnload -= CurrentDomain_DomainUnload;
         }
 
         public static void SetStickySession(FluentSession session)

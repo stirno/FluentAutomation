@@ -54,7 +54,7 @@ namespace FluentAutomation.Tests.Actions
         [Fact]
         public void SelectTextFailed()
         {
-            var exception = Assert.Throws<NoSuchElementException>(() =>
+            var exception = Assert.Throws<FluentException>(() =>
             {
                 I.Select("NonExistentText").From(InputsPage.SelectControlSelector);
             });
@@ -65,7 +65,7 @@ namespace FluentAutomation.Tests.Actions
         [Fact]
         public void SelectValueFailed()
         {
-            var exception = Assert.Throws<NoSuchElementException>(() =>
+            var exception = Assert.Throws<FluentException>(() =>
             {
                 I.Select(Option.Value, "NonExistentValue").From(InputsPage.SelectControlSelector);
             });
@@ -97,7 +97,7 @@ namespace FluentAutomation.Tests.Actions
         [Fact]
         public void MultiSelectIndex()
         {
-            I.Select(3, 4, 5).From(InputsPage.MultiSelectControlSelector)
+            I.Select(2, 3, 4).From(InputsPage.MultiSelectControlSelector)
              .Assert
                 .Text("Manitoba").In(InputsPage.MultiSelectControlSelector)
                 .Text("Nouveau-Brunswick").In(InputsPage.MultiSelectControlSelector)
@@ -107,7 +107,7 @@ namespace FluentAutomation.Tests.Actions
         [Fact]
         public void MultiSelectText()
         {
-            I.Select("Manitoba", "Nouvea-Brunswick", "Terra-Neuve").From(InputsPage.MultiSelectControlSelector)
+            I.Select("Manitoba", "Nouveau-Brunswick", "Terre-Neuve").From(InputsPage.MultiSelectControlSelector)
              .Assert
                 .Value("MB").In(InputsPage.MultiSelectControlSelector)
                 .Value("NB").In(InputsPage.MultiSelectControlSelector)
