@@ -567,7 +567,10 @@ namespace FluentAutomation
             else if (accessor.Field == AlertField.CancelButton)
                 alert.Dismiss();
             else
+            {
+                alert.Dismiss();
                 throw new FluentException("FluentAutomation only supports clicking on OK or Cancel in alerts or prompts.");
+            }
         }
 
         public void AlertText(Action<string> matchFunc)

@@ -548,7 +548,22 @@ namespace FluentAutomation
                 this.ConfirmHandler.CancelButton.Click();
             }
             else
+            {
+                // attempt to close any dialogs to allow other tests to continue
+                try
+                {
+                    this.AlertHandler.OKButton.Click();
+                }
+                catch (Exception) { }
+
+                try
+                {
+                    this.ConfirmHandler.OKButton.Click();
+                }
+                catch (Exception) { }
+
                 throw new FluentException("FluentAutomation only supports clicking on OK or Cancel in alerts or prompts.");
+            }
         }
 
         public void AlertText(Action<string> matchFunc)

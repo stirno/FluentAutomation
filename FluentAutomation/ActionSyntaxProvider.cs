@@ -90,7 +90,10 @@ namespace FluentAutomation
         public IActionSyntaxProvider Click(Alert alertAccessor)
         {
             if (alertAccessor.Field != AlertField.OKButton && alertAccessor.Field != AlertField.CancelButton)
+            {
+                this.Click(Alert.Cancel);
                 throw new FluentException("FluentAutomation only supports clicking the OK or Cancel buttons of an alert/prompt.");
+            }
 
             this.commandProvider.AlertClick(alertAccessor);
             return this;
@@ -559,7 +562,10 @@ namespace FluentAutomation
             public IActionSyntaxProvider In(Alert accessor)
             {
                 if (accessor.Field != AlertField.Input)
+                {
+                    this.syntaxProvider.commandProvider.AlertClick(Alert.Cancel);
                     throw new FluentException("FluentAutomation only supports entering text in text input of a prompt.");
+                }
 
                 this.syntaxProvider.commandProvider.AlertEnterText(text);
                 return this.syntaxProvider;

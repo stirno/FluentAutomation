@@ -692,7 +692,10 @@ namespace FluentAutomation
             public AssertSyntaxProvider In(Alert accessor)
             {
                 if (accessor.Field != AlertField.Message)
-                    throw new FluentException("FluentAutomation only supports checking the message in an alert/prompt/confirmation.");
+                {
+                    this.commandProvider.AlertClick(Alert.Cancel);
+                    throw new FluentException("FluentAutomation only supports checking the message in an alerts or prompts.");
+                }
 
                 if (this.matchFunc == null)
                 {
