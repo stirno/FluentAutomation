@@ -534,6 +534,9 @@ namespace FluentAutomation
             /// <param name="element">IElement factory function.</param>
             public IActionSyntaxProvider In(ElementProxy element)
             {
+                if (!element.Element.IsText)
+                    throw new FluentException("Enter().In() is only supported on text elements (input, textarea, etc).");
+
                 if (this.eventsEnabled)
                 {
                     this.syntaxProvider.commandProvider.EnterText(element, text);
@@ -599,6 +602,9 @@ namespace FluentAutomation
             /// <param name="element">IElement factory function.</param>
             public IActionSyntaxProvider To(ElementProxy element)
             {
+                if (!element.Element.IsText)
+                    throw new FluentException("Append().To() is only supported on text elements (input, textarea, etc).");
+
                 if (this.eventsEnabled)
                 {
                     this.syntaxProvider.commandProvider.AppendText(element, text);

@@ -15,6 +15,8 @@ namespace FluentAutomation.Tests
 
         public BaseTest()
         {
+            Config.WaitUntilTimeout(TimeSpan.FromSeconds(2));
+
             // Default tests use chrome and load the site
             FluentAutomation.SeleniumWebDriver.Bootstrap(SeleniumWebDriver.Browser.Chrome);
             I.Open(SiteUrl);
