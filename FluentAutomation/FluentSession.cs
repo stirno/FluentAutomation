@@ -48,8 +48,10 @@ namespace FluentAutomation
             if (FluentSession.Current == null)
             {
                 containerAction(this.Container);
+                return;
             }
-            else if (FluentSession.Current.HasBootstrappedTypes == false)
+
+            if (FluentSession.Current.HasBootstrappedTypes == false)
             {
                 containerAction(this.Container);
             }

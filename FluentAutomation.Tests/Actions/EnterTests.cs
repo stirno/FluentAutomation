@@ -71,7 +71,7 @@ namespace FluentAutomation.Tests.Actions
             // Prompt
             I.Click(AlertsPage.TriggerPromptSelector);
 
-            I.Enter("Wat").In(Alert.Message)
+            I.Enter("Wat").In(Alert.Input)
              .Wait(5)
              .Assert.Text("Wat").In(Alert.Input);
 
