@@ -19,23 +19,36 @@ namespace FluentAutomation.Tests.Actions
         [Fact]
         public void SelectValue()
         {
-            I.Select(Option.Value, "QC").From(InputsPage.SelectControlSelector);
-            I.Assert.Text("Québec").In(InputsPage.SelectControlSelector);
+            I.Select(Option.Value, "QC").From(InputsPage.SelectControlSelector)
+             .Assert.Text("Québec").In(InputsPage.SelectControlSelector);
         }
 
         [Fact]
         public void SelectIndex()
         {
-            I.Select(3).From(InputsPage.SelectControlSelector);
-            I.Assert.Value("MB").In(InputsPage.SelectControlSelector);
-            I.Assert.Text("Manitoba").In(InputsPage.SelectControlSelector);
+            I.Select(3).From(InputsPage.SelectControlSelector)
+             .Assert
+                .Value("MB").In(InputsPage.SelectControlSelector)
+                .Text("Manitoba").In(InputsPage.SelectControlSelector);
         }
 
         [Fact]
         public void SelectText()
         {
-            I.Select("Québec").From(InputsPage.SelectControlSelector);
-            I.Assert.Value("QC").In(InputsPage.SelectControlSelector);
+            I.Select("Québec").From(InputsPage.SelectControlSelector)
+             .Assert.Value("QC").In(InputsPage.SelectControlSelector);
+        }
+
+        [Fact]
+        public void SelectClearsOptionBetweenSelections()
+        {
+            I.Select("Québec").From(InputsPage.SelectControlSelector)
+             .Assert.Value("QC").In(InputsPage.SelectControlSelector);
+
+            I.Select("Manitoba").From(InputsPage.SelectControlSelector)
+             .Assert
+                .Value("MB").In(InputsPage.SelectControlSelector)
+                .Value("QC").Not.In(InputsPage.SelectControlSelector);
         }
 
         [Fact]
@@ -74,40 +87,43 @@ namespace FluentAutomation.Tests.Actions
         [Fact]
         public void MultiSelectValue()
         {
-            I.Select(Option.Value, "QC", "MB").From(InputsPage.MultiSelectControlSelector);
-            I.Assert.Text("Québec").In(InputsPage.MultiSelectControlSelector);
-            I.Assert.Text("Manitoba").In(InputsPage.MultiSelectControlSelector);
-            I.Assert.Text("Alberta").Not.In(InputsPage.MultiSelectControlSelector);
+            I.Select(Option.Value, "QC", "MB").From(InputsPage.MultiSelectControlSelector)
+             .Assert
+                .Text("Québec").In(InputsPage.MultiSelectControlSelector)
+                .Text("Manitoba").In(InputsPage.MultiSelectControlSelector)
+                .Text("Alberta").Not.In(InputsPage.MultiSelectControlSelector);
         }
 
         [Fact]
         public void MultiSelectIndex()
         {
-            I.Select(3, 4, 5).From(InputsPage.MultiSelectControlSelector);
-            I.Assert.Text("Manitoba").In(InputsPage.MultiSelectControlSelector);
-            I.Assert.Text("Nouveau-Brunswick").In(InputsPage.MultiSelectControlSelector);
-            I.Assert.Text("Terre-Neuve").In(InputsPage.MultiSelectControlSelector);
+            I.Select(3, 4, 5).From(InputsPage.MultiSelectControlSelector)
+             .Assert
+                .Text("Manitoba").In(InputsPage.MultiSelectControlSelector)
+                .Text("Nouveau-Brunswick").In(InputsPage.MultiSelectControlSelector)
+                .Text("Terre-Neuve").In(InputsPage.MultiSelectControlSelector);
         }
 
         [Fact]
         public void MultiSelectText()
         {
-            I.Select("Manitoba", "Nouvea-Brunswick", "Terra-Neuve").From(InputsPage.MultiSelectControlSelector);
-            I.Assert.Value("MB").In(InputsPage.MultiSelectControlSelector);
-            I.Assert.Value("NB").In(InputsPage.MultiSelectControlSelector);
-            I.Assert.Value("NL").In(InputsPage.MultiSelectControlSelector);
+            I.Select("Manitoba", "Nouvea-Brunswick", "Terra-Neuve").From(InputsPage.MultiSelectControlSelector)
+             .Assert
+                .Value("MB").In(InputsPage.MultiSelectControlSelector)
+                .Value("NB").In(InputsPage.MultiSelectControlSelector)
+                .Value("NL").In(InputsPage.MultiSelectControlSelector);
         }
 
         [Fact]
         public void MultiSelectClearOptionsBetweenSelections()
         {
-            I.Select(Option.Value, "QC", "MB").From(InputsPage.MultiSelectControlSelector);
-            I.Assert.Text("Québec").In(InputsPage.MultiSelectControlSelector);
+            I.Select(Option.Value, "QC", "MB").From(InputsPage.MultiSelectControlSelector)
+             .Assert.Text("Québec").In(InputsPage.MultiSelectControlSelector);
 
-            I.Select(Option.Value, "AB").From(InputsPage.MultiSelectControlSelector);
-            I.Assert.Text("Alberta").In(InputsPage.MultiSelectControlSelector);
-            I.Assert.Text("Québec").Not.In(InputsPage.MultiSelectControlSelector);
+            I.Select(Option.Value, "AB").From(InputsPage.MultiSelectControlSelector)
+             .Assert
+                .Text("Alberta").In(InputsPage.MultiSelectControlSelector)
+                .Text("Québec").Not.In(InputsPage.MultiSelectControlSelector);
         }
-
     }
 }
