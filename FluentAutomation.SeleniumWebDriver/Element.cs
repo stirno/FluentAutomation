@@ -39,7 +39,7 @@ namespace FluentAutomation
         {
             get
             {
-                if (this.TagName == "input")
+                if (this.TagName == "input" || this.TagName == "textarea")
                 {
                     return this.Attributes.Get("value");
                 }
@@ -58,7 +58,7 @@ namespace FluentAutomation
         {
             get
             {
-                if (this.TagName == "input")
+                if (this.TagName == "input" || this.TagName == "textarea")
                 {
                     return this.Value;
                 }
