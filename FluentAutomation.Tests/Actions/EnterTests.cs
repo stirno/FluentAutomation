@@ -10,7 +10,8 @@ namespace FluentAutomation.Tests.Actions
 {
     public class EnterTests : BaseTest
     {
-        public EnterTests() : base()
+        public EnterTests()
+            : base()
         {
             I.Open("/Inputs");
         }
@@ -18,14 +19,23 @@ namespace FluentAutomation.Tests.Actions
         [Fact]
         public void EnterTextInValidInput()
         {
-            I.Enter("Test String").In("#text-control");
-            I.Assert.Text("Test String").In("#text-control");
+            // enter text, verify change fired
+            I.Enter("Test String").In("#text-control")
+             .Assert.Text("Test String").In("#text-control");
+            I.Focus("#textarea-control")
+             .Assert.Text("Changed").In("#text-control-changed");
 
-            I.Enter("Other Test String").In("#textarea-control");
-            I.Assert.Text("Other Test String").In("#textarea-control");
+            // no change event should be fired
+            I.Enter("Quick Test").WithoutEvents().In("#text-control")
+             .Assert.Text("Quick Test").In("#text-control");
+            I.Focus("#textarea-control")
+             .Assert.Text("").In("#text-control-changed");
 
-            I.Enter(10).In("#text-control");
-            I.Assert.Text("10").In("#text-control");
+            I.Enter("Other Test String").In("#textarea-control")
+             .Assert.Text("Other Test String").In("#textarea-control");
+
+            I.Enter(10).In("#text-control")
+             .Assert.Text("10").In("#text-control");
         }
 
         [Fact]

@@ -9,6 +9,8 @@
     <div class="form-group">
         <label for="text-control">Text Input</label>
         <input id="text-control" class="form-control">
+
+        <div id="text-control-changed"></div>
     </div>
 
     <div class="form-group">
@@ -52,6 +54,14 @@
 
 <script type="text/javascript">
     $(function () {
+        $('#text-control').on('change', function () {
+            var tcc = $('#text-control-changed');
+            tcc.text('Changed');
+            setTimeout(function () {
+                tcc.text('');
+            }, 1500);
+        });
+
         var clickedText = $('#button-clicked-text');
         $('#button-control')
             .on('click', function () {
