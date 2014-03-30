@@ -180,63 +180,93 @@ namespace FluentAutomation
 
         public void Click(int x, int y)
         {
-            FluentAutomation.MouseControl.Click(x, y);
+            this.Act(CommandType.Action, () =>
+            {
+                FluentAutomation.MouseControl.Click(x, y);
+            });
         }
 
         public void Click(ElementProxy element, int x, int y)
         {
-            var el = element.Element as Element;
-            FluentAutomation.MouseControl.Click(el.PosX + x, el.PosY + y);
+            this.Act(CommandType.Action, () =>
+            {
+                var el = element.Element as Element;
+                FluentAutomation.MouseControl.Click(el.PosX + x, el.PosY + y);
+            });
         }
 
         public void Click(ElementProxy element)
         {
-            var el = element.Element as Element;
-            el.AutomationElement.Click();
+            this.Act(CommandType.Action, () =>
+            {
+                var el = element.Element as Element;
+                el.AutomationElement.Click();
+            });
         }
 
         public void DoubleClick(int x, int y)
         {
-            FluentAutomation.MouseControl.Click(x, y);
-            System.Threading.Thread.Sleep(30);
-            FluentAutomation.MouseControl.Click(x, y);
+            this.Act(CommandType.Action, () =>
+            {
+                FluentAutomation.MouseControl.Click(x, y);
+                System.Threading.Thread.Sleep(30);
+                FluentAutomation.MouseControl.Click(x, y);
+            });
         }
 
         public void DoubleClick(ElementProxy element, int x, int y)
         {
-            var el = element.Element as Element;
-            FluentAutomation.MouseControl.Click(el.PosX + x, el.PosY + y);
-            System.Threading.Thread.Sleep(30);
-            FluentAutomation.MouseControl.Click(el.PosX + x, el.PosY + y);
+            this.Act(CommandType.Action, () =>
+            {
+                var el = element.Element as Element;
+                FluentAutomation.MouseControl.Click(el.PosX + x, el.PosY + y);
+                System.Threading.Thread.Sleep(30);
+                FluentAutomation.MouseControl.Click(el.PosX + x, el.PosY + y);
+            });
         }
 
         public void DoubleClick(ElementProxy element)
         {
-            var el = element.Element as Element;
-            this.ActiveDomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).dblclick(); }}", el.AutomationElement.GetJavascriptElementReference()));
+            this.Act(CommandType.Action, () =>
+            {
+                var el = element.Element as Element;
+                this.ActiveDomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).dblclick(); }}", el.AutomationElement.GetJavascriptElementReference()));
+            });
         }
 
         public void RightClick(ElementProxy element)
         {
-            var el = element.Element as Element;
-            this.ActiveDomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).trigger('contextmenu'); }}", el.AutomationElement.GetJavascriptElementReference()));
+            this.Act(CommandType.Action, () =>
+            {
+                var el = element.Element as Element;
+                this.ActiveDomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).trigger('contextmenu'); }}", el.AutomationElement.GetJavascriptElementReference()));
+            });
         }
 
         public void Hover(int x, int y)
         {
-            FluentAutomation.MouseControl.SetPosition(x, y);
+            this.Act(CommandType.Action, () =>
+            {
+                FluentAutomation.MouseControl.SetPosition(x, y);
+            });
         }
 
         public void Hover(ElementProxy element, int x, int y)
         {
-            var el = element.Element as Element;
-            FluentAutomation.MouseControl.SetPosition(el.PosX + x, el.PosY + y);
+            this.Act(CommandType.Action, () =>
+            {
+                var el = element.Element as Element;
+                FluentAutomation.MouseControl.SetPosition(el.PosX + x, el.PosY + y);
+            });
         }
 
         public void Hover(ElementProxy element)
         {
-            var el = element.Element as Element;
-            FluentAutomation.MouseControl.SetPosition(el.PosX, el.PosY);            
+            this.Act(CommandType.Action, () =>
+            {
+                var el = element.Element as Element;
+                FluentAutomation.MouseControl.SetPosition(el.PosX, el.PosY);
+            });
         }
 
         public void Focus(ElementProxy element)
@@ -281,125 +311,158 @@ namespace FluentAutomation
 
         public void EnterText(ElementProxy element, string text)
         {
-            var el = element.Element as Element;
-            if (el.IsText)
+            this.Act(CommandType.Action, () =>
             {
-                var txt = new WatiNCore.TextField(this.ActiveDomContainer, el.AutomationElement.NativeElement);
-                txt.TypeText(text);
-            }
+                var el = element.Element as Element;
+                if (el.IsText)
+                {
+                    var txt = new WatiNCore.TextField(this.ActiveDomContainer, el.AutomationElement.NativeElement);
+                    txt.TypeText(text);
+                }
+            });
         }
 
         public void EnterTextWithoutEvents(ElementProxy element, string text)
         {
-            var el = element.Element as Element;
-            if (el.IsText)
+            this.Act(CommandType.Action, () =>
             {
-                var txt = new WatiNCore.TextField(this.ActiveDomContainer, el.AutomationElement.NativeElement);
-                txt.Value = text;
-                this.ActiveDomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).trigger('keyup'); }}", el.AutomationElement.GetJavascriptElementReference()));
-            }
+                var el = element.Element as Element;
+                if (el.IsText)
+                {
+                    var txt = new WatiNCore.TextField(this.ActiveDomContainer, el.AutomationElement.NativeElement);
+                    txt.Value = text;
+                    this.ActiveDomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).trigger('keyup'); }}", el.AutomationElement.GetJavascriptElementReference()));
+                }
+            });
         }
 
         public void AppendText(ElementProxy element, string text)
         {
-            var el = element.Element as Element;
-            if (el.IsText)
+            this.Act(CommandType.Action, () =>
             {
-                var txt = new WatiNCore.TextField(this.ActiveDomContainer, el.AutomationElement.NativeElement);
-                txt.AppendText(text);
-            }
+                var el = element.Element as Element;
+                if (el.IsText)
+                {
+                    var txt = new WatiNCore.TextField(this.ActiveDomContainer, el.AutomationElement.NativeElement);
+                    txt.AppendText(text);
+                }
+            });
         }
 
         public void AppendTextWithoutEvents(ElementProxy element, string text)
         {
-            var el = element.Element as Element;
-            if (el.IsText)
+            this.Act(CommandType.Action, () =>
             {
-                var txt = new WatiNCore.TextField(this.ActiveDomContainer, el.AutomationElement.NativeElement);
-                txt.Value = text;
-                this.ActiveDomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).trigger('keyup'); }}", el.AutomationElement.GetJavascriptElementReference()));
-            }
+                var el = element.Element as Element;
+                if (el.IsText)
+                {
+                    var txt = new WatiNCore.TextField(this.ActiveDomContainer, el.AutomationElement.NativeElement);
+                    txt.Value = text;
+                    this.ActiveDomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).trigger('keyup'); }}", el.AutomationElement.GetJavascriptElementReference()));
+                }
+            });
         }
 
         public void SelectText(ElementProxy element, string optionText)
         {
-            var el = element.Element as Element;
-            if (el.IsSelect)
+            this.Act(CommandType.Action, () =>
             {
-                var sl = new WatiNCore.SelectList(this.ActiveDomContainer, el.AutomationElement.NativeElement);
-                sl.Select(optionText);
-                fireOnChange(el.AutomationElement);
-            }
+                var el = element.Element as Element;
+                if (el.IsSelect)
+                {
+                    var sl = new WatiNCore.SelectList(this.ActiveDomContainer, el.AutomationElement.NativeElement);
+                    sl.Select(optionText);
+                    fireOnChange(el.AutomationElement);
+                }
+            });
         }
 
         public void SelectValue(ElementProxy element, string optionValue)
         {
-            var el = element.Element as Element;
-            if (el.IsSelect)
+            this.Act(CommandType.Action, () =>
             {
-                var sl = new WatiNCore.SelectList(this.ActiveDomContainer, el.AutomationElement.NativeElement);
-                sl.SelectByValue(optionValue);
-                fireOnChange(el.AutomationElement);
-            }
+                var el = element.Element as Element;
+                if (el.IsSelect)
+                {
+                    var sl = new WatiNCore.SelectList(this.ActiveDomContainer, el.AutomationElement.NativeElement);
+                    sl.SelectByValue(optionValue);
+                    fireOnChange(el.AutomationElement);
+                }
+            });
         }
 
         public void SelectIndex(ElementProxy element, int optionIndex)
         {
-            var el = element.Element as Element;
-            if (el.IsSelect)
+            this.Act(CommandType.Action, () =>
             {
-                var sl = new WatiNCore.SelectList(this.ActiveDomContainer, el.AutomationElement.NativeElement);
-                sl.Options[optionIndex].Select();
-                fireOnChange(el.AutomationElement);
-            }
+                var el = element.Element as Element;
+                if (el.IsSelect)
+                {
+                    var sl = new WatiNCore.SelectList(this.ActiveDomContainer, el.AutomationElement.NativeElement);
+                    sl.Options[optionIndex].Select();
+                    fireOnChange(el.AutomationElement);
+                }
+            });
         }
 
         public void MultiSelectText(ElementProxy element, string[] optionTextCollection)
         {
-            var el = element.Element as Element;
-            if (el.IsSelect && el.IsMultipleSelect)
+            this.Act(CommandType.Action, () =>
             {
-                var sl = new WatiNCore.SelectList(this.ActiveDomContainer, el.AutomationElement.NativeElement);
-                foreach (var text in optionTextCollection)
+                var el = element.Element as Element;
+                if (el.IsSelect && el.IsMultipleSelect)
                 {
-                    sl.Select(text);
-                    fireOnChange(el.AutomationElement);
+                    var sl = new WatiNCore.SelectList(this.ActiveDomContainer, el.AutomationElement.NativeElement);
+                    foreach (var text in optionTextCollection)
+                    {
+                        sl.Select(text);
+                        fireOnChange(el.AutomationElement);
+                    }
                 }
-            }
+            });
         }
 
         public void MultiSelectValue(ElementProxy element, string[] optionValues)
         {
-            var el = element.Element as Element;
-            if (el.IsSelect && el.IsMultipleSelect)
+            this.Act(CommandType.Action, () =>
             {
-                new WatiNCore.SelectList(this.browser.Frame("").DomContainer, el.AutomationElement.NativeElement);
-                var sl = new WatiNCore.SelectList(this.ActiveDomContainer, el.AutomationElement.NativeElement);
-                foreach (var val in optionValues)
+                var el = element.Element as Element;
+                if (el.IsSelect && el.IsMultipleSelect)
                 {
-                    sl.SelectByValue(val);
-                    fireOnChange(el.AutomationElement);
+                    new WatiNCore.SelectList(this.browser.Frame("").DomContainer, el.AutomationElement.NativeElement);
+                    var sl = new WatiNCore.SelectList(this.ActiveDomContainer, el.AutomationElement.NativeElement);
+                    foreach (var val in optionValues)
+                    {
+                        sl.SelectByValue(val);
+                        fireOnChange(el.AutomationElement);
+                    }
                 }
-            }
+            });
         }
 
         public void MultiSelectIndex(ElementProxy element, int[] optionIndices)
         {
-            var el = element.Element as Element;
-            if (el.IsSelect && el.IsMultipleSelect)
+            this.Act(CommandType.Action, () =>
             {
-                var sl = new WatiNCore.SelectList(this.ActiveDomContainer, el.AutomationElement.NativeElement);
-                foreach (var i in optionIndices)
+                var el = element.Element as Element;
+                if (el.IsSelect && el.IsMultipleSelect)
                 {
-                    sl.Options[i].Select();
-                    fireOnChange(el.AutomationElement);
+                    var sl = new WatiNCore.SelectList(this.ActiveDomContainer, el.AutomationElement.NativeElement);
+                    foreach (var i in optionIndices)
+                    {
+                        sl.Options[i].Select();
+                        fireOnChange(el.AutomationElement);
+                    }
                 }
-            }
+            });
         }
 
         public override void TakeScreenshot(string screenshotName)
         {
-            this.browser.CaptureWebPageToFile(screenshotName);
+            this.Act(CommandType.Action, () =>
+            {
+                this.browser.CaptureWebPageToFile(screenshotName);
+            });
         }
 
         public void UploadFile(ElementProxy element, int x, int y, string fileName)
@@ -409,15 +472,21 @@ namespace FluentAutomation
         
         public void Press(string keys)
         {
-            System.Windows.Forms.SendKeys.SendWait(keys);
+            this.Act(CommandType.Action, () =>
+            {
+                System.Windows.Forms.SendKeys.SendWait(keys);
+            });
         }
 
         public void Type(string text)
         {
-            foreach (var chr in text)
+            this.Act(CommandType.Action, () =>
             {
-                System.Windows.Forms.SendKeys.SendWait(chr.ToString());
-            }
+                foreach (var chr in text)
+                {
+                    System.Windows.Forms.SendKeys.SendWait(chr.ToString());
+                }
+            });
         }
 
         public void Dispose()

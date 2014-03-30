@@ -99,6 +99,7 @@ namespace FluentAutomation.Tests.Actions
             I.Click(Alert.OK);
 
             // Alert box:
+            // Alerts don't have OK/Cancel but both work, so we test as if Cancel was clicked
             I.Click(AlertsPage.TriggerAlertSelector)
              .Click(Alert.OK)
              .Assert.Text("Clicked Alert Cancel").In(AlertsPage.ResultSelector);
