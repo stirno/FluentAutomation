@@ -26,12 +26,7 @@ namespace FluentAutomation.Tests.Actions
         [Fact]
         public void AttemptToFindFakeElement()
         {
-            var exception = Assert.Throws<FluentException>(() =>
-            {
-                var proxy = I.Find("#fake-control");
-                proxy.Element.ToString(); // accessing Element executes the Find
-            });
-
+            var exception = Assert.Throws<FluentException>(() => I.Find("#fake-control").Element.ToString()); // accessing Element executes the Find
             Assert.True(exception.Message.Contains("Unable to find"));
         }
     }

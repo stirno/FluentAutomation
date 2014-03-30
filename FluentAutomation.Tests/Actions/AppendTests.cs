@@ -45,11 +45,7 @@ namespace FluentAutomation.Tests.Actions
         [Fact]
         public void AppendTextToInvalidInputUsingSelector()
         {
-            var exception = Assert.Throws<FluentException>(() =>
-            {
-                I.Append("Test String").To("#text-control-fake");
-            });
-
+            var exception = Assert.Throws<FluentException>(() => I.Append("Test String").To("#text-control-fake"));
             Assert.True(exception.Message.Contains("Unable to find"));
         }
 
@@ -57,11 +53,7 @@ namespace FluentAutomation.Tests.Actions
         public void AppendTextToSelect()
         {
             // Append cannot be used on non-text elements
-            var exception = Assert.Throws<FluentException>(() =>
-            {
-                I.Append("QA").To(InputsPage.SelectControlSelector);
-            });
-
+            var exception = Assert.Throws<FluentException>(() => I.Append("QA").To(InputsPage.SelectControlSelector));
             Assert.True(exception.Message.Contains("only supported"));
         }
     }

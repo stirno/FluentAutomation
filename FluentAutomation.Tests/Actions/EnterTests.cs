@@ -41,11 +41,7 @@ namespace FluentAutomation.Tests.Actions
         [Fact]
         public void EnterTextInInvalidInputUsingSelector()
         {
-            var exception = Assert.Throws<FluentException>(() =>
-            {
-                I.Enter("Test String").In("#text-control-fake");
-            });
-
+            var exception = Assert.Throws<FluentException>(() => I.Enter("Test String").In("#text-control-fake"));
             Assert.True(exception.Message.Contains("Unable to find"));
         }
 
@@ -53,11 +49,7 @@ namespace FluentAutomation.Tests.Actions
         public void EnterTextInSelect()
         {
             // Enter cannot be used on non-text elements
-            var exception = Assert.Throws<FluentException>(() =>
-            {
-                I.Enter("QA").In(InputsPage.SelectControlSelector);
-            });
-
+            var exception = Assert.Throws<FluentException>(() => I.Enter("QA").In(InputsPage.SelectControlSelector));
             Assert.True(exception.Message.Contains("only supported"));
         }
     }

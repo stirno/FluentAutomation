@@ -54,33 +54,21 @@ namespace FluentAutomation.Tests.Actions
         [Fact]
         public void SelectTextFailed()
         {
-            var exception = Assert.Throws<FluentException>(() =>
-            {
-                I.Select("NonExistentText").From(InputsPage.SelectControlSelector);
-            });
-
+            var exception = Assert.Throws<FluentException>(() => I.Select("NonExistentText").From(InputsPage.SelectControlSelector));
             Assert.True(exception.InnerException.Message.Contains("NonExistentText"));
         }
 
         [Fact]
         public void SelectValueFailed()
         {
-            var exception = Assert.Throws<FluentException>(() =>
-            {
-                I.Select(Option.Value, "NonExistentValue").From(InputsPage.SelectControlSelector);
-            });
-
+            var exception = Assert.Throws<FluentException>(() => I.Select(Option.Value, "NonExistentValue").From(InputsPage.SelectControlSelector));
             Assert.True(exception.InnerException.Message.Contains("NonExistentValue"));
         }
 
         [Fact]
         public void SelectIndexFailed()
         {
-            var exception = Assert.Throws<FluentException>(() =>
-            {
-                I.Select(1000).From(InputsPage.SelectControlSelector);
-            });
-
+            var exception = Assert.Throws<FluentException>(() => I.Select(1000).From(InputsPage.SelectControlSelector));
             Assert.True(exception.InnerException.Message.Contains("1000"));
         }
 

@@ -28,4 +28,17 @@ namespace FluentAutomation.Tests
 
         public Pages.InputsPage InputsPage = null;
     }
+
+    public class AssertBaseTest : BaseTest
+    {
+        public AssertBaseTest()
+            : base()
+        {
+            Config.OnExpectFailed((ex, state) =>
+            {
+                // For the purpose of these tests, allow expects to throw (break test)
+                throw ex;
+            });
+        }
+    }
 }
