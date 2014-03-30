@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using FluentAutomation.Exceptions;
 using FluentAutomation.Interfaces;
 using WatiNCore = global::WatiN.Core;
+using WatiN.Core.DialogHandlers;
+using WatiN.Core.Exceptions;
 
 namespace FluentAutomation
 {
@@ -22,6 +24,71 @@ namespace FluentAutomation
             }
         }
 
+        private AlertDialogHandler alertHandler = null;
+        internal AlertDialogHandler AlertHandler
+        {
+            get
+            {
+                if (alertHandler == null)
+                {
+                    alertHandler = new AlertDialogHandler();
+                    lazyBrowser.Value.AddDialogHandler(alertHandler);
+                }
+
+                return alertHandler;
+            }
+
+            set
+            {
+                if (value == null)
+                    lazyBrowser.Value.RemoveDialogHandler(alertHandler);
+            }
+        }
+
+        private ConfirmDialogHandler confirmHandler = null;
+        internal ConfirmDialogHandler ConfirmHandler
+        {
+            get
+            {
+                if (confirmHandler == null)
+                {
+                    confirmHandler = new ConfirmDialogHandler();
+                    lazyBrowser.Value.AddDialogHandler(alertHandler);
+                }
+
+                return confirmHandler;
+            }
+
+            set
+            {
+                if (value == null)
+                    lazyBrowser.Value.RemoveDialogHandler(confirmHandler);
+            }
+        }
+
+        private PromptDialogHandler promptHandler = null;
+        internal PromptDialogHandler PromptHandler
+        {
+            get
+            {
+                if (promptHandler == null)
+                {
+                    promptHandler = new PromptDialogHandler("");
+                    lazyBrowser.Value.AddDialogHandler(alertHandler);
+                }
+
+                return promptHandler;
+            }
+
+            set
+            {
+                if (value == null)
+                    lazyBrowser.Value.RemoveDialogHandler(promptHandler);
+            }
+        }
+
+        private WatiNCore.DomContainer ActiveDomContainer { get; set; }
+
         public CommandProvider(Func<WatiNCore.IE> browserFactory)
         {
             FluentTest.ProviderInstance = null;
@@ -35,6 +102,11 @@ namespace FluentAutomation
                 else
                     FluentTest.IsMultiBrowserTest = true;
 
+                // force init handler
+                var hack = this.alertHandler;
+                var hack2 = this.confirmHandler;
+                this.ActiveDomContainer = bf.DomContainer;
+
                 return bf;
             });
         }
@@ -47,14 +119,22 @@ namespace FluentAutomation
             }
         }
 
+        public string Source
+        {
+            get
+            {
+                return this.browser.Body.Parent.OuterHtml;
+            }
+        }
+
         public void Navigate(Uri uri)
         {
             this.browser.GoTo(uri);
         }
         
-        public Func<IElement> Find(string selector)
+        public ElementProxy Find(string selector)
         {
-            return new Func<IElement>(() =>
+            return new ElementProxy(this, () =>
             {
                 try
                 {
@@ -70,24 +150,32 @@ namespace FluentAutomation
             });
         }
 
-        public Func<IEnumerable<IElement>> FindMultiple(string selector)
+        public ElementProxy FindMultiple(string selector)
         {
-            return new Func<IEnumerable<IElement>>(() =>
+            var finalResult = new ElementProxy();
+
+            finalResult.Children.Add(new Func<ElementProxy>(() =>
             {
                 try
                 {
                     var automationElements = this.browser.Elements.Filter(WatiNCore.Find.BySelector(selector));
                     if (automationElements.Count == 0) throw new KeyNotFoundException();
 
-                    List<Element> resultSet = new List<Element>();
-                    automationElements.ToList().ForEach(x => resultSet.Add(new Element(x, selector)));
-                    return resultSet;
+                    var result = new ElementProxy();
+                    foreach (var element in automationElements)
+                    {
+                        result.Elements.Add(this, () => new Element(element, selector));
+                    }
+
+                    return result;
                 }
                 catch (KeyNotFoundException)
                 {
                     throw new FluentException("Unable to find element with selector: {0}", selector);
                 }
-            });
+            }));
+
+            return finalResult;
         }
 
         public void Click(int x, int y)
@@ -95,15 +183,15 @@ namespace FluentAutomation
             FluentAutomation.MouseControl.Click(x, y);
         }
 
-        public void Click(Func<IElement> element, int x, int y)
+        public void Click(ElementProxy element, int x, int y)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             FluentAutomation.MouseControl.Click(el.PosX + x, el.PosY + y);
         }
 
-        public void Click(Func<IElement> element)
+        public void Click(ElementProxy element)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             el.AutomationElement.Click();
         }
 
@@ -114,24 +202,24 @@ namespace FluentAutomation
             FluentAutomation.MouseControl.Click(x, y);
         }
 
-        public void DoubleClick(Func<IElement> element, int x, int y)
+        public void DoubleClick(ElementProxy element, int x, int y)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             FluentAutomation.MouseControl.Click(el.PosX + x, el.PosY + y);
             System.Threading.Thread.Sleep(30);
             FluentAutomation.MouseControl.Click(el.PosX + x, el.PosY + y);
         }
 
-        public void DoubleClick(Func<IElement> element)
+        public void DoubleClick(ElementProxy element)
         {
-            var el = element() as Element;
-            this.browser.DomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).dblclick(); }}", el.AutomationElement.GetJavascriptElementReference()));
+            var el = element.Element as Element;
+            this.ActiveDomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).dblclick(); }}", el.AutomationElement.GetJavascriptElementReference()));
         }
 
-        public void RightClick(Func<IElement> element)
+        public void RightClick(ElementProxy element)
         {
-            var el = element() as Element;
-            this.browser.DomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).trigger('contextmenu'); }}", el.AutomationElement.GetJavascriptElementReference()));
+            var el = element.Element as Element;
+            this.ActiveDomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).trigger('contextmenu'); }}", el.AutomationElement.GetJavascriptElementReference()));
         }
 
         public void Hover(int x, int y)
@@ -139,19 +227,19 @@ namespace FluentAutomation
             FluentAutomation.MouseControl.SetPosition(x, y);
         }
 
-        public void Hover(Func<IElement> element, int x, int y)
+        public void Hover(ElementProxy element, int x, int y)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             FluentAutomation.MouseControl.SetPosition(el.PosX + x, el.PosY + y);
         }
 
-        public void Hover(Func<IElement> element)
+        public void Hover(ElementProxy element)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             FluentAutomation.MouseControl.SetPosition(el.PosX, el.PosY);            
         }
 
-        public void Focus(Func<IElement> element)
+        public void Focus(ElementProxy element)
         {
             throw new NotImplementedException();
         }
@@ -164,10 +252,10 @@ namespace FluentAutomation
             MouseControl.MouseEvent(MouseControl.MouseEvent_LeftButtonUp, destinationX, destinationY, 0, 0);
         }
 
-        public void DragAndDrop(Func<IElement> source, Func<IElement> target)
+        public void DragAndDrop(ElementProxy source, ElementProxy target)
         {
-            var sourceEl = source() as Element;
-            var targetEl = target() as Element;
+            var sourceEl = source.Element as Element;
+            var targetEl = target.Element as Element;
 
             MouseControl.SetPosition(sourceEl.PosX, sourceEl.PosY);
             MouseControl.MouseEvent(MouseControl.MouseEvent_LeftButtonDown, sourceEl.PosX, sourceEl.PosY, 0, 0);
@@ -175,10 +263,10 @@ namespace FluentAutomation
             MouseControl.MouseEvent(MouseControl.MouseEvent_LeftButtonUp, targetEl.PosX, targetEl.PosY, 0, 0);
         }
 
-        public void DragAndDrop(Func<IElement> source, int sourceOffsetX, int sourceOffsetY, Func<IElement> target, int targetOffsetX, int targetOffsetY)
+        public void DragAndDrop(ElementProxy source, int sourceOffsetX, int sourceOffsetY, ElementProxy target, int targetOffsetX, int targetOffsetY)
         {
-            var sourceEl = source() as Element;
-            var targetEl = target() as Element;
+            var sourceEl = source.Element as Element;
+            var targetEl = target.Element as Element;
 
             var sourceX = sourceEl.PosX + sourceOffsetX;
             var sourceY = sourceEl.PosY + sourceOffsetY;
@@ -191,87 +279,87 @@ namespace FluentAutomation
             MouseControl.MouseEvent(MouseControl.MouseEvent_LeftButtonUp, targetX, targetY, 0, 0);
         }
 
-        public void EnterText(Func<IElement> element, string text)
+        public void EnterText(ElementProxy element, string text)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             if (el.IsText)
             {
-                var txt = new WatiNCore.TextField(this.browser.DomContainer, el.AutomationElement.NativeElement);
+                var txt = new WatiNCore.TextField(this.ActiveDomContainer, el.AutomationElement.NativeElement);
                 txt.TypeText(text);
             }
         }
 
-        public void EnterTextWithoutEvents(Func<IElement> element, string text)
+        public void EnterTextWithoutEvents(ElementProxy element, string text)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             if (el.IsText)
             {
-                var txt = new WatiNCore.TextField(this.browser.DomContainer, el.AutomationElement.NativeElement);
+                var txt = new WatiNCore.TextField(this.ActiveDomContainer, el.AutomationElement.NativeElement);
                 txt.Value = text;
-                this.browser.DomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).trigger('keyup'); }}", el.AutomationElement.GetJavascriptElementReference()));
+                this.ActiveDomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).trigger('keyup'); }}", el.AutomationElement.GetJavascriptElementReference()));
             }
         }
 
-        public void AppendText(Func<IElement> element, string text)
+        public void AppendText(ElementProxy element, string text)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             if (el.IsText)
             {
-                var txt = new WatiNCore.TextField(this.browser.DomContainer, el.AutomationElement.NativeElement);
+                var txt = new WatiNCore.TextField(this.ActiveDomContainer, el.AutomationElement.NativeElement);
                 txt.AppendText(text);
             }
         }
 
-        public void AppendTextWithoutEvents(Func<IElement> element, string text)
+        public void AppendTextWithoutEvents(ElementProxy element, string text)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             if (el.IsText)
             {
-                var txt = new WatiNCore.TextField(this.browser.DomContainer, el.AutomationElement.NativeElement);
+                var txt = new WatiNCore.TextField(this.ActiveDomContainer, el.AutomationElement.NativeElement);
                 txt.Value = text;
-                this.browser.DomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).trigger('keyup'); }}", el.AutomationElement.GetJavascriptElementReference()));
+                this.ActiveDomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).trigger('keyup'); }}", el.AutomationElement.GetJavascriptElementReference()));
             }
         }
 
-        public void SelectText(Func<IElement> element, string optionText)
+        public void SelectText(ElementProxy element, string optionText)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             if (el.IsSelect)
             {
-                var sl = new WatiNCore.SelectList(this.browser.DomContainer, el.AutomationElement.NativeElement);
+                var sl = new WatiNCore.SelectList(this.ActiveDomContainer, el.AutomationElement.NativeElement);
                 sl.Select(optionText);
                 fireOnChange(el.AutomationElement);
             }
         }
 
-        public void SelectValue(Func<IElement> element, string optionValue)
+        public void SelectValue(ElementProxy element, string optionValue)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             if (el.IsSelect)
             {
-                var sl = new WatiNCore.SelectList(this.browser.DomContainer, el.AutomationElement.NativeElement);
+                var sl = new WatiNCore.SelectList(this.ActiveDomContainer, el.AutomationElement.NativeElement);
                 sl.SelectByValue(optionValue);
                 fireOnChange(el.AutomationElement);
             }
         }
 
-        public void SelectIndex(Func<IElement> element, int optionIndex)
+        public void SelectIndex(ElementProxy element, int optionIndex)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             if (el.IsSelect)
             {
-                var sl = new WatiNCore.SelectList(this.browser.DomContainer, el.AutomationElement.NativeElement);
+                var sl = new WatiNCore.SelectList(this.ActiveDomContainer, el.AutomationElement.NativeElement);
                 sl.Options[optionIndex].Select();
                 fireOnChange(el.AutomationElement);
             }
         }
 
-        public void MultiSelectText(Func<IElement> element, string[] optionTextCollection)
+        public void MultiSelectText(ElementProxy element, string[] optionTextCollection)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             if (el.IsSelect && el.IsMultipleSelect)
             {
-                var sl = new WatiNCore.SelectList(this.browser.DomContainer, el.AutomationElement.NativeElement);
+                var sl = new WatiNCore.SelectList(this.ActiveDomContainer, el.AutomationElement.NativeElement);
                 foreach (var text in optionTextCollection)
                 {
                     sl.Select(text);
@@ -280,12 +368,13 @@ namespace FluentAutomation
             }
         }
 
-        public void MultiSelectValue(Func<IElement> element, string[] optionValues)
+        public void MultiSelectValue(ElementProxy element, string[] optionValues)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             if (el.IsSelect && el.IsMultipleSelect)
             {
-                var sl = new WatiNCore.SelectList(this.browser.DomContainer, el.AutomationElement.NativeElement);
+                new WatiNCore.SelectList(this.browser.Frame("").DomContainer, el.AutomationElement.NativeElement);
+                var sl = new WatiNCore.SelectList(this.ActiveDomContainer, el.AutomationElement.NativeElement);
                 foreach (var val in optionValues)
                 {
                     sl.SelectByValue(val);
@@ -294,12 +383,12 @@ namespace FluentAutomation
             }
         }
 
-        public void MultiSelectIndex(Func<IElement> element, int[] optionIndices)
+        public void MultiSelectIndex(ElementProxy element, int[] optionIndices)
         {
-            var el = element() as Element;
+            var el = element.Element as Element;
             if (el.IsSelect && el.IsMultipleSelect)
             {
-                var sl = new WatiNCore.SelectList(this.browser.DomContainer, el.AutomationElement.NativeElement);
+                var sl = new WatiNCore.SelectList(this.ActiveDomContainer, el.AutomationElement.NativeElement);
                 foreach (var i in optionIndices)
                 {
                     sl.Options[i].Select();
@@ -313,7 +402,7 @@ namespace FluentAutomation
             this.browser.CaptureWebPageToFile(screenshotName);
         }
 
-        public void UploadFile(Func<IElement> element, int x, int y, string fileName)
+        public void UploadFile(ElementProxy element, int x, int y, string fileName)
         {
             throw new NotImplementedException();
         }
@@ -339,9 +428,116 @@ namespace FluentAutomation
             this.browser.Dispose();
         }
 
+        public void SwitchToWindow(string windowName)
+        {
+            this.Act(CommandType.Action, () =>
+            {
+                this.ActiveDomContainer = WatiNCore.Browser.AttachTo<WatiNCore.IE>(WatiNCore.Find.ByTitle(windowName)).DomContainer;
+            });
+        }
+
+        public void SwitchToFrame(string frameNameOrSelector)
+        {
+            this.Act(CommandType.Action, () =>
+            {
+                // try to locate frame using argument as a selector, if that fails try finding
+                // frame by name
+                WatiNCore.Frame frame = null;
+                try
+                {
+                    frame = this.browser.Frame(WatiNCore.Find.BySelector(frameNameOrSelector));
+                }
+                catch (FrameNotFoundException)
+                {
+                }
+
+                if (frame == null)
+                    frame = this.browser.Frame(WatiNCore.Find.ByName(frameNameOrSelector));
+
+                this.ActiveDomContainer = frame.DomContainer;
+            });
+        }
+
+        public void SwitchToFrame(ElementProxy frameElement)
+        {
+            this.Act(CommandType.Action, () =>
+            {
+                this.ActiveDomContainer = this.browser.Frame(WatiNCore.Find.BySelector(frameElement.Element.Selector)).DomContainer;
+            });
+        }
+
+        public void AlertClick(Alert accessor)
+        {
+            if (accessor.Field == AlertField.OKButton)
+            {
+                this.AlertHandler.WaitUntilExists((int)this.Settings.WaitTimeout.TotalSeconds);
+                this.AlertHandler.OKButton.Click();
+            }
+            else if (accessor.Field == AlertField.CancelButton)
+            {
+                this.ConfirmHandler.WaitUntilExists((int)this.Settings.WaitTimeout.TotalSeconds);
+                this.ConfirmHandler.CancelButton.Click();
+            }
+            else
+                throw new FluentException("FluentAutomation only supports clicking on OK or Cancel in alerts or prompts.");
+        }
+
+        public void AlertText(Action<string> matchFunc)
+        {
+            this.ConfirmHandler.WaitUntilExists((int)this.Settings.WaitTimeout.TotalSeconds);
+            matchFunc(this.ConfirmHandler.Message);
+        }
+
+        public void AlertEnterText(string text)
+        {
+            throw new FluentException("Due to inconsistent behavior, handling of prompts that accept text entry is disabled when using WatiN with FluentAutomation.");
+        }
+        
+        public void Visible(ElementProxy element, Action<bool> action)
+        {
+            this.Act(CommandType.Action, () =>
+            {
+                var el = (element.Element as Element).AutomationElement;
+                var isVisible = false;
+                try
+                {
+                    isVisible = bool.Parse(this.ActiveDomContainer.Eval(string.Format("jQuery({0}).is(':visible');", el.GetJavascriptElementReference())));
+                }
+                catch (JavaScriptException) { }
+                action(isVisible);
+            });
+        }
+
+        public void CssPropertyValue(ElementProxy element, string propertyName, Action<bool, string> action)
+        {
+            this.Act(CommandType.Action, () =>
+            {
+                var el = (element.Element as Element).AutomationElement;
+                object cssPropertyValue = null;
+                try
+                {
+                    cssPropertyValue = bool.Parse(this.ActiveDomContainer.Eval(string.Format("jQuery({0}).css('{1}');", el.GetJavascriptElementReference(), propertyName)));
+                }
+                catch (JavaScriptException) { }
+
+                action(cssPropertyValue != null, cssPropertyValue.ToString());
+            });
+        }
+
+        public ICommandProvider WithConfig(FluentSettings settings)
+        {
+            this.Settings = settings;
+
+            // If the browser size has changed since the last config change, update it
+            if (settings.WindowWidth.HasValue && settings.WindowHeight.HasValue)
+                this.browser.SizeWindow(settings.WindowWidth.Value, settings.WindowHeight.Value);
+
+            return this;
+        }
+
         private void fireOnChange(WatiNCore.Element element)
         {
-            this.browser.DomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).change(); }}", element.GetJavascriptElementReference()));
+            this.ActiveDomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).change(); }}", element.GetJavascriptElementReference()));
         }
     }
 }

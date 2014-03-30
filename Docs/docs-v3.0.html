@@ -1,0 +1,1805 @@
+<ul class="menu">
+	<li class="heading">Documentation</li>
+	
+	<li><a href="#intro">Introduction</a></li>
+	
+	<li><a href="#getting-started">Getting Started</a></li>
+	
+	<li><a href="#settings">Settings</a></li>
+	
+	<li><a href="#multi-browser">Multi-browser testing</a></li>
+	
+	<li><a href="#sticky-sessions">Sticky Sessions</a></li>
+	
+	<li><a href="#pageobjects">PageObjects</a></li>
+	
+	<li><a href="#method-chaining">Method Chaining</a></li>
+	
+	<li><a href="#remote-webdriver">Remote WebDriver</a></li>
+	
+	<li><a href="#scriptcs">scriptcs</a></li>
+	
+	<li><a href="#intro">Introduction</a></li>
+	
+	<li><a href="#getting-started">Getting Started</a></li>
+	
+	<li><a href="#settings">Settings</a></li>
+	
+	<li><a href="#multi-browser">Multi-browser testing</a></li>
+	
+	<li><a href="#sticky-sessions">Sticky Sessions</a></li>
+	
+	<li><a href="#pageobjects">PageObjects</a></li>
+	
+	<li><a href="#method-chaining">Method Chaining</a></li>
+	
+	<li><a href="#remote-webdriver">Remote WebDriver</a></li>
+	
+	<li><a href="#scriptcs">scriptcs</a></li>
+	
+
+	<li class="heading" style="margin-top: 15px">API</li>
+	
+	<li class="heading"><a href="#actions-intro">Actions</a></li>
+	
+	<li><a href="#actions-open">Open</a></li>
+	
+	<li><a href="#actions-enter">Enter</a></li>
+	
+	<li><a href="#actions-append">Append</a></li>
+	
+	<li><a href="#actions-select">Select</a></li>
+	
+	<li><a href="#actions-click">Click</a></li>
+	
+	<li><a href="#actions-doubleclick">DoubleClick</a></li>
+	
+	<li><a href="#actions-rightclick">RightClick</a></li>
+	
+	<li><a href="#actions-focus">Focus</a></li>
+	
+	<li><a href="#actions-hover">Hover</a></li>
+	
+	<li><a href="#actions-press">Press</a></li>
+	
+	<li><a href="#actions-type">Type</a></li>
+	
+	<li><a href="#actions-wait">Wait</a></li>
+	
+	<li><a href="#actions-waituntil">WaitUntil</a></li>
+	
+	<li><a href="#actions-find">Find</a></li>
+	
+	<li><a href="#actions-drag">Drag</a></li>
+	
+	<li><a href="#actions-takescreenshot">TakeScreenshot</a></li>
+	
+	<li><a href="#actions-upload">Upload</a></li>
+	
+	<li class="heading"><a href="#asserts-intro">Expect/Assert</a></li>
+	
+	<li><a href="#asserts-exists">Exists</a></li>
+	
+	<li><a href="#asserts-count">Count</a></li>
+	
+	<li><a href="#asserts-value">Value</a></li>
+	
+	<li><a href="#asserts-text">Text</a></li>
+	
+	<li><a href="#asserts-class">Class</a></li>
+	
+	<li><a href="#asserts-url">Url</a></li>
+	
+	<li><a href="#asserts-throws">Throws</a></li>
+	
+	<li><a href="#asserts-true">True</a></li>
+	
+	<li><a href="#asserts-false">False</a></li>
+	
+	<li class="heading"><a href="#actions-intro">Actions</a></li>
+	
+	<li><a href="#actions-open">Open</a></li>
+	
+	<li><a href="#actions-enter">Enter</a></li>
+	
+	<li><a href="#actions-append">Append</a></li>
+	
+	<li><a href="#actions-select">Select</a></li>
+	
+	<li><a href="#actions-click">Click</a></li>
+	
+	<li><a href="#actions-doubleclick">DoubleClick</a></li>
+	
+	<li><a href="#actions-rightclick">RightClick</a></li>
+	
+	<li><a href="#actions-focus">Focus</a></li>
+	
+	<li><a href="#actions-hover">Hover</a></li>
+	
+	<li><a href="#actions-press">Press</a></li>
+	
+	<li><a href="#actions-type">Type</a></li>
+	
+	<li><a href="#actions-wait">Wait</a></li>
+	
+	<li><a href="#actions-waituntil">WaitUntil</a></li>
+	
+	<li><a href="#actions-find">Find</a></li>
+	
+	<li><a href="#actions-drag">Drag</a></li>
+	
+	<li><a href="#actions-takescreenshot">TakeScreenshot</a></li>
+	
+	<li><a href="#actions-upload">Upload</a></li>
+	
+	<li class="heading"><a href="#asserts-intro">Expect/Assert</a></li>
+	
+	<li><a href="#asserts-exists">Exists</a></li>
+	
+	<li><a href="#asserts-count">Count</a></li>
+	
+	<li><a href="#asserts-value">Value</a></li>
+	
+	<li><a href="#asserts-text">Text</a></li>
+	
+	<li><a href="#asserts-class">Class</a></li>
+	
+	<li><a href="#asserts-url">Url</a></li>
+	
+	<li><a href="#asserts-throws">Throws</a></li>
+	
+	<li><a href="#asserts-true">True</a></li>
+	
+	<li><a href="#asserts-false">False</a></li>
+	
+</ul>
+
+<section class="doc_content">
+	
+	<div class="doc_page" id="intro">
+		<h4>Introduction</h4>
+		<p>FluentAutomation is a simple, powerful automated testing framework for web applications. It can be used with Selenium WebDriver or WatiN to test all sorts of browsers and devices.</p>
+
+<p>In this documentation, it is our intent to cover all the basics of the API and important classes/functions. If you notice any issues or missing content please create an issue on <a href="//github.com/stirno/FluentAutomation">GitHub</a> as soon as possible.</p>
+	</div>
+	
+	<div class="doc_page" id="getting-started">
+		<h4>Getting Started</h4>
+		<p>FluentAutomation is implemented using one of two supported automation providers - <a href="http://seleniumhq.org" target="_blank">Selenium WebDriver</a> or <a href="http://watin.org" target="_blank">WatiN</a>. Selenium is the preferred provider and the most developed. WatiN is provided as an alternative method of automation Internet Explorer. PhantomJS support has been moved into the Selenium package as a browser target.</p>
+
+<p>You'll need a unit test framework as well. I use either <a href="http;//xunit.codeplex.com/" target="_blank">xUnit.net</a> or <a href="http://nunit.org/" target="_blank">NUnit</a> in most projects. MSTest (the default in Visual Studio Test Projects) is also supported. We don't exhaustively test on every unit test library out there so let us know if your favorite framework doesn't work!</p>
+
+<p>Once you've decided which provider to use and have your test framework ready, it is super easy to start testing with FluentAutomation -- use NuGet!</p>
+
+<p>The commands to the right can help you install via the NuGet Package Manager Console or you can just search for FluentAutomation in the 'Manage NuGet Packages' dialog within Visual Studio. NuGet will handle downloading all the dependencies and setting up the project.</p>
+
+<p>If you're using xUnit.net, copy the sample test on the right into a new class file and you're ready to go!</p>
+
+<p><strong>Test Setup</strong></p>
+
+<p>Your test classes need to inherit from <code>FluentAutomation.FluentTest</code> and call your providers appropriate <code>Bootstrap</code> method. In most test frameworks you'll do this in the constructor of your class, as shown in the sample.</p>
+
+<p>For Selenium, the <code>Bootstrap</code> method takes the browser target as an argument. You can pass multiple browsers if you would like to run the same test in each.</p>
+
+<div class="highlight"><pre lang="csharp">/*-------- NuGet Package Manager Console --------*/
+
+// Install the Selenium WebDriver provider
+Install-Package FluentAutomation.SeleniumWebDriver
+
+// Install the WatiN provider
+Install-Package FluentAutomation.WatiN
+
+/*--------------- SampleTests.cs ---------------*/
+
+using FluentAutomation;
+using Xunit;
+
+namespace TestProject
+{
+    public  class SampleTests : FluentTest
+    {
+        public SampleTests()
+        {
+            SeleniumWebDriver.Bootstrap(
+                SeleniumWebDriver.Browser.Chrome
+            );
+        }
+&nbsp;
+        [Fact]
+        public void Test1()
+        {
+            I.Open("<a href='http://google.com/'>http://google.com/</a>");
+            // get busy testing!
+        }
+    }
+}
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="settings">
+		<h4>Settings</h4>
+		<p>Most of the configurable settings are located on the static object FluentAutomation.Settings and can be set anywhere within your project.</p>
+
+<p><code>TimeSpan</code>    <strong>DefaultWaitTimeout</strong><br />Length of time an unargumented <code>I.Wait()</code> will wait before continuing.</p>
+
+<p><code>TimeSpan</code> <strong>DefaultWaitUntilThreadSleep</strong><br />Length of time to wait before re-evaluating the condition passed to <code>WaitUntil</code>.</p>
+
+<p><code>TimeSpan</code> <strong>DefaultWaitUntilTimeout</strong><br />Length of time to wait before assuming the <code>WaitUntil</code> condition will not be met.</p>
+
+<p><code>bool</code> <strong>ExpectIsAssert</strong><br />Whether or not <code>I.Expect</code> throws exceptions that will stop a test from continuing.</p>
+
+<p><code>bool</code> <strong>MinimizeAllWIndowsOnTestStart</strong><br />Whether or not we ask the <code>Win32</code> API to minimize other windows before starting a test.</p>
+
+<p><code>bool</code> <strong>ScreenshotOnFailedAction</strong><br />Whether or not we automatically take a screenshot when an action fails.</p>
+
+<p><code>bool</code> <strong>ScreenshotOnFailedExpect</strong><br />Whether or not we automatically take a screenshot when an <code>Assert</code> or <code>Expect</code> fails.</p>
+
+<p><code>string</code> <strong>ScreenshotPath</strong><br />Path to store screenshots on the filesystem.</p>
+
+<p><code>string</code> <strong>UserTempDirectory</strong><br />Path used for temporary storage. Usually not necessary to change.</p>
+
+<p><code>bool</code> <strong>WaitOnAllCommands</strong><br />Whether or not we enable implicit waits on all comamnds/actions using <code>I.WaitUntil</code>.</p>
+
+<p><code>bool</code> <strong>WaitOnAllExpects</strong><br />Whether or not we enable implicit waits on all asserts or expects using <code>I.WaitUntil</code>.</p>
+
+<p><code>int</code> <strong>WindowHeight</strong><br />Height of the browser window, if null will use system/profile default.</p>
+
+<p><code>int</code> <strong>WindowWidth</strong><br />Width of the browser window, if null will use system/profile default.</p>
+
+<p><code>Action&lt;FluentExpectFailedException&gt;</code> <strong>ExpectFailedCallback</strong><br />Method executed when <code>Settings.ExpectIsAssert</code> is <code>true</code> and an <code>Expect</code> fails.</p>
+
+<div class="highlight"><pre lang="csharp">// Settings - All default values
+Settings.DefaultWaitTimeout = TimeSpan.FromSeconds(1);
+Settings.DefaultWaitUntilTimeout = TimeSpan.FromSeconds(30);
+Settings.DefaultWaitUntilThreadSleep = TimeSpan.FromMilliseconds(100);
+Settings.ExpectIsAssert = true; // changing in v2.4 to false
+Settings.MinimizeAllWindowsOnTestStart = false;
+Settings.ScreenshotOnFailedAction = false;
+Settings.ScreenshotOnFailedExpect = false;
+Settings.ScreenshotPath = Path.GetTempPath();
+Settings.UserTempDirectory = Path.GetTempPath();
+Settings.WaitOnAllCommands = true;
+Settings.WaitOnAllExpects = true;
+Settings.WindowHeight = null;
+Settings.WindowWidth = null;
+
+Settings.ExpectFailedCallback = (c) => {
+    var fluentException = c.InnerException as FluentException;
+    if (fluentException != null)
+        Trace.WriteLine(fluentException.Message);
+    else
+        Trace.WriteLine(c.Message);  
+};
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="multi-browser">
+		<h4>Multi-browser Testing</h4>
+		<p><strong><em>Feature Status: Beta</em></strong></p>
+
+<p>Many projects require that you validate your application in multiple browsers. Over the years we've had many different methods for achieving this, but now we've made it as simple as we can.</p>
+
+<p>Simply pass in multiple browser values to the <code>Bootstrap</code> call and we'll run the tests in parallel.</p>
+
+<p><strong>Methods that return references to page elements such as <code>I.Find</code> will not work when testing with multiple browsers.</strong> There are known issues with certain functions triggering this issue inappropriately, notably<code>I.Select.From()</code>. We are working on it!</p>
+
+<div class="highlight"><pre lang="csharp">using FluentAutomation;
+using Xunit;
+
+namespace TestProject
+{
+    public  class SampleTests : FluentTest
+    {
+        public SampleTests()
+        {
+            // Execute tests in this class with Chrome, Firefox and IE
+            SeleniumWebDriver.Bootstrap(
+                SeleniumWebDriver.Browser.Chrome,
+                SeleniumWebDriver.Browser.Firefox,
+                SeleniumWebDriver.Browser.InternetExplorer
+            );
+        }
+&nbsp;
+        [Fact]
+        public void Test1()
+        {
+            I.Open("<a href='http://google.com/'>http://google.com/</a>");
+            // get busy testing!
+        }
+    }
+}
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="sticky-sessions">
+		<h4>Sticky Sessions</h4>
+		<p><strong><em>Feature Status: Beta</em></strong></p>
+
+<p>One of those features built on an airplane (the best way to build new things, I think) -- Enables a set of tests to reuse the same browser instance between tests.</p>
+
+<p>This can result in much faster execution times as compared to the standard method of creating a new browser instance for each test. Some Applications-under-test can experience intermittent issues in this configuration so it is not the default.</p>
+
+<div class="highlight"><pre lang="csharp">// All tests executed after this will share browser instances
+FluentSession.EnableStickySession();
+
+// Stop sharing browser instances.
+FluentSession.DisableStickySession();
+
+// Pass the current tests session in and use it for other tests
+// (in the scope of a test method)
+FluentSession.SetStickySession(this.Session);
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="pageobjects">
+		<h4>PageObjects</h4>
+		<p>Anyone who has done any serious amount of automated testing will tell you that the largest challenge we all face is fragile, hard to maintain tests.</p>
+
+<p>To combat this, it can be useful to use <code>PageObject</code> to group your actions/expects/asserts. This gives you functional code that can be reused in any number of tests.</p>
+
+<p>With the new first-class <code>PageObject</code> support, we provide some simple but useful built-in functions such as <code>Go</code> and <code>Switch</code>. Also included, a validation function tied to the <code>this.At</code> property.</p>
+
+<p>Any time a <code>PageObject</code> navigation is triggered, or any time <code>Switch</code> is used, the included <code>At</code> functino will execute providing an easy hook to make sure all tests execute with the underlying browser and application in the same state, every time.</p>
+
+<p>If you have any ideas for or comments on the new <code>PageObject</code> functionality, let us know! Its a new feature and we'd love some feedback.</p>
+
+<div style="height: 430px"></div>
+
+<div class="highlight"><pre lang="csharp">public class BingSearchPage : PageObject<BingSearchPage>
+{
+    public BingSearchPage(FluentTest test)
+        : base(test)
+    {
+        Url = "<a href='http://bing.com/'>http://bing.com/</a>";
+        At = () =>; I.Expect.Exists(SearchInput);
+    }
+&nbsp;
+    public BingSearchResultsPage Search(string searchText)
+    {
+        I.Enter(searchText).In(SearchInput);
+        I.Press("{ENTER}");
+        return this.Switch<BingSearchResultsPage>();
+    }
+&nbsp;
+    private const string SearchInput = "input[title='Enter your search term']";
+}
+
+public class BingSearchResultsPage : PageObject<BingSearchResultsPage>
+{
+    public BingSearchResultsPage(FluentTest test)
+        : base(test)
+    {
+        At = () => I.Expect.Exists(SearchResultsContainer);
+    }
+&nbsp;
+    public BingSearchResultsPage FindResultUrl(string url)
+    {
+        I.Expect.Exists(string.Format(ResultUrlLink, url));
+        return this;
+    }
+&nbsp;
+    private const string SearchResultsContainer = "#b_results";
+    private const string ResultUrlLink = "a[href='{0}']";
+}
+
+public class SampleTest : FluentTest
+{
+    public SampleTest()
+    {
+        SeleniumWebDriver.Bootstrap(SeleniumWebDriver.Browser.Chrome);
+    }
+&nbsp;
+    [Fact]
+    public void SearchForFluentAutomation()
+    {
+        new BingSearchPage(this)
+            .Go()
+            .Search("FluentAutomation")
+            .FindResultUrl("<a href='http://fluent.stirno.com/blog/FluentAutomation-scriptcs/'>http://fluent.stirno.com/blog/FluentAutomation-scriptcs/</a>");
+    }
+}
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="method-chaining">
+		<h4>Method Chaining</h4>
+		<p>As part of trying to provide the best fluent syntax we can, we now have method chaining on all "terminating methods". These are the bits that actually execute or do something, rather than just configure the next step.</p>
+
+<p>This provides a pretty clean, very simple way to push your tests towards AAA (Arrange/Act/Assert). As you can see to the right, clean and tight code.</p>
+
+<div class="highlight"><pre lang="csharp">I.Open("<a href='http://automation.apphb.com/forms'>http://automation.apphb.com/forms</a>")
+    .Select("Motorcycles").From(".liveExample tr select:eq(0)")
+    .Select(2).From(".liveExample tr select:eq(1)")
+    .Enter(6).In(".liveExample td.quantity input:eq(0)")
+    .Expect
+        .Text("$197.72").In(".liveExample tr span:eq(1)")
+        .Value(6).In(".liveExample td.quantity input:eq(0)");
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="remote-webdriver">
+		<h4>Remote WebDriver</h4>
+		<p>We fully support connecting to remote WebDriver instances (including Selenium Grid) as of the v2.2 bits. Obviously this is only supported in the SeleniumWebDriver provider.</p>
+
+<p>This is accomplished by passing a URI and settings to the <code>Bootstrap</code> method in your constructor. Remote functionality becomes useful when connecting to Selenium Grid or if you want to automate a browser that doesn't run on your primary machine.</p>
+
+<p>Additionally, there is support for passing a <code>Dictionary&lt;string, object&gt;</code> of capabilities.</p>
+
+<div class="highlight"><pre lang="csharp">using FluentAutomation;
+using System;
+
+namespace TestProject
+{
+    public class MacSafariTests : FluentTest
+    {
+        public MacSafariTests()
+        {
+            SeleniumWebDriver.Bootstrap(
+                new Uri("<a href='http://mac/wd/hub'>http://mac/wd/hub</a>"), SeleniumWebDriver.Browser.Safari
+            );
+        }
+    }
+}
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="scriptcs">
+		<h4>scriptcs</h4>
+		<p>Access to FluentAutomation inside of <a href="http://scriptcs.net/" target="_blank">scriptcs</a> is trivially easy and very powerful. We have a custom Script Pack that provides access to the functionality you expect.</p>
+
+<p>To get started, install scriptcs (per instructions on their site). The commands to the right will get a directory ready for scriptcs testing.</p>
+
+<p>Create a new script, <code>test.csx</code> for example. We'll require in the Script Pack, Bootstrap our browser and get testing.</p>
+
+<p>The new script can be run very easily a Command Prompt with: <code>scriptcs test.csx</code>. You'll see some debugging information from the browser and/or Selenium -- no worries -- and then you'll see the test execute and you'll get results.</p>
+
+<div class="highlight"><pre lang="csharp">// prepare a new directory for your tests
+mkdir tests
+scriptcs -install ScriptCs.FluentAutomation
+scriptcs -install FluentAutomation.SeleniumWebDriver
+
+// First test!
+var Test = Require<F14N>()
+    .Init<FluentAutomation.SeleniumWebDriver>()
+    .Bootstrap("Chrome")
+    .Config(settings => {
+        // Easy access to FluentAutomation.Settings values
+        settings.DefaultWaitUntilTimeout = TimeSpan.FromSeconds(1);
+    });
+
+Test.Run("Hello Google", I => {
+    I.Open("<a href='http://google.com'>http://google.com</a>");
+});
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-intro">
+		<h4>Actions</h4>
+		<p>We interchangeable use the terms <code>Action</code> and <code>Command</code> to refer to the same thing. This is because of terminology changes throughout the lifetime of the project.</p>
+
+<p>Actions are the units of work which manipulate state of the browser or the page.</p>
+	</div>
+	
+	<div class="doc_page" id="actions-open">
+		<h4>I.Open</h4>
+		<p>Open and navigate the web browser to the specified URL or <a href="http://msdn.microsoft.com/en-us/library/system.uri(v=vs.110).aspx" target="_blank">Uri</a>. Using a Uri can be valuable to validate your URI fragment before using it in a test.</p>
+
+<div class="highlight"><pre lang="csharp">// Open browser via string/URL
+I.Open("<a href='http://google.com'>http://google.com</a>");
+
+// Open browser via URI
+I.Open(new Uri("<a href='http://google.com'>http://google.com</a>"));
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-enter">
+		<h4>I.Enter</h4>
+		<p>Primary method of entering text into inputs and textareas. Automatically calls <code>ToString()</code> on non-string values to simplify tests.</p>
+
+<p>Using <code>WithoutEvents()</code> will cause the value to be set via JavaScript and will not trigger keyup/keydown events in the browser.</p>
+
+<div class="highlight"><pre lang="csharp">// Enter text into element
+I.Enter("FluentAutomation").In("#searchBox");
+
+// Enter text without keyup/keydown events
+I.Enter("FluentAutomation").WithoutEvents().In("#searchBox");
+
+// Enter an integer into element
+I.Enter(6).In("#quantity");
+
+// Enter text using cached reference to element
+var element = I.Find("#searchBox");
+I.Enter("FluentAutomation").In(element);
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-append">
+		<h4>I.Append</h4>
+		<p>Append text to the current values of inputs and textareas. Automatically calls <code>ToString()</code> on non-string values to simplify tests.</p>
+
+<p>Using <code>WithoutEvents()</code> will cause the value to be set via JavaScript and will not trigger keyup/keydown events in the browser.</p>
+
+<div class="highlight"><pre lang="csharp">// Append text onto element value
+I.Append("FluentAutomation").In("#searchBox");
+
+// Append text without keyup/keydown events
+I.Append("FluentAutomation").WithoutEvents().In("#searchBox");
+
+// Append an integer onto element value
+I.Append(6).In("#quantity");
+
+// Append text using cached reference to element
+var element = I.Find("#searchBox");
+I.Append("FluentAutomation").In(element);
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-select">
+		<h4>I.Select</h4>
+		<p>Primary method of selecting items in <code>&lt;SELECT&gt;</code> elements found via selector or cached reference. Selection can be done using <code>&lt;OPTION&gt;</code> value, text or index.</p>
+
+<p>Selecting via Text/string will fall back to Value matching if no match is found. This simplifies the API for most users but may be confusing. If you need to guarantee the selection was based on value use the <code>Option</code> overload.</p>
+
+<div class="highlight"><pre lang="csharp">// Select option by Text
+I.Select("MN").From("#states");
+
+// Select option by index
+I.Select(12).From("#states");
+
+// Select option by value
+I.Select(Option.Value, 9999).From("#numbers");
+
+// Select multiple options from a multiselect by text, index, or value
+I.Select("ND", "MN").From("#states");
+I.Select(10, 11, 12).From("#states");
+I.Select(Option.Value, 9998, 9999).From("#numbers");
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-click">
+		<h4>I.Click</h4>
+		<p>Click an element by selector, coordinates or cached reference. Optionally provide an offset to click relative to the item.</p>
+
+<div class="highlight"><pre lang="csharp">// Click by element selector
+I.Click("#searchBox");
+
+// Click by x, y coordinates
+I.Click(10, 100);
+
+// Click by relative offset from element selector
+I.Click("#searchBox", 10, 100);
+
+// Click using cached reference to element.
+var element = I.Find("#searchBox");
+I.Click(element);
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-doubleclick">
+		<h4>I.DoubleClick</h4>
+		<p>Double-click an element by selector, coordinates or cached reference. Optionally provide an offset to click relative to the item.</p>
+
+<div class="highlight"><pre lang="csharp">// DoubleClick by element selector
+I.DoubleClick("#searchBox");
+
+// DoubleClick by x, y coordinates
+I.DoubleClick(10, 100);
+
+// DoubleClick by relative offset from element selector
+I.DoubleClick("#searchBox", 10, 100);
+
+// DoubleClick using cached reference to element.
+var element = I.Find("#searchBox");
+I.DoubleClick(element);
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-rightclick">
+		<h4>I.RightClick</h4>
+		<p>Right-click an element by selector, coordinates or cached reference. Optionally provide an offset to click relative to the item.</p>
+
+<div class="highlight"><pre lang="csharp">// RightClick by element selector
+I.RightClick("#searchBox");
+
+// RightClick by x, y coordinates
+I.RightClick(10, 100);
+
+// RightClick by relative offset from element selector
+I.RightClick("#searchBox", 10, 100);
+
+// RightClick using cached reference to element.
+var element = I.Find("#searchBox");
+I.RightClick(element);
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-focus">
+		<h4>I.Focus</h4>
+		<p>Set the browser's current focus to a specified element or cached reference to an element.</p>
+
+<div class="highlight"><pre lang="csharp">// Set browser focus by selector
+I.Focus("#searchBox");
+
+// Set browser focus using cached reference to element
+var element = I.Find("#searchBox");
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-hover">
+		<h4>I.Hover</h4>
+		<p>Cause the mouse to hover over a specified element, coordinates or position relative to an element.</p>
+
+<div class="highlight"><pre lang="csharp">// Hover over element
+I.Hover("#searchBox");
+
+// Hover over x, y coordinates
+I.Hover(10, 100);
+
+// Hover over relative offset from element selector
+I.Hover("#searchBox", 10, 100);
+
+// Hover using cached reference to element.
+var element = I.Find("#searchBox");
+I.Hover(element);
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-press">
+		<h4>I.Press</h4>
+		<p>Triggers a single OS level keypress event. This method will send events to whatever the active window is at the time its trigger, currently <strong>not guaranteed to be the actual browser window. Use with caution.</strong></p>
+
+<p>The intended use is for interactive with elements that steal focus or are not a part of the DOM such as Flash.</p>
+
+<p>Several keys require special values to be used. Refer to the <a href="http://msdn.microsoft.com/en-us/library/system.windows.forms.sendkeys.aspx" target="_blank">Windows Forms SendKeys documentation</a> for valid values.</p>
+
+<div class="highlight"><pre lang="csharp">// Press Tab key
+I.Press("{TAB}");
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-type">
+		<h4>I.Type</h4>
+		<p>Type a string, one character at a time using OS level keypress events. This functionality will send keypress events to whatever the active window is at the time its trigger, currently <strong>not guaranteed to be the actual browser window. Use with caution.</strong></p>
+
+<p>The intended use is for interactive with elements that steal focus or are not a part of the DOM such as Flash.</p>
+
+<p>Type does not support the use of special key values.</p>
+
+<div class="highlight"><pre lang="csharp">// Type string
+I.Type("FluentAutomation");
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-wait">
+		<h4>I.Wait</h4>
+		<p>Wait for a specified period of time before continuing the test. Method accepts a number of seconds or a <a href="http://msdn.microsoft.com/en-us/library/system.timespan(v=vs.110).aspx" target="_blank">TimeSpan</a>. Not guaranteed to be exact.</p>
+
+<p>In most cases, your tests will be less fragile if you can utilize <a href="#i-waituntil">I.WaitUntil</a> instead.</p>
+
+<div class="highlight"><pre lang="csharp">// Wait for 10 seconds
+I.Wait(10);
+
+// Wait for 500 milliseconds
+I.Wait(TimeSpan.FromMilliseconds(500));
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-waituntil">
+		<h4>I.WaitUntil</h4>
+		<p>Recommended method of waiting in tests. Conditional wait using anonymous functions that either return <code>true</code> / <code>false</code> or throw an <code>Exception</code> when the condition has not been met. Useful when content on the page is loaded dynamically or changes state during interactions.</p>
+
+<p>If the condition has not been met, a timed wait will be executed before testing the condition again. The duration if this wait is set in <code>Settings.DefaultWaitUntilThreadSleep</code>.</p>
+
+<p>The condition must succeed within the time set in <code>Settings.DefaultWaitUntilTimeout</code> or the test will fail.</p>
+
+<p>Important Note: Most actions have implicit WaitUntil functionality built-in. Before adding, be sure your test needs it.</p>
+
+<div class="highlight"><pre lang="csharp">// WaitUntil element exists
+I.WaitUntil(() => I.Assert.Exists("#searchBar")));
+
+// WaitUntil element has attribute 'data-loaded'
+I.WaitUntil(() =>
+    I.Find("#searchBar")()
+        .Attributes
+        .Get("data-loaded") == "true"
+);
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-find">
+		<h4>I.Find</h4>
+		<p>Get a factory reference to an element. Returns a function that can be evaluated to return access to the underlying element. Used internally by all functions that target elements.</p>
+
+<p>A second method, <code>I.FindMultiple</code>, exists to retrieve a collection of elements at once. It provides the same factory function but returns an <code>IEnumerable</code> instead.</p>
+
+<p>Often this function is used to break through the abstraction and get direct access to the providers element representation. This can be necessary in some cases but using <code>I.Find</code> in this way is discouraged.</p>
+
+<p><strong>Warning:</strong> If you intend to cache an element, cache this function not its result. The result is not kept up to date with the current state of the page.</p>
+
+<div class="highlight"><pre lang="csharp">// Find element by selector
+var element = I.Find("#searchBox");
+
+// Get reference to underlying IWebElement (Selenium)
+var webElement = element() as OpenQA.Selenium.IWebElement;
+
+// Get reference to underlying WatiN.Core.Element (WatiN)
+var webElement = element() as WatiN.Core.Element;
+
+// Find a collection of elements matching selector
+var listItems = I.FindMultiple("li");
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-drag">
+		<h4>I.Drag</h4>
+		<p>Drag &amp; drop works with elements, coordinates and offsets. In the next version, the offset functionality will look a bit less... stupid. Sorry about that.</p>
+
+<div class="highlight"><pre lang="csharp">// Drag one element to another
+I.Drag("#drag").To("#drop");
+
+// Drag one coordinate to another
+I.Drag(100, 100).To(500, 500);
+
+// Drag from element offset to another element
+I.Drag(I.Find("#drag"), 50, 50).To("#drop");
+
+// Drag from element to another elements offset
+I.Drag("#drag").To(I.Find("#drop", 100, 30));
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-takescreenshot">
+		<h4>I.TakeScreenshot</h4>
+		<p>Grab a quick screenshot of the current browser window and save it to disk. The screenshot path is configurable via <code>Settings.ScreenshotPath</code>.</p>
+
+<div class="highlight"><pre lang="csharp">// Take Screenshot
+I.TakeScreenshot("LoginScreen");
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-upload">
+		<h4>I.Upload</h4>
+		<p>Upload a file using an <code>&lt;input type="file"&gt;</code> on the current page. The provided path must be absolute and point to the file you want to upload.</p>
+
+<p>This has been used with several Flash uploaders without issue. Your mileage may vary.</p>
+
+<div class="highlight"><pre lang="csharp">// Upload LoginScreen.jpg
+I.Upload("input[type='file'].uploader", @"C:\LoginScreen");
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="asserts-intro">
+		<h4>Expect/Assert</h4>
+		<p>As of <code>v2.3</code> proper assertions were added to FluentAutomation.</p>
+
+<p>Fundamentally <code>Expect</code> and <code>Assert</code> work exactly the same. The methods and their signatures are identical. The difference is that, when <code>Settings.ExpectIsAssert</code> is set to <code>false</code>, <code>Assert</code> will <code>throw</code> an <code>Exception</code> and fail a test. In comparison, <code>Expect</code> will attempt to log the failure using the <code>Action</code> provided in <code>Settings.ExpectFailedCallback</code> and allow the test to continue</p>
+
+<p>For ease of maintaining the documentation, we will document <code>Assert</code> methods only. Unless otherwise noted, <code>Expect</code> methods are identical.</p>
+
+<p><strong>Warning:</strong> The current default value of <code>Settings.ExpectIsAssert</code> is <code>true</code>. This will change in <code>v2.4</code>. If you want to guarantee your test behavior doesn't change, set the value in your project before upgrading.</p>
+	</div>
+	
+	<div class="doc_page" id="asserts-exists">
+		<h4>I.Assert.Exists</h4>
+		<p>Assert that an element is on the page.</p>
+
+<div class="highlight"><pre lang="csharp">// Element on page
+I.Assert.Exists("#searchBar");
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="asserts-count">
+		<h4>I.Assert.Count</h4>
+		<p>Assert that we have a certain count of items matching a selector.</p>
+
+<div class="highlight"><pre lang="csharp">// 1 search bar on page.
+I.Assert.Count(1).Of("#searchBar");
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="asserts-value">
+		<h4>I.Assert.Value</h4>
+		<p>Assert that an element matching selector has the specified value. Works with <code>&lt;INPUT&gt;</code>, <code>&lt;TEXTAREA&gt;</code> and <code>&lt;SELECT&gt;</code></p>
+
+<p>Supports anonymous functions that return <code>true</code> or <code>false</code>.</p>
+
+<div class="highlight"><pre lang="csharp">// Dropdown has value of 10.
+I.Assert.Value(10).In("#quantity");
+
+// Value starts with 'M'
+I.Assert.Value((value) => value.StartsWith("M")).In("#states");
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="asserts-text">
+		<h4>I.Assert.Text</h4>
+		<p>Assert that an element matching selector has the specified text. Works with any DOM element that has <code>innerHTML</code> or can provides its contents/value via text.</p>
+
+<p>Supports anonymous functions that return <code>true</code> or <code>false</code>.</p>
+
+<div class="highlight"><pre lang="csharp">// Header tag set to FluentAutomation
+I.Assert.Text("FluentAutomation").In("header");
+
+// Content longer than 50 characters
+I.Assert.Text((text) => text.Length > 50).In("#content");
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="asserts-class">
+		<h4>I.Assert.Class</h4>
+		<p>Assert that an element matching selector has the specified class.</p>
+
+<div class="highlight"><pre lang="csharp">// Has btn-primary class
+I.Assert.Class("btn-primary").Of("header");
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="asserts-url">
+		<h4>I.Assert.Url</h4>
+		<p>Assert that the browser has the specified Url. If using the string or Uri overloads, the match must be exact.</p>
+
+<p>Supports anonymous functions that return <code>true</code> or <code>false</code>. Particularly useful on pages that modify the URL via hashtags or other mechanisms.</p>
+
+<div class="highlight"><pre lang="csharp">// At #assert-url on docs
+I.Assert.Url("<a href='http://fluent.stirno.com/docs/#assert-url'>http://fluent.stirno.com/docs/#assert-url</a>");
+
+// Verify we're on SSL
+I.Assert.Url((uri) => uri.Scheme == "https");
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="asserts-throws">
+		<h4>I.Assert.Throws</h4>
+		<p>Assert that an <code>Exception</code> should be thrown by the anonymous function. Useful for negative assertions such as testing that something is not present.</p>
+
+<div class="highlight"><pre lang="csharp">// Page has no errors
+I.Assert.Throws(() => I.Assert.Exists(".error"));
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="asserts-true">
+		<h4>I.Assert.True</h4>
+		<p>Assert that an anonymous function should return true. Use with <code>I.Find</code> to fail tests properly if conditions are not met.</p>
+
+<div class="highlight"><pre lang="csharp">// Element is a select box
+var element = I.Find("select");
+I.Assert.True(() => element().IsSelect);
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="asserts-false">
+		<h4>I.Assert.False</h4>
+		<p>Assert that an anonymous function should return false. Use with <code>I.Find</code> to fail tests properly if conditions are not met.</p>
+
+<div class="highlight"><pre lang="csharp">// Element is not a select box
+var element = I.Find("input");
+I.Assert.False(() => element().IsSelect);
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="intro">
+		<h4>Introduction</h4>
+		<p>FluentAutomation is a simple, powerful automated testing framework for web applications. It can be used with Selenium WebDriver or WatiN to test all sorts of browsers and devices.</p>
+
+<p>In this documentation, it is our intent to cover all the basics of the API and important classes/functions. If you notice any issues or missing content please create an issue on <a href="//github.com/stirno/FluentAutomation">GitHub</a> as soon as possible.</p>
+	</div>
+	
+	<div class="doc_page" id="getting-started">
+		<h4>Getting Started</h4>
+		<p>FluentAutomation is implemented using one of two supported automation providers - <a href="http://seleniumhq.org" target="_blank">Selenium WebDriver</a> or <a href="http://watin.org" target="_blank">WatiN</a>. Selenium is the preferred provider and the most developed. WatiN is provided as an alternative method of automation Internet Explorer. PhantomJS support has been moved into the Selenium package as a browser target.</p>
+
+<p>You'll need a unit test framework as well. I use either <a href="http;//xunit.codeplex.com/" target="_blank">xUnit.net</a> or <a href="http://nunit.org/" target="_blank">NUnit</a> in most projects. MSTest (the default in Visual Studio Test Projects) is also supported. We don't exhaustively test on every unit test library out there so let us know if your favorite framework doesn't work!</p>
+
+<p>Once you've decided which provider to use and have your test framework ready, it is super easy to start testing with FluentAutomation -- use NuGet!</p>
+
+<p>The commands to the right can help you install via the NuGet Package Manager Console or you can just search for FluentAutomation in the 'Manage NuGet Packages' dialog within Visual Studio. NuGet will handle downloading all the dependencies and setting up the project.</p>
+
+<p>If you're using xUnit.net, copy the sample test on the right into a new class file and you're ready to go!</p>
+
+<p><strong>Test Setup</strong></p>
+
+<p>Your test classes need to inherit from <code>FluentAutomation.FluentTest</code> and call your providers appropriate <code>Bootstrap</code> method. In most test frameworks you'll do this in the constructor of your class, as shown in the sample.</p>
+
+<p>For Selenium, the <code>Bootstrap</code> method takes the browser target as an argument. You can pass multiple browsers if you would like to run the same test in each.</p>
+
+<div class="highlight"><pre lang="csharp">/*-------- NuGet Package Manager Console --------*/
+
+// Install the Selenium WebDriver provider
+Install-Package FluentAutomation.SeleniumWebDriver
+
+// Install the WatiN provider
+Install-Package FluentAutomation.WatiN
+
+/*--------------- SampleTests.cs ---------------*/
+
+using FluentAutomation;
+using Xunit;
+
+namespace TestProject
+{
+    public  class SampleTests : FluentTest
+    {
+        public SampleTests()
+        {
+            SeleniumWebDriver.Bootstrap(
+                SeleniumWebDriver.Browser.Chrome
+            );
+        }
+&nbsp;
+        [Fact]
+        public void Test1()
+        {
+            I.Open("<a href='http://google.com/'>http://google.com/</a>");
+            // get busy testing!
+        }
+    }
+}
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="settings">
+		<h4>Settings</h4>
+		<p>Most of the configurable settings are located on the static object FluentAutomation.Settings and can be set anywhere within your project.</p>
+
+<p><code>TimeSpan</code>    <strong>DefaultWaitTimeout</strong><br />Length of time an unargumented <code>I.Wait()</code> will wait before continuing.</p>
+
+<p><code>TimeSpan</code> <strong>DefaultWaitUntilThreadSleep</strong><br />Length of time to wait before re-evaluating the condition passed to <code>WaitUntil</code>.</p>
+
+<p><code>TimeSpan</code> <strong>DefaultWaitUntilTimeout</strong><br />Length of time to wait before assuming the <code>WaitUntil</code> condition will not be met.</p>
+
+<p><code>bool</code> <strong>ExpectIsAssert</strong><br />Whether or not <code>I.Expect</code> throws exceptions that will stop a test from continuing.</p>
+
+<p><code>bool</code> <strong>MinimizeAllWIndowsOnTestStart</strong><br />Whether or not we ask the <code>Win32</code> API to minimize other windows before starting a test.</p>
+
+<p><code>bool</code> <strong>ScreenshotOnFailedAction</strong><br />Whether or not we automatically take a screenshot when an action fails.</p>
+
+<p><code>bool</code> <strong>ScreenshotOnFailedExpect</strong><br />Whether or not we automatically take a screenshot when an <code>Assert</code> or <code>Expect</code> fails.</p>
+
+<p><code>string</code> <strong>ScreenshotPath</strong><br />Path to store screenshots on the filesystem.</p>
+
+<p><code>string</code> <strong>UserTempDirectory</strong><br />Path used for temporary storage. Usually not necessary to change.</p>
+
+<p><code>bool</code> <strong>WaitOnAllCommands</strong><br />Whether or not we enable implicit waits on all comamnds/actions using <code>I.WaitUntil</code>.</p>
+
+<p><code>bool</code> <strong>WaitOnAllExpects</strong><br />Whether or not we enable implicit waits on all asserts or expects using <code>I.WaitUntil</code>.</p>
+
+<p><code>int</code> <strong>WindowHeight</strong><br />Height of the browser window, if null will use system/profile default.</p>
+
+<p><code>int</code> <strong>WindowWidth</strong><br />Width of the browser window, if null will use system/profile default.</p>
+
+<p><code>Action&lt;FluentExpectFailedException&gt;</code> <strong>ExpectFailedCallback</strong><br />Method executed when <code>Settings.ExpectIsAssert</code> is <code>true</code> and an <code>Expect</code> fails.</p>
+
+<div class="highlight"><pre lang="csharp">// Settings - All default values
+Settings.DefaultWaitTimeout = TimeSpan.FromSeconds(1);
+Settings.DefaultWaitUntilTimeout = TimeSpan.FromSeconds(30);
+Settings.DefaultWaitUntilThreadSleep = TimeSpan.FromMilliseconds(100);
+Settings.ExpectIsAssert = true; // changing in v2.4 to false
+Settings.MinimizeAllWindowsOnTestStart = false;
+Settings.ScreenshotOnFailedAction = false;
+Settings.ScreenshotOnFailedExpect = false;
+Settings.ScreenshotPath = Path.GetTempPath();
+Settings.UserTempDirectory = Path.GetTempPath();
+Settings.WaitOnAllCommands = true;
+Settings.WaitOnAllExpects = true;
+Settings.WindowHeight = null;
+Settings.WindowWidth = null;
+
+Settings.ExpectFailedCallback = (c) => {
+    var fluentException = c.InnerException as FluentException;
+    if (fluentException != null)
+        Trace.WriteLine(fluentException.Message);
+    else
+        Trace.WriteLine(c.Message);  
+};
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="multi-browser">
+		<h4>Multi-browser Testing</h4>
+		<p><strong><em>Feature Status: Beta</em></strong></p>
+
+<p>Many projects require that you validate your application in multiple browsers. Over the years we've had many different methods for achieving this, but now we've made it as simple as we can.</p>
+
+<p>Simply pass in multiple browser values to the <code>Bootstrap</code> call and we'll run the tests in parallel.</p>
+
+<p><strong>Methods that return references to page elements such as <code>I.Find</code> will not work when testing with multiple browsers.</strong> There are known issues with certain functions triggering this issue inappropriately, notably<code>I.Select.From()</code>. We are working on it!</p>
+
+<div class="highlight"><pre lang="csharp">using FluentAutomation;
+using Xunit;
+
+namespace TestProject
+{
+    public  class SampleTests : FluentTest
+    {
+        public SampleTests()
+        {
+            // Execute tests in this class with Chrome, Firefox and IE
+            SeleniumWebDriver.Bootstrap(
+                SeleniumWebDriver.Browser.Chrome,
+                SeleniumWebDriver.Browser.Firefox,
+                SeleniumWebDriver.Browser.InternetExplorer
+            );
+        }
+&nbsp;
+        [Fact]
+        public void Test1()
+        {
+            I.Open("<a href='http://google.com/'>http://google.com/</a>");
+            // get busy testing!
+        }
+    }
+}
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="sticky-sessions">
+		<h4>Sticky Sessions</h4>
+		<p><strong><em>Feature Status: Beta</em></strong></p>
+
+<p>One of those features built on an airplane (the best way to build new things, I think) -- Enables a set of tests to reuse the same browser instance between tests.</p>
+
+<p>This can result in much faster execution times as compared to the standard method of creating a new browser instance for each test. Some Applications-under-test can experience intermittent issues in this configuration so it is not the default.</p>
+
+<div class="highlight"><pre lang="csharp">// All tests executed after this will share browser instances
+FluentSession.EnableStickySession();
+
+// Stop sharing browser instances.
+FluentSession.DisableStickySession();
+
+// Pass the current tests session in and use it for other tests
+// (in the scope of a test method)
+FluentSession.SetStickySession(this.Session);
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="pageobjects">
+		<h4>PageObjects</h4>
+		<p>Anyone who has done any serious amount of automated testing will tell you that the largest challenge we all face is fragile, hard to maintain tests.</p>
+
+<p>To combat this, it can be useful to use <code>PageObject</code> to group your actions/expects/asserts. This gives you functional code that can be reused in any number of tests.</p>
+
+<p>With the new first-class <code>PageObject</code> support, we provide some simple but useful built-in functions such as <code>Go</code> and <code>Switch</code>. Also included, a validation function tied to the <code>this.At</code> property.</p>
+
+<p>Any time a <code>PageObject</code> navigation is triggered, or any time <code>Switch</code> is used, the included <code>At</code> functino will execute providing an easy hook to make sure all tests execute with the underlying browser and application in the same state, every time.</p>
+
+<p>If you have any ideas for or comments on the new <code>PageObject</code> functionality, let us know! Its a new feature and we'd love some feedback.</p>
+
+<div style="height: 430px"></div>
+
+<div class="highlight"><pre lang="csharp">public class BingSearchPage : PageObject<BingSearchPage>
+{
+    public BingSearchPage(FluentTest test)
+        : base(test)
+    {
+        Url = "<a href='http://bing.com/'>http://bing.com/</a>";
+        At = () =>; I.Expect.Exists(SearchInput);
+    }
+&nbsp;
+    public BingSearchResultsPage Search(string searchText)
+    {
+        I.Enter(searchText).In(SearchInput);
+        I.Press("{ENTER}");
+        return this.Switch<BingSearchResultsPage>();
+    }
+&nbsp;
+    private const string SearchInput = "input[title='Enter your search term']";
+}
+
+public class BingSearchResultsPage : PageObject<BingSearchResultsPage>
+{
+    public BingSearchResultsPage(FluentTest test)
+        : base(test)
+    {
+        At = () => I.Expect.Exists(SearchResultsContainer);
+    }
+&nbsp;
+    public BingSearchResultsPage FindResultUrl(string url)
+    {
+        I.Expect.Exists(string.Format(ResultUrlLink, url));
+        return this;
+    }
+&nbsp;
+    private const string SearchResultsContainer = "#b_results";
+    private const string ResultUrlLink = "a[href='{0}']";
+}
+
+public class SampleTest : FluentTest
+{
+    public SampleTest()
+    {
+        SeleniumWebDriver.Bootstrap(SeleniumWebDriver.Browser.Chrome);
+    }
+&nbsp;
+    [Fact]
+    public void SearchForFluentAutomation()
+    {
+        new BingSearchPage(this)
+            .Go()
+            .Search("FluentAutomation")
+            .FindResultUrl("<a href='http://fluent.stirno.com/blog/FluentAutomation-scriptcs/'>http://fluent.stirno.com/blog/FluentAutomation-scriptcs/</a>");
+    }
+}
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="method-chaining">
+		<h4>Method Chaining</h4>
+		<p>As part of trying to provide the best fluent syntax we can, we now have method chaining on all "terminating methods". These are the bits that actually execute or do something, rather than just configure the next step.</p>
+
+<p>This provides a pretty clean, very simple way to push your tests towards AAA (Arrange/Act/Assert). As you can see to the right, clean and tight code.</p>
+
+<div class="highlight"><pre lang="csharp">I.Open("<a href='http://automation.apphb.com/forms'>http://automation.apphb.com/forms</a>")
+    .Select("Motorcycles").From(".liveExample tr select:eq(0)")
+    .Select(2).From(".liveExample tr select:eq(1)")
+    .Enter(6).In(".liveExample td.quantity input:eq(0)")
+    .Expect
+        .Text("$197.72").In(".liveExample tr span:eq(1)")
+        .Value(6).In(".liveExample td.quantity input:eq(0)");
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="remote-webdriver">
+		<h4>Remote WebDriver</h4>
+		<p>We fully support connecting to remote WebDriver instances (including Selenium Grid) as of the v2.2 bits. Obviously this is only supported in the SeleniumWebDriver provider.</p>
+
+<p>This is accomplished by passing a URI and settings to the <code>Bootstrap</code> method in your constructor. Remote functionality becomes useful when connecting to Selenium Grid or if you want to automate a browser that doesn't run on your primary machine.</p>
+
+<p>Additionally, there is support for passing a <code>Dictionary&lt;string, object&gt;</code> of capabilities.</p>
+
+<div class="highlight"><pre lang="csharp">using FluentAutomation;
+using System;
+
+namespace TestProject
+{
+    public class MacSafariTests : FluentTest
+    {
+        public MacSafariTests()
+        {
+            SeleniumWebDriver.Bootstrap(
+                new Uri("<a href='http://mac/wd/hub'>http://mac/wd/hub</a>"), SeleniumWebDriver.Browser.Safari
+            );
+        }
+    }
+}
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="scriptcs">
+		<h4>scriptcs</h4>
+		<p>Access to FluentAutomation inside of <a href="http://scriptcs.net/" target="_blank">scriptcs</a> is trivially easy and very powerful. We have a custom Script Pack that provides access to the functionality you expect.</p>
+
+<p>To get started, install scriptcs (per instructions on their site). The commands to the right will get a directory ready for scriptcs testing.</p>
+
+<p>Create a new script, <code>test.csx</code> for example. We'll require in the Script Pack, Bootstrap our browser and get testing.</p>
+
+<p>The new script can be run very easily a Command Prompt with: <code>scriptcs test.csx</code>. You'll see some debugging information from the browser and/or Selenium -- no worries -- and then you'll see the test execute and you'll get results.</p>
+
+<div class="highlight"><pre lang="csharp">// prepare a new directory for your tests
+mkdir tests
+scriptcs -install ScriptCs.FluentAutomation
+scriptcs -install FluentAutomation.SeleniumWebDriver
+
+// First test!
+var Test = Require<F14N>()
+    .Init<FluentAutomation.SeleniumWebDriver>()
+    .Bootstrap("Chrome")
+    .Config(settings => {
+        // Easy access to FluentAutomation.Settings values
+        settings.DefaultWaitUntilTimeout = TimeSpan.FromSeconds(1);
+    });
+
+Test.Run("Hello Google", I => {
+    I.Open("<a href='http://google.com'>http://google.com</a>");
+});
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-intro">
+		<h4>Actions</h4>
+		<p>We interchangeable use the terms <code>Action</code> and <code>Command</code> to refer to the same thing. This is because of terminology changes throughout the lifetime of the project.</p>
+
+<p>Actions are the units of work which manipulate state of the browser or the page.</p>
+	</div>
+	
+	<div class="doc_page" id="actions-open">
+		<h4>I.Open</h4>
+		<p>Open and navigate the web browser to the specified URL or <a href="http://msdn.microsoft.com/en-us/library/system.uri(v=vs.110).aspx" target="_blank">Uri</a>. Using a Uri can be valuable to validate your URI fragment before using it in a test.</p>
+
+<div class="highlight"><pre lang="csharp">// Open browser via string/URL
+I.Open("<a href='http://google.com'>http://google.com</a>");
+
+// Open browser via URI
+I.Open(new Uri("<a href='http://google.com'>http://google.com</a>"));
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-enter">
+		<h4>I.Enter</h4>
+		<p>Primary method of entering text into inputs and textareas. Automatically calls <code>ToString()</code> on non-string values to simplify tests.</p>
+
+<p>Using <code>WithoutEvents()</code> will cause the value to be set via JavaScript and will not trigger keyup/keydown events in the browser.</p>
+
+<div class="highlight"><pre lang="csharp">// Enter text into element
+I.Enter("FluentAutomation").In("#searchBox");
+
+// Enter text without keyup/keydown events
+I.Enter("FluentAutomation").WithoutEvents().In("#searchBox");
+
+// Enter an integer into element
+I.Enter(6).In("#quantity");
+
+// Enter text using cached reference to element
+var element = I.Find("#searchBox");
+I.Enter("FluentAutomation").In(element);
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-append">
+		<h4>I.Append</h4>
+		<p>Append text to the current values of inputs and textareas. Automatically calls <code>ToString()</code> on non-string values to simplify tests.</p>
+
+<p>Using <code>WithoutEvents()</code> will cause the value to be set via JavaScript and will not trigger keyup/keydown events in the browser.</p>
+
+<div class="highlight"><pre lang="csharp">// Append text onto element value
+I.Append("FluentAutomation").In("#searchBox");
+
+// Append text without keyup/keydown events
+I.Append("FluentAutomation").WithoutEvents().In("#searchBox");
+
+// Append an integer onto element value
+I.Append(6).In("#quantity");
+
+// Append text using cached reference to element
+var element = I.Find("#searchBox");
+I.Append("FluentAutomation").In(element);
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-select">
+		<h4>I.Select</h4>
+		<p>Primary method of selecting items in <code>&lt;SELECT&gt;</code> elements found via selector or cached reference. Selection can be done using <code>&lt;OPTION&gt;</code> value, text or index.</p>
+
+<p>Selecting via Text/string will fall back to Value matching if no match is found. This simplifies the API for most users but may be confusing. If you need to guarantee the selection was based on value use the <code>Option</code> overload.</p>
+
+<div class="highlight"><pre lang="csharp">// Select option by Text
+I.Select("MN").From("#states");
+
+// Select option by index
+I.Select(12).From("#states");
+
+// Select option by value
+I.Select(Option.Value, 9999).From("#numbers");
+
+// Select multiple options from a multiselect by text, index, or value
+I.Select("ND", "MN").From("#states");
+I.Select(10, 11, 12).From("#states");
+I.Select(Option.Value, 9998, 9999).From("#numbers");
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-click">
+		<h4>I.Click</h4>
+		<p>Click an element by selector, coordinates or cached reference. Optionally provide an offset to click relative to the item.</p>
+
+<div class="highlight"><pre lang="csharp">// Click by element selector
+I.Click("#searchBox");
+
+// Click by x, y coordinates
+I.Click(10, 100);
+
+// Click by relative offset from element selector
+I.Click("#searchBox", 10, 100);
+
+// Click using cached reference to element.
+var element = I.Find("#searchBox");
+I.Click(element);
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-doubleclick">
+		<h4>I.DoubleClick</h4>
+		<p>Double-click an element by selector, coordinates or cached reference. Optionally provide an offset to click relative to the item.</p>
+
+<div class="highlight"><pre lang="csharp">// DoubleClick by element selector
+I.DoubleClick("#searchBox");
+
+// DoubleClick by x, y coordinates
+I.DoubleClick(10, 100);
+
+// DoubleClick by relative offset from element selector
+I.DoubleClick("#searchBox", 10, 100);
+
+// DoubleClick using cached reference to element.
+var element = I.Find("#searchBox");
+I.DoubleClick(element);
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-rightclick">
+		<h4>I.RightClick</h4>
+		<p>Right-click an element by selector, coordinates or cached reference. Optionally provide an offset to click relative to the item.</p>
+
+<div class="highlight"><pre lang="csharp">// RightClick by element selector
+I.RightClick("#searchBox");
+
+// RightClick by x, y coordinates
+I.RightClick(10, 100);
+
+// RightClick by relative offset from element selector
+I.RightClick("#searchBox", 10, 100);
+
+// RightClick using cached reference to element.
+var element = I.Find("#searchBox");
+I.RightClick(element);
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-focus">
+		<h4>I.Focus</h4>
+		<p>Set the browser's current focus to a specified element or cached reference to an element.</p>
+
+<div class="highlight"><pre lang="csharp">// Set browser focus by selector
+I.Focus("#searchBox");
+
+// Set browser focus using cached reference to element
+var element = I.Find("#searchBox");
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-hover">
+		<h4>I.Hover</h4>
+		<p>Cause the mouse to hover over a specified element, coordinates or position relative to an element.</p>
+
+<div class="highlight"><pre lang="csharp">// Hover over element
+I.Hover("#searchBox");
+
+// Hover over x, y coordinates
+I.Hover(10, 100);
+
+// Hover over relative offset from element selector
+I.Hover("#searchBox", 10, 100);
+
+// Hover using cached reference to element.
+var element = I.Find("#searchBox");
+I.Hover(element);
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-press">
+		<h4>I.Press</h4>
+		<p>Triggers a single OS level keypress event. This method will send events to whatever the active window is at the time its trigger, currently <strong>not guaranteed to be the actual browser window. Use with caution.</strong></p>
+
+<p>The intended use is for interactive with elements that steal focus or are not a part of the DOM such as Flash.</p>
+
+<p>Several keys require special values to be used. Refer to the <a href="http://msdn.microsoft.com/en-us/library/system.windows.forms.sendkeys.aspx" target="_blank">Windows Forms SendKeys documentation</a> for valid values.</p>
+
+<div class="highlight"><pre lang="csharp">// Press Tab key
+I.Press("{TAB}");
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-type">
+		<h4>I.Type</h4>
+		<p>Type a string, one character at a time using OS level keypress events. This functionality will send keypress events to whatever the active window is at the time its trigger, currently <strong>not guaranteed to be the actual browser window. Use with caution.</strong></p>
+
+<p>The intended use is for interactive with elements that steal focus or are not a part of the DOM such as Flash.</p>
+
+<p>Type does not support the use of special key values.</p>
+
+<div class="highlight"><pre lang="csharp">// Type string
+I.Type("FluentAutomation");
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-wait">
+		<h4>I.Wait</h4>
+		<p>Wait for a specified period of time before continuing the test. Method accepts a number of seconds or a <a href="http://msdn.microsoft.com/en-us/library/system.timespan(v=vs.110).aspx" target="_blank">TimeSpan</a>. Not guaranteed to be exact.</p>
+
+<p>In most cases, your tests will be less fragile if you can utilize <a href="#i-waituntil">I.WaitUntil</a> instead.</p>
+
+<div class="highlight"><pre lang="csharp">// Wait for 10 seconds
+I.Wait(10);
+
+// Wait for 500 milliseconds
+I.Wait(TimeSpan.FromMilliseconds(500));
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-waituntil">
+		<h4>I.WaitUntil</h4>
+		<p>Recommended method of waiting in tests. Conditional wait using anonymous functions that either return <code>true</code> / <code>false</code> or throw an <code>Exception</code> when the condition has not been met. Useful when content on the page is loaded dynamically or changes state during interactions.</p>
+
+<p>If the condition has not been met, a timed wait will be executed before testing the condition again. The duration if this wait is set in <code>Settings.DefaultWaitUntilThreadSleep</code>.</p>
+
+<p>The condition must succeed within the time set in <code>Settings.DefaultWaitUntilTimeout</code> or the test will fail.</p>
+
+<p>Important Note: Most actions have implicit WaitUntil functionality built-in. Before adding, be sure your test needs it.</p>
+
+<div class="highlight"><pre lang="csharp">// WaitUntil element exists
+I.WaitUntil(() => I.Assert.Exists("#searchBar")));
+
+// WaitUntil element has attribute 'data-loaded'
+I.WaitUntil(() =>
+    I.Find("#searchBar")()
+        .Attributes
+        .Get("data-loaded") == "true"
+);
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-find">
+		<h4>I.Find</h4>
+		<p>Get a factory reference to an element. Returns a function that can be evaluated to return access to the underlying element. Used internally by all functions that target elements.</p>
+
+<p>A second method, <code>I.FindMultiple</code>, exists to retrieve a collection of elements at once. It provides the same factory function but returns an <code>IEnumerable</code> instead.</p>
+
+<p>Often this function is used to break through the abstraction and get direct access to the providers element representation. This can be necessary in some cases but using <code>I.Find</code> in this way is discouraged.</p>
+
+<p><strong>Warning:</strong> If you intend to cache an element, cache this function not its result. The result is not kept up to date with the current state of the page.</p>
+
+<div class="highlight"><pre lang="csharp">// Find element by selector
+var element = I.Find("#searchBox");
+
+// Get reference to underlying IWebElement (Selenium)
+var webElement = element() as OpenQA.Selenium.IWebElement;
+
+// Get reference to underlying WatiN.Core.Element (WatiN)
+var webElement = element() as WatiN.Core.Element;
+
+// Find a collection of elements matching selector
+var listItems = I.FindMultiple("li");
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-drag">
+		<h4>I.Drag</h4>
+		<p>Drag &amp; drop works with elements, coordinates and offsets. In the next version, the offset functionality will look a bit less... stupid. Sorry about that.</p>
+
+<div class="highlight"><pre lang="csharp">// Drag one element to another
+I.Drag("#drag").To("#drop");
+
+// Drag one coordinate to another
+I.Drag(100, 100).To(500, 500);
+
+// Drag from element offset to another element
+I.Drag(I.Find("#drag"), 50, 50).To("#drop");
+
+// Drag from element to another elements offset
+I.Drag("#drag").To(I.Find("#drop", 100, 30));
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-takescreenshot">
+		<h4>I.TakeScreenshot</h4>
+		<p>Grab a quick screenshot of the current browser window and save it to disk. The screenshot path is configurable via <code>Settings.ScreenshotPath</code>.</p>
+
+<div class="highlight"><pre lang="csharp">// Take Screenshot
+I.TakeScreenshot("LoginScreen");
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="actions-upload">
+		<h4>I.Upload</h4>
+		<p>Upload a file using an <code>&lt;input type="file"&gt;</code> on the current page. The provided path must be absolute and point to the file you want to upload.</p>
+
+<p>This has been used with several Flash uploaders without issue. Your mileage may vary.</p>
+
+<div class="highlight"><pre lang="csharp">// Upload LoginScreen.jpg
+I.Upload("input[type='file'].uploader", @"C:\LoginScreen");
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="asserts-intro">
+		<h4>Expect/Assert</h4>
+		<p>As of <code>v2.3</code> proper assertions were added to FluentAutomation.</p>
+
+<p>Fundamentally <code>Expect</code> and <code>Assert</code> work exactly the same. The methods and their signatures are identical. The difference is that, when <code>Settings.ExpectIsAssert</code> is set to <code>false</code>, <code>Assert</code> will <code>throw</code> an <code>Exception</code> and fail a test. In comparison, <code>Expect</code> will attempt to log the failure using the <code>Action</code> provided in <code>Settings.ExpectFailedCallback</code> and allow the test to continue</p>
+
+<p>For ease of maintaining the documentation, we will document <code>Assert</code> methods only. Unless otherwise noted, <code>Expect</code> methods are identical.</p>
+
+<p><strong>Warning:</strong> The current default value of <code>Settings.ExpectIsAssert</code> is <code>true</code>. This will change in <code>v2.4</code>. If you want to guarantee your test behavior doesn't change, set the value in your project before upgrading.</p>
+	</div>
+	
+	<div class="doc_page" id="asserts-exists">
+		<h4>I.Assert.Exists</h4>
+		<p>Assert that an element is on the page.</p>
+
+<div class="highlight"><pre lang="csharp">// Element on page
+I.Assert.Exists("#searchBar");
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="asserts-count">
+		<h4>I.Assert.Count</h4>
+		<p>Assert that we have a certain count of items matching a selector.</p>
+
+<div class="highlight"><pre lang="csharp">// 1 search bar on page.
+I.Assert.Count(1).Of("#searchBar");
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="asserts-value">
+		<h4>I.Assert.Value</h4>
+		<p>Assert that an element matching selector has the specified value. Works with <code>&lt;INPUT&gt;</code>, <code>&lt;TEXTAREA&gt;</code> and <code>&lt;SELECT&gt;</code></p>
+
+<p>Supports anonymous functions that return <code>true</code> or <code>false</code>.</p>
+
+<div class="highlight"><pre lang="csharp">// Dropdown has value of 10.
+I.Assert.Value(10).In("#quantity");
+
+// Value starts with 'M'
+I.Assert.Value((value) => value.StartsWith("M")).In("#states");
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="asserts-text">
+		<h4>I.Assert.Text</h4>
+		<p>Assert that an element matching selector has the specified text. Works with any DOM element that has <code>innerHTML</code> or can provides its contents/value via text.</p>
+
+<p>Supports anonymous functions that return <code>true</code> or <code>false</code>.</p>
+
+<div class="highlight"><pre lang="csharp">// Header tag set to FluentAutomation
+I.Assert.Text("FluentAutomation").In("header");
+
+// Content longer than 50 characters
+I.Assert.Text((text) => text.Length > 50).In("#content");
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="asserts-class">
+		<h4>I.Assert.Class</h4>
+		<p>Assert that an element matching selector has the specified class.</p>
+
+<div class="highlight"><pre lang="csharp">// Has btn-primary class
+I.Assert.Class("btn-primary").Of("header");
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="asserts-url">
+		<h4>I.Assert.Url</h4>
+		<p>Assert that the browser has the specified Url. If using the string or Uri overloads, the match must be exact.</p>
+
+<p>Supports anonymous functions that return <code>true</code> or <code>false</code>. Particularly useful on pages that modify the URL via hashtags or other mechanisms.</p>
+
+<div class="highlight"><pre lang="csharp">// At #assert-url on docs
+I.Assert.Url("<a href='http://fluent.stirno.com/docs/#assert-url'>http://fluent.stirno.com/docs/#assert-url</a>");
+
+// Verify we're on SSL
+I.Assert.Url((uri) => uri.Scheme == "https");
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="asserts-throws">
+		<h4>I.Assert.Throws</h4>
+		<p>Assert that an <code>Exception</code> should be thrown by the anonymous function. Useful for negative assertions such as testing that something is not present.</p>
+
+<div class="highlight"><pre lang="csharp">// Page has no errors
+I.Assert.Throws(() => I.Assert.Exists(".error"));
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="asserts-true">
+		<h4>I.Assert.True</h4>
+		<p>Assert that an anonymous function should return true. Use with <code>I.Find</code> to fail tests properly if conditions are not met.</p>
+
+<div class="highlight"><pre lang="csharp">// Element is a select box
+var element = I.Find("select");
+I.Assert.True(() => element().IsSelect);
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+	<div class="doc_page" id="asserts-false">
+		<h4>I.Assert.False</h4>
+		<p>Assert that an anonymous function should return false. Use with <code>I.Find</code> to fail tests properly if conditions are not met.</p>
+
+<div class="highlight"><pre lang="csharp">// Element is not a select box
+var element = I.Find("input");
+I.Assert.False(() => element().IsSelect);
+</pre></div>
+
+<div class="highlight"><pre lang="vbnet">// TODO - Visual Basic Code Sample
+</pre></div>
+	</div>
+	
+</section>

@@ -21,8 +21,8 @@ namespace FluentAutomation
             {
                 this.Container = new TinyIoC.TinyIoCContainer();
             }
-            
-            if (Settings.MinimizeAllWindowsOnTestStart) Win32Magic.MinimizeAllWindows();
+
+            if (FluentSettings.Current.MinimizeAllWindowsOnTestStart) Win32Magic.MinimizeAllWindows();
         }
 
         internal TinyIoC.TinyIoCContainer.RegisterOptions SyntaxProviderRegisterOptions = null;

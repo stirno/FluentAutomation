@@ -27,6 +27,8 @@ namespace FluentAutomation
             }
         }
 
+        private string mainWindowHandle = null;
+
         public CommandProvider(Func<IWebDriver> webDriverFactory, IFileStoreProvider fileStoreProvider)
         {
             FluentTest.ProviderInstance = null;
@@ -42,10 +44,18 @@ namespace FluentAutomation
                 webDriver.Manage().Cookies.DeleteAllCookies();
                 webDriver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(10));
 
-                if (FluentAutomation.Settings.WindowHeight.HasValue && FluentAutomation.Settings.WindowWidth.HasValue)
+                if (this.Settings.WindowHeight.HasValue && this.Settings.WindowWidth.HasValue)
                 {
-                    webDriver.Manage().Window.Size = new Size(FluentAutomation.Settings.WindowWidth.Value, FluentAutomation.Settings.WindowHeight.Value);
+                    webDriver.Manage().Window.Size = new Size(this.Settings.WindowWidth.Value, this.Settings.WindowHeight.Value);
                 }
+                else
+                {
+                    var windowSize = webDriver.Manage().Window.Size;
+                    this.Settings.WindowHeight = windowSize.Height;
+                    this.Settings.WindowWidth = windowSize.Width;
+                }
+
+                this.mainWindowHandle = webDriver.CurrentWindowHandle;
 
                 return webDriver;
             });
@@ -61,14 +71,22 @@ namespace FluentAutomation
             }
         }
 
-        public void Navigate(Uri url)
+        public string Source
         {
-            this.Act(() => this.webDriver.Navigate().GoToUrl(url));
+            get
+            {
+                return this.webDriver.PageSource;
+            }
         }
 
-        public Func<IElement> Find(string selector)
+        public void Navigate(Uri url)
         {
-            return new Func<IElement>(() =>
+            this.Act(CommandType.Action, () => this.webDriver.Navigate().GoToUrl(url));
+        }
+
+        public ElementProxy Find(string selector)
+        {
+            return new ElementProxy(this, () =>
             {
                 try
                 {
@@ -82,29 +100,37 @@ namespace FluentAutomation
             });
         }
 
-        public Func<IEnumerable<IElement>> FindMultiple(string selector)
+        public ElementProxy FindMultiple(string selector)
         {
-            return new Func<IEnumerable<IElement>>(() =>
+            var finalResult = new ElementProxy();
+
+            finalResult.Children.Add(new Func<ElementProxy>(() =>
             {
                 try
                 {
+                    var result = new ElementProxy();
                     var webElements = this.webDriver.FindElements(Sizzle.Find(selector));
-                    List<Element> resultSet = new List<Element>();
-                    webElements.ToList().ForEach(x => resultSet.Add(new Element(x, selector)));
-                    return resultSet;
+                    foreach (var element in webElements)
+                    {
+                        result.Elements.Add(this, () => new Element(element, selector));
+                    }
+
+                    return result;
                 }
                 catch (NoSuchElementException)
                 {
                     throw new FluentException("Unable to find element with selector [{0}]", selector);
                 }
-            });
+            }));
+
+            return finalResult;
         }
 
         public void Click(int x, int y)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
-                var rootElement = this.Find("html")() as Element;
+                var rootElement = this.Find("html").Element as Element;
                 new Actions(this.webDriver)
                     .MoveToElement(rootElement.WebElement, x, y)
                     .Click()
@@ -112,11 +138,11 @@ namespace FluentAutomation
             });
         }
 
-        public void Click(Func<IElement> element, int x, int y)
+        public void Click(ElementProxy element, int x, int y)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
-                var containerElement = element() as Element;
+                var containerElement = element.Element as Element;
                 new Actions(this.webDriver)
                     .MoveToElement(containerElement.WebElement, x, y)
                     .Click()
@@ -124,11 +150,11 @@ namespace FluentAutomation
             });
         }
 
-        public void Click(Func<IElement> element)
+        public void Click(ElementProxy element)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
-                var containerElement = element() as Element;
+                var containerElement = element.Element as Element;
                 new Actions(this.webDriver)
                     .Click(containerElement.WebElement)
                     .Perform();
@@ -137,9 +163,9 @@ namespace FluentAutomation
 
         public void DoubleClick(int x, int y)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
-                var rootElement = this.Find("html")() as Element;
+                var rootElement = this.Find("html").Element as Element;
                 new Actions(this.webDriver)
                     .MoveToElement(rootElement.WebElement, x, y)
                     .DoubleClick()
@@ -147,11 +173,11 @@ namespace FluentAutomation
             });
         }
 
-        public void DoubleClick(Func<IElement> element, int x, int y)
+        public void DoubleClick(ElementProxy element, int x, int y)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
-                var containerElement = element() as Element;
+                var containerElement = element.Element as Element;
                 new Actions(this.webDriver)
                     .MoveToElement(containerElement.WebElement, x, y)
                     .DoubleClick()
@@ -159,22 +185,22 @@ namespace FluentAutomation
             });
         }
 
-        public void DoubleClick(Func<IElement> element)
+        public void DoubleClick(ElementProxy element)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
-                var containerElement = element() as Element;
+                var containerElement = element.Element as Element;
                 new Actions(this.webDriver)
                     .DoubleClick(containerElement.WebElement)
                     .Perform();
             });
         }
         
-        public void RightClick(Func<IElement> element)
+        public void RightClick(ElementProxy element)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
-                var containerElement = element() as Element;
+                var containerElement = element.Element as Element;
                 new Actions(this.webDriver)
                     .ContextClick(containerElement.WebElement)
                     .Perform();
@@ -183,42 +209,42 @@ namespace FluentAutomation
 
         public void Hover(int x, int y)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
-                var rootElement = this.Find("html")() as Element;
+                var rootElement = this.Find("html").Element as Element;
                 new Actions(this.webDriver)
                     .MoveToElement(rootElement.WebElement, x, y)
                     .Perform();
             });
         }
 
-        public void Hover(Func<IElement> element, int x, int y)
+        public void Hover(ElementProxy element, int x, int y)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
-                var containerElement = element() as Element;
+                var containerElement = element.Element as Element;
                 new Actions(this.webDriver)
                     .MoveToElement(containerElement.WebElement, x, y)
                     .Perform();
             });
         }
 
-        public void Hover(Func<IElement> element)
+        public void Hover(ElementProxy element)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
-                var unwrappedElement = element() as Element;
+                var unwrappedElement = element.Element as Element;
                 new Actions(this.webDriver)
                     .MoveToElement(unwrappedElement.WebElement)
                     .Perform();
             });
         }
 
-        public void Focus(Func<IElement> element)
+        public void Focus(ElementProxy element)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
-                var unwrappedElement = element() as Element;
+                var unwrappedElement = element.Element as Element;
 
                 switch (unwrappedElement.WebElement.TagName)
                 {
@@ -237,9 +263,9 @@ namespace FluentAutomation
 
         public void DragAndDrop(int sourceX, int sourceY, int destinationX, int destinationY)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
-                var rootElement = this.Find("html")() as Element;
+                var rootElement = this.Find("html").Element as Element;
                 new Actions(this.webDriver)
                     .MoveToElement(rootElement.WebElement, sourceX, sourceY)
                     .ClickAndHold()
@@ -249,12 +275,12 @@ namespace FluentAutomation
             });
         }
 
-        public void DragAndDrop(Func<IElement> source, int sourceOffsetX, int sourceOffsetY, Func<IElement> target, int targetOffsetX, int targetOffsetY)
+        public void DragAndDrop(ElementProxy source, int sourceOffsetX, int sourceOffsetY, ElementProxy target, int targetOffsetX, int targetOffsetY)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
-                var element = source() as Element;
-                var targetElement = target() as Element;
+                var element = source.Element as Element;
+                var targetElement = target.Element as Element;
                 new Actions(this.webDriver)
                     .MoveToElement(element.WebElement, sourceOffsetX, sourceOffsetY)
                     .ClickAndHold()
@@ -264,12 +290,12 @@ namespace FluentAutomation
             });
         }
 
-        public void DragAndDrop(Func<IElement> source, Func<IElement> target)
+        public void DragAndDrop(ElementProxy source, ElementProxy target)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
-                var unwrappedSource = source() as Element;
-                var unwrappedTarget = target() as Element;
+                var unwrappedSource = source.Element as Element;
+                var unwrappedTarget = target.Element as Element;
 
                 new Actions(this.webDriver)
                     .DragAndDrop(unwrappedSource.WebElement, unwrappedTarget.WebElement)
@@ -277,50 +303,50 @@ namespace FluentAutomation
             });
         }
 
-        public void EnterText(Func<IElement> element, string text)
+        public void EnterText(ElementProxy element, string text)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
-                var unwrappedElement = element() as Element;
+                var unwrappedElement = element.Element as Element;
 
                 unwrappedElement.WebElement.Clear();
                 unwrappedElement.WebElement.SendKeys(text);
             });
         }
 
-        public void EnterTextWithoutEvents(Func<IElement> element, string text)
+        public void EnterTextWithoutEvents(ElementProxy element, string text)
         {
-            this.Act(() =>  
+            this.Act(CommandType.Action, () =>  
             {
-                var unwrappedElement = element() as Element;
+                var unwrappedElement = element.Element as Element;
 
                 ((IJavaScriptExecutor)this.webDriver).ExecuteScript(string.Format("if (typeof fluentjQuery != 'undefined') {{ fluentjQuery(\"{0}\").val(\"{1}\").trigger('change'); }}", unwrappedElement.Selector.Replace("\"", ""), text.Replace("\"", "")));
             });
         }
 
-        public void AppendText(Func<IElement> element, string text)
+        public void AppendText(ElementProxy element, string text)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
-                var unwrappedElement = element() as Element;
+                var unwrappedElement = element.Element as Element;
                 unwrappedElement.WebElement.SendKeys(text);
             });
         }
 
-        public void AppendTextWithoutEvents(Func<IElement> element, string text)
+        public void AppendTextWithoutEvents(ElementProxy element, string text)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
-                var unwrappedElement = element() as Element;
+                var unwrappedElement = element.Element as Element;
                 ((IJavaScriptExecutor)this.webDriver).ExecuteScript(string.Format("if (typeof fluentjQuery != 'undefined') {{ fluentjQuery(\"{0}\").val(fluentjQuery(\"{0}\").val() + \"{1}\").trigger('change'); }}", unwrappedElement.Selector.Replace("\"", ""), text.Replace("\"", "")));
             });
         }
 
-        public void SelectText(Func<IElement> element, string optionText)
+        public void SelectText(ElementProxy element, string optionText)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
-                var unwrappedElement = element() as Element;
+                var unwrappedElement = element.Element as Element;
 
                 SelectElement selectElement = new SelectElement(unwrappedElement.WebElement);
                 if (selectElement.IsMultiple) selectElement.DeselectAll();
@@ -328,11 +354,11 @@ namespace FluentAutomation
             });
         }
 
-        public void MultiSelectValue(Func<IElement> element, string[] optionValues)
+        public void MultiSelectValue(ElementProxy element, string[] optionValues)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
-                var unwrappedElement = element() as Element;
+                var unwrappedElement = element.Element as Element;
 
                 SelectElement selectElement = new SelectElement(unwrappedElement.WebElement);
                 if (selectElement.IsMultiple) selectElement.DeselectAll();
@@ -344,11 +370,11 @@ namespace FluentAutomation
             });
         }
 
-        public void MultiSelectIndex(Func<IElement> element, int[] optionIndices)
+        public void MultiSelectIndex(ElementProxy element, int[] optionIndices)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
-                var unwrappedElement = element() as Element;
+                var unwrappedElement = element.Element as Element;
 
                 SelectElement selectElement = new SelectElement(unwrappedElement.WebElement);
                 if (selectElement.IsMultiple) selectElement.DeselectAll();
@@ -360,11 +386,11 @@ namespace FluentAutomation
             });
         }
 
-        public void MultiSelectText(Func<IElement> element, string[] optionTextCollection)
+        public void MultiSelectText(ElementProxy element, string[] optionTextCollection)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
-                var unwrappedElement = element() as Element;
+                var unwrappedElement = element.Element as Element;
 
                 SelectElement selectElement = new SelectElement(unwrappedElement.WebElement);
                 if (selectElement.IsMultiple) selectElement.DeselectAll();
@@ -376,11 +402,11 @@ namespace FluentAutomation
             });
         }
 
-        public void SelectValue(Func<IElement> element, string optionValue)
+        public void SelectValue(ElementProxy element, string optionValue)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
-                var unwrappedElement = element() as Element;
+                var unwrappedElement = element.Element as Element;
 
                 SelectElement selectElement = new SelectElement(unwrappedElement.WebElement);
                 if (selectElement.IsMultiple) selectElement.DeselectAll();
@@ -388,11 +414,11 @@ namespace FluentAutomation
             });
         }
 
-        public void SelectIndex(Func<IElement> element, int optionIndex)
+        public void SelectIndex(ElementProxy element, int optionIndex)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
-                var unwrappedElement = element() as Element;
+                var unwrappedElement = element.Element as Element;
 
                 SelectElement selectElement = new SelectElement(unwrappedElement.WebElement);
                 if (selectElement.IsMultiple) selectElement.DeselectAll();
@@ -402,36 +428,26 @@ namespace FluentAutomation
 
         public override void TakeScreenshot(string screenshotName)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
                 // get raw screenshot
                 var screenshotDriver = (ITakesScreenshot)this.webDriver;
-                var tmpImagePath = Path.Combine(Settings.UserTempDirectory, screenshotName);
+                var tmpImagePath = Path.Combine(this.Settings.UserTempDirectory, screenshotName);
                 screenshotDriver.GetScreenshot().SaveAsFile(tmpImagePath, ImageFormat.Png);
 
                 // save to file store
-                this.fileStoreProvider.SaveScreenshot(File.ReadAllBytes(tmpImagePath), screenshotName);
+                this.fileStoreProvider.SaveScreenshot(this.Settings, File.ReadAllBytes(tmpImagePath), screenshotName);
                 File.Delete(tmpImagePath);
             });
         }
 
-        public void UploadFile(Func<IElement> element, int x, int y, string fileName)
+        public void UploadFile(ElementProxy element, int x, int y, string fileName)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
                 // wait before typing in the field
                 var task = Task.Factory.StartNew(() =>
                 {
-                    //switch (SeleniumWebDriver.SelectedBrowser)
-                    //{
-                    //    case SeleniumWebDriver.Browser.Firefox:
-                    //        this.Wait(TimeSpan.FromMilliseconds(1000));
-                    //        break;
-                    //    case SeleniumWebDriver.Browser.Chrome:
-                    //        this.Wait(TimeSpan.FromMilliseconds(1500));
-                    //        break;
-                    //}
-
                     this.Type(fileName);
                 });
 
@@ -451,12 +467,12 @@ namespace FluentAutomation
 
         public void Press(string keys)
         {
-            this.Act(() => System.Windows.Forms.SendKeys.SendWait(keys));
+            this.Act(CommandType.Action, () => System.Windows.Forms.SendKeys.SendWait(keys));
         }
 
         public void Type(string text)
         {
-            this.Act(() =>
+            this.Act(CommandType.Action, () =>
             {
                 foreach (var character in text)
                 {
@@ -464,6 +480,127 @@ namespace FluentAutomation
                     this.Wait(TimeSpan.FromMilliseconds(20));
                 }
             });
+        }
+
+        public void SwitchToWindow(string windowName)
+        {
+            this.Act(CommandType.Action, () =>
+            {
+                if (windowName == string.Empty)
+                {
+                    this.webDriver.SwitchTo().Window(this.mainWindowHandle);
+                    return;
+                }
+
+                var matchFound = false;
+                foreach (var windowHandle in this.webDriver.WindowHandles)
+                {
+                    this.webDriver.SwitchTo().Window(windowHandle);
+
+                    if (this.webDriver.Title == windowName || this.webDriver.Url.EndsWith(windowName))
+                    {
+                        matchFound = true;
+                        break;
+                    }
+                }
+
+                if (!matchFound)
+                {
+                    throw new FluentException("No window with a title or URL matching [{0}] could be found.", windowName);
+                }
+            });
+        }
+
+        public void SwitchToFrame(string frameNameOrSelector)
+        {
+            this.Act(CommandType.Action, () =>
+            {
+                if (frameNameOrSelector == string.Empty)
+                {
+                    this.webDriver.SwitchTo().DefaultContent();
+                    return;
+                }
+
+                // try to locate frame using argument as a selector, if that fails pass it into Frame so it can be
+                // evaluated as a name by Selenium
+                IWebElement frameBySelector = null;
+                try
+                {
+                    frameBySelector = this.webDriver.FindElement(Sizzle.Find(frameNameOrSelector));
+                }
+                catch (NoSuchElementException)
+                {
+                }
+
+                if (frameBySelector == null)
+                    this.webDriver.SwitchTo().Frame(frameNameOrSelector);
+                else
+                    this.webDriver.SwitchTo().Frame(frameBySelector);
+            });
+        }
+
+        public void SwitchToFrame(ElementProxy frameElement)
+        {
+            this.Act(CommandType.Action, () =>
+            {
+                this.webDriver.SwitchTo().Frame((frameElement.Element as Element).WebElement);
+            });
+        }
+
+        public void AlertClick(Alert accessor)
+        {
+            var alert = this.webDriver.SwitchTo().Alert();
+
+            if (accessor.Field == AlertField.OKButton)
+                alert.Accept();
+            else if (accessor.Field == AlertField.CancelButton)
+                alert.Dismiss();
+            else
+                throw new FluentException("FluentAutomation only supports clicking on OK or Cancel in alerts or prompts.");
+        }
+
+        public void AlertText(Action<string> matchFunc)
+        {
+            var alert = this.webDriver.SwitchTo().Alert();
+            matchFunc(alert.Text);
+        }
+
+        public void AlertEnterText(string text)
+        {
+            var alert = this.webDriver.SwitchTo().Alert();
+            alert.SendKeys(text);
+        }
+
+        public void Visible(ElementProxy element, Action<bool> action)
+        {
+            this.Act(CommandType.Action, () =>
+            {
+                var isVisible = (element.Element as Element).WebElement.Displayed;
+                action(isVisible);
+            });
+        }
+        
+        public void CssPropertyValue(ElementProxy element, string propertyName, Action<bool, string> action)
+        {
+            this.Act(CommandType.Action, () =>
+            {
+                var propertyValue = ((IJavaScriptExecutor)this.webDriver).ExecuteScript(string.Format("return fluentjQuery(\"{0}\").css(\"{1}\")", element.Element.Selector, propertyName));
+                if (propertyValue == null)
+                    action(false, string.Empty);
+                else
+                    action(true, propertyValue.ToString());
+            });
+        }
+
+        public ICommandProvider WithConfig(FluentSettings settings)
+        {
+            this.Settings = settings;
+
+            // If the browser size has changed since the last config change, update it
+            if (settings.WindowWidth.HasValue && settings.WindowHeight.HasValue)
+                this.webDriver.Manage().Window.Size = new Size(settings.WindowWidth.Value, settings.WindowHeight.Value);
+
+            return this;
         }
 
         public void Dispose()

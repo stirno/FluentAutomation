@@ -13,61 +13,129 @@ namespace FluentAutomation
     {
         protected bool ExecuteImmediate = true;
         protected List<Action> StoredActions = new List<Action>();
+        public FluentSettings Settings = FluentSettings.Current;
 
-        public void Act(Action action, bool waitableAction = true)
+        private bool WaitOnAction(CommandType commandType)
         {
-            if (this.ExecuteImmediate)
+            switch (commandType)
             {
-                try
-                {
-                    if (waitableAction && Settings.WaitOnAllCommands)
-                    {
-                        this.WaitUntil(() => action(), Settings.DefaultWaitUntilTimeout);
-                    }
-                    else
-                    {
-                        action();
-                    }
-                }
-                catch (Exceptions.FluentExpectFailedException ex)
-                {
-                    if (Settings.ScreenshotOnFailedExpect)
-                    {
-                        var screenshotName = string.Format(CultureInfo.CurrentCulture, "ExpectFailed_{0}", DateTimeOffset.Now.Date.ToFileTime());
-                        ex.ScreenshotPath = System.IO.Path.Combine(Settings.ScreenshotPath, screenshotName);
-                        this.TakeScreenshot(ex.ScreenshotPath);
-                    }
-
-                    throw;
-                }
-                catch (Exceptions.FluentException ex)
-                {
-                    if (Settings.ScreenshotOnFailedAction)
-                    {
-                        var screenshotName = string.Format(CultureInfo.CurrentCulture, "ActionFailed_{0}", DateTimeOffset.Now.Date.ToFileTime());
-                        ex.ScreenshotPath = System.IO.Path.Combine(Settings.ScreenshotPath, screenshotName);
-                        this.TakeScreenshot(ex.ScreenshotPath);
-                    }
-
-                    throw;
-                }
-            }
-            else
-            {
-                if (waitableAction && Settings.WaitOnAllCommands)
-                {
-                    this.StoredActions.Add(new Action(() => this.WaitUntil(() => action(), Settings.DefaultWaitUntilTimeout)));
-                }
-                else
-                {
-                    this.StoredActions.Add(action);
-                }
+                case CommandType.Action:
+                    return this.Settings.WaitOnAllActions;
+                case CommandType.Assert:
+                    return this.Settings.WaitOnAllAsserts;
+                case CommandType.Expect:
+                    return this.Settings.WaitOnAllExpects;
+                case CommandType.Wait:
+                default:
+                    return false;
             }
         }
 
-        public void ExecuteDeferredActions()
+        public Tuple<FluentAssertFailedException, WindowState> PendingAssertFailedExceptionNotification { get; set; }
+        public Tuple<FluentExpectFailedException, WindowState> PendingExpectFailedExceptionNotification { get; set; }
+
+        public void Act(CommandType commandType, Action action)
         {
-            this.StoredActions.ForEach(action => action());
+            bool originalWaitOnActions = this.Settings.WaitOnAllActions;
+            try
+            {
+                if (this.WaitOnAction(commandType))
+                {
+                    this.WaitUntil(() => action(), this.Settings.WaitUntilTimeout);
+                }
+                else
+                {
+                    // If we've decided we don't wait on this type AND its an expect or assert, we want to disable
+                    // waits on actions as well because the Expects use actions to fetch elements for verification
+                    if (commandType == CommandType.Expect || commandType == CommandType.Assert)
+                        this.Settings.WaitOnAllActions = false;
+
+                    action();
+                }
+            }
+            catch (Exceptions.FluentAssertFailedException ex)
+            {
+                if (this.Settings.ScreenshotOnFailedExpect)
+                {
+                    var screenshotName = string.Format(CultureInfo.CurrentCulture, "ExpectFailed_{0}", DateTimeOffset.Now.Date.ToFileTime());
+                    ex.ScreenshotPath = System.IO.Path.Combine(this.Settings.ScreenshotPath, screenshotName);
+                    this.TakeScreenshot(ex.ScreenshotPath);
+                }
+
+                // fire related event before throwing/breaking
+                if (this.PendingAssertFailedExceptionNotification != null)
+                {
+                    this.Settings.OnAssertFailed(this.PendingAssertFailedExceptionNotification.Item1, this.PendingAssertFailedExceptionNotification.Item2);
+                    this.PendingAssertFailedExceptionNotification = null;
+                }
+
+                throw;
+            }
+            catch (Exceptions.FluentException ex)
+            {
+                if (this.Settings.ScreenshotOnFailedAction)
+                {
+                    var screenshotName = string.Format(CultureInfo.CurrentCulture, "ActionFailed_{0}", DateTimeOffset.Now.Date.ToFileTime());
+                    ex.ScreenshotPath = System.IO.Path.Combine(this.Settings.ScreenshotPath, screenshotName);
+                    this.TakeScreenshot(ex.ScreenshotPath);
+                }
+
+                if (ex.InnerException != null)
+                {
+                    if (ex.InnerException.GetType() == typeof(FluentExpectFailedException))
+                    {
+                        if (this.Settings.ScreenshotOnFailedExpect)
+                        {
+                            var screenshotName = string.Format(CultureInfo.CurrentCulture, "ExpectFailed_{0}", DateTimeOffset.Now.Date.ToFileTime());
+                            ex.ScreenshotPath = System.IO.Path.Combine(this.Settings.ScreenshotPath, screenshotName);
+                            this.TakeScreenshot(ex.ScreenshotPath);
+                        }
+
+                        if (this.PendingAssertFailedExceptionNotification != null)
+                        {
+                            this.Settings.OnAssertFailed(this.PendingAssertFailedExceptionNotification.Item1, this.PendingAssertFailedExceptionNotification.Item2);
+                            this.PendingAssertFailedExceptionNotification = null;
+                        }
+                    }
+                    else if (ex.InnerException.GetType() == typeof(FluentAssertFailedException))
+                    {
+                        if (this.Settings.ScreenshotOnFailedAssert)
+                        {
+                            var screenshotName = string.Format(CultureInfo.CurrentCulture, "AssertFailed_{0}", DateTimeOffset.Now.Date.ToFileTime());
+                            ex.ScreenshotPath = System.IO.Path.Combine(this.Settings.ScreenshotPath, screenshotName);
+                            this.TakeScreenshot(ex.ScreenshotPath);
+                        }
+
+                        // fire related event before throwing/breaking
+                        if (this.PendingAssertFailedExceptionNotification != null)
+                        {
+                            this.Settings.OnAssertFailed(this.PendingAssertFailedExceptionNotification.Item1, this.PendingAssertFailedExceptionNotification.Item2);
+                            this.PendingAssertFailedExceptionNotification = null;
+                        }
+                    }
+                }
+
+                // fire related event before throwing/breaking
+                if (this.PendingAssertFailedExceptionNotification != null)
+                {
+                    this.Settings.OnAssertFailed(this.PendingAssertFailedExceptionNotification.Item1, this.PendingAssertFailedExceptionNotification.Item2);
+                    this.PendingAssertFailedExceptionNotification = null;
+                }
+
+                throw;
+            }
+            finally
+            {
+                // fire off event for expect failures
+                if (this.PendingExpectFailedExceptionNotification != null)
+                {
+                    this.Settings.OnExpectFailed(this.PendingExpectFailedExceptionNotification.Item1, this.PendingExpectFailedExceptionNotification.Item2);
+                    this.PendingExpectFailedExceptionNotification = null;
+                }
+
+                // restore WaitOnAllActions settings in all cases (protection for future cases where above catches dont rethrow)
+                this.Settings.WaitOnAllActions = originalWaitOnActions;
+            }
         }
         
         public void Wait(int seconds)
@@ -77,22 +145,22 @@ namespace FluentAutomation
 
         public void Wait()
         {
-            this.Wait(Settings.DefaultWaitTimeout);
+            this.Wait(this.Settings.WaitTimeout);
         }
 
         public void Wait(TimeSpan timeSpan)
         {
-            this.Act(() => System.Threading.Thread.Sleep(timeSpan), false);
+            this.Act(CommandType.Wait, () => System.Threading.Thread.Sleep(timeSpan));
         }
 
         public void WaitUntil(Expression<Func<bool>> conditionFunc)
         {
-            this.WaitUntil(conditionFunc, Settings.DefaultWaitUntilTimeout);
+            this.WaitUntil(conditionFunc, this.Settings.WaitUntilTimeout);
         }
 
         public void WaitUntil(Expression<Func<bool>> conditionFunc, TimeSpan timeout)
         {
-            this.Act(() =>
+            this.Act(CommandType.Wait, () =>
             {
                 DateTime dateTimeTimeout = DateTime.Now.Add(timeout);
                 bool isFuncValid = false;
@@ -109,7 +177,7 @@ namespace FluentAutomation
                             break;
                         }
 
-                        System.Threading.Thread.Sleep(Settings.DefaultWaitUntilThreadSleep);
+                        System.Threading.Thread.Sleep(this.Settings.WaitUntilInterval);
                     }
                     catch (FluentException ex)
                     {
@@ -126,17 +194,17 @@ namespace FluentAutomation
                 {
                     throw new FluentException("Conditional wait passed the timeout [{0}ms] for expression [{1}]. See InnerException for details of the last FluentException thrown.", lastException, timeout.TotalMilliseconds, conditionFunc.ToExpressionString());
                 }
-            }, false);
+            });
         }
 
         public void WaitUntil(Expression<Action> conditionAction)
         {
-            this.WaitUntil(conditionAction, Settings.DefaultWaitUntilTimeout);
+            this.WaitUntil(conditionAction, this.Settings.WaitUntilTimeout);
         }
 
         public void WaitUntil(Expression<Action> conditionAction, TimeSpan timeout)
         {
-            this.Act(() =>
+            this.Act(CommandType.Wait, () =>
             {
                 DateTime dateTimeTimeout = DateTime.Now.Add(timeout);
                 bool threwException = false;
@@ -165,7 +233,7 @@ namespace FluentAutomation
                         break;
                     }
 
-                    System.Threading.Thread.Sleep(Settings.DefaultWaitUntilThreadSleep);
+                    System.Threading.Thread.Sleep(this.Settings.WaitUntilInterval);
                 }
 
                 // If an exception was thrown the last loop, assume we hit the timeout
@@ -173,7 +241,7 @@ namespace FluentAutomation
                 {
                     throw new FluentException("Conditional wait passed the timeout [{0}ms] for expression [{1}]. See InnerException for details of the last FluentException thrown.", lastFluentException, timeout.TotalMilliseconds, conditionAction.ToExpressionString());
                 }
-            }, false);
+            });
         }
 
         public abstract void TakeScreenshot(string screenshotName);

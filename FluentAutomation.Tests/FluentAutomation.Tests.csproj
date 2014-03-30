@@ -36,9 +36,12 @@
   <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
-    <Reference Include="WebDriver, Version=2.37.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\FluentAutomation.SeleniumWebDriver\bin\Debug\WebDriver.dll</HintPath>
+    <Reference Include="System.Drawing" />
+    <Reference Include="WebDriver">
+      <HintPath>..\packages\Selenium.WebDriver.2.41.0\lib\net40\WebDriver.dll</HintPath>
+    </Reference>
+    <Reference Include="WebDriver.Support">
+      <HintPath>..\packages\Selenium.Support.2.41.0\lib\net40\WebDriver.Support.dll</HintPath>
     </Reference>
     <Reference Include="xunit">
       <HintPath>..\packages\xunit.1.9.0.1566\lib\xunit.dll</HintPath>
@@ -53,6 +56,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="AlertTests.cs" />
     <Compile Include="Native\SeleniumChrome.cs" />
     <Compile Include="Native\SeleniumFirefox.cs" />
     <Compile Include="Native\FormsNative.cs" />
@@ -60,6 +64,7 @@
     <Compile Include="Native\SessionTests.cs" />
     <Compile Include="Native\RepeatableNativeTest.cs" />
     <Compile Include="Native\SeleniumIE.cs" />
+    <Compile Include="Native\SelectExpects.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Native\WatiN.cs" />
     <Compile Include="BingSearchPage.cs" />

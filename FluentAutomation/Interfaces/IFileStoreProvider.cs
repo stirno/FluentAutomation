@@ -8,6 +8,6 @@ namespace FluentAutomation
 {
     public interface IFileStoreProvider
     {
-        bool SaveScreenshot(byte[] contents, string fileName);
+        bool SaveScreenshot(FluentSettings settings, byte[] contents, string fileName);
     }
 }

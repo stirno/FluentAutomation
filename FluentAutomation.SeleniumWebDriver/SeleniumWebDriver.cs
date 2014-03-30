@@ -2,6 +2,7 @@
 using FluentAutomation.Interfaces;
 using FluentAutomation.Wrappers;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Remote;
 using System;
 using System.Collections.Generic;
@@ -81,10 +82,10 @@ namespace FluentAutomation
         /// <param name="browser"></param>
         public static void Bootstrap(Browser browser)
         {
-            FluentAutomation.Settings.Registration = (container) =>
+            FluentSettings.Current.ContainerRegistration = (container) =>
             {
                 container.Register<ICommandProvider, CommandProvider>();
-                container.Register<IExpectProvider, ExpectProvider>();
+                container.Register<IAssertProvider, AssertProvider>();
                 container.Register<IFileStoreProvider, LocalFileStoreProvider>();
 
                 var browserDriver = GenerateBrowserSpecificDriver(browser);
@@ -100,7 +101,7 @@ namespace FluentAutomation
                 return;
             }
 
-            FluentAutomation.Settings.Registration = (container) =>
+            FluentSettings.Current.ContainerRegistration = (container) =>
             {
                 var webDrivers = new List<Func<IWebDriver>>();
                 browsers.Distinct().ToList().ForEach(x => webDrivers.Add(GenerateBrowserSpecificDriver(x)));
@@ -109,7 +110,7 @@ namespace FluentAutomation
                 container.Register<CommandProviderList>(commandProviders);
 
                 container.Register<ICommandProvider, MultiCommandProvider>();
-                container.Register<IExpectProvider, MultiExpectProvider>();
+                container.Register<IAssertProvider, MultiAssertProvider>();
                 container.Register<IFileStoreProvider, LocalFileStoreProvider>();
             };
         }
@@ -121,10 +122,10 @@ namespace FluentAutomation
         /// <param name="browser"></param>
         public static void Bootstrap(Uri driverUri, Browser browser)
         {
-            FluentAutomation.Settings.Registration = (container) =>
+            FluentSettings.Current.ContainerRegistration = (container) =>
             {
                 container.Register<ICommandProvider, CommandProvider>();
-                container.Register<IExpectProvider, ExpectProvider>();
+                container.Register<IAssertProvider, AssertProvider>();
                 container.Register<IFileStoreProvider, LocalFileStoreProvider>();
 
                 DesiredCapabilities browserCapabilities = GenerateDesiredCapabilities(browser);
@@ -139,10 +140,10 @@ namespace FluentAutomation
         /// <param name="capabilities"></param>
         public static void Bootstrap(Uri driverUri, Browser browser, Dictionary<string, object> capabilities)
         {
-            FluentAutomation.Settings.Registration = (container) =>
+            FluentSettings.Current.ContainerRegistration = (container) =>
             {
                 container.Register<ICommandProvider, CommandProvider>();
-                container.Register<IExpectProvider, ExpectProvider>();
+                container.Register<IAssertProvider, AssertProvider>();
                 container.Register<IFileStoreProvider, LocalFileStoreProvider>();
 
                 DesiredCapabilities browserCapabilities = GenerateDesiredCapabilities(browser);
@@ -157,10 +158,10 @@ namespace FluentAutomation
 
         public static void Bootstrap(Uri driverUri, Dictionary<string, object> capabilities)
         {
-            FluentAutomation.Settings.Registration = (container) =>
+            FluentSettings.Current.ContainerRegistration = (container) =>
             {
                 container.Register<ICommandProvider, CommandProvider>();
-                container.Register<IExpectProvider, ExpectProvider>();
+                container.Register<IAssertProvider, AssertProvider>();
                 container.Register<IFileStoreProvider, LocalFileStoreProvider>();
 
                 DesiredCapabilities browserCapabilities = new DesiredCapabilities(capabilities);
@@ -183,7 +184,14 @@ namespace FluentAutomation
                     return new Func<IWebDriver>(() => new OpenQA.Selenium.Firefox.FirefoxDriver());
                 case Browser.Chrome:
                     driverPath = EmbeddedResources.UnpackFromAssembly("chromedriver.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
-                    return new Func<IWebDriver>(() => new OpenQA.Selenium.Chrome.ChromeDriver(Path.GetDirectoryName(driverPath)));
+
+                    var chromeService = ChromeDriverService.CreateDefaultService(Path.GetDirectoryName(driverPath));
+                    chromeService.SuppressInitialDiagnosticInformation = true;
+
+                    var options = new ChromeOptions();
+                    options.AddArgument("--log-level=3");
+
+                    return new Func<IWebDriver>(() => new OpenQA.Selenium.Chrome.ChromeDriver(chromeService, options));
                 case Browser.PhantomJs:
                     driverPath = EmbeddedResources.UnpackFromAssembly("phantomjs.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
                     return new Func<IWebDriver>(() => new OpenQA.Selenium.PhantomJS.PhantomJSDriver(Path.GetDirectoryName(driverPath)));
