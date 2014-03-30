@@ -25,7 +25,7 @@ namespace FluentAutomation.Tests.Pages
 
         public string InputButtonControlSelector = "#input-button-control";
 
-        public string TextChangedTextSelector = "#text-changed";
+        public string TextChangedTextSelector = "#text-control-changed";
 
         public string ButtonClickedTextSelector = "#button-clicked";
     }
