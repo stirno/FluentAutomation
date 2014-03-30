@@ -11,13 +11,13 @@ namespace FluentAutomation.Tests.Actions
     {
         public FindTests()
         {
-            I.Open("/Inputs");
+            InputsPage.Go();
         }
 
         [Fact]
         public void FindElement()
         {
-            var element = I.Find("#text-control").Element;
+            var element = I.Find(InputsPage.TextControlSelector).Element;
 
             // simple assert on element to ensure it was properly loaded
             Assert.True(element.IsText);            

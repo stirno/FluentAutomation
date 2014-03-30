@@ -13,29 +13,29 @@ namespace FluentAutomation.Tests.Actions
         public EnterTests()
             : base()
         {
-            I.Open("/Inputs");
+            InputsPage.Go();
         }
 
         [Fact]
         public void EnterTextInValidInput()
         {
             // enter text, verify change fired
-            I.Enter("Test String").In("#text-control")
-             .Assert.Text("Test String").In("#text-control");
-            I.Focus("#textarea-control")
-             .Assert.Text("Changed").In("#text-control-changed");
+            I.Enter("Test String").In(InputsPage.TextControlSelector)
+             .Assert.Text("Test String").In(InputsPage.TextControlSelector);
+            I.Focus(InputsPage.TextareaControlSelector)
+             .Assert.Text("Changed").In(InputsPage.TextChangedTextSelector);
 
             // no change event should be fired
-            I.Enter("Quick Test").WithoutEvents().In("#text-control")
-             .Assert.Text("Quick Test").In("#text-control");
-            I.Focus("#textarea-control")
-             .Assert.Text("").In("#text-control-changed");
+            I.Enter("Quick Test").WithoutEvents().In(InputsPage.TextControlSelector)
+             .Assert.Text("Quick Test").In(InputsPage.TextControlSelector);
+            I.Focus(InputsPage.TextareaControlSelector)
+             .Assert.Text("").In(InputsPage.TextChangedTextSelector);
 
-            I.Enter("Other Test String").In("#textarea-control")
-             .Assert.Text("Other Test String").In("#textarea-control");
+            I.Enter("Other Test String").In(InputsPage.TextareaControlSelector)
+             .Assert.Text("Other Test String").In(InputsPage.TextareaControlSelector);
 
-            I.Enter(10).In("#text-control")
-             .Assert.Text("10").In("#text-control");
+            I.Enter(10).In(InputsPage.TextControlSelector)
+             .Assert.Text("10").In(InputsPage.TextControlSelector);
         }
 
         [Fact]
@@ -55,7 +55,7 @@ namespace FluentAutomation.Tests.Actions
             // Enter cannot be used on non-text elements
             var exception = Assert.Throws<FluentException>(() =>
             {
-                I.Enter("QA").In("#select-control");
+                I.Enter("QA").In(InputsPage.SelectControlSelector);
             });
 
             Assert.True(exception.Message.Contains("only supported"));

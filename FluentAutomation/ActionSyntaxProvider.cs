@@ -291,7 +291,7 @@ namespace FluentAutomation
         {
             private readonly ActionSyntaxProvider syntaxProvider = null;
 
-            public SwitchSyntaxProvider(ActionSyntaxProvider syntaxProvider)
+            internal SwitchSyntaxProvider(ActionSyntaxProvider syntaxProvider)
             {
                 this.syntaxProvider = syntaxProvider;
             }
@@ -375,13 +375,13 @@ namespace FluentAutomation
             protected readonly int offsetX = 0;
             protected readonly int offsetY = 0;
 
-            public DragDropSyntaxProvider(ActionSyntaxProvider syntaxProvider, ElementProxy element)
+            internal DragDropSyntaxProvider(ActionSyntaxProvider syntaxProvider, ElementProxy element)
             {
                 this.syntaxProvider = syntaxProvider;
                 this.sourceElement = element;
             }
 
-            public DragDropSyntaxProvider(ActionSyntaxProvider syntaxProvider, ElementProxy element, int offsetX, int offsetY)
+            internal DragDropSyntaxProvider(ActionSyntaxProvider syntaxProvider, ElementProxy element, int offsetX, int offsetY)
             {
                 this.syntaxProvider = syntaxProvider;
                 this.sourceElement = element;
@@ -502,7 +502,7 @@ namespace FluentAutomation
             protected readonly string text = null;
             protected bool eventsEnabled = true;
 
-            public TextEntrySyntaxProvider(ActionSyntaxProvider syntaxProvider, string text)
+            internal TextEntrySyntaxProvider(ActionSyntaxProvider syntaxProvider, string text)
             {
                 this.syntaxProvider = syntaxProvider;
                 this.text = text;
@@ -570,7 +570,7 @@ namespace FluentAutomation
             protected bool eventsEnabled = true;
             protected bool isAppend = false;
 
-            public TextAppendSyntaxProvider(ActionSyntaxProvider syntaxProvider, string text)
+            internal TextAppendSyntaxProvider(ActionSyntaxProvider syntaxProvider, string text)
             {
                 this.syntaxProvider = syntaxProvider;
                 this.text = text;
@@ -622,41 +622,41 @@ namespace FluentAutomation
         #region <select />
         public SelectSyntaxProvider Select(string value)
         {
-            return new SelectSyntaxProvider(this, value, Option.Text);
+            return new SelectSyntaxProvider(this, value, SelectionOption.Text);
         }
 
         public SelectSyntaxProvider Select(Option mode, string value)
         {
-            return new SelectSyntaxProvider(this, value, mode);
+            return new SelectSyntaxProvider(this, value, mode == Option.Text ? SelectionOption.Text : SelectionOption.Value);
         }
 
         public SelectSyntaxProvider Select(params string[] values)
         {
-            return new SelectSyntaxProvider(this, values, Option.Text);
+            return new SelectSyntaxProvider(this, values, SelectionOption.Text);
         }
 
         public SelectSyntaxProvider Select(Option mode, params string[] values)
         {
-            return new SelectSyntaxProvider(this, values, mode);
+            return new SelectSyntaxProvider(this, values, mode == Option.Text ? SelectionOption.Text : SelectionOption.Value);
         }
 
         public SelectSyntaxProvider Select(int index)
         {
-            return new SelectSyntaxProvider(this, index, Option.Index);
+            return new SelectSyntaxProvider(this, index, SelectionOption.Index);
         }
 
         public SelectSyntaxProvider Select(params int[] indices)
         {
-            return new SelectSyntaxProvider(this, indices, Option.Index);
+            return new SelectSyntaxProvider(this, indices, SelectionOption.Index);
         }
         
         public class SelectSyntaxProvider
         {
             protected readonly ActionSyntaxProvider syntaxProvider = null;
             protected readonly dynamic value = null;
-            protected readonly Option mode;
+            internal readonly SelectionOption mode;
 
-            public SelectSyntaxProvider(ActionSyntaxProvider syntaxProvider, dynamic value, Option mode)
+            internal SelectSyntaxProvider(ActionSyntaxProvider syntaxProvider, dynamic value, SelectionOption mode)
             {
                 this.syntaxProvider = syntaxProvider;
                 this.value = value;
@@ -678,7 +678,7 @@ namespace FluentAutomation
             /// <param name="element">IElement factory function.</param>
             public IActionSyntaxProvider From(ElementProxy element)
             {
-                if (this.mode == Option.Value)
+                if (this.mode == SelectionOption.Value)
                 {
                     if (this.value is string)
                     {
@@ -689,7 +689,7 @@ namespace FluentAutomation
                         this.syntaxProvider.commandProvider.MultiSelectValue(element, this.value);
                     }
                 }
-                else if (this.mode == Option.Text)
+                else if (this.mode == SelectionOption.Text)
                 {
                     if (this.value is string)
                     {
@@ -760,10 +760,16 @@ namespace FluentAutomation
     /// <summary>
     /// Option mode for <select /> manipulation: Text, Value or Index
     /// </summary>
-    public enum Option
+    internal enum SelectionOption
     {
         Text = 1,
         Value = 2,
         Index = 3
+    }
+
+    public enum Option
+    {
+        Text = 1,
+        Value = 2
     }
 }

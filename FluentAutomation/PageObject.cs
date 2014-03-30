@@ -22,7 +22,12 @@ namespace FluentAutomation
         public string Url
         {
             get { return _uri.ToString(); }
-            set { _uri = new Uri(value); }
+            set {
+                if (value.StartsWith("/"))
+                    _uri = new Uri(value, UriKind.Relative);
+                else
+                    _uri = new Uri(value, UriKind.Absolute);
+            }
         }
 
         public Action At { get; set; }

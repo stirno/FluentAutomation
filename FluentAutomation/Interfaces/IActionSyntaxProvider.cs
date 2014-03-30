@@ -280,7 +280,7 @@ namespace FluentAutomation.Interfaces
         /// <summary>
         /// Manipulates a <c>&lt;select /></c> DOM element by selecting options with matching <paramref name="values"/> using the specified <paramref name="mode"/>.
         /// </summary>
-        /// <param name="mode">Mode of interaction with the <c>&lt;select /></c>; by Text, Value or Index.</param>
+        /// <param name="mode">Mode of interaction with the <c>&lt;select /></c>; by Text or Value.</param>
         /// <param name="values">Options to be selected.</param>
         /// <returns><c>SelectSyntaxProvider</c></returns>
         ActionSyntaxProvider.SelectSyntaxProvider Select(Option mode, params string[] values);
@@ -288,7 +288,7 @@ namespace FluentAutomation.Interfaces
         /// <summary>
         /// Manipulates a <c>&lt;select /></c> DOM element by selecting an option with matching <paramref name="value"/> using the specified <paramref name="mode"/>.
         /// </summary>
-        /// <param name="mode">Mode of interaction with the <c>&lt;select /></c>; by Text, Value or Index.</param>
+        /// <param name="mode">Mode of interaction with the <c>&lt;select /></c>; by Text or Value.</param>
         /// <param name="value">Option to be selected.</param>
         /// <returns><c>SelectSyntaxProvider</c></returns>
         ActionSyntaxProvider.SelectSyntaxProvider Select(Option mode, string value);

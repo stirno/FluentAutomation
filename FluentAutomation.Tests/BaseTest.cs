@@ -17,9 +17,14 @@ namespace FluentAutomation.Tests
         {
             Config.WaitUntilTimeout(TimeSpan.FromSeconds(2));
 
+            // Create Page Objects
+            this.InputsPage = new Pages.InputsPage(this);
+
             // Default tests use chrome and load the site
             FluentAutomation.SeleniumWebDriver.Bootstrap(SeleniumWebDriver.Browser.Chrome);
             I.Open(SiteUrl);
         }
+
+        public Pages.InputsPage InputsPage = null;
     }
 }

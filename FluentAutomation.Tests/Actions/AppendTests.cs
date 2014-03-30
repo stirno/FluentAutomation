@@ -13,33 +13,33 @@ namespace FluentAutomation.Tests.Actions
         public AppendTests()
             : base()
         {
-            I.Open("/Inputs");
+            InputsPage.Go();
         }
 
         [Fact]
         public void AppendTextToValidInput()
         {
             // set the base string so we know what the appended result will be
-            I.Enter("BaseString").In("#text-control");
-            I.Enter("BaseString").In("#textarea-control");
+            I.Enter("BaseString").In(InputsPage.TextControlSelector);
+            I.Enter("BaseString").In(InputsPage.TextareaControlSelector);
 
             // enter text, verify change fired
-            I.Append("Test String").To("#text-control")
-             .Assert.Text("BaseStringTest String").In("#text-control");
-            I.Focus("#textarea-control")
-             .Assert.Text("Changed").In("#text-control-changed");
+            I.Append("Test String").To(InputsPage.TextControlSelector)
+             .Assert.Text("BaseStringTest String").In(InputsPage.TextControlSelector);
+            I.Focus(InputsPage.TextareaControlSelector)
+             .Assert.Text("Changed").In(InputsPage.TextChangedTextSelector);
 
             // no change event should be fired
-            I.Append("Quick Test").WithoutEvents().To("#text-control")
-             .Assert.Text("BaseStringTest StringQuick Test").In("#text-control");
-            I.Focus("#textarea-control")
-             .Assert.Text("").In("#text-control-changed");
+            I.Append("Quick Test").WithoutEvents().To(InputsPage.TextControlSelector)
+             .Assert.Text("BaseStringTest StringQuick Test").In(InputsPage.TextControlSelector);
+            I.Focus(InputsPage.TextareaControlSelector)
+             .Assert.Text("").In(InputsPage.TextChangedTextSelector);
 
-            I.Append(10).To("#text-control")
-             .Assert.Text("BaseStringTest StringQuick Test10").In("#text-control");
+            I.Append(10).To(InputsPage.TextControlSelector)
+             .Assert.Text("BaseStringTest StringQuick Test10").In(InputsPage.TextControlSelector);
 
-            I.Append("Other Test String").To("#textarea-control")
-             .Assert.Text("BaseStringOther Test String").In("#textarea-control");
+            I.Append("Other Test String").To(InputsPage.TextareaControlSelector)
+             .Assert.Text("BaseStringOther Test String").In(InputsPage.TextareaControlSelector);
         }
 
         [Fact]
@@ -59,7 +59,7 @@ namespace FluentAutomation.Tests.Actions
             // Append cannot be used on non-text elements
             var exception = Assert.Throws<FluentException>(() =>
             {
-                I.Append("QA").To("#select-control");
+                I.Append("QA").To(InputsPage.SelectControlSelector);
             });
 
             Assert.True(exception.Message.Contains("only supported"));

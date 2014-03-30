@@ -85,6 +85,7 @@
     <Compile Include="Base\PageObjectTests.cs" />
     <Compile Include="Base\RemoteWebDriverTests.cs" />
     <Compile Include="Base\SessionTests.cs" />
+    <Compile Include="Pages\InputsPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
