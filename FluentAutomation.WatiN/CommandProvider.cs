@@ -234,12 +234,29 @@ namespace FluentAutomation
             });
         }
 
+        public void RightClick(int x, int y)
+        {
+            this.Act(CommandType.Action, () =>
+            {
+                FluentAutomation.MouseControl.RightClick(x, y);
+            });
+        }
+
+        public void RightClick(ElementProxy element, int x, int y)
+        {
+            this.Act(CommandType.Action, () =>
+            {
+                var el = element.Element as Element;
+                FluentAutomation.MouseControl.RightClick(el.PosX + x, el.PosY + y);
+            });
+        }
+
         public void RightClick(ElementProxy element)
         {
             this.Act(CommandType.Action, () =>
             {
                 var el = element.Element as Element;
-                this.ActiveDomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).trigger('contextmenu'); }}", el.AutomationElement.GetJavascriptElementReference()));
+                this.RightClick(el.PosX + el.Width / 2, el.PosY + el.Height / 2);
             });
         }
 

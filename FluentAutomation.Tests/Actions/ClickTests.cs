@@ -51,25 +51,22 @@ namespace FluentAutomation.Tests.Actions
         {
             var el = I.Find(InputsPage.ButtonControlSelector);
             I.Click(el.Element.PosX + 10, el.Element.PosY + 10)
-             .Assert
-                .Text("Button Clicked").In(InputsPage.ButtonClickedTextSelector)
-                .Text("10 10").In(InputsPage.ButtonClickedXYSelector);
+             .Assert.Text("Button Clicked").In(InputsPage.ButtonClickedTextSelector);
 
-            I.DoubleClick(el.Element.PosX + 11, el.Element.PosY + 11)
-             .Assert
-                .Text("Button Double Clicked").In(InputsPage.ButtonClickedTextSelector)
-                .Text("11 11").In(InputsPage.ButtonClickedXYSelector);
+            I.DoubleClick(el.Element.PosX + 10, el.Element.PosY + 10)
+             .Assert.Text("Button Double Clicked").In(InputsPage.ButtonClickedTextSelector);
 
-            I.Click(InputsPage.ButtonControlSelector, 15, 15)
-             .Assert
-                .Text("Button Clicked").In(InputsPage.ButtonClickedTextSelector)
-                .Text("15 15").In(InputsPage.ButtonClickedXYSelector);
+            I.RightClick(el.Element.PosX + 10, el.Element.PosY + 10)
+             .Assert.Text("Button Right Clicked").In(InputsPage.ButtonClickedTextSelector);
 
-            I.DoubleClick(InputsPage.ButtonControlSelector, 16, 16)
-             .Assert
-                .Text("Button Double Clicked").In(InputsPage.ButtonClickedTextSelector)
-                .Text("16 16").In(InputsPage.ButtonClickedXYSelector);
+            I.Click(InputsPage.ButtonControlSelector, 10, 10)
+             .Assert.Text("Button Clicked").In(InputsPage.ButtonClickedTextSelector);
 
+            I.DoubleClick(InputsPage.ButtonControlSelector, 10, 10)
+             .Assert.Text("Button Double Clicked").In(InputsPage.ButtonClickedTextSelector);
+
+            I.RightClick(InputsPage.ButtonControlSelector, 10, 10)
+             .Assert.Text("Button Right Clicked").In(InputsPage.ButtonClickedTextSelector);
         }
 
         [Fact]
@@ -82,21 +79,6 @@ namespace FluentAutomation.Tests.Actions
             {
                 I.Click(Alert.OK);
             });
-
-            // Bad actions
-            Assert.Throws<FluentException>(() =>
-            {
-                I.Click(AlertsPage.TriggerAlertSelector)
-                 .Click(Alert.Input);
-            });
-            I.Click(Alert.OK);
-
-            Assert.Throws<FluentException>(() =>
-            {
-                I.Click(AlertsPage.TriggerAlertSelector)
-                 .Click(Alert.Message);
-            });
-            I.Click(Alert.OK);
 
             // Alert box:
             // Alerts don't have OK/Cancel but both work, so we test as if Cancel was clicked

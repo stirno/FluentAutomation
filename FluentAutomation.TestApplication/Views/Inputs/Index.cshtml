@@ -67,7 +67,6 @@
 
         <div class="form-group">
             <span id="button-clicked-text"></span>
-            <span id="button-clicked-xy"></span>
         </div>
     </div>
 </form>
@@ -83,21 +82,17 @@
         });
 
         var clickedText = $('#button-clicked-text');
-        var clickedXY = $('#button-clicked-xy');
         $('#button-control')
             .on('click', function (e) {
                 clickedText.text('Button Clicked');
-                clickedXY.text(e.offsetX + ' ' + e.offsetY);
             })
             .on('dblclick', function (e) {
                 clickedText.text('Button Double Clicked');
-                clickedXY.text(e.offsetX + ' ' + e.offsetY);
             })
             .on('mousedown', function (e) {
                 e.stopPropagation();
                 if (e.which == 3) {
                     clickedText.text('Button Right Clicked');
-                    clickedXY.text(e.offsetX + ' ' + e.offsetY);
                 }
             });
 

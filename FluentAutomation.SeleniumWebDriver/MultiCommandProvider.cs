@@ -102,12 +102,19 @@ namespace FluentAutomation
             });
         }
 
+        public void RightClick(int x, int y)
+        {
+            Parallel.ForEach(this.commandProviders, xx => xx.RightClick(x, y));
+        }
+
+        public void RightClick(ElementProxy element, int x, int y)
+        {
+            Parallel.ForEach(element.Elements, e => e.Key.RightClick(new ElementProxy(e.Key, e.Value), x, y));
+        }
+
         public void RightClick(ElementProxy element)
         {
-            Parallel.ForEach(element.Elements, e =>
-            {
-                e.Key.RightClick(new ElementProxy(e.Key, e.Value));
-            });
+            Parallel.ForEach(element.Elements, e => e.Key.RightClick(new ElementProxy(e.Key, e.Value)));
         }
 
         public void Hover(int x, int y)
