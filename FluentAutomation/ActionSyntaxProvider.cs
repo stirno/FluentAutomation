@@ -145,6 +145,24 @@ namespace FluentAutomation
             return this;
         }
 
+        public IActionSyntaxProvider RightClick(int x, int y)
+        {
+            this.commandProvider.RightClick(x, y);
+            return this;
+        }
+
+        public IActionSyntaxProvider RightClick(string selector, int x, int y)
+        {
+            return this.RightClick(this.Find(selector), x, y);
+        }
+
+        public IActionSyntaxProvider RightClick(ElementProxy element, int x, int y)
+        {
+            this.commandProvider.RightClick(element, x, y);
+            return this;
+        }
+
+
         public IActionSyntaxProvider RightClick(string selector)
         {
             return this.RightClick(this.Find(selector));

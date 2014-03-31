@@ -27,6 +27,8 @@ namespace FluentAutomation.Interfaces
         void DoubleClick(ElementProxy element, int x, int y);
         void DoubleClick(ElementProxy element);
 
+        void RightClick(int x, int y);
+        void RightClick(ElementProxy element, int x, int y);
         void RightClick(ElementProxy element);
 
         void Hover(int x, int y);

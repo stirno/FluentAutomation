@@ -206,6 +206,30 @@ namespace FluentAutomation
                     .Perform();
             });
         }
+
+        public void RightClick(int x, int y)
+        {
+            this.Act(CommandType.Action, () =>
+            {
+                var rootElement = this.Find("html").Element as Element;
+                new Actions(this.webDriver)
+                    .MoveToElement(rootElement.WebElement, x, y)
+                    .ContextClick()
+                    .Perform();
+            });
+        }
+
+        public void RightClick(ElementProxy element, int x, int y)
+        {
+            this.Act(CommandType.Action, () =>
+            {
+                var containerElement = element.Element as Element;
+                new Actions(this.webDriver)
+                    .MoveToElement(containerElement.WebElement, x, y)
+                    .ContextClick()
+                    .Perform();
+            });
+        }
         
         public void RightClick(ElementProxy element)
         {

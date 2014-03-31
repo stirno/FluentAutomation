@@ -192,10 +192,25 @@ namespace FluentAutomation.Interfaces
         IActionSyntaxProvider DoubleClick(string selector, int x, int y);
 
         /// <summary>
+        /// RightClick at the specified coordinates.
+        /// </summary>
+        /// <param name="x">X-coordinate specified.</param>
+        /// <param name="y">Y-coordinate specified.</param>
+        IActionSyntaxProvider RightClick(int x, int y);
+
+        /// <summary>
         /// RightClick the element matching <paramref name="selector"/>.
         /// </summary>
         /// <param name="selector">Sizzle selector.</param>
         IActionSyntaxProvider RightClick(string selector);
+
+        /// <summary>
+        /// RightClick a specified coordinate, starting from the position of the element matching <paramref name="selector"/>.
+        /// </summary>
+        /// <param name="selector">Sizzle selector.</param>
+        /// <param name="x">X-coordinate offset.</param>
+        /// <param name="y">Y-coordinate offset.</param>
+        IActionSyntaxProvider RightClick(string selector, int x, int y);
 
         /// <summary>
         /// Begin a Drag/Drop operation starting with the element matching <paramref name="selector"/>.
