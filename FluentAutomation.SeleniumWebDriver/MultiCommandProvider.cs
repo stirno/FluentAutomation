@@ -40,10 +40,7 @@ namespace FluentAutomation
         {
             var result = new ElementProxy();
 
-            Parallel.ForEach(this.commandProviders, x =>
-            {
-                result.Elements.Add(x, x.Find(selector).Elements.First().Value);
-            });
+            Parallel.ForEach(this.commandProviders, x => result.Elements.Add(x, x.Find(selector).Elements.First().Value));
 
             return result;
         }
@@ -75,10 +72,7 @@ namespace FluentAutomation
 
         public void Click(ElementProxy element)
         {
-            Parallel.ForEach(element.Elements, e =>
-            {
-                e.Key.Click(new ElementProxy(e.Key, e.Value));
-            });
+            Parallel.ForEach(element.Elements, e => e.Key.Click(new ElementProxy(e.Key, e.Value)));
         }
 
         public void DoubleClick(int x, int y)
@@ -88,18 +82,12 @@ namespace FluentAutomation
 
         public void DoubleClick(ElementProxy element, int x, int y)
         {
-            Parallel.ForEach(element.Elements, e =>
-            {
-                e.Key.DoubleClick(new ElementProxy(e.Key, e.Value), x, y);
-            });
+            Parallel.ForEach(element.Elements, e => e.Key.DoubleClick(new ElementProxy(e.Key, e.Value), x, y));
         }
 
         public void DoubleClick(ElementProxy element)
         {
-            Parallel.ForEach(element.Elements, e =>
-            {
-                e.Key.DoubleClick(new ElementProxy(e.Key, e.Value));
-            });
+            Parallel.ForEach(element.Elements, e => e.Key.DoubleClick(new ElementProxy(e.Key, e.Value)));
         }
 
         public void RightClick(int x, int y)
@@ -124,26 +112,17 @@ namespace FluentAutomation
 
         public void Hover(ElementProxy element, int x, int y)
         {
-            Parallel.ForEach(element.Elements, e =>
-            {
-                e.Key.Hover(new ElementProxy(e.Key, e.Value), x, y);
-            });
+            Parallel.ForEach(element.Elements, e => e.Key.Hover(new ElementProxy(e.Key, e.Value), x, y));
         }
 
         public void Hover(ElementProxy element)
         {
-            Parallel.ForEach(element.Elements, e =>
-            {
-                e.Key.Hover(new ElementProxy(e.Key, e.Value));
-            });
+            Parallel.ForEach(element.Elements, e => e.Key.Hover(new ElementProxy(e.Key, e.Value)));
         }
 
         public void Focus(ElementProxy element)
         {
-            Parallel.ForEach(element.Elements, e =>
-            {
-                e.Key.Focus(new ElementProxy(e.Key, e.Value));
-            });
+            Parallel.ForEach(element.Elements, e => e.Key.Focus(new ElementProxy(e.Key, e.Value)));
         }
 
         public void DragAndDrop(int sourceX, int sourceY, int destinationX, int destinationY)
@@ -175,18 +154,12 @@ namespace FluentAutomation
 
         public void EnterText(ElementProxy element, string text)
         {
-            Parallel.ForEach(element.Elements, e =>
-            {
-                e.Key.EnterText(new ElementProxy(e.Key, e.Value), text);
-            });
+            Parallel.ForEach(element.Elements, e => e.Key.EnterText(new ElementProxy(e.Key, e.Value), text));
         }
 
         public void EnterTextWithoutEvents(ElementProxy element, string text)
         {
-            Parallel.ForEach(element.Elements, e =>
-            {
-                e.Key.EnterTextWithoutEvents(new ElementProxy(e.Key, e.Value), text);
-            });
+            Parallel.ForEach(element.Elements, e => e.Key.EnterTextWithoutEvents(new ElementProxy(e.Key, e.Value), text));
         }
 
         public void AppendText(ElementProxy element, string text)
@@ -199,58 +172,37 @@ namespace FluentAutomation
 
         public void AppendTextWithoutEvents(ElementProxy element, string text)
         {
-            Parallel.ForEach(element.Elements, e =>
-            {
-                e.Key.AppendTextWithoutEvents(new ElementProxy(e.Key, e.Value), text);
-            });
+            Parallel.ForEach(element.Elements, e => e.Key.AppendTextWithoutEvents(new ElementProxy(e.Key, e.Value), text));
         }
 
         public void SelectText(ElementProxy element, string optionText)
         {
-            Parallel.ForEach(element.Elements, e =>
-            {
-                e.Key.SelectText(new ElementProxy(e.Key, e.Value), optionText);
-            });
+            Parallel.ForEach(element.Elements, e => e.Key.SelectText(new ElementProxy(e.Key, e.Value), optionText));
         }
 
         public void SelectValue(ElementProxy element, string optionValue)
         {
-            Parallel.ForEach(element.Elements, e =>
-            {
-                e.Key.SelectValue(new ElementProxy(e.Key, e.Value), optionValue);
-            });
+            Parallel.ForEach(element.Elements, e => e.Key.SelectValue(new ElementProxy(e.Key, e.Value), optionValue));
         }
 
         public void SelectIndex(ElementProxy element, int optionIndex)
         {
-            Parallel.ForEach(element.Elements, e =>
-            {
-                e.Key.SelectIndex(new ElementProxy(e.Key, e.Value), optionIndex);
-            });
+            Parallel.ForEach(element.Elements, e => e.Key.SelectIndex(new ElementProxy(e.Key, e.Value), optionIndex));
         }
 
         public void MultiSelectText(ElementProxy element, string[] optionTextCollection)
         {
-            Parallel.ForEach(element.Elements, e =>
-            {
-                e.Key.MultiSelectText(new ElementProxy(e.Key, e.Value), optionTextCollection);
-            });
+            Parallel.ForEach(element.Elements, e => e.Key.MultiSelectText(new ElementProxy(e.Key, e.Value), optionTextCollection));
         }
 
         public void MultiSelectValue(ElementProxy element, string[] optionValues)
         {
-            Parallel.ForEach(element.Elements, e =>
-            {
-                e.Key.MultiSelectValue(new ElementProxy(e.Key, e.Value), optionValues);
-            });
+            Parallel.ForEach(element.Elements, e => e.Key.MultiSelectValue(new ElementProxy(e.Key, e.Value), optionValues));
         }
 
         public void MultiSelectIndex(ElementProxy element, int[] optionIndices)
         {
-            Parallel.ForEach(element.Elements, e =>
-            {
-                e.Key.MultiSelectIndex(new ElementProxy(e.Key, e.Value), optionIndices);
-            });
+            Parallel.ForEach(element.Elements, e => e.Key.MultiSelectIndex(new ElementProxy(e.Key, e.Value), optionIndices));
         }
 
         public void TakeScreenshot(string screenshotName)
@@ -260,10 +212,7 @@ namespace FluentAutomation
 
         public void UploadFile(ElementProxy element, int x, int y, string fileName)
         {
-            Parallel.ForEach(element.Elements, e =>
-            {
-                e.Key.UploadFile(new ElementProxy(e.Key, e.Value), x, y, fileName);
-            });
+            Parallel.ForEach(element.Elements, e => e.Key.UploadFile(new ElementProxy(e.Key, e.Value), x, y, fileName));
         }
 
         public void Wait()
