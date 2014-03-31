@@ -794,67 +794,55 @@ namespace FluentAutomation
         #region Alerts
         public void AlertText(string text)
         {
-            this.commandProvider.Act(CommandType.NoRetry, () =>
+            this.commandProvider.AlertText((alertText) =>
             {
-                this.commandProvider.AlertText((alertText) =>
+                if (!IsTextMatch(alertText, text))
                 {
-                    if (!IsTextMatch(alertText, text))
-                    {
-                        // because the browser blocks, we dismiss the alert when a failure happens so we can cleanly shutdown.
-                        this.commandProvider.AlertClick(Alert.Cancel);
-                        this.ReportError("Expected alert text to be [{0}] but it was actually [{1}].", text, alertText);
-                    }
-                });
+                    // because the browser blocks, we dismiss the alert when a failure happens so we can cleanly shutdown.
+                    this.commandProvider.AlertClick(Alert.Cancel);
+                    this.ReportError("Expected alert text to be [{0}] but it was actually [{1}].", text, alertText);
+                }
             });
         }
 
         public void AlertNotText(string text)
         {
-            this.commandProvider.Act(CommandType.NoRetry, () =>
+            this.commandProvider.AlertText((alertText) =>
             {
-                this.commandProvider.AlertText((alertText) =>
+                if (IsTextMatch(alertText, text))
                 {
-                    if (IsTextMatch(alertText, text))
-                    {
-                        // because the browser blocks, we dismiss the alert when a failure happens so we can cleanly shutdown.
-                        this.commandProvider.AlertClick(Alert.Cancel);
-                        this.ReportError("Expected alert text not to be [{0}] but it was.", text);
-                    }
-                });
+                    // because the browser blocks, we dismiss the alert when a failure happens so we can cleanly shutdown.
+                    this.commandProvider.AlertClick(Alert.Cancel);
+                    this.ReportError("Expected alert text not to be [{0}] but it was.", text);
+                }
             });
         }
 
         public void AlertText(Expression<Func<string, bool>> matchFunc)
         {
-            this.commandProvider.Act(CommandType.NoRetry, () =>
+            var compiledFunc = matchFunc.Compile();
+            this.commandProvider.AlertText((alertText) =>
             {
-                var compiledFunc = matchFunc.Compile();
-                this.commandProvider.AlertText((alertText) =>
+                if (!compiledFunc(alertText))
                 {
-                    if (!compiledFunc(alertText))
-                    {
-                        // because the browser blocks, we dismiss the alert when a failure happens so we can cleanly shutdown.
-                        this.commandProvider.AlertClick(Alert.Cancel);
-                        this.ReportError("Expected alert text to match expression [{0}] but it was actually [{1}].", matchFunc.ToExpressionString(), alertText);
-                    }
-                });
+                    // because the browser blocks, we dismiss the alert when a failure happens so we can cleanly shutdown.
+                    this.commandProvider.AlertClick(Alert.Cancel);
+                    this.ReportError("Expected alert text to match expression [{0}] but it was actually [{1}].", matchFunc.ToExpressionString(), alertText);
+                }
             });
         }
             
         public void AlertNotText(Expression<Func<string, bool>> matchFunc)
         {
-            this.commandProvider.Act(CommandType.NoRetry, () =>
+            var compiledFunc = matchFunc.Compile();
+            this.commandProvider.AlertText((alertText) =>
             {
-                var compiledFunc = matchFunc.Compile();
-                this.commandProvider.AlertText((alertText) =>
+                if (compiledFunc(alertText))
                 {
-                    if (compiledFunc(alertText))
-                    {
-                        // because the browser blocks, we dismiss the alert when a failure happens so we can cleanly shutdown.
-                        this.commandProvider.AlertClick(Alert.Cancel);
-                        this.ReportError("Expected alert text not to match expression [{0}] but it did.", matchFunc.ToExpressionString());
-                    }
-                });
+                    // because the browser blocks, we dismiss the alert when a failure happens so we can cleanly shutdown.
+                    this.commandProvider.AlertClick(Alert.Cancel);
+                    this.ReportError("Expected alert text not to match expression [{0}] but it did.", matchFunc.ToExpressionString());
+                }
             });
         }
         #endregion

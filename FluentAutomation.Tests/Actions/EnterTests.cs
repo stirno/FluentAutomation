@@ -58,28 +58,9 @@ namespace FluentAutomation.Tests.Actions
         {
             AlertsPage.Go();
 
-            // Alert -- all actions invalid
-            I.Click(AlertsPage.TriggerAlertSelector);
-
-            //Assert.Throws<FluentException>(() => I.Enter("Wat").In(Alert.Input));
-            //Assert.Throws<FluentException>(() => I.Enter("Wat").In(Alert.Message));
-            //Assert.Throws<FluentException>(() => I.Enter("Wat").In(Alert.OK));
-            //Assert.Throws<FluentException>(() => I.Enter("Wat").In(Alert.Cancel));
-
-            I.Click(Alert.OK);
-
-            // Prompt
             I.Click(AlertsPage.TriggerPromptSelector);
-
-            I.Enter("Wat").In(Alert.Input)
-             .Wait(5)
-             .Assert.Text("Wat").In(Alert.Input);
-
-            Assert.Throws<FluentException>(() => I.Enter("Wat").In(Alert.Message));
-            Assert.Throws<FluentException>(() => I.Enter("Wat").In(Alert.OK));
-            Assert.Throws<FluentException>(() => I.Enter("Wat").In(Alert.Cancel));
-
-            I.Click(Alert.OK);
+            I.Enter("Wat").In(Alert.Input);
+            I.Assert.Text("Clicked Prompt OK: Wat").In(AlertsPage.ResultSelector);
         }
     }
 }

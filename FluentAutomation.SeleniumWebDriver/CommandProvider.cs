@@ -36,17 +36,20 @@ namespace FluentAutomation
             this.lazyWebDriver = new Lazy<IWebDriver>(() =>
             {
                 var webDriver = webDriverFactory();
-                if (FluentTest.ProviderInstance == null)
+                if (!FluentTest.IsMultiBrowserTest && FluentTest.ProviderInstance == null)
                     FluentTest.ProviderInstance = webDriver;
-                else
-                    FluentTest.IsMultiBrowserTest = true;
 
                 webDriver.Manage().Cookies.DeleteAllCookies();
                 webDriver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(10));
 
                 if (this.Settings.WindowHeight.HasValue && this.Settings.WindowWidth.HasValue)
                 {
-                    webDriver.Manage().Window.Size = new Size(this.Settings.WindowWidth.Value, this.Settings.WindowHeight.Value);
+                    // If an alert is open, the world ends if we touch the size property. Ignore this and let it get set by the next command chain
+                    try
+                    {
+                        webDriver.Manage().Window.Size = new Size(this.Settings.WindowWidth.Value, this.Settings.WindowHeight.Value);
+                    }
+                    catch (UnhandledAlertException) { }
                 }
                 else
                 {
@@ -582,31 +585,55 @@ namespace FluentAutomation
             });
         }
 
+        public static IAlert ActiveAlert = null;
+        private void SetActiveAlert()
+        {
+            if (ActiveAlert == null)
+            {
+                this.Wait(TimeSpan.FromMilliseconds(100));
+                ActiveAlert = this.webDriver.SwitchTo().Alert();
+            }
+        }
+
         public void AlertClick(Alert accessor)
         {
-            var alert = this.webDriver.SwitchTo().Alert();
+            this.SetActiveAlert();
 
-            if (accessor.Field == AlertField.OKButton)
-                alert.Accept();
-            else if (accessor.Field == AlertField.CancelButton)
-                alert.Dismiss();
-            else
+            try
             {
-                alert.Dismiss();
-                throw new FluentException("FluentAutomation only supports clicking on OK or Cancel in alerts or prompts.");
+                if (accessor.Field == AlertField.OKButton)
+                    ActiveAlert.Accept();
+                else if (accessor.Field == AlertField.CancelButton)
+                    ActiveAlert.Dismiss();
+                else
+                {
+                    ActiveAlert.Dismiss();
+                    throw new FluentException("FluentAutomation only supports clicking on OK or Cancel in alerts or prompts.");
+                }
+            }
+            finally
+            {
+                ActiveAlert = null;
             }
         }
 
         public void AlertText(Action<string> matchFunc)
         {
-            var alert = this.webDriver.SwitchTo().Alert();
-            matchFunc(alert.Text);
+            this.SetActiveAlert();
+            matchFunc(ActiveAlert.Text);
         }
 
         public void AlertEnterText(string text)
         {
-            var alert = this.webDriver.SwitchTo().Alert();
-            alert.SendKeys(text);
+            this.SetActiveAlert();
+            ActiveAlert.SendKeys(text);
+
+            try
+            {
+                // just do it - attempting to get behaviors between browsers to match
+                ActiveAlert.Accept();
+            }
+            catch (Exception) {}
         }
 
         public void Visible(ElementProxy element, Action<bool> action)
@@ -636,7 +663,14 @@ namespace FluentAutomation
 
             // If the browser size has changed since the last config change, update it
             if (settings.WindowWidth.HasValue && settings.WindowHeight.HasValue)
-                this.webDriver.Manage().Window.Size = new Size(settings.WindowWidth.Value, settings.WindowHeight.Value);
+            {
+                // If an alert is open, the world ends if we touch the size property. Ignore this and let it get set by the next command chain
+                try
+                {
+                    this.webDriver.Manage().Window.Size = new Size(settings.WindowWidth.Value, settings.WindowHeight.Value);
+                }
+                catch (UnhandledAlertException) { }
+            }
 
             return this;
         }

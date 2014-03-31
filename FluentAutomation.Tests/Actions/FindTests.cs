@@ -10,6 +10,7 @@ namespace FluentAutomation.Tests.Actions
     public class FindTests : BaseTest
     {
         public FindTests()
+            : base()
         {
             InputsPage.Go();
         }

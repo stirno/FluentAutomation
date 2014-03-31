@@ -36,6 +36,7 @@ namespace FluentAutomation
                 new AssertProvider(e.Key).Count(new ElementProxy(e.Key, e.Value), count);
             });
         }
+
         public void NotCount(ElementProxy element, int count)
         {
             Parallel.ForEach(element.Elements, e =>

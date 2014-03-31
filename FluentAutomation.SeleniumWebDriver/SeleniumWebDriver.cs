@@ -103,6 +103,8 @@ namespace FluentAutomation
 
             FluentSettings.Current.ContainerRegistration = (container) =>
             {
+                FluentTest.IsMultiBrowserTest = true;
+
                 var webDrivers = new List<Func<IWebDriver>>();
                 browsers.Distinct().ToList().ForEach(x => webDrivers.Add(GenerateBrowserSpecificDriver(x)));
 
@@ -181,7 +183,13 @@ namespace FluentAutomation
                     driverPath = EmbeddedResources.UnpackFromAssembly("IEDriverServer64.exe", "IEDriverServer.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
                     return new Func<IWebDriver>(() => new Wrappers.IEDriverWrapper(Path.GetDirectoryName(driverPath)));
                 case Browser.Firefox:
-                    return new Func<IWebDriver>(() => new OpenQA.Selenium.Firefox.FirefoxDriver());
+                    return new Func<IWebDriver>(() => {
+                        return new OpenQA.Selenium.Firefox.FirefoxDriver(new OpenQA.Selenium.Firefox.FirefoxProfile
+                        {
+                            EnableNativeEvents = true,
+                            AcceptUntrustedCertificates = true
+                        });
+                    });
                 case Browser.Chrome:
                     driverPath = EmbeddedResources.UnpackFromAssembly("chromedriver.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
 

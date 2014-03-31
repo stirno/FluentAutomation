@@ -12,17 +12,18 @@ namespace FluentAutomation.Tests
     public class BaseTest : FluentTest<IWebDriver>
     {
         public string SiteUrl { get { return "http://localhost:38043/"; } }
-
+        
         public BaseTest()
         {
-            Config.WaitUntilTimeout(TimeSpan.FromSeconds(2));
+            FluentSession.EnableStickySession();
+            Config.WaitUntilTimeout(TimeSpan.FromMilliseconds(2000));
 
             // Create Page Objects
             this.InputsPage = new Pages.InputsPage(this);
             this.AlertsPage = new Pages.AlertsPage(this);
-
+            
             // Default tests use chrome and load the site
-            FluentAutomation.SeleniumWebDriver.Bootstrap(SeleniumWebDriver.Browser.Chrome);
+            FluentAutomation.SeleniumWebDriver.Bootstrap(SeleniumWebDriver.Browser.Firefox);//, SeleniumWebDriver.Browser.Firefox, SeleniumWebDriver.Browser.InternetExplorer);
             I.Open(SiteUrl);
         }
 
