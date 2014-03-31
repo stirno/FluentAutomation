@@ -80,29 +80,6 @@ namespace FluentAutomation.Tests.Actions
                 I.Click(Alert.OK);
             });
 
-            // Bad actions
-            try
-            {
-                Assert.Throws<FluentException>(() =>
-                {
-                    I.Click(AlertsPage.TriggerAlertSelector)
-                     .Click(Alert.Input);
-                });
-                I.Click(Alert.OK);
-            }
-            catch (OpenQA.Selenium.NoAlertPresentException) { }
-
-            try
-            {
-                Assert.Throws<FluentException>(() =>
-                {
-                    I.Click(AlertsPage.TriggerAlertSelector)
-                     .Click(Alert.Message);
-                });
-                I.Click(Alert.OK);
-            }
-            catch (OpenQA.Selenium.NoAlertPresentException) { }
-
             // Alert box:
             // Alerts don't have OK/Cancel but both work, so we test as if Cancel was clicked
             I.Click(AlertsPage.TriggerAlertSelector)

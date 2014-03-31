@@ -256,7 +256,7 @@ namespace FluentAutomation
             this.Act(CommandType.Action, () =>
             {
                 var el = element.Element as Element;
-                RightClick(el.PosX + el.Width / 2, el.PosY + el.Height / 2);
+                this.RightClick(el.PosX + el.Width / 2, el.PosY + el.Height / 2);
             });
         }
 
