@@ -11,12 +11,22 @@ namespace FluentAutomation
         /// <summary>
         /// LeftButtonDown mouse event code
         /// </summary>
-        public const int MouseEvent_LeftButtonDown = 0x002;
+        public const int MouseEvent_LeftButtonDown = 0x02;
 
         /// <summary>
         /// LeftButtonUp mouse event code
         /// </summary>
-        public const int MouseEvent_LeftButtonUp = 0x004;
+        public const int MouseEvent_LeftButtonUp = 0x04;
+
+        /// <summary>
+        /// RightButtonDown mouse event code
+        /// </summary>
+        public const int MouseEvent_RightButtonDown = 0x08;
+
+        /// <summary>
+        /// RightButtonUp mouse event code
+        /// </summary>
+        public const int MouseEvent_RightButtonUp = 0x10;
 
         /// <summary>
         /// Sets the cursor position.
@@ -41,12 +51,25 @@ namespace FluentAutomation
         /// <summary>
         /// Clicks the specified point (X, Y coordinates).
         /// </summary>
-        /// <param name="point">The point.</param>
+        /// <param name="x">X coordinate.</param>
+        /// <param name="y">Y coordinate.</param>
         public static void Click(int x, int y)
         {
             SetPosition(x, y);
             MouseEvent(MouseEvent_LeftButtonDown, x, y, 0, 0);
             MouseEvent(MouseEvent_LeftButtonUp, x, y, 0, 0);
+        }
+
+        /// <summary>
+        /// Right-clicks the specified point (X, Y coordinates).
+        /// </summary>
+        /// <param name="x">X coordinate.</param>
+        /// <param name="y">Y coordinate.</param>
+        public static void RightClick(int x, int y)
+        {
+            SetPosition(x, y);
+            MouseEvent(MouseEvent_RightButtonDown, x, y, 0, 0);
+            MouseEvent(MouseEvent_RightButtonUp, x, y, 0, 0);
         }
 
         /// <summary>
