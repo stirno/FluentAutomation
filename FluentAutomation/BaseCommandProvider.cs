@@ -34,6 +34,22 @@ namespace FluentAutomation
         public Tuple<FluentAssertFailedException, WindowState> PendingAssertFailedExceptionNotification { get; set; }
         public Tuple<FluentExpectFailedException, WindowState> PendingExpectFailedExceptionNotification { get; set; }
 
+        private void FireAssertFailed()
+        {
+            var cachedAssertNotification = this.PendingAssertFailedExceptionNotification;
+            this.PendingAssertFailedExceptionNotification = null;
+
+            this.Settings.OnAssertFailed(cachedAssertNotification.Item1, cachedAssertNotification.Item2);
+        }
+
+        private void FireExpectFailed()
+        {
+            var cachedExpectFailed = this.PendingExpectFailedExceptionNotification;
+            this.PendingExpectFailedExceptionNotification = null;
+
+            this.Settings.OnExpectFailed(cachedExpectFailed.Item1, cachedExpectFailed.Item2);
+        }
+
         public void Act(CommandType commandType, Action action)
         {
             bool originalWaitOnActions = this.Settings.WaitOnAllActions;
@@ -64,10 +80,7 @@ namespace FluentAutomation
 
                 // fire related event before throwing/breaking
                 if (this.PendingAssertFailedExceptionNotification != null)
-                {
-                    this.Settings.OnAssertFailed(this.PendingAssertFailedExceptionNotification.Item1, this.PendingAssertFailedExceptionNotification.Item2);
-                    this.PendingAssertFailedExceptionNotification = null;
-                }
+                    this.FireAssertFailed();
 
                 throw;
             }
@@ -92,10 +105,7 @@ namespace FluentAutomation
                         }
 
                         if (this.PendingAssertFailedExceptionNotification != null)
-                        {
-                            this.Settings.OnAssertFailed(this.PendingAssertFailedExceptionNotification.Item1, this.PendingAssertFailedExceptionNotification.Item2);
-                            this.PendingAssertFailedExceptionNotification = null;
-                        }
+                            this.FireAssertFailed();
                     }
                     else if (ex.InnerException.GetType() == typeof(FluentAssertFailedException))
                     {
@@ -108,19 +118,13 @@ namespace FluentAutomation
 
                         // fire related event before throwing/breaking
                         if (this.PendingAssertFailedExceptionNotification != null)
-                        {
-                            this.Settings.OnAssertFailed(this.PendingAssertFailedExceptionNotification.Item1, this.PendingAssertFailedExceptionNotification.Item2);
-                            this.PendingAssertFailedExceptionNotification = null;
-                        }
+                            this.FireAssertFailed();
                     }
                 }
 
                 // fire related event before throwing/breaking
                 if (this.PendingAssertFailedExceptionNotification != null)
-                {
-                    this.Settings.OnAssertFailed(this.PendingAssertFailedExceptionNotification.Item1, this.PendingAssertFailedExceptionNotification.Item2);
-                    this.PendingAssertFailedExceptionNotification = null;
-                }
+                    this.FireAssertFailed();
 
                 throw;
             }
@@ -128,10 +132,7 @@ namespace FluentAutomation
             {
                 // fire off event for expect failures
                 if (this.PendingExpectFailedExceptionNotification != null)
-                {
-                    this.Settings.OnExpectFailed(this.PendingExpectFailedExceptionNotification.Item1, this.PendingExpectFailedExceptionNotification.Item2);
-                    this.PendingExpectFailedExceptionNotification = null;
-                }
+                    this.FireExpectFailed();
 
                 // restore WaitOnAllActions settings in all cases (protection for future cases where above catches dont rethrow)
                 this.Settings.WaitOnAllActions = originalWaitOnActions;

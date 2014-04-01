@@ -102,7 +102,6 @@ namespace FluentAutomation.Tests.Actions
             // Prompt box:
             I.Click(AlertsPage.TriggerPromptSelector)
              .Enter("1").In(Alert.Input)
-             .Click(Alert.OK)
              .Assert.Text("Clicked Prompt OK: 1").In(AlertsPage.ResultSelector);
 
             I.Click(AlertsPage.TriggerPromptSelector)
