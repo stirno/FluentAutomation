@@ -14,12 +14,7 @@ namespace FluentAutomation
         internal readonly ICommandProvider commandProvider = null;
         internal readonly IAssertProvider assertProvider = null;
         internal FluentSettings settings = null;
-
-        public ActionSyntaxProvider(ICommandProvider commandProvider, IAssertProvider assertProvider)
-            : this(commandProvider, assertProvider, FluentSettings.Current)
-        {
-        }
-
+        
         public ActionSyntaxProvider(ICommandProvider commandProvider, IAssertProvider assertProvider, FluentSettings settings)
         {
             this.commandProvider = commandProvider.WithConfig(settings);

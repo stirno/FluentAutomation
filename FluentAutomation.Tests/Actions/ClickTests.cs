@@ -77,6 +77,10 @@ namespace FluentAutomation.Tests.Actions
             // No alerts present
             Assert.Throws<FluentException>(() => I.Click(Alert.OK));
 
+            // Can't 'click' these fields
+            Assert.Throws<FluentException>(() => I.Click(Alert.Input));
+            Assert.Throws<FluentException>(() => I.Click(Alert.Message));
+
             // Alert box:
             // Alerts don't have OK/Cancel but both work, so we test as if Cancel was clicked
             I.Click(AlertsPage.TriggerAlertSelector)

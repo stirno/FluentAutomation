@@ -85,6 +85,10 @@ namespace FluentAutomation.Tests.Actions
         [Fact]
         public void MultiSelectIndex()
         {
+            I.Select(2).From(InputsPage.MultiSelectControlSelector)
+             .Assert
+                .Text("Manitoba").In(InputsPage.MultiSelectControlSelector);
+
             I.Select(2, 3, 4).From(InputsPage.MultiSelectControlSelector)
              .Assert
                 .Text("Manitoba").In(InputsPage.MultiSelectControlSelector)
@@ -95,7 +99,21 @@ namespace FluentAutomation.Tests.Actions
         [Fact]
         public void MultiSelectText()
         {
+            I.Select("Manitoba").From(InputsPage.MultiSelectControlSelector)
+             .Assert
+                .Value("MB").In(InputsPage.MultiSelectControlSelector);
+
+            I.Select(Option.Text, "Nouveau-Brunswick").From(InputsPage.MultiSelectControlSelector)
+             .Assert
+                .Value("NB").In(InputsPage.MultiSelectControlSelector);
+
             I.Select("Manitoba", "Nouveau-Brunswick", "Terre-Neuve").From(InputsPage.MultiSelectControlSelector)
+             .Assert
+                .Value("MB").In(InputsPage.MultiSelectControlSelector)
+                .Value("NB").In(InputsPage.MultiSelectControlSelector)
+                .Value("NL").In(InputsPage.MultiSelectControlSelector);
+
+            I.Select(Option.Text, "Manitoba", "Nouveau-Brunswick", "Terre-Neuve").From(InputsPage.MultiSelectControlSelector)
              .Assert
                 .Value("MB").In(InputsPage.MultiSelectControlSelector)
                 .Value("NB").In(InputsPage.MultiSelectControlSelector)

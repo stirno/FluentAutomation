@@ -61,6 +61,9 @@ namespace FluentAutomation.Tests.Actions
             I.Click(AlertsPage.TriggerPromptSelector)
              .Enter("Wat").In(Alert.Input)
              .Assert.Text("Clicked Prompt OK: Wat").In(AlertsPage.ResultSelector);
+
+            // Can't enter text into a message, verify exception is thrown properly
+            Assert.Throws<FluentException>(() => I.Enter("Wat2").In(Alert.Message));
         }
     }
 }

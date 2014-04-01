@@ -15,11 +15,6 @@ namespace FluentAutomation.Exceptions
         {
         }
 
-        public FluentExpectFailedException(FluentAssertFailedException assertException)
-            : base(assertException.Message)
-        {
-        }
-
         public FluentExpectFailedException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {

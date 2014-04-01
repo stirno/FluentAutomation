@@ -13,12 +13,6 @@ namespace FluentAutomation
     {
         private string selector = null;
 
-        public Element(IWebElement webElement)
-        {
-            this.WebElement = webElement;
-            this.tagName = this.WebElement.TagName;
-        }
-
         public Element(IWebElement webElement, string selector)
         {
             this.WebElement = webElement;
