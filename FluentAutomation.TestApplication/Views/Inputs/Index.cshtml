@@ -73,14 +73,6 @@
 
 <script type="text/javascript">
     $(function () {
-        $('#text-control').on('change', function () {
-            var tcc = $('#text-control-changed');
-            tcc.text('Changed');
-            setTimeout(function () {
-                tcc.text('');
-            }, 1500);
-        });
-
         var clickedText = $('#button-clicked-text');
         $('#button-control')
             .on('click', function (e) {
@@ -122,6 +114,20 @@
             })
             .on('contextmenu', function () {
                 return false;
+            });
+
+        var tccTimeoutHandle = null;
+        $('#text-control')
+            .on('change', function () {
+                if (tccTimeoutHandle != null)
+                    clearTimeout(tccTimeoutHandle);
+
+                var tcc = $('#text-control-changed');
+                tcc.text('Changed');
+
+                tccTimeoutHandle = setTimeout(function () {
+                    tcc.text('');
+                }, 1500);
             });
     });
 </script>

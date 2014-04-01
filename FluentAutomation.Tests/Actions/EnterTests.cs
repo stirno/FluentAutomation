@@ -58,9 +58,9 @@ namespace FluentAutomation.Tests.Actions
         {
             AlertsPage.Go();
 
-            I.Click(AlertsPage.TriggerPromptSelector);
-            I.Enter("Wat").In(Alert.Input);
-            I.Assert.Text("Clicked Prompt OK: Wat").In(AlertsPage.ResultSelector);
+            I.Click(AlertsPage.TriggerPromptSelector)
+             .Enter("Wat").In(Alert.Input)
+             .Assert.Text("Clicked Prompt OK: Wat").In(AlertsPage.ResultSelector);
         }
     }
 }

@@ -75,10 +75,7 @@ namespace FluentAutomation.Tests.Actions
             AlertsPage.Go();
 
             // No alerts present
-            Assert.Throws<OpenQA.Selenium.NoAlertPresentException>(() =>
-            {
-                I.Click(Alert.OK);
-            });
+            Assert.Throws<FluentException>(() => I.Click(Alert.OK));
 
             // Alert box:
             // Alerts don't have OK/Cancel but both work, so we test as if Cancel was clicked

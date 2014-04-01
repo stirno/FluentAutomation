@@ -186,8 +186,9 @@ namespace FluentAutomation
                     return new Func<IWebDriver>(() => {
                         return new OpenQA.Selenium.Firefox.FirefoxDriver(new OpenQA.Selenium.Firefox.FirefoxProfile
                         {
-                            EnableNativeEvents = true,
-                            AcceptUntrustedCertificates = true
+                            EnableNativeEvents = false,
+                            AcceptUntrustedCertificates = true,
+                            AlwaysLoadNoFocusLibrary = true
                         });
                     });
                 case Browser.Chrome:

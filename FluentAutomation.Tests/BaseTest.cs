@@ -23,7 +23,7 @@ namespace FluentAutomation.Tests
             this.AlertsPage = new Pages.AlertsPage(this);
             
             // Default tests use chrome and load the site
-            FluentAutomation.SeleniumWebDriver.Bootstrap(SeleniumWebDriver.Browser.Chrome);//, SeleniumWebDriver.Browser.Firefox, SeleniumWebDriver.Browser.InternetExplorer);
+            FluentAutomation.SeleniumWebDriver.Bootstrap(SeleniumWebDriver.Browser.Chrome, SeleniumWebDriver.Browser.InternetExplorer, SeleniumWebDriver.Browser.Firefox);
             I.Open(SiteUrl);
         }
 

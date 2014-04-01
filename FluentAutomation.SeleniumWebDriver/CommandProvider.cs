@@ -590,26 +590,52 @@ namespace FluentAutomation
         {
             if (ActiveAlert == null)
             {
-                this.Wait(TimeSpan.FromMilliseconds(100));
-                ActiveAlert = this.webDriver.SwitchTo().Alert();
+                this.Act(CommandType.Action, () =>
+                {
+                    try
+                    {
+                        ActiveAlert = this.webDriver.SwitchTo().Alert();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new FluentException(ex.Message, ex);
+                    }
+                });
             }
         }
 
         public void AlertClick(Alert accessor)
         {
             this.SetActiveAlert();
+            if (ActiveAlert == null)
+                return;
+
+            if (accessor != Alert.OK && accessor != Alert.Cancel)
+            {
+                try
+                {
+                    ActiveAlert.Dismiss();
+                }
+                catch (NoAlertPresentException) { }
+                throw new FluentException("FluentAutomation only supports clicking on OK or Cancel in alerts or prompts.");
+            }
 
             try
             {
-                if (accessor.Field == AlertField.OKButton)
-                    ActiveAlert.Accept();
-                else if (accessor.Field == AlertField.CancelButton)
-                    ActiveAlert.Dismiss();
-                else
+                this.Act(CommandType.Action, () =>
                 {
-                    ActiveAlert.Dismiss();
-                    throw new FluentException("FluentAutomation only supports clicking on OK or Cancel in alerts or prompts.");
-                }
+                    try
+                    {
+                        if (accessor == Alert.OK)
+                            ActiveAlert.Accept();
+                        else
+                            ActiveAlert.Dismiss();
+                    }
+                    catch (NoAlertPresentException ex)
+                    {
+                        throw new FluentException(ex.Message, ex);
+                    }
+                });
             }
             finally
             {
