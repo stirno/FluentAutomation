@@ -89,5 +89,47 @@ namespace FluentAutomation.Tests.Actions
             I.Hover(ScrollingPage.TopLeftSelector)
              .Assert.Css("color", ScrollingPage.HoverColor).On(ScrollingPage.TopLeftSelector);
         }
+
+        [Fact]
+        public void HoverXY()
+        {
+            var el = I.Find(InputsPage.ButtonControlSelector);
+            I.Hover(el.Element.PosX + 10, el.Element.PosY + 10)
+             .Assert.Css("color", InputsPage.HoverColor).On(InputsPage.ButtonControlSelector);
+
+            I.Hover(InputsPage.InputButtonControlSelector, 10, 10)
+             .Assert.Css("color", InputsPage.HoverColor).On(InputsPage.InputButtonControlSelector);
+        }
+
+        /// <summary>
+        /// Test that Scroll is equivalent to Hover
+        /// </summary>
+        [Fact]
+        public void Scroll()
+        {
+            // Identical to the first test in this.HoverXY()
+            var el = I.Find(InputsPage.ButtonControlSelector);
+            I.Scroll(el.Element.PosX + 10, el.Element.PosY + 10)
+             .Assert.Css("color", InputsPage.HoverColor).On(InputsPage.ButtonControlSelector);
+
+            ScrollingPage.Go();
+
+            // Identical to this.HoverScroll()
+            I.Assert.Css("color", ScrollingPage.HoverColor).Not.On(ScrollingPage.TopRightSelector);
+            I.Scroll(ScrollingPage.TopRightSelector)
+             .Assert.Css("color", ScrollingPage.HoverColor).On(ScrollingPage.TopRightSelector);
+
+            I.Assert.Css("color", ScrollingPage.HoverColor).Not.On(ScrollingPage.BottomRightSelector);
+            I.Scroll(ScrollingPage.BottomRightSelector)
+             .Assert.Css("color", ScrollingPage.HoverColor).On(ScrollingPage.BottomRightSelector);
+
+            I.Assert.Css("color", ScrollingPage.HoverColor).Not.On(ScrollingPage.BottomLeftSelector);
+            I.Scroll(ScrollingPage.BottomLeftSelector)
+             .Assert.Css("color", ScrollingPage.HoverColor).On(ScrollingPage.BottomLeftSelector);
+
+            I.Assert.Css("color", ScrollingPage.HoverColor).Not.On(ScrollingPage.TopLeftSelector);
+            I.Scroll(ScrollingPage.TopLeftSelector)
+             .Assert.Css("color", ScrollingPage.HoverColor).On(ScrollingPage.TopLeftSelector);
+        }
     }
 }
