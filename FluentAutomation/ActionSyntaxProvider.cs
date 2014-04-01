@@ -102,8 +102,7 @@ namespace FluentAutomation
 
         public IActionSyntaxProvider Scroll(string selector)
         {
-            this.commandProvider.Hover(this.Find(selector));
-            return this;
+            return this.Scroll(this.Find(selector));
         }
 
         public IActionSyntaxProvider Scroll(ElementProxy element)
