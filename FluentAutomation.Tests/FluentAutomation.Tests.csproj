@@ -86,6 +86,7 @@
     <Compile Include="Base\RemoteWebDriverTests.cs" />
     <Compile Include="Base\SessionTests.cs" />
     <Compile Include="Pages\AlertsPage.cs" />
+    <Compile Include="Pages\DragPage.cs" />
     <Compile Include="Pages\TextPage.cs" />
     <Compile Include="Pages\InputsPage.cs" />
     <Compile Include="Pages\ScrollingPage.cs" />
