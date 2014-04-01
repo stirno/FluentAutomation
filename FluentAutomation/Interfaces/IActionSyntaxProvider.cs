@@ -275,6 +275,25 @@ namespace FluentAutomation.Interfaces
         IActionSyntaxProvider Hover(string selector, int x, int y);
 
         /// <summary>
+        /// Scrolls the viewport to the specified coordinates. Alias for Hover(int, int).
+        /// </summary>
+        /// <param name="x">X-coordinate.</param>
+        /// <param name="y">Y-coordinate.</param>
+        IActionSyntaxProvider Scroll(int x, int y);
+
+        /// <summary>
+        /// Scrolls the viewport to the element matching <paramref name="selector"/>. Alias for Hover(string).
+        /// </summary>
+        /// <param name="selector"></param>
+        IActionSyntaxProvider Scroll(string selector);
+
+        /// <summary>
+        /// Scrolls the viewport to the specified <paramref name="element"/>. Alias for Hover(ElementProxy).
+        /// </summary>
+        /// <param name="element">IElement factory function.</param>
+        IActionSyntaxProvider Scroll(ElementProxy element);
+
+        /// <summary>
         /// Open a web browser and navigate to specified URL
         /// </summary>
         /// <param name="url">Fully-qualified URL. Example: <c>http://google.com/</c></param>
