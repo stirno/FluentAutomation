@@ -17,6 +17,17 @@ namespace FluentAutomation
             this.inlineSettings = FluentSettings.Current.Clone();
         }
 
+        public WithSyntaxProvider Wait(int seconds)
+        {
+            return this.Wait(TimeSpan.FromSeconds(seconds));
+        }
+
+        public WithSyntaxProvider Wait(TimeSpan timeout)
+        {
+            this.inlineSettings.WaitTimeout = timeout;
+            return this;
+        }
+
         public WithSyntaxProvider WaitUntil(int seconds)
         {
             return this.WaitUntil(TimeSpan.FromSeconds(seconds));
@@ -25,6 +36,17 @@ namespace FluentAutomation
         public WithSyntaxProvider WaitUntil(TimeSpan timeout)
         {
             this.inlineSettings.WaitUntilTimeout = timeout;
+            return this;
+        }
+
+        public WithSyntaxProvider WaitInterval(int seconds)
+        {
+            return this.WaitInterval(TimeSpan.FromSeconds(seconds));
+        }
+
+        public WithSyntaxProvider WaitInterval(TimeSpan interval)
+        {
+            this.inlineSettings.WaitUntilInterval = interval;
             return this;
         }
 

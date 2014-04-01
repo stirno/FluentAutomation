@@ -225,6 +225,12 @@ namespace FluentAutomation
             return this;
         }
 
+        public IActionSyntaxProvider Wait()
+        {
+            this.commandProvider.Wait();
+            return this;
+        }
+
         public IActionSyntaxProvider Wait(int seconds)
         {
             return this.Wait(TimeSpan.FromSeconds(seconds));

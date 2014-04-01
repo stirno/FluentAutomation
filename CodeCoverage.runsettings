@@ -50,7 +50,8 @@ Included items must then not match any entries in the exclude list to remain inc
                 <Function>^Microsoft::VisualStudio::CppUnitTestFramework::.*</Function>
                 <Function>^TinyIoC\.*</Function>
                 <Function>^System\.*</Function>
-                <Function>Multi\.*Provider</Function>
+                <Function>.*MultiCommandProvider.*</Function>
+                <Function>.*MultiAssertProvider.*</Function>
               </Exclude>
             </Functions>
 

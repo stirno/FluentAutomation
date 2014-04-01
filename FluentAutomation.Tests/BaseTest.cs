@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Xunit;
 
 namespace FluentAutomation.Tests
 {
@@ -33,6 +34,12 @@ namespace FluentAutomation.Tests
         public Pages.AlertsPage AlertsPage = null;
         public Pages.ScrollingPage ScrollingPage = null;
         public Pages.TextPage TextPage = null;
+
+        [Fact]
+        public void ProviderIsAvailable()
+        {
+            Assert.True(this.Provider != null);
+        }
     }
 
     public class AssertBaseTest : BaseTest

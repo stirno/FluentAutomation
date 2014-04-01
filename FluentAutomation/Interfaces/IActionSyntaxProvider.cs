@@ -143,10 +143,38 @@ namespace FluentAutomation.Interfaces
         IActionSyntaxProvider WaitUntil(Expression<Action> conditionAction);
 
         /// <summary>
+        /// Wait until the provided <paramref name="conditionAction">action</paramref> succeeds. Intended for use with I.Expect.* methods.
+        /// </summary>
+        /// <param name="conditionAction">Action to be repeated until it succeeds or exceeds the timeout.</param>
+        /// <param name="timeout">Timeout for this specific action.</param>
+        IActionSyntaxProvider WaitUntil(Expression<Action> conditionAction, TimeSpan timeout);
+
+        /// <summary>
+        /// Wait until the provided <paramref name="conditionAction">action</paramref> succeeds. Intended for use with I.Expect.* methods.
+        /// </summary>
+        /// <param name="conditionAction">Action to be repeated until it succeeds or exceeds the timeout.</param>
+        /// <param name="seconds">Timeout in seconds for this specific action.</param>
+        IActionSyntaxProvider WaitUntil(Expression<Action> conditionAction, int seconds);
+
+        /// <summary>
         /// Wait until the provided <paramref name="conditionFunc">function</paramref> returns <c>true</c>.
         /// </summary>
         /// <param name="conditionFunc">Function to be repeated until it returns true or exceeds the timeout. <see cref="Settings.DefaultWaitUntilTimeout"/> determines the timeout.</param>
         IActionSyntaxProvider WaitUntil(Expression<Func<bool>> conditionFunc);
+
+        /// <summary>
+        /// Wait until the provided <paramref name="conditionFunc">function</paramref> returns <c>true</c>.
+        /// </summary>
+        /// <param name="conditionFunc">Function to be repeated until it returns true or exceeds the timeout.</param>
+        /// <param name="seconds">Timeout in seconds for this specific action.</param>
+        IActionSyntaxProvider WaitUntil(Expression<Func<bool>> conditionFunc, int seconds);
+
+        /// <summary>
+        /// Wait until the provided <paramref name="conditionFunc">function</paramref> returns <c>true</c>.
+        /// </summary>
+        /// <param name="conditionFunc">Function to be repeated until it returns true or exceeds the timeout.</param>
+        /// <param name="timeout">Timeout for this specific action.</param>
+        IActionSyntaxProvider WaitUntil(Expression<Func<bool>> conditionFunc, TimeSpan timeout);
 
         // remote commands
         /// <summary>
@@ -367,6 +395,12 @@ namespace FluentAutomation.Interfaces
         /// </summary>
         /// <param name="text">String to be sent, one character at a time.</param>
         IActionSyntaxProvider Type(string text);
+
+        /// <summary>
+        /// Waits the duration of the WaitTimeout as specified in settings.
+        /// </summary>
+        /// <returns></returns>
+        IActionSyntaxProvider Wait();
 
         /// <summary>
         /// Waits a determined period of time.
