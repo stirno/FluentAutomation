@@ -1,0 +1,78 @@
+﻿@{
+    ViewBag.Title = "Scrolling";
+}
+
+<div id="bigtext"></div>
+<div id="big">    
+    <div id="topleft">
+        <button>Top Left</button>
+    </div>
+    <div id="topright">
+        <button>Top Right</button>
+    </div>
+    <div id="bottomleft">
+        <button>Bottom Left</button>
+    </div>
+    <div id="bottomright">
+        <button>Bottom Right</button>
+    </div>
+</div>
+
+<script>
+    $('#big > div > button').click(function () {
+        $('#bigtext').text($(this).text());
+    });
+
+    $(".navbar-fixed-top").removeClass("navbar-fixed-top");
+</script>
+
+<style>
+    #bigtext {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        background: black;
+        color: white;
+    }
+
+    #big {
+        margin: 50px 0;
+        border: 2px black solid;
+        position: relative;
+        height: 2000px;
+        width: 2000px;
+        text-align: center;
+    }
+
+    #topleft {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    #topright {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #bottomleft {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    }
+
+    #bottomright {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+    }
+
+    button:hover {
+        color: rgb(255, 0, 0) !important;
+    }
+
+    button:focus {
+        color: rgb(0, 0, 255) !important;
+    }
+</style>

@@ -21,6 +21,8 @@ namespace FluentAutomation.Tests
             // Create Page Objects
             this.InputsPage = new Pages.InputsPage(this);
             this.AlertsPage = new Pages.AlertsPage(this);
+            this.ScrollingPage = new Pages.ScrollingPage(this);
+            this.TextPage = new Pages.TextPage(this);
             
             // Default tests use chrome and load the site
             FluentAutomation.SeleniumWebDriver.Bootstrap(SeleniumWebDriver.Browser.Chrome, SeleniumWebDriver.Browser.InternetExplorer, SeleniumWebDriver.Browser.Firefox);
@@ -29,6 +31,8 @@ namespace FluentAutomation.Tests
 
         public Pages.InputsPage InputsPage = null;
         public Pages.AlertsPage AlertsPage = null;
+        public Pages.ScrollingPage ScrollingPage = null;
+        public Pages.TextPage TextPage = null;
     }
 
     public class AssertBaseTest : BaseTest

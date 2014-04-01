@@ -29,6 +29,8 @@ namespace FluentAutomation.Tests.Pages
 
         public string ButtonClickedTextSelector = "#button-clicked-text";
 
-        public string ButtonClickedXYSelector = "#button-clicked-xy";
+        public string HoverColor = "rgb(255, 0, 0)";
+
+        public string FocusColor = "rgb(0, 0, 255)";
     }
 }
