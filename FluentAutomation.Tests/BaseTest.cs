@@ -24,6 +24,7 @@ namespace FluentAutomation.Tests
             this.AlertsPage = new Pages.AlertsPage(this);
             this.ScrollingPage = new Pages.ScrollingPage(this);
             this.TextPage = new Pages.TextPage(this);
+            this.DragPage = new Pages.DragPage(this);
             
             // Default tests use chrome and load the site
             FluentAutomation.SeleniumWebDriver.Bootstrap(SeleniumWebDriver.Browser.Chrome);//, SeleniumWebDriver.Browser.InternetExplorer, SeleniumWebDriver.Browser.Firefox);
@@ -34,6 +35,7 @@ namespace FluentAutomation.Tests
         public Pages.AlertsPage AlertsPage = null;
         public Pages.ScrollingPage ScrollingPage = null;
         public Pages.TextPage TextPage = null;
+        public Pages.DragPage DragPage = null;
 
         [Fact]
         public void ProviderIsAvailable()

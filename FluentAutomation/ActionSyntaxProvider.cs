@@ -381,6 +381,11 @@ namespace FluentAutomation
         {
             return new DragDropSyntaxProvider(this, element);
         }
+
+        public DragDropSyntaxProvider Drag(string selector, int sourceX, int sourceY)
+        {
+            return this.Drag(this.Find(selector), sourceX, sourceY);
+        }
         
         public DragDropSyntaxProvider Drag(ElementProxy element, int sourceX, int sourceY)
         {
@@ -441,6 +446,17 @@ namespace FluentAutomation
             }
 
             /// <summary>
+            /// End Drag/Drop operation at element specified by <paramref name="selector"/> with offset.
+            /// </summary>
+            /// <param name="selectr"></param>
+            /// <param name="targetOffsetX">X-offset for drop.</param>
+            /// <param name="targetOffsetY">Y-offset for drop.</param>
+            public IActionSyntaxProvider To(string selector, int targetOffsetX, int targetOffsetY)
+            {
+                return this.To(this.syntaxProvider.Find(selector), targetOffsetX, targetOffsetY);
+            }
+
+            /// <summary>
             /// End Drag/Drop operation at specified <paramref name="targetElement"/>.
             /// </summary>
             /// <param name="targetElement">IElement factory function.</param>
@@ -478,12 +494,32 @@ namespace FluentAutomation
             }
 
             /// <summary>
+            /// End Drag/Drop operation at the element specified by <paramref name="selector"/>.
+            /// </summary>
+            /// <param name="selector"></param>
+            public void To(string selector)
+            {
+                this.To(this.syntaxProvider.Find(selector));
+            }
+
+            /// <summary>
             /// End Drag/Drop operation at specified <paramref name="targetElement"/>.
             /// </summary>
             /// <param name="targetElement">IElement factory function.</param>
             public void To(ElementProxy targetElement)
             {
                 this.syntaxProvider.commandProvider.DragAndDrop(this.syntaxProvider.commandProvider.Find("html"), this.sourceX, this.sourceY, targetElement, 0, 0);
+            }
+
+            /// <summary>
+            /// End Drag/Drop operation at the element specified by <paramref name="selector"/>.
+            /// </summary>
+            /// <param name="selector"></param>
+            /// <param name="targetOffsetX">X-offset for drop.</param>
+            /// <param name="targetOffsetY">Y-offset for drop.</param>
+            public void To(string selector, int targetOffsetX, int targetOffsetY)
+            {
+                this.To(this.syntaxProvider.Find(selector), targetOffsetX, targetOffsetY);
             }
 
             /// <summary>

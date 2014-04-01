@@ -54,6 +54,15 @@ namespace FluentAutomation.Interfaces
         ActionSyntaxProvider.DragDropSyntaxProvider Drag(ElementProxy element);
 
         /// <summary>
+        /// Begin a Drag/Drop operation starting with the specified by <paramref name="selector"/> and an offset.
+        /// </summary>
+        /// <param name="selector"></param>
+        /// <param name="offsetX"></param>
+        /// <param name="offsetY"></param>
+        /// <returns><c>DragDropSyntaxProvider</c></returns>
+        ActionSyntaxProvider.DragDropSyntaxProvider Drag(string selector, int offsetX, int offsetY);
+
+        /// <summary>
         /// Begin a Drag/Drop operation starting with the specified element and an offset.
         /// </summary>
         /// <param name="element"><see cref="IElement"/> factory function.</param>
