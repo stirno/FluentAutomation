@@ -40,7 +40,7 @@ namespace FluentAutomation
         {
             var result = new ElementProxy();
 
-            this.RepackExceptions(() => Parallel.ForEach(this.commandProviders, x => result.Elements.Add(x, x.Find(selector).Elements.First().Value)));
+            this.RepackExceptions(() => Parallel.ForEach(this.commandProviders, x => result.Elements.Add(new Tuple<ICommandProvider, Func<IElement>>(x, x.Find(selector).Elements.First().Item2))));
 
             return result;
         }
@@ -53,7 +53,7 @@ namespace FluentAutomation
             {
                 foreach (var element in x.FindMultiple(selector).Elements)
                 {
-                    result.Elements.Add(x, element.Value);
+                    result.Elements.Add(new Tuple<ICommandProvider, Func<IElement>>(x, element.Item2));
                 }
             }));
 
@@ -72,7 +72,7 @@ namespace FluentAutomation
 
         public void Click(ElementProxy element)
         {
-            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Key.Click(new ElementProxy(e.Key, e.Value))));
+            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Item1.Click(new ElementProxy(e.Item1, e.Item2))));
         }
 
         public void DoubleClick(int x, int y)
@@ -82,12 +82,12 @@ namespace FluentAutomation
 
         public void DoubleClick(ElementProxy element, int x, int y)
         {
-            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Key.DoubleClick(new ElementProxy(e.Key, e.Value), x, y)));
+            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Item1.DoubleClick(new ElementProxy(e.Item1, e.Item2), x, y)));
         }
 
         public void DoubleClick(ElementProxy element)
         {
-            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Key.DoubleClick(new ElementProxy(e.Key, e.Value))));
+            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Item1.DoubleClick(new ElementProxy(e.Item1, e.Item2))));
         }
 
         public void RightClick(int x, int y)
@@ -97,12 +97,12 @@ namespace FluentAutomation
 
         public void RightClick(ElementProxy element, int x, int y)
         {
-            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Key.RightClick(new ElementProxy(e.Key, e.Value), x, y)));
+            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Item1.RightClick(new ElementProxy(e.Item1, e.Item2), x, y)));
         }
 
         public void RightClick(ElementProxy element)
         {
-            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Key.RightClick(new ElementProxy(e.Key, e.Value))));
+            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Item1.RightClick(new ElementProxy(e.Item1, e.Item2))));
         }
 
         public void Hover(int x, int y)
@@ -112,17 +112,17 @@ namespace FluentAutomation
 
         public void Hover(ElementProxy element, int x, int y)
         {
-            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Key.Hover(new ElementProxy(e.Key, e.Value), x, y)));
+            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Item1.Hover(new ElementProxy(e.Item1, e.Item2), x, y)));
         }
 
         public void Hover(ElementProxy element)
         {
-            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Key.Hover(new ElementProxy(e.Key, e.Value))));
+            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Item1.Hover(new ElementProxy(e.Item1, e.Item2))));
         }
 
         public void Focus(ElementProxy element)
         {
-            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Key.Focus(new ElementProxy(e.Key, e.Value))));
+            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Item1.Focus(new ElementProxy(e.Item1, e.Item2))));
         }
 
         public void DragAndDrop(int sourceX, int sourceY, int destinationX, int destinationY)
@@ -134,9 +134,9 @@ namespace FluentAutomation
         {
             this.RepackExceptions(() => Parallel.ForEach(source.Elements, e =>
             {
-                e.Key.DragAndDrop(
-                    new ElementProxy(e.Key, e.Value), sourceOffsetX, sourceOffsetY,
-                    new ElementProxy(e.Key, target.Elements[e.Key]), targetOffsetX, targetOffsetY
+                e.Item1.DragAndDrop(
+                    new ElementProxy(e.Item1, e.Item2), sourceOffsetX, sourceOffsetY,
+                    new ElementProxy(e.Item1, target.Elements.First(x => x.Item1 == e.Item1).Item2), targetOffsetX, targetOffsetY
                 );
             }));
         }
@@ -145,64 +145,64 @@ namespace FluentAutomation
         {
             this.RepackExceptions(() => Parallel.ForEach(source.Elements, e =>
             {
-                e.Key.DragAndDrop(
-                    new ElementProxy(e.Key, e.Value),
-                    new ElementProxy(e.Key, target.Elements[e.Key])
+                e.Item1.DragAndDrop(
+                    new ElementProxy(e.Item1, e.Item2),
+                    new ElementProxy(e.Item1, target.Elements.First(x => x.Item1 == e.Item1).Item2)
                 );
             }));
         }
 
         public void EnterText(ElementProxy element, string text)
         {
-            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Key.EnterText(new ElementProxy(e.Key, e.Value), text)));
+            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Item1.EnterText(new ElementProxy(e.Item1, e.Item2), text)));
         }
 
         public void EnterTextWithoutEvents(ElementProxy element, string text)
         {
-            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Key.EnterTextWithoutEvents(new ElementProxy(e.Key, e.Value), text)));
+            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Item1.EnterTextWithoutEvents(new ElementProxy(e.Item1, e.Item2), text)));
         }
 
         public void AppendText(ElementProxy element, string text)
         {
             this.RepackExceptions(() => Parallel.ForEach(element.Elements, e =>
             {
-                e.Key.AppendText(new ElementProxy(e.Key, e.Value), text);
+                e.Item1.AppendText(new ElementProxy(e.Item1, e.Item2), text);
             }));
         }
 
         public void AppendTextWithoutEvents(ElementProxy element, string text)
         {
-            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Key.AppendTextWithoutEvents(new ElementProxy(e.Key, e.Value), text)));
+            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Item1.AppendTextWithoutEvents(new ElementProxy(e.Item1, e.Item2), text)));
         }
 
         public void SelectText(ElementProxy element, string optionText)
         {
-            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Key.SelectText(new ElementProxy(e.Key, e.Value), optionText)));
+            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Item1.SelectText(new ElementProxy(e.Item1, e.Item2), optionText)));
         }
 
         public void SelectValue(ElementProxy element, string optionValue)
         {
-            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Key.SelectValue(new ElementProxy(e.Key, e.Value), optionValue)));
+            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Item1.SelectValue(new ElementProxy(e.Item1, e.Item2), optionValue)));
         }
 
         public void SelectIndex(ElementProxy element, int optionIndex)
         {
-            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Key.SelectIndex(new ElementProxy(e.Key, e.Value), optionIndex)));
+            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Item1.SelectIndex(new ElementProxy(e.Item1, e.Item2), optionIndex)));
         }
 
         public void MultiSelectText(ElementProxy element, string[] optionTextCollection)
         {
-            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Key.MultiSelectText(new ElementProxy(e.Key, e.Value), optionTextCollection)));
+            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Item1.MultiSelectText(new ElementProxy(e.Item1, e.Item2), optionTextCollection)));
         }
 
         public void MultiSelectValue(ElementProxy element, string[] optionValues)
         {
-            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Key.MultiSelectValue(new ElementProxy(e.Key, e.Value), optionValues)));
+            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Item1.MultiSelectValue(new ElementProxy(e.Item1, e.Item2), optionValues)));
         }
 
         public void MultiSelectIndex(ElementProxy element, int[] optionIndices)
         {
-            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Key.MultiSelectIndex(new ElementProxy(e.Key, e.Value), optionIndices)));
+            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Item1.MultiSelectIndex(new ElementProxy(e.Item1, e.Item2), optionIndices)));
         }
 
         public void TakeScreenshot(string screenshotName)
@@ -212,7 +212,7 @@ namespace FluentAutomation
 
         public void UploadFile(ElementProxy element, int x, int y, string fileName)
         {
-            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Key.UploadFile(new ElementProxy(e.Key, e.Value), x, y, fileName)));
+            this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Item1.UploadFile(new ElementProxy(e.Item1, e.Item2), x, y, fileName)));
         }
 
         public void Wait()

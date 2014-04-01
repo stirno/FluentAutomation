@@ -126,7 +126,7 @@ namespace FluentAutomation
                     var webElements = this.webDriver.FindElements(Sizzle.Find(selector));
                     foreach (var element in webElements)
                     {
-                        result.Elements.Add(this, () => new Element(element, selector));
+                        result.Elements.Add(new Tuple<ICommandProvider, Func<IElement>>(this, () => new Element(element, selector)));
                     }
 
                     return result;

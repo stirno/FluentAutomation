@@ -33,7 +33,7 @@ namespace FluentAutomation
         {
             Parallel.ForEach(element.Elements, e =>
             {
-                new AssertProvider(e.Key).Count(new ElementProxy(e.Key, e.Value), count);
+                new AssertProvider(e.Item1).Count(new ElementProxy(e.Item1, e.Item2), count);
             });
         }
 
@@ -41,7 +41,7 @@ namespace FluentAutomation
         {
             Parallel.ForEach(element.Elements, e =>
             {
-                new AssertProvider(e.Key).NotCount(new ElementProxy(e.Key, e.Value), count);
+                new AssertProvider(e.Item1).NotCount(new ElementProxy(e.Item1, e.Item2), count);
             });
         }
 
@@ -58,14 +58,14 @@ namespace FluentAutomation
         {
             Parallel.ForEach(element.Elements, e =>
             {
-                new AssertProvider(e.Key).CssClass(new ElementProxy(e.Key, e.Value), className);
+                new AssertProvider(e.Item1).CssClass(new ElementProxy(e.Item1, e.Item2), className);
             });
         }
         public void NotCssClass(ElementProxy element, string className)
         {
             Parallel.ForEach(element.Elements, e =>
             {
-                new AssertProvider(e.Key).NotCssClass(new ElementProxy(e.Key, e.Value), className);
+                new AssertProvider(e.Item1).NotCssClass(new ElementProxy(e.Item1, e.Item2), className);
             });
         }
 
@@ -82,7 +82,7 @@ namespace FluentAutomation
         {
             Parallel.ForEach(element.Elements, e =>
             {
-                new AssertProvider(e.Key).Text(new ElementProxy(e.Key, e.Value), text);
+                new AssertProvider(e.Item1).Text(new ElementProxy(e.Item1, e.Item2), text);
             });
         }
 
@@ -90,7 +90,7 @@ namespace FluentAutomation
         {
             Parallel.ForEach(element.Elements, e =>
             {
-                new AssertProvider(e.Key).NotText(new ElementProxy(e.Key, e.Value), text);
+                new AssertProvider(e.Item1).NotText(new ElementProxy(e.Item1, e.Item2), text);
             });
         }
 
@@ -108,7 +108,7 @@ namespace FluentAutomation
         {
             Parallel.ForEach(element.Elements, e =>
             {
-                new AssertProvider(e.Key).Text(new ElementProxy(e.Key, e.Value), matchFunc);
+                new AssertProvider(e.Item1).Text(new ElementProxy(e.Item1, e.Item2), matchFunc);
             });
         }
 
@@ -116,7 +116,7 @@ namespace FluentAutomation
         {
             Parallel.ForEach(element.Elements, e =>
             {
-                new AssertProvider(e.Key).NotText(new ElementProxy(e.Key, e.Value), matchFunc);
+                new AssertProvider(e.Item1).NotText(new ElementProxy(e.Item1, e.Item2), matchFunc);
             });
         }
 
@@ -134,7 +134,7 @@ namespace FluentAutomation
         {
             Parallel.ForEach(element.Elements, e =>
             {
-                new AssertProvider(e.Key).Value(new ElementProxy(e.Key, e.Value), value);
+                new AssertProvider(e.Item1).Value(new ElementProxy(e.Item1, e.Item2), value);
             });
         }
 
@@ -142,7 +142,7 @@ namespace FluentAutomation
         {
             Parallel.ForEach(element.Elements, e =>
             {
-                new AssertProvider(e.Key).NotValue(new ElementProxy(e.Key, e.Value), value);
+                new AssertProvider(e.Item1).NotValue(new ElementProxy(e.Item1, e.Item2), value);
             });
         }
 
@@ -160,7 +160,7 @@ namespace FluentAutomation
         {
             Parallel.ForEach(element.Elements, e =>
             {
-                new AssertProvider(e.Key).Value(new ElementProxy(e.Key, e.Value), matchFunc);
+                new AssertProvider(e.Item1).Value(new ElementProxy(e.Item1, e.Item2), matchFunc);
             });
         }
 
@@ -168,7 +168,7 @@ namespace FluentAutomation
         {
             Parallel.ForEach(element.Elements, e =>
             {
-                new AssertProvider(e.Key).NotValue(new ElementProxy(e.Key, e.Value), matchFunc);
+                new AssertProvider(e.Item1).NotValue(new ElementProxy(e.Item1, e.Item2), matchFunc);
             });
         }
 

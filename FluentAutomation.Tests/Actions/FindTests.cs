@@ -25,6 +25,14 @@ namespace FluentAutomation.Tests.Actions
         }
 
         [Fact]
+        public void FindMultipleElements()
+        {
+            var elements = I.FindMultiple("div").Elements;
+
+            Assert.True(elements.Count > 1);
+        }
+
+        [Fact]
         public void AttemptToFindFakeElement()
         {
             var exception = Assert.Throws<FluentException>(() => I.Find("#fake-control").Element.ToString()); // accessing Element executes the Find

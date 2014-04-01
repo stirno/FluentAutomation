@@ -164,7 +164,7 @@ namespace FluentAutomation
                     var result = new ElementProxy();
                     foreach (var element in automationElements)
                     {
-                        result.Elements.Add(this, () => new Element(element, selector));
+                        result.Elements.Add(new Tuple<ICommandProvider, Func<IElement>>(this, () => new Element(element, selector)));
                     }
 
                     return result;

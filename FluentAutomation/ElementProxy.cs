@@ -13,6 +13,7 @@ namespace FluentAutomation
         /// </summary>
         public ElementProxy()
         {
+            this.Children = new List<Func<ElementProxy>>();
         }
 
         /// <summary>
@@ -22,17 +23,17 @@ namespace FluentAutomation
         /// <param name="element"></param>
         public ElementProxy(ICommandProvider commandProvider, Func<IElement> element)
         {
-            this.Elements.Add(commandProvider, element);
+            this.Elements.Add(new Tuple<ICommandProvider, Func<IElement>>(commandProvider, element));
         }
 
         public List<Func<ElementProxy>> Children { get; set; }
 
-        private Dictionary<ICommandProvider, Func<IElement>> elements = new Dictionary<ICommandProvider, Func<IElement>>();
+        private List<Tuple<ICommandProvider, Func<IElement>>> elements = new List<Tuple<ICommandProvider, Func<IElement>>>();
 
         /// <summary>
         /// Representation of an element across command providers, wrapped for lazy loading.
         /// </summary>
-        public Dictionary<ICommandProvider, Func<IElement>> Elements
+        public List<Tuple<ICommandProvider, Func<IElement>>> Elements
         {
             get
             {
@@ -43,7 +44,7 @@ namespace FluentAutomation
                     {
                         foreach (var element in proxy().Elements)
                         {
-                            this.elements.Add(element.Key, element.Value);
+                            this.elements.Add(new Tuple<ICommandProvider, Func<IElement>>(element.Item1, element.Item2));
                         }
                     }
 
@@ -58,7 +59,7 @@ namespace FluentAutomation
         {
             get
             {
-                return this.Elements.First().Value();
+                return this.Elements.First().Item2();
             }
         }
     }
