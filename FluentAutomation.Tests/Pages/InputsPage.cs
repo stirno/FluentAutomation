@@ -29,6 +29,8 @@ namespace FluentAutomation.Tests.Pages
 
         public string ButtonClickedTextSelector = "#button-clicked-text";
 
+        public string FormGroupDiv = "div[class='form-group']";
+
         public string HoverColor = "rgb(255, 0, 0)";
 
         public string FocusColor = "rgb(0, 0, 255)";

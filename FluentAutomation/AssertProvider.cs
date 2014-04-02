@@ -709,6 +709,10 @@ namespace FluentAutomation
             {
                 threwException = true;
             }
+            catch (FluentException)
+            {
+                threwException = true;
+            }
 
             return threwException;
         }

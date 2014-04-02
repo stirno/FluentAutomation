@@ -71,7 +71,7 @@
     <Compile Include="Actions\UploadTests.cs" />
     <Compile Include="Actions\WaitTests.cs" />
     <Compile Include="Asserts\BooleanTests.cs" />
-    <Compile Include="Asserts\ClassTests.cs" />
+    <Compile Include="Asserts\CssTests.cs" />
     <Compile Include="Asserts\CountTests.cs" />
     <Compile Include="Asserts\ExistsTests.cs" />
     <Compile Include="Asserts\TextTests.cs" />
