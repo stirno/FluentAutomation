@@ -22,6 +22,8 @@ namespace FluentAutomation.Tests.Asserts
 
             Assert.Throws<FluentException>(() => I.Assert.Throws(() => I.Assert.True(() => true)));
             Assert.Throws<FluentException>(() => I.Assert.Not.Throws(() => I.Assert.True(() => false)));
+
+            Assert.Throws<FluentAssertFailedException>(() => With.WaitOnAllAsserts(false).Then.Assert.Throws(() => I.Assert.True(() => true)));
         }
     }
 }

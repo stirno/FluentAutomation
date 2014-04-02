@@ -57,7 +57,6 @@ namespace FluentAutomation.Interfaces
         void UploadFile(ElementProxy element, int x, int y, string fileName);
 
         void Wait();
-        void Wait(int seconds);
         void Wait(TimeSpan timeSpan);
         void WaitUntil(Expression<Func<bool>> conditionFunc);
         void WaitUntil(Expression<Func<bool>> conditionFunc, TimeSpan timeout);

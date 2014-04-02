@@ -54,9 +54,11 @@ namespace FluentAutomation.Tests.Actions
 
             // Will never succeed
             Assert.Throws<FluentException>(() => I.WaitUntil(() => I.Assert.True(() => false)));
+            Assert.Throws<FluentException>(() => I.WaitUntil(() => I.Assert.True(() => false), 1));
             Assert.Throws<FluentException>(() => I.WaitUntil(() => I.Assert.True(() => false), TimeSpan.FromMilliseconds(50)));
 
             Assert.Throws<FluentException>(() => I.WaitUntil(() => false));
+            Assert.Throws<FluentException>(() => I.WaitUntil(() => false, 1));
             Assert.Throws<FluentException>(() => I.WaitUntil(() => false, TimeSpan.FromMilliseconds(50)));
 
             controlInt = 0;

@@ -70,6 +70,7 @@
     <Compile Include="Actions\TakeScreenshotTests.cs" />
     <Compile Include="Actions\UploadTests.cs" />
     <Compile Include="Actions\WaitTests.cs" />
+    <Compile Include="Asserts\AttributeTests.cs" />
     <Compile Include="Asserts\BooleanTests.cs" />
     <Compile Include="Asserts\CssTests.cs" />
     <Compile Include="Asserts\CountTests.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="Asserts\ThrowsTests.cs" />
     <Compile Include="Asserts\UrlTests.cs" />
     <Compile Include="Asserts\ValueTests.cs" />
+    <Compile Include="Asserts\VisibleTests.cs" />
     <Compile Include="BaseTest.cs" />
     <Compile Include="Base\BootstrapTests.cs" />
     <Compile Include="Base\ConfigTests.cs" />

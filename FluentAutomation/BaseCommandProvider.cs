@@ -139,11 +139,6 @@ namespace FluentAutomation
             }
         }
         
-        public void Wait(int seconds)
-        {
-            this.Wait(TimeSpan.FromSeconds(seconds));
-        }
-
         public void Wait()
         {
             this.Wait(this.Settings.WaitTimeout);

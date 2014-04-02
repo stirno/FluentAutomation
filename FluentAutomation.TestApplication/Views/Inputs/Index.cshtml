@@ -6,7 +6,7 @@
 <h2>Input Controls Testbed</h2>
 
 <form action="/" onsubmit="setTimeout(function () { $('#button-clicked-text').text(''); }, 1500); return false" method="post" role="form">
-    <div class="form-group">
+    <div class="form-group other-class">
         <label for="text-control">Text Input</label>
         <input id="text-control" class="form-control">
 
@@ -69,6 +69,8 @@
             <span id="button-clicked-text"></span>
         </div>
     </div>
+
+    <div id="hidden-div" style="display: none">Hidden</div>
 </form>
 
 <script type="text/javascript">

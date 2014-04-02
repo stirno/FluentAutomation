@@ -69,16 +69,24 @@ namespace FluentAutomation.Tests.Asserts
                 .Text(t => t.StartsWith("M")).In(InputsPage.MultiSelectControlSelector)
                 .Text("Saskatchewan").In(InputsPage.MultiSelectControlSelector)
                 .Text(t => t.StartsWith("S")).In(InputsPage.MultiSelectControlSelector)
+                .Text("Saskatchewan").In(I.Find(InputsPage.MultiSelectControlSelector))
+                .Text(t => t.StartsWith("S")).In(I.Find(InputsPage.MultiSelectControlSelector))
                 .Text("Ontario").Not.In(InputsPage.MultiSelectControlSelector)
-                .Text(t => t.StartsWith("Ont")).Not.In(InputsPage.MultiSelectControlSelector);
+                .Text(t => t.StartsWith("Ont")).Not.In(InputsPage.MultiSelectControlSelector)
+                .Text("Ontario").Not.In(I.Find(InputsPage.MultiSelectControlSelector))
+                .Text(t => t.StartsWith("Ont")).Not.In(I.Find(InputsPage.MultiSelectControlSelector));
 
             I.Expect
                 .Text("Manitoba").In(InputsPage.MultiSelectControlSelector)
                 .Text(t => t.StartsWith("M")).In(InputsPage.MultiSelectControlSelector)
                 .Text("Saskatchewan").In(InputsPage.MultiSelectControlSelector)
                 .Text(t => t.StartsWith("S")).In(InputsPage.MultiSelectControlSelector)
+                .Text("Saskatchewan").In(I.Find(InputsPage.MultiSelectControlSelector))
+                .Text(t => t.StartsWith("S")).In(I.Find(InputsPage.MultiSelectControlSelector))
                 .Text("Ontario").Not.In(InputsPage.MultiSelectControlSelector)
-                .Text(t => t.StartsWith("Ont")).Not.In(InputsPage.MultiSelectControlSelector);
+                .Text(t => t.StartsWith("Ont")).Not.In(InputsPage.MultiSelectControlSelector)
+                .Text("Ontario").Not.In(I.Find(InputsPage.MultiSelectControlSelector))
+                .Text(t => t.StartsWith("Ont")).Not.In(I.Find(InputsPage.MultiSelectControlSelector));
 
             // throw due to invalid assertions
             var exception = Assert.Throws<FluentException>(() => I.Assert.Text("Ontario").In(InputsPage.MultiSelectControlSelector));

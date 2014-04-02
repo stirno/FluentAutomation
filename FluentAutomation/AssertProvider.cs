@@ -258,7 +258,7 @@ namespace FluentAutomation
                 {
                     this.ReportError("Expected element [{0}] to have attribute [{1}] but it did not.", element.Element.Selector, attributeName);
                 }
-                else if (!IsTextMatch(result, attributeValue))
+                else if (attributeValue != null && !IsTextMatch(result, attributeValue))
                 {
                     this.ReportError("Expected element [{0}]'s attribute [{1}] to have a value of [{2}] but it was actually [{3}].", element.Element.Selector, attributeName, attributeValue, result);
                 }

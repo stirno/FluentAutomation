@@ -29,7 +29,9 @@ namespace FluentAutomation.Tests.Pages
 
         public string ButtonClickedTextSelector = "#button-clicked-text";
 
-        public string FormGroupDiv = "div[class='form-group']";
+        public string FormGroupDivSelector = "div[class='form-group other-class']";
+
+        public string HiddenDivSelector = "#hidden-div";
 
         public string HoverColor = "rgb(255, 0, 0)";
 

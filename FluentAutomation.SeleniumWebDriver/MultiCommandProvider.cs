@@ -220,11 +220,6 @@ namespace FluentAutomation
             this.commandProviders.First().Wait();
         }
 
-        public void Wait(int seconds)
-        {
-            this.commandProviders.First().Wait(seconds);
-        }
-
         public void Wait(TimeSpan timeSpan)
         {
             this.commandProviders.First().Wait(timeSpan);
