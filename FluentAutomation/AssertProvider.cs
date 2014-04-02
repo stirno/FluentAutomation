@@ -44,13 +44,30 @@ namespace FluentAutomation
             });
         }
 
+        private int CountElementsInProxy(ElementProxy elements)
+        {
+            int count = 0;
+
+            foreach (var element in elements.Elements)
+            {
+                try
+                {
+                    element.Item2();
+                    count++;
+                }
+                catch (Exception) { }
+            }
+
+            return count;
+        }
+
         public void Count(ElementProxy elements, int count)
         {
             this.commandProvider.Act(commandType, () =>
             {
-                if (elements.Elements.Count() != count)
+                if (this.CountElementsInProxy(elements) != count)
                 {
-                    this.ReportError("Expected count of elements in collection to be [{1}] but instead it was [{2}]", count, elements.Elements.Count());
+                    this.ReportError("Expected count of elements in collection to be [{0}] but instead it was [{1}].", count, elements.Elements.Count());
                 }
             });
         }
@@ -59,9 +76,9 @@ namespace FluentAutomation
         {
             this.commandProvider.Act(commandType, () =>
             {
-                if (elements.Elements.Count() == count)
+                if (this.CountElementsInProxy(elements) == count)
                 {
-                    this.ReportError("Expected count of elements in collection not to be [{1}] but it was.", count);
+                    this.ReportError("Expected count of elements in collection not to be [{0}] but it was.", count);
                 }
             });
         }
@@ -722,10 +739,15 @@ namespace FluentAutomation
         #region Exists
         private bool elementExists(string selector)
         {
-            var exists = false;
+            return this.elementExists(this.commandProvider.Find(selector));
+        }
+
+        private bool elementExists(ElementProxy element)
+        {
+            bool exists = false;
             try
             {
-                exists = this.commandProvider.Find(selector).Element != null;
+                exists = element.Element != null;
             }
             catch (FluentException) { }
 
@@ -743,13 +765,35 @@ namespace FluentAutomation
             });
         }
 
+        public void Exists(ElementProxy element)
+        {
+            this.commandProvider.Act(commandType, () =>
+            {
+                if (!elementExists(element))
+                {
+                    this.ReportError("Expected element provided to exist.");
+                }
+            });
+        }
+
         public void NotExists(string selector)
         {
             this.commandProvider.Act(commandType, () =>
             {
                 if (elementExists(selector))
                 {
-                    this.ReportError("Expected element matching selector [{0}] to exist.", selector);
+                    this.ReportError("Expected element matching selector [{0}] not to exist.", selector);
+                }
+            });
+        }
+        
+        public void NotExists(ElementProxy element)
+        {
+            this.commandProvider.Act(commandType, () =>
+            {
+                if (elementExists(element))
+                {
+                    this.ReportError("Expected element provided not to exist.");
                 }
             });
         }

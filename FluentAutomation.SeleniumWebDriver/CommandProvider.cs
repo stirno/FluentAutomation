@@ -610,16 +610,6 @@ namespace FluentAutomation
             if (ActiveAlert == null)
                 return;
 
-            if (accessor != Alert.OK && accessor != Alert.Cancel)
-            {
-                try
-                {
-                    ActiveAlert.Dismiss();
-                }
-                catch (NoAlertPresentException) { }
-                throw new FluentException("FluentAutomation only supports clicking on OK or Cancel in alerts or prompts.");
-            }
-
             try
             {
                 this.Act(CommandType.Action, () =>

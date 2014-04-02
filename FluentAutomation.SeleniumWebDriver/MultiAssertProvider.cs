@@ -221,6 +221,16 @@ namespace FluentAutomation
             Parallel.ForEach(this.providers, x => x.Key.NotExists(selector));
         }
 
+        public void Exists(ElementProxy element)
+        {
+            Parallel.ForEach(this.providers, x => x.Key.Exists(element));
+        }
+
+        public void NotExists(ElementProxy element)
+        {
+            Parallel.ForEach(this.providers, x => x.Key.NotExists(element));
+        }
+
         public void AlertText(string text)
         {
             Parallel.ForEach(this.providers, x => x.Key.AlertText(text));

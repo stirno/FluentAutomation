@@ -51,7 +51,9 @@ namespace FluentAutomation.Interfaces
         void NotThrows(Expression<Action> matchAction);
 
         void Exists(string selector);
+        void Exists(ElementProxy element);
         void NotExists(string selector);
+        void NotExists(ElementProxy element);
         void Visible(string selector);
         void NotVisible(string selector);
         void Visible(ElementProxy element);

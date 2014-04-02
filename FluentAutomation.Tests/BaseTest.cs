@@ -17,7 +17,7 @@ namespace FluentAutomation.Tests
         public BaseTest()
         {
             FluentSession.EnableStickySession();
-            Config.WaitUntilTimeout(TimeSpan.FromMilliseconds(2000));
+            Config.WaitUntilTimeout(TimeSpan.FromMilliseconds(1000));
 
             // Create Page Objects
             this.InputsPage = new Pages.InputsPage(this);

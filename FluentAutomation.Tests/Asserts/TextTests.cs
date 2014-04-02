@@ -26,20 +26,28 @@ namespace FluentAutomation.Tests.Asserts
             // Valid
             I.Assert
                 .Text(validText).In(InputsPage.TextControlSelector)
-                .Text(t => t.StartsWith(validText.Substring(0, 5))).In(InputsPage.TextControlSelector);
+                .Text(t => t == validText).In(InputsPage.TextControlSelector)
+                .Text(validText).In(I.Find(InputsPage.TextControlSelector))
+                .Text(t => t == validText).In(I.Find(InputsPage.TextControlSelector));
 
             I.Expect
                 .Text(validText).In(InputsPage.TextControlSelector)
-                .Text(t => t.StartsWith(validText.Substring(0, 5))).In(InputsPage.TextControlSelector);
+                .Text(t => t == validText).In(InputsPage.TextControlSelector)
+                .Text(validText).In(I.Find(InputsPage.TextControlSelector))
+                .Text(t => t == validText).In(InputsPage.TextControlSelector);
 
             // Invalid
             I.Assert
                 .Text(invalidText).Not.In(InputsPage.TextControlSelector)
-                .Text(t => t.StartsWith(invalidText.Substring(0, 5))).Not.In(InputsPage.TextControlSelector);
+                .Text(t => t == invalidText).Not.In(InputsPage.TextControlSelector)
+                .Text(invalidText).Not.In(I.Find(InputsPage.TextControlSelector))
+                .Text(t => t == invalidText).Not.In(I.Find(InputsPage.TextControlSelector));
 
             I.Expect
                 .Text(invalidText).Not.In(InputsPage.TextControlSelector)
-                .Text(t => t.StartsWith(invalidText.Substring(0, 5))).Not.In(InputsPage.TextControlSelector);
+                .Text(t => t == invalidText).Not.In(InputsPage.TextControlSelector)
+                .Text(invalidText).Not.In(I.Find(InputsPage.TextControlSelector))
+                .Text(t => t == invalidText).Not.In(I.Find(InputsPage.TextControlSelector));
 
             // Throw due to invalid assertion
             var exception = Assert.Throws<FluentException>(() => I.Assert.Text(invalidText).In(InputsPage.TextControlSelector));
@@ -75,6 +83,36 @@ namespace FluentAutomation.Tests.Asserts
             // throw due to invalid assertions
             var exception = Assert.Throws<FluentException>(() => I.Assert.Text("Ontario").In(InputsPage.MultiSelectControlSelector));
             Assert.True(exception.InnerException.Message.Contains("Ontario") && exception.InnerException.Message.Contains("Manitoba"));
+        }
+
+        [Fact]
+        public void TextInAlerts()
+        {
+            AlertsPage.Go();
+
+            I.Click(AlertsPage.TriggerAlertSelector)
+             .Assert
+                .Text("Alert box").In(Alert.Message)
+                .Text("Prompt box").Not.In(Alert.Message);
+
+            I.Expect
+                .Text("Alert box").In(Alert.Message)
+                .Text("Prompt box").Not.In(Alert.Message);
+
+            Assert.Throws<FluentAssertFailedException>(() => I.Assert.Text("Alert box").Not.In(Alert.Message)); // always returns immediately, so not wrapped in FluentException
+            Assert.Throws<FluentException>(() => I.Assert.Text("Alert box1").In(Alert.Message));
+            Assert.Throws<FluentException>(() => I.Expect.Text("Alert box").Not.In(Alert.Message));
+            Assert.Throws<FluentException>(() => I.Expect.Text("Alert box1").In(Alert.Message));
+            Assert.Throws<FluentException>(() => I.Expect.Text("Wat").In(Alert.Input));
+
+            Assert.Throws<FluentException>(() => I.Assert.Text("Alert box").Not.In(Alert.Message));
+            Assert.Throws<FluentException>(() => I.Assert.Text("Alert box1").In(Alert.Message));
+            Assert.Throws<FluentException>(() => I.Expect.Text("Alert box").Not.In(Alert.Message));
+            Assert.Throws<FluentException>(() => I.Expect.Text("Alert box1").In(Alert.Message));
+            Assert.Throws<FluentException>(() => I.Expect.Text("Wat").In(Alert.Input));
+
+            Assert.Throws<FluentException>(() => I.Expect.Text(x => x.StartsWith("Alert box")).In(Alert.Message));
+            Assert.Throws<FluentException>(() => I.Expect.Text(x => x.StartsWith("Prompt box")).Not.In(Alert.Message));
         }
     }
 }

@@ -103,6 +103,16 @@ namespace FluentAutomation
             }
 
             /// <summary>
+            /// Assert the element specified does not exist.
+            /// </summary>
+            /// <param name="selector">Element reference.</param>
+            public AssertSyntaxProvider Exists(ElementProxy element)
+            {
+                this.assertProvider.NotExists(element);
+                return this.assertSyntaxProvider;
+            }
+
+            /// <summary>
             /// Assert that the element matching the selector is not visible and cannot be interacted with.
             /// </summary>
             /// <param name="selector"></param>
@@ -710,7 +720,7 @@ namespace FluentAutomation
                 else
                 {
                     if (this.notMode)
-                        this.assertProvider.AlertNotText(this.value.ToString());
+                        this.assertProvider.AlertNotText(this.matchFunc);
                     else
                         this.assertProvider.AlertText(this.matchFunc);
                 }
@@ -790,6 +800,17 @@ namespace FluentAutomation
         public AssertSyntaxProvider Exists(string selector)
         {
             this.assertProvider.Exists(selector);
+            return this.assertSyntaxProvider;
+        }
+
+        /// <summary>
+        /// Assert the element specified exists.
+        /// </summary>
+        /// <param name="element">Reference to element</param>
+        /// <returns></returns>
+        public AssertSyntaxProvider Exists(ElementProxy element)
+        {
+            this.assertProvider.Exists(element);
             return this.assertSyntaxProvider;
         }
 
