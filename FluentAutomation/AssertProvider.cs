@@ -24,10 +24,17 @@ namespace FluentAutomation
         {
             this.commandProvider.Act(commandType, () =>
             {
-                var elements = this.commandProvider.FindMultiple(selector).Elements;
-                if (elements.Count() != count)
+                try
                 {
-                    this.ReportError("Expected count of elements matching selector [{0}] to be [{1}] but instead it was [{2}]", selector, count, elements.Count());
+                    var elements = this.commandProvider.FindMultiple(selector).Elements;
+                    if (elements.Count() != count)
+                    {
+                        this.ReportError("Expected count of elements matching selector [{0}] to be [{1}] but instead it was [{2}]", selector, count, elements.Count());
+                    }
+                }
+                catch (FluentException ex) {
+                    if (!ex.Message.StartsWith("Unable to"))
+                        throw ex;
                 }
             });
         }
@@ -36,10 +43,18 @@ namespace FluentAutomation
         {
             this.commandProvider.Act(commandType, () =>
             {
-                var elements = this.commandProvider.FindMultiple(selector).Elements;
-                if (elements.Count() == count)
+                try
                 {
-                    this.ReportError("Expected count of elements matching selector [{0}] not to be [{1}] but it was.", selector, count);
+                    var elements = this.commandProvider.FindMultiple(selector).Elements;
+                    if (elements.Count() == count)
+                    {
+                        this.ReportError("Expected count of elements matching selector [{0}] not to be [{1}] but it was.", selector, count);
+                    }
+                }
+                catch (FluentException ex)
+                {
+                    if (!ex.Message.StartsWith("Unable to"))
+                        throw ex;
                 }
             });
         }

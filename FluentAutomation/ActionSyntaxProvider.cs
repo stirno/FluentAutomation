@@ -321,7 +321,7 @@ namespace FluentAutomation
             }
 
             /// <summary>
-            /// Switch to a window by name
+            /// Switch to a window by name or URL (can be relative such as /about -- matches on the end of the URL)
             /// </summary>
             /// <param name="windowName"></param>
             public IActionSyntaxProvider Window(string windowName)

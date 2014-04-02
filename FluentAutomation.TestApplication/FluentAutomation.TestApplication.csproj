@@ -139,6 +139,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InputsController.cs" />
     <Compile Include="Controllers\ScrollingController.cs" />
+    <Compile Include="Controllers\SwitchController.cs" />
     <Compile Include="Controllers\TextController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -152,6 +153,7 @@
     <Content Include="Views\Scrolling\Index.cshtml" />
     <Content Include="Views\Text\Index.cshtml" />
     <Content Include="Views\DragAndDrop\Index.cshtml" />
+    <Content Include="Views\Switch\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

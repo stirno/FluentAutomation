@@ -25,6 +25,7 @@ namespace FluentAutomation.Tests
             this.ScrollingPage = new Pages.ScrollingPage(this);
             this.TextPage = new Pages.TextPage(this);
             this.DragPage = new Pages.DragPage(this);
+            this.SwitchPage = new Pages.SwitchPage(this);
             
             // Default tests use chrome and load the site
             FluentAutomation.SeleniumWebDriver.Bootstrap(SeleniumWebDriver.Browser.Chrome);//, SeleniumWebDriver.Browser.InternetExplorer, SeleniumWebDriver.Browser.Firefox);
@@ -36,6 +37,7 @@ namespace FluentAutomation.Tests
         public Pages.ScrollingPage ScrollingPage = null;
         public Pages.TextPage TextPage = null;
         public Pages.DragPage DragPage = null;
+        public Pages.SwitchPage SwitchPage = null;
     }
 
     public class AssertBaseTest : BaseTest

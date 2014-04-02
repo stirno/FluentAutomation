@@ -52,10 +52,43 @@ namespace FluentAutomation.Tests.Asserts
             // Throw due to invalid assertion
             var exception = Assert.Throws<FluentException>(() => I.Assert.Value(invalidText).In(InputsPage.TextControlSelector));
             Assert.True(exception.InnerException.Message.Contains(invalidText) && exception.InnerException.Message.Contains(validText));
+            Assert.Throws<FluentException>(() => I.Assert.Value(x => x == invalidText).In(InputsPage.TextControlSelector));
+            Assert.Throws<FluentException>(() => I.Assert.Value(x => x == validText).Not.In(InputsPage.TextControlSelector));
 
             // Throw due to invalid expect
             exception = Assert.Throws<FluentExpectFailedException>(() => I.Expect.Value(invalidText).In(InputsPage.TextControlSelector));
             Assert.True(exception.Message.Contains(invalidText) && exception.Message.Contains(validText));
+            Assert.Throws<FluentExpectFailedException>(() => I.Expect.Value(x => x == invalidText).In(InputsPage.TextControlSelector));
+            Assert.Throws<FluentExpectFailedException>(() => I.Expect.Value(x => x == validText).Not.In(InputsPage.TextControlSelector));
+        }
+        
+        [Fact]
+        public void ValueInSelects()
+        {
+            // setup
+            I.Select("Manitoba").From(InputsPage.SelectControlSelector);
+
+            I.Assert
+                .Value("MB").In(InputsPage.SelectControlSelector)
+                .Value(t => t.StartsWith("M")).In(InputsPage.SelectControlSelector);
+
+            I.Expect
+                .Value("MB").In(InputsPage.SelectControlSelector)
+                .Value(t => t.StartsWith("M")).In(InputsPage.SelectControlSelector);
+
+            // throw due to invalid assertions
+            var exception = Assert.Throws<FluentException>(() => I.Assert.Value("ON").In(InputsPage.SelectControlSelector));
+            Assert.True(exception.InnerException.Message.Contains("ON") && exception.InnerException.Message.Contains("MB"));
+            Assert.Throws<FluentException>(() => I.Assert.Value("ON").In(I.Find(InputsPage.SelectControlSelector)));
+            Assert.Throws<FluentException>(() => I.Assert.Value(x => x == "ON").In(InputsPage.SelectControlSelector));
+            Assert.Throws<FluentException>(() => I.Assert.Value(x => x == "MB").Not.In(InputsPage.SelectControlSelector));
+
+            // throw due to invalid expect
+            exception = Assert.Throws<FluentExpectFailedException>(() => I.Expect.Value("ON").In(InputsPage.SelectControlSelector));
+            Assert.True(exception.Message.Contains("ON") && exception.Message.Contains("MB"));
+            Assert.Throws<FluentExpectFailedException>(() => I.Expect.Value("ON").In(I.Find(InputsPage.SelectControlSelector)));
+            Assert.Throws<FluentExpectFailedException>(() => I.Expect.Value(x => x == "ON").In(InputsPage.SelectControlSelector));
+            Assert.Throws<FluentExpectFailedException>(() => I.Expect.Value(x => x == "MB").Not.In(InputsPage.SelectControlSelector));
         }
 
         [Fact]
@@ -83,6 +116,22 @@ namespace FluentAutomation.Tests.Asserts
             // throw due to invalid assertions
             var exception = Assert.Throws<FluentException>(() => I.Assert.Value("ON").In(InputsPage.MultiSelectControlSelector));
             Assert.True(exception.InnerException.Message.Contains("ON") && exception.InnerException.Message.Contains("MB"));
+            Assert.Throws<FluentException>(() => I.Assert.Value("MB").Not.In(InputsPage.MultiSelectControlSelector));
+            Assert.Throws<FluentException>(() => I.Assert.Value("MB").Not.In(I.Find(InputsPage.MultiSelectControlSelector)));
+            Assert.Throws<FluentException>(() => I.Assert.Value(x => x == "ON").In(InputsPage.MultiSelectControlSelector));
+            Assert.Throws<FluentException>(() => I.Assert.Value(x => x == "MB").Not.In(InputsPage.MultiSelectControlSelector));
+            Assert.Throws<FluentException>(() => I.Assert.Value(x => x == "ON").In(I.Find(InputsPage.MultiSelectControlSelector)));
+            Assert.Throws<FluentException>(() => I.Assert.Value(x => x == "MB").Not.In(I.Find(InputsPage.MultiSelectControlSelector)));
+
+            // throw due to invalid expects
+            exception = Assert.Throws<FluentExpectFailedException>(() => I.Expect.Value("ON").In(InputsPage.MultiSelectControlSelector));
+            Assert.True(exception.Message.Contains("ON") && exception.Message.Contains("MB"));
+            Assert.Throws<FluentExpectFailedException>(() => I.Expect.Value("MB").Not.In(InputsPage.MultiSelectControlSelector));
+            Assert.Throws<FluentExpectFailedException>(() => I.Expect.Value("MB").Not.In(I.Find(InputsPage.MultiSelectControlSelector)));
+            Assert.Throws<FluentExpectFailedException>(() => I.Expect.Value(x => x == "ON").In(InputsPage.MultiSelectControlSelector));
+            Assert.Throws<FluentExpectFailedException>(() => I.Expect.Value(x => x == "MB").Not.In(InputsPage.MultiSelectControlSelector));
+            Assert.Throws<FluentExpectFailedException>(() => I.Expect.Value(x => x == "ON").In(I.Find(InputsPage.MultiSelectControlSelector)));
+            Assert.Throws<FluentExpectFailedException>(() => I.Expect.Value(x => x == "MB").Not.In(I.Find(InputsPage.MultiSelectControlSelector)));
         }
 
         [Fact]
