@@ -21,15 +21,17 @@ namespace FluentAutomation.Tests.Actions
             var element = I.Find(InputsPage.TextControlSelector).Element;
 
             // simple assert on element to ensure it was properly loaded
-            Assert.True(element.IsText);            
+            Assert.True(element.IsText);
         }
 
         [Fact]
         public void FindMultipleElements()
         {
-            var elements = I.FindMultiple("div").Elements;
+            var proxy = I.FindMultiple("div");
 
-            Assert.True(elements.Count > 1);
+            Assert.True(proxy.Elements.Count > 1);
+            Assert.False(proxy.Element.IsText);
+            Assert.True(proxy.Element.Text == proxy.Element.Value);
         }
 
         [Fact]

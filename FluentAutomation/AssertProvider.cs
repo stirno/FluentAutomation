@@ -662,7 +662,7 @@ namespace FluentAutomation
                 var compiledFunc = matchFunc.Compile();
                 if (!compiledFunc())
                 {
-                    this.ReportError("Expected expression [{0}] to return false.", matchFunc.ToExpressionString());
+                    this.ReportError("Expected expression [{0}] to return true.", matchFunc.ToExpressionString());
                 }
             });
         }

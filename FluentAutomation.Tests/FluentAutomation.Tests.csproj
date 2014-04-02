@@ -81,10 +81,12 @@
     <Compile Include="BaseTest.cs" />
     <Compile Include="Base\BootstrapTests.cs" />
     <Compile Include="Base\ConfigTests.cs" />
+    <Compile Include="Base\FluentTestTests.cs" />
     <Compile Include="Base\MultiBrowserTests.cs" />
     <Compile Include="Base\PageObjectTests.cs" />
     <Compile Include="Base\RemoteWebDriverTests.cs" />
     <Compile Include="Base\SessionTests.cs" />
+    <Compile Include="Base\WithTests.cs" />
     <Compile Include="Pages\AlertsPage.cs" />
     <Compile Include="Pages\DragPage.cs" />
     <Compile Include="Pages\TextPage.cs" />

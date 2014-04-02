@@ -36,12 +36,6 @@ namespace FluentAutomation.Tests
         public Pages.ScrollingPage ScrollingPage = null;
         public Pages.TextPage TextPage = null;
         public Pages.DragPage DragPage = null;
-
-        [Fact]
-        public void ProviderIsAvailable()
-        {
-            Assert.True(this.Provider != null);
-        }
     }
 
     public class AssertBaseTest : BaseTest
