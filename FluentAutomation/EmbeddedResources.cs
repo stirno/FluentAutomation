@@ -52,13 +52,20 @@ namespace FluentAutomation
 
         public static string UnpackFromAssembly(string resourceFileName, string outputFileName, Assembly assembly)
         {
-            var filePath = FileExists(outputFileName);
-            if (filePath != string.Empty) return filePath;
+            // if user provided an custom version of resource, use that
+            var customResource = string.Format("Custom{0}", resourceFileName);
+            var customResourcePath = FileExists(outputFileName);
+            if (customResourcePath != string.Empty) return customResourcePath;
 
+            // search for an exact match in the path, based on name and file size.
             var resourceName = assembly.GetManifestResourceNames().FirstOrDefault(x => x.EndsWith(resourceFileName));
             var resourceStream = assembly.GetManifestResourceStream(resourceName);
-            var resourceBytes = new byte[(int)resourceStream.Length];
 
+            var filePath = FileExists(outputFileName);
+            if (filePath != string.Empty && new FileInfo(filePath).Length == resourceStream.Length)
+                return filePath;
+
+            var resourceBytes = new byte[(int)resourceStream.Length];
             var tmpPath = Path.Combine(Path.GetTempPath(), outputFileName);
             resourceStream.Read(resourceBytes, 0, resourceBytes.Length);
             File.WriteAllBytes(tmpPath, resourceBytes);
