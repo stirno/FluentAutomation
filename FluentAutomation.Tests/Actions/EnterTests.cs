@@ -65,5 +65,27 @@ namespace FluentAutomation.Tests.Actions
             // Can't enter text into a message, verify exception is thrown properly
             Assert.Throws<FluentException>(() => I.Enter("Wat2").In(Alert.Message));
         }
+
+        [Fact]
+        public void EnterTextInElementTypes()
+        {
+            I.Enter("test").In(InputsPage.TextEmailControlSelector)
+             .Assert.Value("test").In(InputsPage.TextEmailControlSelector);
+
+            I.Enter("test").In(InputsPage.TextSearchControlSelector)
+             .Assert.Value("test").In(InputsPage.TextSearchControlSelector);
+
+            I.Enter("test").In(InputsPage.TextUrlControlSelector)
+             .Assert.Value("test").In(InputsPage.TextUrlControlSelector);
+
+            I.Enter("test").In(InputsPage.TextTelControlSelector)
+             .Assert.Value("test").In(InputsPage.TextTelControlSelector);
+
+            I.Enter("14").In(InputsPage.TextNumberControlSelector)
+             .Assert.Value("14").In(InputsPage.TextNumberControlSelector);
+
+            I.Enter("test").In(InputsPage.TextPasswordControlSelector)
+             .Assert.Value("test").In(InputsPage.TextPasswordControlSelector);
+        }
     }
 }
