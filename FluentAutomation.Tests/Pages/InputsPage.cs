@@ -36,5 +36,12 @@ namespace FluentAutomation.Tests.Pages
         public string HoverColor = "rgb(255, 0, 0)";
 
         public string FocusColor = "rgb(0, 0, 255)";
+
+        public string TextEmailControlSelector = "#text-email-control";
+        public string TextSearchControlSelector = "#text-search-control";
+        public string TextUrlControlSelector = "#text-url-control";
+        public string TextTelControlSelector = "#text-tel-control";
+        public string TextNumberControlSelector = "#text-number-control";
+        public string TextPasswordControlSelector = "#text-password-control";
     }
 }

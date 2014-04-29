@@ -128,6 +128,11 @@ namespace FluentAutomation
                         switch (this.Attributes.Get("type").ToLower())
                         {
                             case "text":
+                            case "email":
+                            case "search":
+                            case "url":
+                            case "tel":
+                            case "number":
                             case "password":
                             case "hidden":
                                 isText = true;
