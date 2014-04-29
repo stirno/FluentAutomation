@@ -121,7 +121,7 @@ namespace FluentAutomation
         {
             get
             {
-                bool isText = false;
+                bool isText = false;    
                 switch (this.TagName.ToLower())
                 {
                     case "input":

@@ -84,6 +84,7 @@
     <Compile Include="Base\ConfigTests.cs" />
     <Compile Include="Base\ElementTests.cs" />
     <Compile Include="Base\FluentTestTests.cs" />
+    <Compile Include="Base\MultiBrowserTests.cs" />
     <Compile Include="Base\PageObjectTests.cs" />
     <Compile Include="Base\WithTests.cs" />
     <Compile Include="Pages\AlertsPage.cs" />
