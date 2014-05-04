@@ -30,6 +30,7 @@ namespace FluentAutomation
             // browser size
             this.WindowHeight = null;
             this.WindowWidth = null;
+            this.WindowMaximized = false;
 
             // timeouts
             this.WaitTimeout = TimeSpan.FromSeconds(1);
@@ -78,6 +79,7 @@ namespace FluentAutomation
         public bool ScreenshotOnFailedAction { get; set; }
         public int? WindowHeight { get; set; }
         public int? WindowWidth { get; set; }
+        public bool WindowMaximized { get; set; }
         public TimeSpan WaitTimeout { get; set; }
         public TimeSpan WaitUntilTimeout { get; set; }
         public TimeSpan WaitUntilInterval { get; set; }

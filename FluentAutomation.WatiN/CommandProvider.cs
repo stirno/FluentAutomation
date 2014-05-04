@@ -629,9 +629,15 @@ namespace FluentAutomation
         {
             this.Settings = settings;
 
+            if (settings.WindowMaximized)
+            {
+                this.browser.ShowWindow(WatiNCore.Native.Windows.NativeMethods.WindowShowStyle.ShowMaximized);
+            }
             // If the browser size has changed since the last config change, update it
-            if (settings.WindowWidth.HasValue && settings.WindowHeight.HasValue)
+            else if (settings.WindowWidth.HasValue && settings.WindowHeight.HasValue)
+            {
                 this.browser.SizeWindow(settings.WindowWidth.Value, settings.WindowHeight.Value);
+            }
 
             return this;
         }

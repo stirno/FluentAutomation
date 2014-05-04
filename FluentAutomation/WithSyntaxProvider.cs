@@ -105,6 +105,12 @@ namespace FluentAutomation
             return this;
         }
 
+        public WithSyntaxProvider WindowMaximized()
+        {
+            this.inlineSettings.WindowMaximized = true;
+            return this;
+        }
+
         public IActionSyntaxProvider Then
         {
             get

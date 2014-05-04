@@ -41,22 +41,34 @@ namespace FluentAutomation
 
                 webDriver.Manage().Cookies.DeleteAllCookies();
                 webDriver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(10));
-
-                if (this.Settings.WindowHeight.HasValue && this.Settings.WindowWidth.HasValue)
+                
+                // If an alert is open, the world ends if we touch the size property. Ignore this and let it get set by the next command chain
+                try
                 {
-                    // If an alert is open, the world ends if we touch the size property. Ignore this and let it get set by the next command chain
-                    try
+                    if (this.Settings.WindowMaximized)
+                    {
+                        // store window size back before maximizing so we can 'undo' this action if necessary
+                        var windowSize = webDriver.Manage().Window.Size;
+                        if (!this.Settings.WindowWidth.HasValue)
+                            this.Settings.WindowWidth = windowSize.Width;
+
+                        if (!this.Settings.WindowHeight.HasValue)
+                            this.Settings.WindowHeight = windowSize.Height;
+
+                        webDriver.Manage().Window.Maximize();
+                    }
+                    else if (this.Settings.WindowHeight.HasValue && this.Settings.WindowWidth.HasValue)
                     {
                         webDriver.Manage().Window.Size = new Size(this.Settings.WindowWidth.Value, this.Settings.WindowHeight.Value);
                     }
-                    catch (UnhandledAlertException) { }
+                    else
+                    {
+                        var windowSize = webDriver.Manage().Window.Size;
+                        this.Settings.WindowHeight = windowSize.Height;
+                        this.Settings.WindowWidth = windowSize.Width;
+                    }
                 }
-                else
-                {
-                    var windowSize = webDriver.Manage().Window.Size;
-                    this.Settings.WindowHeight = windowSize.Height;
-                    this.Settings.WindowWidth = windowSize.Width;
-                }
+                catch (UnhandledAlertException) { }
 
                 this.mainWindowHandle = webDriver.CurrentWindowHandle;
 
@@ -64,6 +76,39 @@ namespace FluentAutomation
             });
 
             this.fileStoreProvider = fileStoreProvider;
+        }
+
+        public ICommandProvider WithConfig(FluentSettings settings)
+        {
+            // If an alert is open, the world ends if we touch the size property. Ignore this and let it get set by the next command chain
+            try
+            {
+                if (settings.WindowMaximized)
+                {
+                    // store window size back before maximizing so we can 'undo' this action if necessary
+                    // this code intentionally touches this.Settings before its been replaced with the local
+                    // configuration code, so that when the With.___.Then block is completed, the outer settings
+                    // object has the correct window size to work with.
+                    var windowSize = webDriver.Manage().Window.Size;
+                    if (!this.Settings.WindowWidth.HasValue)
+                        this.Settings.WindowWidth = windowSize.Width;
+
+                    if (!this.Settings.WindowHeight.HasValue)
+                        this.Settings.WindowHeight = windowSize.Height;
+
+                    this.webDriver.Manage().Window.Maximize();
+                }
+                // If the browser size has changed since the last config change, update it
+                else if (settings.WindowWidth.HasValue && settings.WindowHeight.HasValue)
+                {
+                    this.webDriver.Manage().Window.Size = new Size(settings.WindowWidth.Value, settings.WindowHeight.Value);
+                }
+            }
+            catch (UnhandledAlertException) { }
+
+            this.Settings = settings;
+
+            return this;
         }
 
         public Uri Url
@@ -674,24 +719,6 @@ namespace FluentAutomation
                 else
                     action(true, propertyValue.ToString());
             });
-        }
-
-        public ICommandProvider WithConfig(FluentSettings settings)
-        {
-            this.Settings = settings;
-
-            // If the browser size has changed since the last config change, update it
-            if (settings.WindowWidth.HasValue && settings.WindowHeight.HasValue)
-            {
-                // If an alert is open, the world ends if we touch the size property. Ignore this and let it get set by the next command chain
-                try
-                {
-                    this.webDriver.Manage().Window.Size = new Size(settings.WindowWidth.Value, settings.WindowHeight.Value);
-                }
-                catch (UnhandledAlertException) { }
-            }
-
-            return this;
         }
 
         public void Dispose()

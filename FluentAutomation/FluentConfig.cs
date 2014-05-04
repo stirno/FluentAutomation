@@ -84,6 +84,12 @@ namespace FluentAutomation
             return this;
         }
 
+        public FluentConfig WindowMaximized(bool isMaximized)
+        {
+            this.Settings.WindowMaximized = isMaximized;
+            return this;
+        }
+
         public FluentConfig ExpectIsAssert(bool isAssert)
         {
             this.Settings.ExpectIsAssert = isAssert;
