@@ -32,9 +32,12 @@ namespace FluentAutomation
                         this.ReportError("Expected count of elements matching selector [{0}] to be [{1}] but instead it was [{2}]", selector, count, elements.Count());
                     }
                 }
-                catch (FluentException ex) {
-                    if (!ex.Message.StartsWith("Unable to"))
-                        throw ex;
+                catch (FluentElementNotFoundException)
+                {
+                    if (count != 0)
+                    {
+                        this.ReportError("Expected count of elements matching selector [{0}] to be [{1}] but no matching elements could be found.", selector, count);
+                    }
                 }
             });
         }
@@ -51,10 +54,12 @@ namespace FluentAutomation
                         this.ReportError("Expected count of elements matching selector [{0}] not to be [{1}] but it was.", selector, count);
                     }
                 }
-                catch (FluentException ex)
+                catch (FluentElementNotFoundException)
                 {
-                    if (!ex.Message.StartsWith("Unable to"))
-                        throw ex;
+                    if (count == 0)
+                    {
+                        this.ReportError("Expected count of elements matching selector [{0}] not to be [{1}] but it was.", selector, count);
+                    }
                 }
             });
         }

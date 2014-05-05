@@ -48,6 +48,7 @@
     <Compile Include="ActionSyntaxProvider.cs" />
     <Compile Include="CommandType.cs" />
     <Compile Include="ElementProxy.cs" />
+    <Compile Include="Exceptions\FluentElementNotFoundException.cs" />
     <Compile Include="FluentSession.cs" />
     <Compile Include="FluentConfig.cs" />
     <Compile Include="Interfaces\ISyntaxProvider.cs" />

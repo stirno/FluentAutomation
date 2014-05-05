@@ -29,5 +29,15 @@ namespace FluentAutomation.Tests.Asserts
              .Count(0).Of("crazyElementThatDoesntExist")
              .Count(0).Of(I.Find("crazyElementThatDoesntExist"));
         }
+
+        [Fact]
+        public void CountFailure()
+        {
+            I.Assert
+             .Throws(() => I.Assert.Count(0).Of("div"))
+             .Throws(() => I.Assert.Count(1).Of("div"))
+             .Throws(() => I.Assert.Count(1).Of("crazyElementThatDoesntExist"))
+             .Throws(() => I.Assert.Count(0).Not.Of("crazyElementThatDoesntExist"));
+        }
     }
 }

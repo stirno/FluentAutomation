@@ -145,7 +145,7 @@ namespace FluentAutomation
                 }
                 catch (KeyNotFoundException)
                 {
-                    throw new FluentException("Unable to find element with selector: {0}", selector);
+                    throw new FluentElementNotFoundException("Unable to find element with selector: {0}", selector);
                 }
             });
         }
@@ -171,7 +171,7 @@ namespace FluentAutomation
                 }
                 catch (KeyNotFoundException)
                 {
-                    throw new FluentException("Unable to find element with selector: {0}", selector);
+                    throw new FluentElementNotFoundException("Unable to find element with selector: {0}", selector);
                 }
             }));
 

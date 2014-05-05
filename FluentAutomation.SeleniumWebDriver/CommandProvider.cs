@@ -154,7 +154,7 @@ namespace FluentAutomation
                 }
                 catch (NoSuchElementException)
                 {
-                    throw new FluentException("Unable to find element with selector [{0}]", selector);
+                    throw new FluentElementNotFoundException("Unable to find element with selector [{0}]", selector);
                 }
             });
         }
@@ -165,24 +165,17 @@ namespace FluentAutomation
 
             finalResult.Children.Add(new Func<ElementProxy>(() =>
             {
-                try
-                {
-                    var result = new ElementProxy();
-                    var webElements = this.webDriver.FindElements(Sizzle.Find(selector));
-                    if (webElements.Count == 0)
-                        throw new FluentException("Unable to find element with selector [{0}].", selector);
+                var result = new ElementProxy();
+                var webElements = this.webDriver.FindElements(Sizzle.Find(selector));
+                if (webElements.Count == 0)
+                    throw new FluentElementNotFoundException("Unable to find element with selector [{0}].", selector);
 
-                    foreach (var element in webElements)
-                    {
-                        result.Elements.Add(new Tuple<ICommandProvider, Func<IElement>>(this, () => new Element(element, selector)));
-                    }
-
-                    return result;
-                }
-                catch (NoSuchElementException)
+                foreach (var element in webElements)
                 {
-                    throw new FluentException("Unable to find element with selector [{0}].", selector);
+                    result.Elements.Add(new Tuple<ICommandProvider, Func<IElement>>(this, () => new Element(element, selector)));
                 }
+
+                return result;
             }));
 
             return finalResult;
