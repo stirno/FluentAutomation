@@ -4,7 +4,7 @@ link: Getting Started
 ---
 FluentAutomation is implemented using one of two supported automation providers - <a href="http://seleniumhq.org" target="_blank">Selenium WebDriver</a> or <a href="http://watin.org" target="_blank">WatiN</a>. Selenium is the preferred provider and the most developed. WatiN is provided as an alternative method of automation Internet Explorer. PhantomJS support has been moved into the Selenium package as a browser target.
 
-You'll need a unit test framework as well. I use either <a href="http;//xunit.codeplex.com/" target="_blank">xUnit.net</a> or <a href="http://nunit.org/" target="_blank">NUnit</a> in most projects. MSTest (the default in Visual Studio Test Projects) is also supported. We don't exhaustively test on every unit test library out there so let us know if your favorite framework doesn't work!
+You'll need a unit test framework as well. I use either <a href="https://github.com/xunit/xunit" target="_blank">xUnit.net</a> or <a href="http://nunit.org/" target="_blank">NUnit</a> in most projects. MSTest (the default in Visual Studio Test Projects) is also supported. We don't exhaustively test on every unit test library out there so let us know if your favorite framework doesn't work!
 
 Once you've decided which provider to use and have your test framework ready, it is super easy to start testing with FluentAutomation -- use NuGet!
 
