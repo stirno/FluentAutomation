@@ -47,3 +47,7 @@ _ReSharper*/
 
 # Office Temp Files
 ~$*
+
+*~
+pvc-packages
+*.nupkg
