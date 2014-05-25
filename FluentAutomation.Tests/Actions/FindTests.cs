@@ -22,7 +22,7 @@ namespace FluentAutomation.Tests.Actions
 
             // simple assert on element to ensure it was properly loaded
             Assert.True(element.IsText);
-            Assert.Throws<FluentException>(() => I.Find("doesntexist").Element);
+            Assert.Throws<FluentElementNotFoundException>(() => I.Find("doesntexist").Element);
         }
 
         [Fact]
@@ -38,9 +38,9 @@ namespace FluentAutomation.Tests.Actions
         [Fact]
         public void AttemptToFindFakeElement()
         {
-            var exception = Assert.Throws<FluentException>(() => I.Find("#fake-control").Element.ToString()); // accessing Element executes the Find
+            var exception = Assert.Throws<FluentElementNotFoundException>(() => I.Find("#fake-control").Element.ToString()); // accessing Element executes the Find
             Assert.True(exception.Message.Contains("Unable to find"));
-            Assert.Throws<FluentException>(() => I.FindMultiple("doesntexist").Element);
+            Assert.Throws<FluentElementNotFoundException>(() => I.FindMultiple("doesntexist").Element);
         }
     }
 }

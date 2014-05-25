@@ -527,6 +527,7 @@ namespace FluentAutomation
                 // wait before typing in the field
                 var task = Task.Factory.StartNew(() =>
                 {
+                    this.Wait(TimeSpan.FromMilliseconds(1000));
                     this.Type(fileName);
                 });
 

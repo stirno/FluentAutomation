@@ -73,7 +73,7 @@ namespace FluentAutomation
             {
                 if (this.Settings.ScreenshotOnFailedExpect)
                 {
-                    var screenshotName = string.Format(CultureInfo.CurrentCulture, "ExpectFailed_{0}", DateTimeOffset.Now.Date.ToFileTime());
+                    var screenshotName = string.Format(CultureInfo.CurrentCulture, "ExpectFailed_{0}", DateTimeOffset.Now.ToFileTime());
                     ex.ScreenshotPath = System.IO.Path.Combine(this.Settings.ScreenshotPath, screenshotName);
                     this.TakeScreenshot(ex.ScreenshotPath);
                 }
@@ -88,7 +88,7 @@ namespace FluentAutomation
             {
                 if (this.Settings.ScreenshotOnFailedAction)
                 {
-                    var screenshotName = string.Format(CultureInfo.CurrentCulture, "ActionFailed_{0}", DateTimeOffset.Now.Date.ToFileTime());
+                    var screenshotName = string.Format(CultureInfo.CurrentCulture, "ActionFailed_{0}", DateTimeOffset.Now.ToFileTime());
                     ex.ScreenshotPath = System.IO.Path.Combine(this.Settings.ScreenshotPath, screenshotName);
                     this.TakeScreenshot(ex.ScreenshotPath);
                 }
@@ -99,7 +99,7 @@ namespace FluentAutomation
                     {
                         if (this.Settings.ScreenshotOnFailedExpect)
                         {
-                            var screenshotName = string.Format(CultureInfo.CurrentCulture, "ExpectFailed_{0}", DateTimeOffset.Now.Date.ToFileTime());
+                            var screenshotName = string.Format(CultureInfo.CurrentCulture, "ExpectFailed_{0}", DateTimeOffset.Now.ToFileTime());
                             ex.ScreenshotPath = System.IO.Path.Combine(this.Settings.ScreenshotPath, screenshotName);
                             this.TakeScreenshot(ex.ScreenshotPath);
                         }
@@ -111,7 +111,7 @@ namespace FluentAutomation
                     {
                         if (this.Settings.ScreenshotOnFailedAssert)
                         {
-                            var screenshotName = string.Format(CultureInfo.CurrentCulture, "AssertFailed_{0}", DateTimeOffset.Now.Date.ToFileTime());
+                            var screenshotName = string.Format(CultureInfo.CurrentCulture, "AssertFailed_{0}", DateTimeOffset.Now.ToFileTime());
                             ex.ScreenshotPath = System.IO.Path.Combine(this.Settings.ScreenshotPath, screenshotName);
                             this.TakeScreenshot(ex.ScreenshotPath);
                         }

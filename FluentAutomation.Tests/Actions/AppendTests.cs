@@ -45,7 +45,7 @@ namespace FluentAutomation.Tests.Actions
         [Fact]
         public void AppendTextToInvalidInputUsingSelector()
         {
-            var exception = Assert.Throws<FluentException>(() => I.Append("Test String").To("#text-control-fake"));
+            var exception = Assert.Throws<FluentElementNotFoundException>(() => I.Append("Test String").To("#text-control-fake"));
             Assert.True(exception.Message.Contains("Unable to find"));
         }
 
