@@ -357,26 +357,26 @@ FluentSession.SetStickySession(this.Session);
 
 <div style="height: 430px"></div>
 
-<div class="highlight"><pre lang="csharp">public class BingSearchPage : PageObject<BingSearchPage>
+<div class="highlight"><pre lang="csharp">public class BingSearchPage : PageObject&lt;BingSearchPage&gt;
 {
     public BingSearchPage(FluentTest test)
         : base(test)
     {
         Url = "<a href='http://bing.com/'>http://bing.com/</a>";
-        At = () =>; I.Expect.Exists(SearchInput);
+        At = () => I.Expect.Exists(SearchInput);
     }
 &nbsp;
     public BingSearchResultsPage Search(string searchText)
     {
         I.Enter(searchText).In(SearchInput);
         I.Press("{ENTER}");
-        return this.Switch<BingSearchResultsPage>();
+        return this.Switch&lt;BingSearchResultsPage&gt;();
     }
 &nbsp;
     private const string SearchInput = "input[title='Enter your search term']";
 }
 
-public class BingSearchResultsPage : PageObject<BingSearchResultsPage>
+public class BingSearchResultsPage : PageObject&lt;BingSearchResultsPage&gt;
 {
     public BingSearchResultsPage(FluentTest test)
         : base(test)
@@ -407,7 +407,7 @@ public class SampleTest : FluentTest
         new BingSearchPage(this)
             .Go()
             .Search("FluentAutomation")
-            .FindResultUrl("<a href='http://fluent.stirno.com/blog/FluentAutomation-scriptcs/'>http://fluent.stirno.com/blog/FluentAutomation-scriptcs/</a>");
+            .FindResultUrl("<a href='http://fluent.stirno.com/'>http://fluent.stirno.com/</a>");
     }
 }
 </pre></div>
