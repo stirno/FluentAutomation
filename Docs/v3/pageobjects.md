@@ -23,14 +23,14 @@ public class BingSearchPage : PageObject<BingSearchPage>
         Url = "http://bing.com/";
         At = () =>; I.Expect.Exists(SearchInput);
     }
-&nbsp;
+    
     public BingSearchResultsPage Search(string searchText)
     {
         I.Enter(searchText).In(SearchInput);
         I.Press("{ENTER}");
         return this.Switch<BingSearchResultsPage>();
     }
-&nbsp;
+    
     private const string SearchInput = "input[title='Enter your search term']";
 }
 
@@ -41,13 +41,13 @@ public class BingSearchResultsPage : PageObject<BingSearchResultsPage>
     {
         At = () => I.Expect.Exists(SearchResultsContainer);
     }
-&nbsp;
+    
     public BingSearchResultsPage FindResultUrl(string url)
     {
         I.Expect.Exists(string.Format(ResultUrlLink, url));
         return this;
     }
-&nbsp;
+    
     private const string SearchResultsContainer = "#b_results";
     private const string ResultUrlLink = "a[href='{0}']";
 }
@@ -58,14 +58,14 @@ public class SampleTest : FluentTest
     {
         SeleniumWebDriver.Bootstrap(SeleniumWebDriver.Browser.Chrome);
     }
-&nbsp;
+    
     [Fact]
     public void SearchForFluentAutomation()
     {
         new BingSearchPage(this)
             .Go()
             .Search("FluentAutomation")
-            .FindResultUrl("http://fluent.stirno.com/blog/FluentAutomation-scriptcs/");
+            .FindResultUrl("http://fluent.stirno.com/");
     }
 }
 ```
