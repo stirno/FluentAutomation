@@ -21,7 +21,7 @@ public class BingSearchPage : PageObject<BingSearchPage>
         : base(test)
     {
         Url = "http://bing.com/";
-        At = () =>; I.Expect.Exists(SearchInput);
+        At = () => I.Expect.Exists(SearchInput);
     }
     
     public BingSearchResultsPage Search(string searchText)
