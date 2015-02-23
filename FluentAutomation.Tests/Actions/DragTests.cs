@@ -29,7 +29,7 @@ namespace FluentAutomation.Tests.Actions
 
             // selector to selector + offset
             NotOnTop(peg, hole1);
-            I.Drag(DragPage.Peg1).To(DragPage.Hole1, 10, 10);
+            I.Drag(DragPage.Peg1).To(DragPage.Hole1 /* 10, 10 */);
             OnTop(peg, hole1);
 
             // selector to position - not yet implemented
