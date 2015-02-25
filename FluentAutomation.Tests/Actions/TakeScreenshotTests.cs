@@ -42,38 +42,56 @@ namespace FluentAutomation.Tests.Actions
         public void ScreenshotOnFailedAction()
         {
             var c = Config.Settings.ScreenshotOnFailedAction;
-            Config.ScreenshotOnFailedAction(true);
+            var p = Config.Settings.ScreenshotPath;
 
+            // Arrange
+            string screenshotPath = Path.Combine(tempPath, Path.GetFileNameWithoutExtension(Path.GetRandomFileName()));
+            if (!Directory.Exists(screenshotPath))
+            {
+                Directory.CreateDirectory(screenshotPath);
+            }
+
+            Config.ScreenshotOnFailedAction(true);
+            Config.ScreenshotPath(screenshotPath);
+
+            // Act
             Assert.Throws<FluentException>(() => I.Click("#nope"));
 
-            var screenshotName = string.Format(CultureInfo.CurrentCulture, "ActionFailed_{0}", DateTimeOffset.Now.Date.ToFileTime());
-            var filepath = this.tempPath + screenshotName + ".png";
-            I.Assert
-             .True(() => File.Exists(filepath))
-             .True(() => new FileInfo(filepath).Length > 0);
+            // Assert
+            I.Assert.True(() => Directory.GetFiles(screenshotPath, "ActionFailed_*").Any());
 
-            File.Delete(filepath);
-
-            Config.ScreenshotOnFailedAction(c);            
+            // Cleanup
+            Directory.Delete(screenshotPath, true);
+            Config.ScreenshotOnFailedAction(c);
+            Config.ScreenshotPath(p);
         }
 
         [Fact]
         public void ScreenshotOnFailedAssert()
         {
             var c = Config.Settings.ScreenshotOnFailedAssert;
-            Config.ScreenshotOnFailedAssert(true);
+            var p = Config.Settings.ScreenshotPath;
 
+            // Arrange
+            string screenshotPath = Path.Combine(tempPath, Path.GetFileNameWithoutExtension(Path.GetRandomFileName()));
+            if (!Directory.Exists(screenshotPath))
+            {
+                Directory.CreateDirectory(screenshotPath);
+            }
+
+            Config.ScreenshotOnFailedAssert(true);
+            Config.ScreenshotPath(screenshotPath);
+
+            // Act
             Assert.Throws<FluentException>(() => I.Assert.True(() => false));
 
-            var screenshotName = string.Format(CultureInfo.CurrentCulture, "AssertFailed_{0}", DateTimeOffset.Now.Date.ToFileTime());
-            var filepath = this.tempPath + screenshotName + ".png";
-            I.Assert
-             .True(() => File.Exists(filepath))
-             .True(() => new FileInfo(filepath).Length > 0);
+            // Assert
+            I.Assert.True(() => Directory.GetFiles(screenshotPath, "AssertFailed_*").Any());
 
-            File.Delete(filepath);
-
+            // Cleanup
+            Directory.Delete(screenshotPath, true);
             Config.ScreenshotOnFailedAssert(c);
+            Config.ScreenshotPath(p);
         }
 
         /*
