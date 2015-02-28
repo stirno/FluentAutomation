@@ -80,6 +80,9 @@ namespace FluentAutomation
 
         public static void DisableStickySession()
         {
+            if (FluentSession.Current == null)
+                return;
+            
             FluentSession.Current.SyntaxProviderRegisterOptions.AsMultiInstance();
             FluentSession.Current = null;
             AppDomain.CurrentDomain.DomainUnload -= CurrentDomain_DomainUnload;
