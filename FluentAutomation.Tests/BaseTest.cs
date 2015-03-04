@@ -28,7 +28,7 @@ namespace FluentAutomation.Tests
             this.SwitchPage = new Pages.SwitchPage(this);
             
             // Default tests use chrome and load the site
-            FluentAutomation.SeleniumWebDriver.Bootstrap(SeleniumWebDriver.Browser.Chrome);//, SeleniumWebDriver.Browser.InternetExplorer, SeleniumWebDriver.Browser.Firefox);
+            FluentAutomation.SeleniumWebDriver.Bootstrap(SeleniumWebDriver.Browser.Chrome); //, SeleniumWebDriver.Browser.InternetExplorer, SeleniumWebDriver.Browser.Firefox);
             I.Open(SiteUrl);
         }
 
