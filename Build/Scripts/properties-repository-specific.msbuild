@@ -1,0 +1,17 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<WebsiteProjectConventionName>WebApplication</WebsiteProjectConventionName>
+		<CSharpSourceDirectory>$(BaseDirectory)Source\</CSharpSourceDirectory>
+		<HtmlSourceDirectory>$(BaseDirectory)StaticSource\</HtmlSourceDirectory>
+
+		<SkipDefaultSassCompile>True</SkipDefaultSassCompile>
+		<SkipDefaultJavascriptMinification>True</SkipDefaultJavascriptMinification>
+		<SkipDefaultCssMinification>True</SkipDefaultCssMinification>
+
+		<UseAspNetCompilerForRelease>False</UseAspNetCompilerForRelease>
+		<FilesToCopyForWebsiteReleasePattern>**</FilesToCopyForWebsiteReleasePattern>
+		<FilesToRemoveForWebsiteReleasePattern>.git*;Views\*.*;Xslt\*.*;Install\**\*.*;**\*.cs;**\*.scssc</FilesToRemoveForWebsiteReleasePattern>
+
+		<DeploySkipDirectoryPattern>($(DeployTargetName)\\robots.txt)|($(DeployTargetName)\\App_Data)|($(DeployTargetName)\\media)|($(DeployTargetName)\\Config\\Acc)|($(DeployTargetName)\\Config\\Prd)|($(DeployTargetName)\\aspnet_client)</DeploySkipDirectoryPattern>
+	</PropertyGroup>	
+</Project>
