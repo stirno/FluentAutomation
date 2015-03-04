@@ -154,10 +154,10 @@
     <Content Include="Views\Text\Index.cshtml" />
     <Content Include="Views\DragAndDrop\Index.cshtml" />
     <Content Include="Views\Switch\Index.cshtml" />
-    <None Include="Web.Debug.config">
+    <None Include="Web.DEV.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
-    <None Include="Web.Release.config">
+    <None Include="Web.PROD.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
