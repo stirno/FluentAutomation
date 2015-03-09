@@ -161,7 +161,6 @@ namespace FluentAutomation
                 container.Register<IWebDriver, RemoteWebDriver>(new EnhancedRemoteWebDriver(driverUri, browserCapabilities, commandTimeout));
             };
         }
-
         
         /// <summary>
         /// Bootstrap Selenium provider using a Remote web driver service with the requested capabilities
@@ -213,6 +212,11 @@ namespace FluentAutomation
                 DesiredCapabilities browserCapabilities = new DesiredCapabilities(capabilities);
                 container.Register<IWebDriver, RemoteWebDriver>(new EnhancedRemoteWebDriver(driverUri, browserCapabilities, commandTimeout));
             };
+        }
+
+        public static void EnableBrowserStackLocal(string browserStackKey, string overrideArguments = null)
+        {
+            BrowserStackLocal.Instance.Start(browserStackKey, overrideArguments);
         }
 
         private static Func<IWebDriver> GenerateBrowserSpecificDriver(Browser browser)
@@ -299,5 +303,6 @@ namespace FluentAutomation
             browserCapabilities.IsJavaScriptEnabled = true;
             return browserCapabilities;
         }
+
     }
 }

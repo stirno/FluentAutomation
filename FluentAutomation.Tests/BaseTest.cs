@@ -12,7 +12,7 @@ namespace FluentAutomation.Tests
     /// </summary>
     public class BaseTest : FluentTest<IWebDriver>
     {
-        public string SiteUrl { get { return "http://localhost:38043/"; } }
+        public string SiteUrl { get { return "http://wbtstr.net-testbed.dt-dev1.mirabeau.nl/"; } }
         
         public BaseTest()
         {
@@ -28,7 +28,17 @@ namespace FluentAutomation.Tests
             this.SwitchPage = new Pages.SwitchPage(this);
             
             // Default tests use chrome and load the site
-            FluentAutomation.SeleniumWebDriver.Bootstrap(SeleniumWebDriver.Browser.Chrome); //, SeleniumWebDriver.Browser.InternetExplorer, SeleniumWebDriver.Browser.Firefox);
+            //FluentAutomation.SeleniumWebDriver.Bootstrap(SeleniumWebDriver.Browser.Chrome); //, SeleniumWebDriver.Browser.InternetExplorer, SeleniumWebDriver.Browser.Firefox);
+
+            // Test browserstack local
+            var _capabilities = new Dictionary<string, object>();
+            SeleniumWebDriver.EnableBrowserStackLocal("***REMOVED***");
+            _capabilities.Add("browserstack.local", "true");
+            _capabilities.Add("browserstack.user", "***REMOVED***");
+            _capabilities.Add("browserstack.key", "***REMOVED***");
+            _capabilities.Add("browserstack.debug", "true");
+            SeleniumWebDriver.Bootstrap(new Uri("http://hub.browserstack.com/wd/hub/"), _capabilities);
+
             I.Open(SiteUrl);
         }
 
