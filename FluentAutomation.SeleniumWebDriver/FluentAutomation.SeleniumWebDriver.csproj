@@ -85,17 +85,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="3rdPartyLib\BrowserStackLocal.exe" />
     <EmbeddedResource Include="3rdPartyLib\chromedriver.exe" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="3rdPartyLib\IEDriverServer32.exe" />
     <EmbeddedResource Include="3rdPartyLib\IEDriverServer64.exe" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="3rdPartyLib\phantomjs.exe" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="3rdPartyLib\BrowserStackLocal.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
