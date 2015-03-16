@@ -216,7 +216,10 @@ namespace FluentAutomation
 
         public static void EnableBrowserStackLocal(string browserStackKey, string overrideArguments = null)
         {
-            BrowserStackLocal.Instance.Start(browserStackKey, overrideArguments);
+            string uniqueIdentifier = FluentSettings.Current.UniqueIdentitfier.ToString();
+            BrowserStackLocal.Current.Start(browserStackKey, uniqueIdentifier);
+
+            FluentSettings.Current.OnDisposed += (sender, args) => BrowserStackLocal.Current.Stop(uniqueIdentifier);
         }
 
         private static Func<IWebDriver> GenerateBrowserSpecificDriver(Browser browser)

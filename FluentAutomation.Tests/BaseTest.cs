@@ -30,15 +30,19 @@ namespace FluentAutomation.Tests
             // Default tests use chrome and load the site
             //FluentAutomation.SeleniumWebDriver.Bootstrap(SeleniumWebDriver.Browser.Chrome); //, SeleniumWebDriver.Browser.InternetExplorer, SeleniumWebDriver.Browser.Firefox);
 
-            // Test browserstack local
-            var _capabilities = new Dictionary<string, object>();
-            SeleniumWebDriver.EnableBrowserStackLocal("***REMOVED***");
-            _capabilities.Add("browserstack.local", "true");
-            _capabilities.Add("browserstack.user", "***REMOVED***");
-            _capabilities.Add("browserstack.key", "***REMOVED***");
-            _capabilities.Add("browserstack.debug", "true");
-            SeleniumWebDriver.Bootstrap(new Uri("http://hub.browserstack.com/wd/hub/"), _capabilities);
+            string browserStackUsername = ConfigReader.GetEnvironmentVariableOrAppSetting("browserStackUsername");
+            string browserStackPassword = ConfigReader.GetEnvironmentVariableOrAppSetting("browserStackPassword");
 
+            // Test browserstack local
+            WbTstr.Configure()
+                .SetBrowserStackCredentials(browserStackUsername, browserStackPassword)
+                .EnableBrowserStackLocal()
+                .EnableBrowserStackDebug()
+                .SetUniqueIdentifier(FluentSettings.Current.UniqueIdentitfier)
+                .UseRemoteWebDriver("http://hub.browserstack.com/wd/hub/")
+                .Bootstrap();
+
+            FluentSession.DisableStickySession();
             I.Open(SiteUrl);
         }
 

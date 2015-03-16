@@ -10,8 +10,7 @@ namespace FluentAutomation.Tests.Actions
 {
     public class ClickTests : BaseTest
     {
-        public ClickTests()
-            : base()
+        public ClickTests() : base()
         {
             InputsPage.Go();
         }

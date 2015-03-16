@@ -63,11 +63,13 @@
     <Compile Include="CommandProvider.cs" />
     <Compile Include="Element.cs" />
     <Compile Include="CommandProviderList.cs" />
+    <Compile Include="Interfaces\IWebTstr.cs" />
     <Compile Include="MultiCommandProvider.cs" />
     <Compile Include="MultiAssertProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SeleniumWebDriver.cs" />
     <Compile Include="Sizzle.cs" />
+    <Compile Include="WbTstr.cs" />
     <Compile Include="Wrappers\BrowserStackLocal.cs" />
     <Compile Include="Wrappers\EnhancedRemoteWebDriver.cs" />
     <Compile Include="Wrappers\IEDriver.cs" />
