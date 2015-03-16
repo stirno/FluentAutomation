@@ -1,4 +1,5 @@
-﻿using FluentAutomation.Exceptions;
+﻿using System.Diagnostics;
+using FluentAutomation.Exceptions;
 using FluentAutomation.Interfaces;
 using FluentAutomation.Wrappers;
 using OpenQA.Selenium;
@@ -249,11 +250,12 @@ namespace FluentAutomation
                         }, commandTimeout);
                     });
                 case Browser.Chrome:
-                    driverPath = EmbeddedResources.UnpackFromAssembly("chromedriver.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
-
-                    var chromeService = ChromeDriverService.CreateDefaultService(Path.GetDirectoryName(driverPath));
+                    //Providing an unique name for the chromedriver makes it possible to run multiple instances
+                    var uniqueName = string.Format("chromedriver{0}.exe", Guid.NewGuid());
+                    driverPath = EmbeddedResources.UnpackFromAssembly("chromedriver.exe", uniqueName , Assembly.GetAssembly(typeof(SeleniumWebDriver)));
+                    var chromeService = ChromeDriverService.CreateDefaultService(Path.GetDirectoryName(driverPath),
+                        uniqueName);
                     chromeService.SuppressInitialDiagnosticInformation = true;
-
                     var chromeOptions = new ChromeOptions();
                     chromeOptions.AddArgument("--log-level=3");
 
@@ -306,6 +308,10 @@ namespace FluentAutomation
             browserCapabilities.IsJavaScriptEnabled = true;
             return browserCapabilities;
         }
+
+
+      
+
 
     }
 }
