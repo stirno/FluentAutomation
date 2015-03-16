@@ -12,7 +12,7 @@ namespace FluentAutomation.Tests
     /// </summary>
     public class BaseTest : FluentTest<IWebDriver>
     {
-        public string SiteUrl { get { return "http://localhost:38043/"; } }
+        public string SiteUrl { get { return "http://wbtstr.net-testbed.dt-dev1.mirabeau.nl/"; } }
         
         public BaseTest()
         {
@@ -28,7 +28,21 @@ namespace FluentAutomation.Tests
             this.SwitchPage = new Pages.SwitchPage(this);
             
             // Default tests use chrome and load the site
-            FluentAutomation.SeleniumWebDriver.Bootstrap(SeleniumWebDriver.Browser.Chrome); //, SeleniumWebDriver.Browser.InternetExplorer, SeleniumWebDriver.Browser.Firefox);
+            //FluentAutomation.SeleniumWebDriver.Bootstrap(SeleniumWebDriver.Browser.Chrome); //, SeleniumWebDriver.Browser.InternetExplorer, SeleniumWebDriver.Browser.Firefox);
+
+            string browserStackUsername = ConfigReader.GetEnvironmentVariableOrAppSetting("browserStackUsername");
+            string browserStackPassword = ConfigReader.GetEnvironmentVariableOrAppSetting("browserStackPassword");
+
+            // Test browserstack local
+            WbTstr.Configure()
+                .SetBrowserStackCredentials(browserStackUsername, browserStackPassword)
+                .EnableBrowserStackLocal()
+                .EnableBrowserStackDebug()
+                .SetUniqueIdentifier(FluentSettings.Current.UniqueIdentitfier)
+                .UseRemoteWebDriver("http://hub.browserstack.com/wd/hub/")
+                .Bootstrap();
+
+            FluentSession.DisableStickySession();
             I.Open(SiteUrl);
         }
 

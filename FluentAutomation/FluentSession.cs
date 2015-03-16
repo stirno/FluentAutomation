@@ -36,6 +36,8 @@ namespace FluentAutomation
         {
             if (this.SyntaxProviderRegisterOptions == null)
                 this.SyntaxProviderRegisterOptions = this.Container.Register(typeof(ISyntaxProvider), typeof(T));
+
+            this.Container.Register<FluentSettings>((c, p) => FluentSettings.Current);
         }
 
         public ISyntaxProvider GetSyntaxProvider()

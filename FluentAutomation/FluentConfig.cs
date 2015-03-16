@@ -17,12 +17,6 @@ namespace FluentAutomation
         {
         }
 
-        public FluentConfig Configure(FluentSettings settings)
-        {
-            FluentSettings.Current = settings;
-            return this;
-        }
-
         public FluentConfig UserTempDirectory(string tempDir)
         {
             this.Settings.UserTempDirectory = tempDir;
