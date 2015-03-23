@@ -12,7 +12,9 @@ namespace FluentAutomation
     {
         public static string GetEnvironmentVariableOrAppSetting(string key)
         {
-            return Environment.GetEnvironmentVariable(key) ?? GetConfigurationFileSetting(key);
+            return Environment.GetEnvironmentVariable(string.Format("bamboo_{0}", key))
+                ?? Environment.GetEnvironmentVariable(key)
+                ?? GetConfigurationFileSetting(key);
         }
 
         private static string GetConfigurationFileSetting(string key)
