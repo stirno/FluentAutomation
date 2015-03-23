@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Configuration;
 using System.Linq;
 using System.Text;
+using System.Xml;
 
 namespace FluentAutomation
 {
@@ -10,7 +12,44 @@ namespace FluentAutomation
     {
         public static string GetEnvironmentVariableOrAppSetting(string key)
         {
-            return Environment.GetEnvironmentVariable(key) ?? ConfigurationManager.AppSettings[key];
+            return Environment.GetEnvironmentVariable(key) ?? GetConfigurationFileSetting(key);
+        }
+
+        private static string GetConfigurationFileSetting(string key)
+        {
+            string configFile = ConfigurationManager.AppSettings["WbTstr:ConfigFile"];
+            if (!string.IsNullOrEmpty(configFile))
+            {
+                NameValueCollection settings = GetNameValueCollectionSection("settings", configFile);
+                string valueFromConfigFile = settings[key];
+
+                if (!string.IsNullOrEmpty(valueFromConfigFile))
+                {
+                    return valueFromConfigFile;
+                }
+            }
+            return ConfigurationManager.AppSettings[key];
+        }
+
+        private static NameValueCollection GetNameValueCollectionSection(string section, string filePath)
+        {
+            string file = filePath;
+            XmlDocument doc = new XmlDocument();
+            NameValueCollection nameValueColl = new NameValueCollection();
+
+            ExeConfigurationFileMap map = new ExeConfigurationFileMap();
+            map.ExeConfigFilename = file;
+            Configuration config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
+            string xml = config.GetSection(section).SectionInformation.GetRawXml();
+            doc.LoadXml(xml);
+
+            XmlNode list = doc.ChildNodes[0];
+            foreach (XmlNode node in list)
+            {
+                nameValueColl.Add(node.Attributes[0].Value, node.Attributes[1].Value);
+
+            }
+            return nameValueColl;
         }
 
         public static bool? GetEnvironmentVariableOrAppSettingAsBoolean(string key)
