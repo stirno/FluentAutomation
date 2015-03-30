@@ -54,7 +54,7 @@ namespace FluentAutomation
                 if (session == null)
                 {
                     session = new FluentSession();
-                    session.RegisterSyntaxProvider<ActionSyntaxProvider>();
+                    session.RegisterSyntaxProvider<WbTstrActionSyntaxProvider>();
                 }
 
                 return session;
@@ -77,18 +77,11 @@ namespace FluentAutomation
                         SyntaxProvider = this.Session.GetSyntaxProvider();
                     }
 
-                    // set the CommandProvider settings each time I is accessed, this allows reversion of
-                    // per step configuration values
-
-                    //mg test
-                    var actionSyntaxProvider = (ActionSyntaxProvider)SyntaxProvider;
+                    var actionSyntaxProvider = (WbTstrActionSyntaxProvider)SyntaxProvider;
                     actionSyntaxProvider.WithConfig(FluentSettings.Current);
-
-                    _actionSyntaxProvider = new WbtstrActionSyntaxCommandProvider(actionSyntaxProvider);
                 }
 
-                return _actionSyntaxProvider;
-                //return SyntaxProvider as IActionSyntaxProvider;
+                return SyntaxProvider as IActionSyntaxProvider;
             }
         }
 

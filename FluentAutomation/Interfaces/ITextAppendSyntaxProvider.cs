@@ -9,7 +9,7 @@ namespace FluentAutomation
         /// that bind to the keyup/keydown/keypress events to function.
         /// </summary>
         /// <returns><c>TextEntrySyntaxProvider</c></returns>
-        ActionSyntaxProvider.TextAppendSyntaxProvider WithoutEvents();
+        ITextAppendSyntaxProvider WithoutEvents();
 
         /// <summary>
         /// Enter text into input or textarea element matching <paramref name="selector"/>.
