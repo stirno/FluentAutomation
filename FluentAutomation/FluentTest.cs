@@ -17,6 +17,8 @@ namespace FluentAutomation
 
         private static object providerInstance = null;
 
+        private IActionSyntaxProvider _actionSyntaxProvider;
+
         public static object ProviderInstance
         {
             get
@@ -52,7 +54,7 @@ namespace FluentAutomation
                 if (session == null)
                 {
                     session = new FluentSession();
-                    session.RegisterSyntaxProvider<ActionSyntaxProvider>();
+                    session.RegisterSyntaxProvider<WbTstrActionSyntaxProvider>();
                 }
 
                 return session;
@@ -66,17 +68,18 @@ namespace FluentAutomation
         {
             get
             {
-                var provider = SyntaxProvider as IActionSyntaxProvider;
-                if (provider == null || provider.IsDisposed())
+                if (_actionSyntaxProvider == null)
                 {
-                    this.Session.BootstrapTypeRegistration(FluentSettings.Current.ContainerRegistration);
-                    SyntaxProvider = this.Session.GetSyntaxProvider();
-                }
+                    var provider = SyntaxProvider as IActionSyntaxProvider;
+                    if (provider == null || provider.IsDisposed())
+                    {
+                        this.Session.BootstrapTypeRegistration(FluentSettings.Current.ContainerRegistration);
+                        SyntaxProvider = this.Session.GetSyntaxProvider();
+                    }
 
-                // set the CommandProvider settings each time I is accessed, this allows reversion of
-                // per step configuration values
-                var actionSyntaxProvider = (ActionSyntaxProvider)SyntaxProvider;
-                actionSyntaxProvider.WithConfig(FluentSettings.Current);
+                    var actionSyntaxProvider = (WbTstrActionSyntaxProvider)SyntaxProvider;
+                    actionSyntaxProvider.WithConfig(FluentSettings.Current);
+                }
 
                 return SyntaxProvider as IActionSyntaxProvider;
             }
