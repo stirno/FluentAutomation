@@ -220,7 +220,11 @@ namespace FluentAutomation
             string uniqueIdentifier = FluentSettings.Current.UniqueIdentitfier.ToString();
             BrowserStackLocal.Current.Start(browserStackKey, uniqueIdentifier);
 
-            FluentSettings.Current.OnDisposed += (sender, args) => BrowserStackLocal.Current.Stop(uniqueIdentifier);
+            FluentSettings.Current.OnDisposed += (sender, args) =>
+            {
+                Console.Write("Disposing FluentSettings object!");
+                BrowserStackLocal.Current.Stop(uniqueIdentifier);
+            };
         }
 
         private static Func<IWebDriver> GenerateBrowserSpecificDriver(Browser browser)
