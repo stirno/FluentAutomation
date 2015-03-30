@@ -2,5 +2,5 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("Fluent Automation API Core Library")]
-[assembly: AssemblyDescription("Fluent Automation is a simplified DSL for web application automation testing.")]
+[assembly: AssemblyTitle("WbTstr.Net API Core Library")]
+[assembly: AssemblyDescription("WbTstr.Net is a functional testing framework for the web.")]

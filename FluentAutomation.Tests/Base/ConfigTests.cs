@@ -11,8 +11,7 @@ namespace FluentAutomation.Tests.Base
         [Fact]
         public void TestConfig()
         {
-            Config
-                .WaitUntilTimeout(FluentSettings.Current.WaitUntilTimeout)
+            Config.WaitUntilTimeout(FluentSettings.Current.WaitUntilTimeout)
                 .WaitUntilInterval(FluentSettings.Current.WaitUntilInterval)
                 .WaitTimeout(FluentSettings.Current.WaitTimeout)
                 .UserTempDirectory(FluentSettings.Current.UserTempDirectory)
@@ -26,8 +25,7 @@ namespace FluentAutomation.Tests.Base
                 .OnExpectFailed(FluentSettings.Current.OnExpectFailed)
                 .MinimizeAllWindowsOnTestStart(FluentSettings.Current.MinimizeAllWindowsOnTestStart)
                 .ExpectIsAssert(FluentSettings.Current.ExpectIsAssert)
-                .ContainerRegistration(FluentSettings.Current.ContainerRegistration)
-                .Configure(FluentSettings.Current);
+                .ContainerRegistration(FluentSettings.Current.ContainerRegistration);
         }
     }
 }

@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project InitialTargets="Bootstrap" DefaultTargets="BuildAndRunUnitTests" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <!-- -->
+  <PropertyGroup>
+    <MsBuildByConventionSpecificVersionToUse></MsBuildByConventionSpecificVersionToUse>
+    <BuildScriptPath>..\..\msbuild-by-convention\Scripts\</BuildScriptPath>
+    <TargetsMsbuildFileName>targets.msbuild</TargetsMsbuildFileName>
+  </PropertyGroup>
+  <UsingTask TaskName="BootstrapMsBuildByConvention" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+    <ParameterGroup>
+      <MsBuildByConventionVersion ParameterType="System.String" Output="false"></MsBuildByConventionVersion>
+      <ErrorCode ParameterType="System.Int32" Output="true"></ErrorCode>
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System" />
+      <Using Namespace="System.Collections.Generic" />
+      <Using Namespace="System.Diagnostics" />
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.Net" />
+      <Code Type="Fragment" Language="cs"><![CDATA[
+
+            // variables
+            string nugeturl = "http://nuget.org/nuget.exe";
+            string installTempDir = Path.Combine(Path.GetTempPath(), "msbuildbyconvention");
+            string nugetTempDir = Path.Combine(installTempDir, "nuget");
+            string nugetTargetFilename = Path.Combine(nugetTempDir, "nuget.exe");
+
+            if (!Directory.Exists(nugetTempDir))
+            {
+                Directory.CreateDirectory(nugetTempDir);
+            }
+
+            if (!File.Exists(nugetTargetFilename))
+            {
+                //Download nuget
+                Console.WriteLine("Downloading:{0} to {1}", nugeturl, nugetTargetFilename);
+                using (WebClient webClient = new WebClient())
+                {
+                    webClient.DownloadFile(nugeturl, nugetTargetFilename);
+                    Console.WriteLine("Finished Downloading:{0} to {1}", nugeturl, nugetTargetFilename);
+                }
+            }
+
+            ProcessStartInfo nugetInstallBuildPackageProcess;
+            if (string.IsNullOrWhiteSpace(MsBuildByConventionVersion))
+            {
+                Console.WriteLine("Trying to install latest version of msbuild-by-convention.");
+                nugetInstallBuildPackageProcess = new ProcessStartInfo(
+                    nugetTargetFilename,
+                    string.Format("install msbuild-by-convention -ExcludeVersion -o ..\\..\\"));
+            }
+            else
+            {
+                Console.WriteLine("Trying to install version {0} of msbuild-by-convention.", MsBuildByConventionVersion);
+                nugetInstallBuildPackageProcess = new ProcessStartInfo(
+                    nugetTargetFilename,
+                    string.Format("install msbuild-by-convention -Version {0} -ExcludeVersion -o ..\\..\\", MsBuildByConventionVersion));
+            }
+
+            nugetInstallBuildPackageProcess.RedirectStandardError = true;
+            nugetInstallBuildPackageProcess.UseShellExecute = false;
+            
+            Process process = Process.Start(nugetInstallBuildPackageProcess);
+
+            process.WaitForExit();
+            if (process.ExitCode != 0)
+            {
+                Console.WriteLine("Error exitcode: " + process.ExitCode + "\n");
+                ErrorCode = process.ExitCode;
+            }
+            else
+            {
+                ProcessStartInfo runInfo = new ProcessStartInfo(Environment.GetCommandLineArgs()[0],
+                                                                string.Join(" ", Environment.GetCommandLineArgs(), 1, Environment.GetCommandLineArgs().Length - 1));
+                runInfo.UseShellExecute = false;
+                
+                Process p = Process.Start(runInfo);
+
+                p.WaitForExit();
+                ErrorCode = p.ExitCode;
+            }
+            //##ENDCODE##
+
+]]></Code>
+    </Task>
+  </UsingTask>
+  <Target Name="Bootstrap">
+    <PropertyGroup>
+      <ErrorCodeFromBootstrap Condition="'$(ErrorCodeFromBootstrap)' == ''">0</ErrorCodeFromBootstrap>
+    </PropertyGroup>
+    <BootstrapMsBuildByConvention Condition="!exists('$(BuildScriptPath)')" MsBuildByConventionVersion="$(MsBuildByConventionSpecificVersionToUse)">
+      <Output TaskParameter="ErrorCode" PropertyName="ErrorCodeFromBootstrap" />
+    </BootstrapMsBuildByConvention>
+    <Error Code="$(ErrorCodeFromBootstrap)" Text="Error while executing build." Condition="'$(ErrorCodeFromBootstrap)' != '0' " />
+  </Target>
+  <Target Name="PrepareGlobalProperties"></Target>
+  <Target Name="InstallBuildDependencies" DependsOnTargets="PrepareGlobalProperties;InstallChocolatey;FetchToolsWithChocolatey;DownloadToolsWithNuget;_PrepareVsTools"></Target>
+  <Target Name="InstallDeployDependencies" DependsOnTargets="PrepareGlobalProperties;DownloadToolsWithNuget;_PrepareVsTools"></Target>
+  <Target Name="InstallChocolatey" Condition="!Exists('$(ChocoPath)')"></Target>
+  <Target Name="FetchToolsWithChocolatey"></Target>
+  <Target Name="DownloadToolsWithNuget"></Target>
+  <Target Name="_PrepareVsTools" DependsOnTargets="DownloadToolsWithNuget"></Target>
+  <Target Name="SplitReleaseConfigurations" DependsOnTargets="DownloadToolsWithNuget" BeforeTargets="CoreRelease;ReleaseAzure"></Target>
+  <Target Name="DownloadAndExtractJmeterToBuildTools" DependsOnTargets="DownloadToolsWithNuget"></Target>
+  <Target Name="UpdatePathAfterToolsInstall" AfterTargets="InstallBuildDependencies"></Target>
+  <Target Name="CreateDirectories" DependsOnTargets="DownloadToolsWithNuget"></Target>
+  <Target Name="Clean" DependsOnTargets="CoreClean;CreateDirectories"></Target>
+  <Target Name="CoreClean"></Target>
+  <Target Name="CopyDependencies"></Target>
+  <Target Name="SetAssemblyFileVersion"></Target>
+  <Target Name="ReplaceProjectImportStatements" Condition=" Exists('$(VisualStudioSqlServerDataToolsDir)Microsoft.Data.Tools.Schema.SqlTasks.targets') "></Target>
+  <Target Name="Compile" DependsOnTargets="Clean;CopyDependencies;SetAssemblyFileVersion;ReplaceProjectImportStatements;BeforeCompile;CoreCompile;AfterCompile;SassCompile;RunGruntFiles"></Target>
+  <Target Name="BeforeCompile"></Target>
+  <Target Name="CoreCompile" Inputs="%(SolutionsToBuild.RootDir)%(SolutionsToBuild.Directory)" Outputs="NonExistingOutputToTriggerTargetForEverySolution"></Target>
+  <Target Name="AfterCompile"></Target>
+  <Target Name="CheckJavascriptWithJsHint"></Target>
+  <Target Name="CompileCheck" DependsOnTargets="InstallBuildDependencies;PrepareGlobalProperties"></Target>
+  <Target Name="RunUnitTests" DependsOnTargets="CompileCheck;CreateDirectories;BeforeRunUnitTests;CoreRunTests"></Target>
+  <Target Name="BeforeRunUnitTests"></Target>
+  <Target Name="RunIntegrationTests" DependsOnTargets="CompileCheck;CreateDirectories;BeforeRunIntegrationTests;CoreRunTests"></Target>
+  <Target Name="BeforeRunIntegrationTests"></Target>
+  <Target Name="CoreRunTests"></Target>
+  <Target Name="RunYSlowTests"></Target>
+  <Target Name="RunJMeterTests" DependsOnTargets="Clean;DownloadAndExtractJmeterToBuildTools;BeforeRunJMeterTests;CoreRunJMeterTests"></Target>
+  <Target Name="BeforeRunJMeterTests"></Target>
+  <Target Name="CoreRunJMeterTests" Inputs="%(JMeterTestProjects.FullPath)" Outputs="AlwaysExecute"></Target>
+  <Target Name="InstallNodePackages" DependsOnTargets="BeforeInstallNodePackages;CoreInstallNodePackages"></Target>
+  <Target Name="BeforeInstallNodePackages"></Target>
+  <Target Name="CoreInstallNodePackages" Inputs="%(PackageJsonFiles.RootDir)%(PackageJsonFiles.Directory)" Outputs="AlwaysExecute"></Target>
+  <Target Name="RunGruntFiles" DependsOnTargets="InstallNodePackages;BeforeRunGruntFiles;CoreRunGruntFiles"></Target>
+  <Target Name="BeforeRunGruntFiles"></Target>
+  <Target Name="CoreRunGruntFiles" Inputs="%(GruntFiles.RootDir)%(GruntFiles.Directory)" Outputs="AlwaysExecute"></Target>
+  <Target Name="MinifyJavaScript" DependsOnTargets="BeforeMinifyJavaScript;CoreMinifyJavaScript" Condition="'$(SkipDefaultJavascriptMinification)' == 'False'"></Target>
+  <Target Name="BeforeMinifyJavaScript"></Target>
+  <Target Name="CoreMinifyJavaScript" Inputs="%(JavaScriptFiles.RootDir)%(JavaScriptFiles.Directory)" Outputs="AlwaysExecute"></Target>
+  <Target Name="MinifyCss" DependsOnTargets="BeforeMinifyCss;CoreMinifyCss" Condition="'$(SkipDefaultCssMinification)' == 'False'"></Target>
+  <Target Name="BeforeMinifyCss"></Target>
+  <Target Name="CoreMinifyCss" Inputs="%(CssFiles.RootDir)%(CssFiles.Directory)" Outputs="AlwaysExecute"></Target>
+  <Target Name="SassCompile" DependsOnTargets="BeforeSassCompile;CoreSassCompile" Condition=" '$(SkipDefaultSassCompile)' == 'False'"></Target>
+  <Target Name="BeforeSassCompile"></Target>
+  <Target Name="CoreSassCompile" Inputs="%(SassFiles.RootDir)%(SassFiles.Directory)" Outputs="AlwaysExecute"></Target>
+  <Target Name="BeforeRelease"></Target>
+  <Target Name="FixUmbracoSecurityIssue" Inputs="%(ProjectsToRelease.RootDir)%(ProjectsToRelease.Directory)" Outputs="AlwaysExecute" BeforeTargets="CoreRelease" Condition="'$(SkipUmbracoSecurityFix)' == 'False'"></Target>
+  <Target Name="ReleaseWebsites"></Target>
+  <Target Name="ReleaseWebServices"></Target>
+  <Target Name="ReleaseStaticHtml"></Target>
+  <Target Name="ReleaseConsoleApps"></Target>
+  <Target Name="ReleaseServices"></Target>
+  <Target Name="ReleaseWorkers"></Target>
+  <Target Name="ReleaseDatabases"></Target>
+  <Target Name="ReleaseDatabasesViaTool"></Target>
+  <Target Name="CoreRelease" Inputs="%(ProjectsToRelease.RootDir)%(ProjectsToRelease.Directory)%(ProjectsToRelease.Environment)" Outputs="AlwaysExecute"></Target>
+  <Target Name="ReleaseAzure" DependsOnTargets="_BeforeReleaseAzure;BeforeReleaseAzure;CoreReleaseAzure"></Target>
+  <Target Name="_BeforeReleaseAzure"></Target>
+  <Target Name="BeforeReleaseAzure" Inputs="%(_AzureToRelease.RootDir)%(_AzureToRelease.Directory)" Outputs="AlwaysExecute"></Target>
+  <Target Name="CoreReleaseAzure" Inputs="%(AzureToRelease.RootDir)%(AzureToRelease.Directory)%(AzureToRelease.Environment)" Outputs="AlwaysExecute"></Target>
+  <Target Name="ReleaseNugetPackages" DependsOnTargets="BeforeReleaseNugetPackage;CoreReleaseNugetPackage"></Target>
+  <Target Name="BeforeReleaseNugetPackage"></Target>
+  <Target Name="CoreReleaseNugetPackage" Inputs="%(NuGetToRelease.RootDir)%(NuGetToRelease.Directory)" Outputs="AlwaysExecute"></Target>
+  <Target Name="AfterRelease"></Target>
+  <Target Name="DeployWebsite"></Target>
+  <Target Name="DeployWebService"></Target>
+  <Target Name="DeployStaticHtml"></Target>
+  <Target Name="DeployWebsiteAndWebServiceAndStaticHtml" DependsOnTargets="DeployWebsite;DeployWebService;DeployStaticHtml"></Target>
+  <Target Name="CoreMsDeployDeploy" Inputs="%(MSDeployProjectsToDeploy.RootDir)%(MSDeployProjectsToDeploy.Directory)" Outputs="AlwaysExecute"></Target>
+  <Target Name="DeployConsoleApp" DependsOnTargets="BeforeDeployConsoleApp;CoreDeployConsoleApp"></Target>
+  <Target Name="BeforeDeployConsoleApp"></Target>
+  <Target Name="CoreDeployConsoleApp" Inputs="%(ConsoleAppsToDeploy.RootDir)%(ConsoleAppsToDeploy.Directory)" Outputs="NonExistingOutputToTriggerTargetForEveryProject"></Target>
+  <Target Name="DeployService" DependsOnTargets="BeforeDeployService;CoreDeployService"></Target>
+  <Target Name="BeforeDeployService"></Target>
+  <Target Name="CoreDeployService" Inputs="%(ServicesToDeploy.RootDir)%(ServicesToDeploy.Directory)" Outputs="NonExistingOutputToTriggerTargetForEveryProject"></Target>
+  <Target Name="DeployDatabase" DependsOnTargets="BeforeDeployDatabase;CoreDeployDatabase"></Target>
+  <Target Name="BeforeDeployDatabase"></Target>
+  <Target Name="CoreDeployDatabase" Inputs="%(DatabasesToDeploy.RootDir)%(DatabasesToDeploy.Directory)" Outputs="NonExistingOutputToTriggerTargetForEveryProject"></Target>
+  <Target Name="DeployAzure" DependsOnTargets="BeforeDeployAzure;CoreDeployAzure"></Target>
+  <Target Name="BeforeDeployAzure"></Target>
+  <Target Name="CoreDeployAzure" Inputs="%(AzureToDeploy.RootDir)%(AzureToDeploy.Directory)" Outputs="NonExistingOutputToTriggerTargetForEveryProject"></Target>
+  <Target Name="DeployNugetPackages" DependsOnTargets="BeforeDeployNugetPackage;CoreDeployNugetPackage"></Target>
+  <Target Name="BeforeDeployNugetPackage"></Target>
+  <Target Name="CoreDeployNugetPackage" Inputs="%(NuGetToDeploy.RootDir)%(NuGetToDeploy.Directory)%(NuGetToDeploy.Filename)" Outputs="AlwaysExecute"></Target>
+  <Target Name="AfterDeploy"></Target>
+  <Target Name="DeleteAzure" DependsOnTargets="BeforeDeleteAzure;CoreDeleteAzure"></Target>
+  <Target Name="BeforeDeleteAzure"></Target>
+  <Target Name="CoreDeleteAzure" Inputs="%(AzureToDelete.RootDir)%(AzureToDelete.Directory)" Outputs="AlwaysExecute"></Target>
+  <Target Name="DeleteDatabase" DependsOnTargets="BeforeDeleteDatabase;CoreDeleteDatabase"></Target>
+  <Target Name="BeforeDeleteDatabase"></Target>
+  <Target Name="CoreDeleteDatabase" Inputs="%(DatabaseToDelete.RootDir)%(DatabaseToDelete.Directory)" Outputs="AlwaysExecute"></Target>
+  <Target Name="AfterDelete"></Target>
+  <Target Name="SwapAzure"></Target>
+  <Target Name="AnalyzeWithFxCop" DependsOnTargets="Build"></Target>
+  <Target Name="AnalyzeWithSonar" DependsOnTargets="BeforeAnalyzeWithSonar;CoreAnalyseWithSonarCSharp;CoreAnalyseWithSonarJavascript"></Target>
+  <Target Name="BeforeAnalyzeWithSonar" DependsOnTargets="PrepareGlobalProperties;CompileCheck"></Target>
+  <Target Name="CoreAnalyseWithSonarJavascript" Inputs="%(JavascriptWebProjectsToAnalyse.RelativeDir)%(JavascriptWebProjectsToAnalyse.Filename)%(JavascriptWebProjectsToAnalyse.Extension)" Outputs="NonExistingOutputToTriggerTargetForEveryWebproject"></Target>
+  <Target Name="CoreAnalyseWithSonarCSharp" Inputs="%(SolutionsToAnalyze.RelativeDir)%(SolutionsToAnalyze.Filename)%(SolutionsToAnalyze.Extension)" Outputs="NonExistingOutputToTriggerTargetForEverySolution"></Target>
+  <Target Name="OptimizeImages"></Target>
+  <Target Name="UnicornSync"></Target>
+  <Target Name="Build" DependsOnTargets="PrepareGlobalProperties;InstallBuildDependencies;Compile"></Target>
+  <Target Name="BuildAndRunUnitTests" DependsOnTargets="Build;RunUnitTests"></Target>
+  <Target Name="BuildAndRunIntegrationTests" DependsOnTargets="Build;RunIntegrationTests"></Target>
+  <Target Name="BuildAndRunAllTests" DependsOnTargets="Build;BeforeRunUnitTests;BeforeRunIntegrationTests;CoreRunTests"></Target>
+  <Target Name="Minify" DependsOnTargets="PrepareGlobalProperties;MinifyJavaScript;MinifyCss"></Target>
+  <Target Name="Release" DependsOnTargets="PrepareGlobalProperties;InstallBuildDependencies;CompileCheck;CreateDirectories;BeforeRelease;Minify;ReleaseWebsites;ReleaseWebServices;ReleaseConsoleApps;ReleaseServices;ReleaseDatabases;ReleaseDatabasesViaTool;ReleaseWorkers;ReleaseStaticHtml;CoreRelease;ReleaseAzure;ReleaseNugetPackages;AfterRelease"></Target>
+  <Target Name="BuildAndRunUnitTestsAndRelease" DependsOnTargets="BeforeRelease;BuildAndRunUnitTests;Release"></Target>
+  <Target Name="Deploy" DependsOnTargets="PrepareGlobalProperties;InstallDeployDependencies;DeployWebsiteAndWebServiceAndStaticHtml;CoreMsDeployDeploy;DeployConsoleApp;DeployService;DeployDatabase;DeployAzure;DeployNugetPackages;AfterDeploy"></Target>
+  <Target Name="Delete" DependsOnTargets="PrepareGlobalProperties;DeleteAzure;DeleteDatabase;AfterDelete"></Target>
+  <Import Project="$(BuildScriptPath)$(TargetsMsbuildFileName)" Condition="exists('$(BuildScriptPath)$(TargetsMsbuildFileName)')" />
+</Project>

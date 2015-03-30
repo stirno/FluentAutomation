@@ -1,4 +1,5 @@
-﻿using FluentAutomation.Exceptions;
+﻿using System.Diagnostics;
+using FluentAutomation.Exceptions;
 using FluentAutomation.Interfaces;
 using FluentAutomation.Wrappers;
 using OpenQA.Selenium;
@@ -161,7 +162,6 @@ namespace FluentAutomation
                 container.Register<IWebDriver, RemoteWebDriver>(new EnhancedRemoteWebDriver(driverUri, browserCapabilities, commandTimeout));
             };
         }
-
         
         /// <summary>
         /// Bootstrap Selenium provider using a Remote web driver service with the requested capabilities
@@ -215,6 +215,14 @@ namespace FluentAutomation
             };
         }
 
+        public static void EnableBrowserStackLocal(string browserStackKey, string overrideArguments = null)
+        {
+            string uniqueIdentifier = FluentSettings.Current.UniqueIdentitfier.ToString();
+            BrowserStackLocal.Current.Start(browserStackKey, uniqueIdentifier);
+
+            FluentSettings.Current.OnDisposed += (sender, args) => BrowserStackLocal.Current.Stop(uniqueIdentifier);
+        }
+
         private static Func<IWebDriver> GenerateBrowserSpecificDriver(Browser browser)
         {
             return GenerateBrowserSpecificDriver(browser, DefaultCommandTimeout);
@@ -242,11 +250,12 @@ namespace FluentAutomation
                         }, commandTimeout);
                     });
                 case Browser.Chrome:
-                    driverPath = EmbeddedResources.UnpackFromAssembly("chromedriver.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
-
-                    var chromeService = ChromeDriverService.CreateDefaultService(Path.GetDirectoryName(driverPath));
+                    //Providing an unique name for the chromedriver makes it possible to run multiple instances
+                    var uniqueName = string.Format("chromedriver{0}.exe", Guid.NewGuid());
+                    driverPath = EmbeddedResources.UnpackFromAssembly("chromedriver.exe", uniqueName , Assembly.GetAssembly(typeof(SeleniumWebDriver)));
+                    var chromeService = ChromeDriverService.CreateDefaultService(Path.GetDirectoryName(driverPath),
+                        uniqueName);
                     chromeService.SuppressInitialDiagnosticInformation = true;
-
                     var chromeOptions = new ChromeOptions();
                     chromeOptions.AddArgument("--log-level=3");
 
@@ -299,5 +308,10 @@ namespace FluentAutomation
             browserCapabilities.IsJavaScriptEnabled = true;
             return browserCapabilities;
         }
+
+
+      
+
+
     }
 }

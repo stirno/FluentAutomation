@@ -5,7 +5,7 @@
 
 <h2>Input Controls Testbed</h2>
 
-<form action="/" onsubmit="setTimeout(function () { $('#button-clicked-text').text(''); }, 1500); return false" method="post" role="form">
+<form action="/" onsubmit="/* setTimeout(function () { $('#button-clicked-text').text(''); }, 1500); */ return false" method="post" role="form">
     <div class="form-group other-class">
         <label for="text-control">Text Input</label>
         <input id="text-control" class="form-control">
@@ -141,8 +141,8 @@
                     clearTimeout(timeoutHandle);
 
                 timeoutHandle = setTimeout(function () {
-                    clickedText.text('');
-                }, 1500);
+                    //clickedText.text('');
+                }, 5000);
             })
             .on('contextmenu', function () {
                 return false;
@@ -158,8 +158,8 @@
                 tcc.text('Changed');
 
                 tccTimeoutHandle = setTimeout(function () {
-                    tcc.text('');
-                }, 1500);
+                    //tcc.text('');
+                }, 5000);
             });
     });
 </script>

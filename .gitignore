@@ -40,7 +40,7 @@ _ReSharper*/
 [Tt]est[Rr]esult*
 
 #Project files
-[Bb]uild/
+msbuild-by-convention/
 
 #Subversion files
 .svn
@@ -51,3 +51,5 @@ _ReSharper*/
 *~
 pvc-packages
 *.nupkg
+
+wbtstr.config
