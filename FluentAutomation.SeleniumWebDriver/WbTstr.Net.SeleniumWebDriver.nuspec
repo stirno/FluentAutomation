@@ -13,7 +13,7 @@
     <language>en-US</language>
     <tags>PhantomJS Phantom WatiN Selenium Fluent Automation API</tags>
     <dependencies>
-        <dependency id="FluentAutomation.Core" version="$version$" />
+        <dependency id="WbTstr.Net.core" version="$version$" />
     </dependencies>
   </metadata>
 </package>
