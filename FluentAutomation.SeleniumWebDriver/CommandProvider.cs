@@ -183,6 +183,7 @@ namespace FluentAutomation
 
         public void Click(int x, int y)
         {
+
             this.Act(CommandType.Action, () =>
             {
                 var rootElement = this.Find("html").Element as Element;

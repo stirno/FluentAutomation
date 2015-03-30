@@ -65,6 +65,7 @@ namespace FluentAutomation
         {
             FluentSession.Current = new FluentSession();
             if (FluentSession.Current.SyntaxProviderRegisterOptions == null)
+               
                 FluentSession.Current.RegisterSyntaxProvider<ActionSyntaxProvider>();
 
             if (FluentSession.Current.HasBootstrappedTypes == false)

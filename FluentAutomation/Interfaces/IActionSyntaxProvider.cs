@@ -51,7 +51,7 @@ namespace FluentAutomation.Interfaces
         /// </summary>
         /// <param name="element"><see cref="IElement"/> factory function.</param>
         /// <returns><c>DragDropSyntaxProvider</c></returns>
-        ActionSyntaxProvider.DragDropSyntaxProvider Drag(ElementProxy element);
+        IDragDropSyntaxProvider Drag(ElementProxy element);
 
         /// <summary>
         /// Begin a Drag/Drop operation starting with the specified by <paramref name="selector"/> and an offset.
@@ -60,7 +60,7 @@ namespace FluentAutomation.Interfaces
         /// <param name="offsetX"></param>
         /// <param name="offsetY"></param>
         /// <returns><c>DragDropSyntaxProvider</c></returns>
-        ActionSyntaxProvider.DragDropSyntaxProvider Drag(string selector, int offsetX, int offsetY);
+        IDragDropSyntaxProvider Drag(string selector, int offsetX, int offsetY);
 
         /// <summary>
         /// Begin a Drag/Drop operation starting with the specified element and an offset.
@@ -69,7 +69,7 @@ namespace FluentAutomation.Interfaces
         /// <param name="offsetX"></param>
         /// <param name="offsetY"></param>
         /// <returns><c>DragDropSyntaxProvider</c></returns>
-        ActionSyntaxProvider.DragDropSyntaxProvider Drag(ElementProxy element, int offsetX, int offsetY);
+        IDragDropSyntaxProvider Drag(ElementProxy element, int offsetX, int offsetY);
 
         /// <summary>
         /// Begin a Drag/Drop operation using coordinates.
@@ -77,7 +77,7 @@ namespace FluentAutomation.Interfaces
         /// <param name="sourceX"></param>
         /// <param name="sourceY"></param>
         /// <returns></returns>
-        ActionSyntaxProvider.DragDropByPositionSyntaxProvider Drag(int sourceX, int sourceY);
+        IDragDropByPositionSyntaxProvider Drag(int sourceX, int sourceY);
 
         /// <summary>
         /// Find an element matching <paramref name="selector"/>.
@@ -254,35 +254,35 @@ namespace FluentAutomation.Interfaces
         /// </summary>
         /// <param name="selector">Sizzle selector.</param>
         /// <returns><c>DragDropSyntaxProvider</c></returns>
-        ActionSyntaxProvider.DragDropSyntaxProvider Drag(string selector);
+        IDragDropSyntaxProvider Drag(string selector);
 
         /// <summary>
         /// Enter a number or other object value into a valid input or textarea. Syntactical candy to avoid having to call .ToString() on integers in tests.
         /// </summary>
         /// <param name="nonString">Value to enter into input or textarea.</param>
         /// <returns><c>TextEntrySyntaxProvider</c></returns>
-        ActionSyntaxProvider.TextEntrySyntaxProvider Enter(dynamic nonString);
+        ITextEntrySyntaxProvider Enter(dynamic nonString);
 
         /// <summary>
         /// Enter text into a valid input or textarea.
         /// </summary>
         /// <param name="text">Text to enter into input or textarea.</param>
         /// <returns><c>TextEntrySyntaxProvider</c></returns>
-        ActionSyntaxProvider.TextEntrySyntaxProvider Enter(string text);
+        ITextEntrySyntaxProvider Enter(string text);
 
         /// <summary>
         /// Append a number or other object value into a valid input or textarea. Syntactical candy to avoid having to call .ToString() on integers in tests.
         /// </summary>
         /// <param name="nonString">Value to enter into input or textarea.</param>
         /// <returns><c>TextEntrySyntaxProvider</c></returns>
-        ActionSyntaxProvider.TextAppendSyntaxProvider Append(dynamic nonString);
+        ITextAppendSyntaxProvider Append(dynamic nonString);
 
         /// <summary>
         /// Append text into a valid input or textarea.
         /// </summary>
         /// <param name="text">Text to enter into input or textarea.</param>
         /// <returns><c>TextEntrySyntaxProvider</c></returns>
-        ActionSyntaxProvider.TextAppendSyntaxProvider Append(string text);
+        ITextAppendSyntaxProvider Append(string text);
 
         /// <summary>
         /// Sets the focus to element matching <paramref name="selector"/>.
@@ -354,7 +354,7 @@ namespace FluentAutomation.Interfaces
         /// <param name="mode">Mode of interaction with the <c>&lt;select /></c>; by Text or Value.</param>
         /// <param name="values">Options to be selected.</param>
         /// <returns><c>SelectSyntaxProvider</c></returns>
-        ActionSyntaxProvider.SelectSyntaxProvider Select(Option mode, params string[] values);
+        ISelectSyntaxProvider Select(Option mode, params string[] values);
 
         /// <summary>
         /// Manipulates a <c>&lt;select /></c> DOM element by selecting an option with matching <paramref name="value"/> using the specified <paramref name="mode"/>.
@@ -362,35 +362,35 @@ namespace FluentAutomation.Interfaces
         /// <param name="mode">Mode of interaction with the <c>&lt;select /></c>; by Text or Value.</param>
         /// <param name="value">Option to be selected.</param>
         /// <returns><c>SelectSyntaxProvider</c></returns>
-        ActionSyntaxProvider.SelectSyntaxProvider Select(Option mode, string value);
+        ISelectSyntaxProvider Select(Option mode, string value);
 
         /// <summary>
         /// Manipulates a <c>&lt;select /></c> DOM element by selecting options at the specified <paramref name="indices"/>.
         /// </summary>
         /// <param name="indices">Options to be selected by Index.</param>
         /// <returns><c>SelectSyntaxProvider</c></returns>
-        ActionSyntaxProvider.SelectSyntaxProvider Select(params int[] indices);
+        ISelectSyntaxProvider Select(params int[] indices);
 
         /// <summary>
         /// Manipulates a <c>&lt;select /></c> DOM element by selecting options with matching <paramref name="text"/>.
         /// </summary>
         /// <param name="values">Options to be selected by Text.</param>
         /// <returns><c>SelectSyntaxProvider</c></returns>
-        ActionSyntaxProvider.SelectSyntaxProvider Select(params string[] text);
+        ISelectSyntaxProvider Select(params string[] text);
 
         /// <summary>
         /// Manipulates a <c>&lt;select /></c> DOM element by selecting an option at the specified <paramref name="index"/>.
         /// </summary>
         /// <param name="index">Option to be selected by Index.</param>
         /// <returns><c>SelectSyntaxProvider</c></returns>
-        ActionSyntaxProvider.SelectSyntaxProvider Select(int index);
+        ISelectSyntaxProvider Select(int index);
 
         /// <summary>
         /// Manipulates a <c>&lt;select /></c> DOM element by selecting an option with matching <paramref name="text"/>.
         /// </summary>
         /// <param name="text">Option to be selected by Text.</param>
         /// <returns><c>SelectSyntaxProvider</c></returns>
-        ActionSyntaxProvider.SelectSyntaxProvider Select(string text);
+        ISelectSyntaxProvider Select(string text);
 
         /// <summary>
         /// Takes a screenshot of the active web browser window.
@@ -437,6 +437,6 @@ namespace FluentAutomation.Interfaces
         /// <summary>
         /// Switch to another window or frame.
         /// </summary>
-        ActionSyntaxProvider.SwitchSyntaxProvider Switch { get; }
+        ISwitchSyntaxProvider Switch { get; }
     }
 }

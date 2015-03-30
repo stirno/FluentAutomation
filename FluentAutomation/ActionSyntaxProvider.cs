@@ -14,7 +14,7 @@ namespace FluentAutomation
         internal readonly ICommandProvider commandProvider = null;
         internal readonly IAssertProvider assertProvider = null;
         internal FluentSettings settings = null;
-        
+  
         public ActionSyntaxProvider(ICommandProvider commandProvider, IAssertProvider assertProvider, FluentSettings settings)
         {
             this.commandProvider = commandProvider.WithConfig(settings);
@@ -297,8 +297,8 @@ namespace FluentAutomation
             return this;
         }
 
-        private SwitchSyntaxProvider switchProvider = null;
-        public SwitchSyntaxProvider Switch
+        private ISwitchSyntaxProvider switchProvider = null;
+        public ISwitchSyntaxProvider Switch
         {
             get
             {
@@ -311,7 +311,7 @@ namespace FluentAutomation
             }
         }
 
-        public class SwitchSyntaxProvider
+        public class SwitchSyntaxProvider : ISwitchSyntaxProvider
         {
             private readonly ActionSyntaxProvider syntaxProvider = null;
 
@@ -371,33 +371,35 @@ namespace FluentAutomation
     
         #endregion
 
+
+        //todo  fix it
         #region Drag/Drop
-        public DragDropSyntaxProvider Drag(string selector)
+        public IDragDropSyntaxProvider Drag(string selector)
         {
             return this.Drag(this.Find(selector));
         }
 
-        public DragDropSyntaxProvider Drag(ElementProxy element)
+        public IDragDropSyntaxProvider Drag(ElementProxy element)
         {
             return new DragDropSyntaxProvider(this, element);
         }
 
-        public DragDropSyntaxProvider Drag(string selector, int sourceX, int sourceY)
+        public IDragDropSyntaxProvider Drag(string selector, int sourceX, int sourceY)
         {
             return this.Drag(this.Find(selector), sourceX, sourceY);
         }
         
-        public DragDropSyntaxProvider Drag(ElementProxy element, int sourceX, int sourceY)
+        public IDragDropSyntaxProvider Drag(ElementProxy element, int sourceX, int sourceY)
         {
             return new DragDropSyntaxProvider(this, element, sourceX, sourceY);
         }
-
-        public DragDropByPositionSyntaxProvider Drag(int sourceX, int sourceY)
+        
+        public IDragDropByPositionSyntaxProvider Drag(int sourceX, int sourceY)
         {
             return new DragDropByPositionSyntaxProvider(this, sourceX, sourceY);
         }
-
-        public class DragDropSyntaxProvider
+        
+        public class DragDropSyntaxProvider : IDragDropSyntaxProvider
         {
             protected readonly ActionSyntaxProvider syntaxProvider = null;
             protected readonly ElementProxy sourceElement = null;
@@ -469,7 +471,7 @@ namespace FluentAutomation
             }
         }
 
-        public class DragDropByPositionSyntaxProvider
+        public class DragDropByPositionSyntaxProvider : IDragDropByPositionSyntaxProvider
         {
             protected readonly ActionSyntaxProvider syntaxProvider = null;
             protected readonly int sourceX = 0;
@@ -536,27 +538,27 @@ namespace FluentAutomation
         #endregion
 
         #region <input />, <textarea />
-        public TextAppendSyntaxProvider Append(string text)
+        public ITextAppendSyntaxProvider Append(string text)
         {
             return new TextAppendSyntaxProvider(this, text);
         }
 
-        public TextAppendSyntaxProvider Append(dynamic nonString)
+        public ITextAppendSyntaxProvider Append(dynamic nonString)
         {
             return this.Append(nonString.ToString());
         }
 
-        public TextEntrySyntaxProvider Enter(string text)
+        public ITextEntrySyntaxProvider Enter(string text)
         {
             return new TextEntrySyntaxProvider(this, text);
         }
 
-        public TextEntrySyntaxProvider Enter(dynamic nonString)
+        public ITextEntrySyntaxProvider Enter(dynamic nonString)
         {
             return this.Enter(nonString.ToString());
         }
 
-        public class TextEntrySyntaxProvider
+        public class TextEntrySyntaxProvider : ITextEntrySyntaxProvider
         {
             protected readonly ActionSyntaxProvider syntaxProvider = null;
             protected readonly string text = null;
@@ -626,7 +628,7 @@ namespace FluentAutomation
             }
         }
 
-        public class TextAppendSyntaxProvider
+        public class TextAppendSyntaxProvider : ITextAppendSyntaxProvider
         {
             protected readonly ActionSyntaxProvider syntaxProvider = null;
             protected readonly string text = null;
@@ -683,37 +685,37 @@ namespace FluentAutomation
         #endregion
 
         #region <select />
-        public SelectSyntaxProvider Select(string value)
+        public ISelectSyntaxProvider Select(string value)
         {
             return new SelectSyntaxProvider(this, value, SelectionOption.Text);
         }
 
-        public SelectSyntaxProvider Select(Option mode, string value)
+        public ISelectSyntaxProvider Select(Option mode, string value)
         {
             return new SelectSyntaxProvider(this, value, mode == Option.Text ? SelectionOption.Text : SelectionOption.Value);
         }
 
-        public SelectSyntaxProvider Select(params string[] values)
+        public ISelectSyntaxProvider Select(params string[] values)
         {
             return new SelectSyntaxProvider(this, values, SelectionOption.Text);
         }
 
-        public SelectSyntaxProvider Select(Option mode, params string[] values)
+        public ISelectSyntaxProvider Select(Option mode, params string[] values)
         {
             return new SelectSyntaxProvider(this, values, mode == Option.Text ? SelectionOption.Text : SelectionOption.Value);
         }
 
-        public SelectSyntaxProvider Select(int index)
+        public ISelectSyntaxProvider Select(int index)
         {
             return new SelectSyntaxProvider(this, index, SelectionOption.Index);
         }
 
-        public SelectSyntaxProvider Select(params int[] indices)
+        public ISelectSyntaxProvider Select(params int[] indices)
         {
             return new SelectSyntaxProvider(this, indices, SelectionOption.Index);
         }
         
-        public class SelectSyntaxProvider
+        public class SelectSyntaxProvider : ISelectSyntaxProvider
         {
             protected readonly ActionSyntaxProvider syntaxProvider = null;
             protected readonly dynamic value = null;
