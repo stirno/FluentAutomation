@@ -388,7 +388,7 @@ namespace FluentAutomation
         {
             return this.Drag(this.Find(selector), sourceX, sourceY);
         }
-        
+
         public IDragDropSyntaxProvider Drag(ElementProxy element, int sourceX, int sourceY)
         {
             return new DragDropSyntaxProvider(this, element, sourceX, sourceY);
@@ -575,7 +575,7 @@ namespace FluentAutomation
             /// that bind to the keyup/keydown/keypress events to function.
             /// </summary>
             /// <returns><c>TextEntrySyntaxProvider</c></returns>
-            public TextEntrySyntaxProvider WithoutEvents()
+            public ITextEntrySyntaxProvider WithoutEvents()
             {
                 this.eventsEnabled = false;
                 return this;
@@ -646,7 +646,7 @@ namespace FluentAutomation
             /// that bind to the keyup/keydown/keypress events to function.
             /// </summary>
             /// <returns><c>TextEntrySyntaxProvider</c></returns>
-            public TextAppendSyntaxProvider WithoutEvents()
+            public ITextAppendSyntaxProvider WithoutEvents()
             {
                 this.eventsEnabled = false;
                 return this;
