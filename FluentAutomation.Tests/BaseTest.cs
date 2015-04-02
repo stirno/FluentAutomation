@@ -36,11 +36,10 @@ namespace FluentAutomation.Tests
             string browserStackPassword = ConfigReader.GetEnvironmentVariableOrAppSetting("browserStackPassword");
 
             // Test browserstack local
-            IWbTstr wbtstr = WbTstr.Configure()
+            WbTstr.Configure()
                 .SetBrowserStackCredentials(browserStackUsername, browserStackPassword)
                 .EnableBrowserStackLocal()
                 .EnableBrowserStackDebug()
-                .SetUniqueIdentifier(FluentSettings.Current.UniqueIdentitfier)
                 .UseRemoteWebDriver("http://hub.browserstack.com/wd/hub/")
                 .PreferedBrowser().IsChrome()
                 .PreferedOperatingSystem().IsWindows()

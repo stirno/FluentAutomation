@@ -21,9 +21,6 @@ namespace FluentAutomation
             else
             {
                 this.Container = new TinyIoC.TinyIoCContainer();
-
-                // Initialize IoC container
-                Container.Register(typeof(ILogger), typeof(ConsoleLogger));
             }
 
             if (FluentSettings.Current.MinimizeAllWindowsOnTestStart) Win32Magic.MinimizeAllWindows();
@@ -37,13 +34,8 @@ namespace FluentAutomation
 
         public void RegisterSyntaxProvider<T>() where T : ISyntaxProvider
         {
-            if (SyntaxProviderRegisterOptions == null)
-            {
-                SyntaxProviderRegisterOptions = Container.Register(typeof(ISyntaxProvider), typeof(T));
-            }
-
-            Container.Register<ActionSyntaxProvider>();
-            Container.Register<FluentSettings>((c, p) => FluentSettings.Current);
+            if (this.SyntaxProviderRegisterOptions == null)
+                this.SyntaxProviderRegisterOptions = this.Container.Register(typeof(ISyntaxProvider), typeof(T));
         }
 
         public ISyntaxProvider GetSyntaxProvider()
@@ -71,7 +63,6 @@ namespace FluentAutomation
         {
             FluentSession.Current = new FluentSession();
             if (FluentSession.Current.SyntaxProviderRegisterOptions == null)
-
                 FluentSession.Current.RegisterSyntaxProvider<WbTstrActionSyntaxProvider>();
 
             if (FluentSession.Current.HasBootstrappedTypes == false)
@@ -110,3 +101,4 @@ namespace FluentAutomation
         }
     }
 }
+

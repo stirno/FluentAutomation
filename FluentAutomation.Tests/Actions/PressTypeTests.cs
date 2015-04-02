@@ -14,7 +14,7 @@ namespace FluentAutomation.Tests.Actions
             InputsPage.Go();
         }
 
-        [Fact]
+        [Fact(Skip = "This test doens't work when using a remote webdriver (e.g. BrowserStack).")]
         public void PressType()
         {
             I.Focus(InputsPage.TextControlSelector)
