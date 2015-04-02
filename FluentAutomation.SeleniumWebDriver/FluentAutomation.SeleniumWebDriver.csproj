@@ -87,11 +87,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="FluentAutomation.SeleniumWebDriver.nuspec" />
     <None Include="packages.config" />
-    <None Include="WbTstr.Net.SeleniumWebDriver.nuspec">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="3rdPartyLib\BrowserStackLocal.exe" />

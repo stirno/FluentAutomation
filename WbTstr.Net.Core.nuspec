@@ -13,4 +13,7 @@
     <language>en-US</language>
     <tags>WbTstr.Net WebDriver PhantomJS Phantom WatiN Selenium Fluent Automation API</tags>
   </metadata>
+  <files>
+    <file src="FluentAutomation\bin\Release\**\*.*" />
+  </files>  
 </package>

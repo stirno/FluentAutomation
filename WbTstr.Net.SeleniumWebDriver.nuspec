@@ -16,4 +16,7 @@
         <dependency id="WbTstr.Net.core" version="$version$" />
     </dependencies>
   </metadata>
+  <files>
+    <file src="FluentAutomation.SeleniumWebDriver\bin\Release\**\*.*" />
+  </files>   
 </package>
