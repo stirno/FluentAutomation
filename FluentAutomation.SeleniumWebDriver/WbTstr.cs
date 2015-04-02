@@ -8,7 +8,7 @@ using FluentAutomation.Interfaces;
 
 namespace FluentAutomation
 {
-    public class WbTstr : IWebTstr
+    public class WbTstr : IWbTstr
     {
         private readonly Dictionary<string, object> _capabilities;
         private string _browserStackUsername;
@@ -26,12 +26,12 @@ namespace FluentAutomation
 
         /*-------------------------------------------------------------------*/
 
-        public static IWebTstr Configure()
+        public static IWbTstr Configure()
         {
             return new WbTstr();
         }
 
-        public IWebTstr SetBrowserStackCredentials(string username, string password)
+        public IWbTstr SetBrowserStackCredentials(string username, string password)
         {
             if (string.IsNullOrEmpty(username)) throw new ArgumentException("username is null or empty");
             if (string.IsNullOrEmpty(password)) throw new ArgumentException("password is null or empty");
@@ -45,33 +45,33 @@ namespace FluentAutomation
             return this;
         }
 
-        public IWebTstr EnableBrowserStackLocal()
+        public IWbTstr EnableBrowserStackLocal()
         {
             _browserStackLocalEnabled = true;
             SetCapability("browserstack.local", "true");
             return this;
         }
 
-        public IWebTstr DisableBrowserStackLocal()
+        public IWbTstr DisableBrowserStackLocal()
         {
             _browserStackLocalEnabled = false;
             SetCapability("browserstack.local", "false");
             return this;
         }
 
-        public IWebTstr EnableBrowserStackDebug()
+        public IWbTstr EnableBrowserStackDebug()
         {
             SetCapability("browserstack.debug", "true");
             return this;
         }
 
-        public IWebTstr DisableBrowserStackDebug()
+        public IWbTstr DisableBrowserStackDebug()
         {
             SetCapability("browserstack.debug", "false");
             return this;
         }
 
-        public IWebTstr SetUniqueIdentifier(Guid uniqueIdentifier)
+        public IWbTstr SetUniqueIdentifier(Guid uniqueIdentifier)
         {
             if (uniqueIdentifier == null) throw new ArgumentNullException("uniqueIdentifier");
 
@@ -82,7 +82,7 @@ namespace FluentAutomation
             return this;
         }
 
-        public IWebTstr SetCapability(string key, string value)
+        public IWbTstr SetCapability(string key, string value)
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentException("key is null or empty");
             if (string.IsNullOrEmpty(value)) throw new ArgumentException("value is null or empty");
@@ -91,13 +91,25 @@ namespace FluentAutomation
             return this;
         }
 
-        public IWebTstr UseWebDriver(SeleniumWebDriver.Browser browser)
+        public IWbTstr RemoveCapability(string key)
+        {
+            if (string.IsNullOrEmpty(key)) throw new ArgumentException("key is null or empty");
+
+            if (_capabilities.ContainsKey(key))
+            {
+                _capabilities.Remove(key);
+            }
+
+            return this;
+        }
+
+        public IWbTstr UseWebDriver(SeleniumWebDriver.Browser browser)
         {
             _localWebDriver = browser;
             return this;
         }
 
-        public IWebTstr UseRemoteWebDriver(string remoteWebDriver)
+        public IWbTstr UseRemoteWebDriver(string remoteWebDriver)
         {
             if (remoteWebDriver == null) throw new ArgumentException("remoteWebDriver");
 
@@ -105,7 +117,22 @@ namespace FluentAutomation
             return this;
         }
 
-        public IWebTstr Bootstrap()
+        public IWbTstrBrowserStackOperatingSystem PreferedOperatingSystem()
+        {
+            return new WbTstrBrowserStackOperatingSystem(this);
+        }
+
+        public IWbTstrBrowserStackScreenResolution PreferedScreenResolution()
+        {
+            return new WbTstrBrowserStackScreenResolution(this);
+        }
+
+        public IWbTstrBrowserStackBrowser PreferedBrowser()
+        {
+            return new WbTstrBrowserStackBrowser(this);
+        }
+
+        public IWbTstr Bootstrap()
         {
             if (_remoteWebDriver != null)
             {

@@ -7,6 +7,8 @@ namespace FluentAutomation.Interfaces
 {
     public interface ILogger
     {
-        void LogMessage(string message);
+        void LogMessage(string message, params object[] args);
+
+        void LogException(Exception exception, string message, params object[] args);
     }
 }

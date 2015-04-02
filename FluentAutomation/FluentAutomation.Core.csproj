@@ -62,6 +62,7 @@
     <Compile Include="Interfaces\ITextAppendSyntaxProvider.cs" />
     <Compile Include="Interfaces\ISelectSyntaxProvider.cs" />
     <Compile Include="Interfaces\ISwitchSyntaxProvider.cs" />
+    <Compile Include="Interfaces\IWithConfig.cs" />
     <Compile Include="PageObject.cs" />
     <Compile Include="Properties\AssemblyGlobal.cs" />
     <Compile Include="BaseCommandProvider.cs" />

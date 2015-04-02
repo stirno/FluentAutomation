@@ -76,8 +76,8 @@ namespace FluentAutomation.Wrappers
                         process.Exited += BrowserStackLocalProcessOnExited;
                         process.OutputDataReceived += BrowserStackLocalProcessOnOutputDataReceived;
 
-                        // Wait 1 second to allow BrowserStackLogic to startup and catch any error-shutdowns
-                        Thread.Sleep(1000);
+                        // Wait 2 second to allow BrowserStackLogic to startup and catch any error-shutdowns
+                        Thread.Sleep(2000);
 
                         process.Refresh();
                         if (!process.HasExited)
@@ -179,10 +179,10 @@ namespace FluentAutomation.Wrappers
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.CreateNoWindow = false;
             startInfo.UseShellExecute = false;
-            startInfo.RedirectStandardOutput = true;
+            startInfo.RedirectStandardOutput = false;
             startInfo.FileName = fullPathToExe;
             startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            startInfo.Arguments = string.Format("-localIdentifier {0} {1} localhost,3000,0", identifier, browserStackKey);
+            startInfo.Arguments = string.Format("-localIdentifier {0} {1}", identifier, browserStackKey);
 
             return startInfo;
         }

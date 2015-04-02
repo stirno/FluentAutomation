@@ -17,8 +17,6 @@ namespace FluentAutomation
 
         private static object providerInstance = null;
 
-        private IActionSyntaxProvider _actionSyntaxProvider;
-
         public static object ProviderInstance
         {
             get
@@ -68,18 +66,15 @@ namespace FluentAutomation
         {
             get
             {
-                if (_actionSyntaxProvider == null)
+                var provider = SyntaxProvider as IActionSyntaxProvider;
+                if (provider == null || provider.IsDisposed())
                 {
-                    var provider = SyntaxProvider as IActionSyntaxProvider;
-                    if (provider == null || provider.IsDisposed())
-                    {
-                        this.Session.BootstrapTypeRegistration(FluentSettings.Current.ContainerRegistration);
-                        SyntaxProvider = this.Session.GetSyntaxProvider();
-                    }
-
-                    var actionSyntaxProvider = (WbTstrActionSyntaxProvider)SyntaxProvider;
-                    actionSyntaxProvider.WithConfig(FluentSettings.Current);
+                    this.Session.BootstrapTypeRegistration(FluentSettings.Current.ContainerRegistration);
+                    SyntaxProvider = this.Session.GetSyntaxProvider();
                 }
+
+                var actionSyntaxProvider = (WbTstrActionSyntaxProvider)SyntaxProvider;
+                actionSyntaxProvider.WithConfig(FluentSettings.Current);
 
                 return SyntaxProvider as IActionSyntaxProvider;
             }

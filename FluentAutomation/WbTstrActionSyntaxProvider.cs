@@ -4,7 +4,7 @@ using FluentAutomation.Interfaces;
 
 namespace FluentAutomation
 {
-    public class WbTstrActionSyntaxProvider : IActionSyntaxProvider
+    public class WbTstrActionSyntaxProvider : IActionSyntaxProvider, IWithConfig
     {
         private readonly ActionSyntaxProvider _actionSyntaxProvider;
         private readonly ILogger _logger;
@@ -13,6 +13,8 @@ namespace FluentAutomation
         {
             _actionSyntaxProvider = actionSyntaxProvider;
             _logger = logger;
+
+            _logger.LogMessage("Created WbTstr-Interface");
         }
       
         /*-------------------------------------------------------------------*/
@@ -63,7 +65,9 @@ namespace FluentAutomation
 
         public void Dispose()
         {
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _actionSyntaxProvider.Dispose();
+
+            _logger.LogMessage("Disposed WbTstr-Interface");
         }
 
         public bool IsDisposed()
@@ -957,7 +961,7 @@ namespace FluentAutomation
 
         /* MISCELLENOUS ACTIONS */
 
-        internal IActionSyntaxProvider WithConfig(FluentSettings settings)
+        public IActionSyntaxProvider WithConfig(FluentSettings settings)
         {
             // Before
             _logger.LogMessage("blablablabla"); // TODO: Elaborate logging

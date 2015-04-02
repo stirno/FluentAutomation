@@ -34,7 +34,7 @@ namespace FluentAutomation.Tests.Base
             Config.MinimizeAllWindowsOnTestStart(true);
         }
 
-        [Fact]
+        [Fact(Skip = "Not possible to run this test on build server (requires an installed browser).")]
         public void ProviderIsAvailable()
         {
             I.Open("http://google.com/");

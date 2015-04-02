@@ -21,6 +21,9 @@ namespace FluentAutomation
             else
             {
                 this.Container = new TinyIoC.TinyIoCContainer();
+
+                // Initialize IoC container
+                Container.Register(typeof(ILogger), typeof(ConsoleLogger));
             }
 
             if (FluentSettings.Current.MinimizeAllWindowsOnTestStart) Win32Magic.MinimizeAllWindows();
