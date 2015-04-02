@@ -17,8 +17,6 @@ namespace FluentAutomation.Interfaces
 
         IWbTstr DisableBrowserStackDebug();
 
-        IWbTstr SetUniqueIdentifier(Guid uniqueIdentifier);
-
         IWbTstr SetCapability(string key, string value);
 
         IWbTstr RemoveCapability(string key);

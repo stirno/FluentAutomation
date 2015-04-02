@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel;
+using System.Diagnostics;
 using FluentAutomation.Exceptions;
 using FluentAutomation.Interfaces;
 using FluentAutomation.Wrappers;
@@ -10,6 +11,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+
+using Polly;
+
+using TinyIoC;
 
 namespace FluentAutomation
 {
@@ -96,9 +101,7 @@ namespace FluentAutomation
         {
             FluentSettings.Current.ContainerRegistration = (container) =>
             {
-                container.Register<ICommandProvider, CommandProvider>();
-                container.Register<IAssertProvider, AssertProvider>();
-                container.Register<IFileStoreProvider, LocalFileStoreProvider>();
+                SetupContainer(container);
 
                 var browserDriver = GenerateBrowserSpecificDriver(browser, commandTimeout);
                 container.Register<IWebDriver>((c, o) => browserDriver());
@@ -131,6 +134,9 @@ namespace FluentAutomation
                 container.Register<ICommandProvider, MultiCommandProvider>();
                 container.Register<IAssertProvider, MultiAssertProvider>();
                 container.Register<IFileStoreProvider, LocalFileStoreProvider>();
+                container.Register<ActionSyntaxProvider>();
+                container.Register<FluentSettings>((c, o) => FluentSettings.Current);
+                container.Register<ILogger, ConsoleLogger>();
             };
         }
         
@@ -154,12 +160,10 @@ namespace FluentAutomation
         {
             FluentSettings.Current.ContainerRegistration = (container) =>
             {
-                container.Register<ICommandProvider, CommandProvider>();
-                container.Register<IAssertProvider, AssertProvider>();
-                container.Register<IFileStoreProvider, LocalFileStoreProvider>();
+                SetupContainer(container);
 
                 DesiredCapabilities browserCapabilities = GenerateDesiredCapabilities(browser);
-                container.Register<IWebDriver, RemoteWebDriver>(new EnhancedRemoteWebDriver(driverUri, browserCapabilities, commandTimeout));
+                container.Register<IWebDriver, RemoteWebDriver>(CreateEnhancedRemoteWebDriver(driverUri, browserCapabilities, commandTimeout));
             };
         }
         
@@ -183,9 +187,7 @@ namespace FluentAutomation
         {
             FluentSettings.Current.ContainerRegistration = (container) =>
             {
-                container.Register<ICommandProvider, CommandProvider>();
-                container.Register<IAssertProvider, AssertProvider>();
-                container.Register<IFileStoreProvider, LocalFileStoreProvider>();
+                SetupContainer(container);
 
                 DesiredCapabilities browserCapabilities = GenerateDesiredCapabilities(browser);
                 foreach (var cap in capabilities)
@@ -193,7 +195,7 @@ namespace FluentAutomation
                     browserCapabilities.SetCapability(cap.Key, cap.Value);
                 }
 
-                container.Register<IWebDriver, RemoteWebDriver>(new EnhancedRemoteWebDriver(driverUri, browserCapabilities, commandTimeout));
+                container.Register<IWebDriver, RemoteWebDriver>(CreateEnhancedRemoteWebDriver(driverUri, browserCapabilities, commandTimeout));
             };
         }
         
@@ -206,24 +208,10 @@ namespace FluentAutomation
         {
             FluentSettings.Current.ContainerRegistration = (container) =>
             {
-                container.Register<ICommandProvider, CommandProvider>();
-                container.Register<IAssertProvider, AssertProvider>();
-                container.Register<IFileStoreProvider, LocalFileStoreProvider>();
+                SetupContainer(container);
 
                 DesiredCapabilities browserCapabilities = new DesiredCapabilities(capabilities);
-                container.Register<IWebDriver, RemoteWebDriver>(new EnhancedRemoteWebDriver(driverUri, browserCapabilities, commandTimeout));
-            };
-        }
-
-        public static void EnableBrowserStackLocal(string browserStackKey, string overrideArguments = null)
-        {
-            string uniqueIdentifier = FluentSettings.Current.UniqueIdentitfier.ToString();
-            BrowserStackLocal.Current.Start(browserStackKey, uniqueIdentifier);
-
-            FluentSettings.Current.OnDisposed += (sender, args) =>
-            {
-                Console.Write("Disposing FluentSettings object!");
-                BrowserStackLocal.Current.Stop(uniqueIdentifier);
+                container.Register<IWebDriver, RemoteWebDriver>(CreateEnhancedRemoteWebDriver(driverUri, browserCapabilities, commandTimeout));
             };
         }
 
@@ -313,9 +301,20 @@ namespace FluentAutomation
             return browserCapabilities;
         }
 
+        private static void SetupContainer(TinyIoCContainer container)
+        {
+            container.Register<ActionSyntaxProvider>();
+            container.Register<FluentSettings>((c, o) => FluentSettings.Current);
+            container.Register<ILogger, ConsoleLogger>();
+            container.Register<ICommandProvider, CommandProvider>();
+            container.Register<IAssertProvider, AssertProvider>();
+            container.Register<IFileStoreProvider, LocalFileStoreProvider>();            
+        }
 
-      
-
-
+        private static EnhancedRemoteWebDriver CreateEnhancedRemoteWebDriver(Uri driverUri, DesiredCapabilities browserCapabilities, TimeSpan commandTimeout)
+        {
+            var policy = Policy.Handle<Exception>().WaitAndRetry(5, i => TimeSpan.FromSeconds(3));
+            return policy.Execute(() => new EnhancedRemoteWebDriver(driverUri, browserCapabilities, commandTimeout));
+        }
     }
 }

@@ -1,10 +1,11 @@
-﻿using System;
+﻿using System.Diagnostics.CodeAnalysis;
+using FluentAutomation.Exceptions;
+using FluentAutomation.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FluentAutomation.Interfaces;
-using FluentAutomation.Exceptions;
 
 namespace FluentAutomation
 {
@@ -13,16 +14,20 @@ namespace FluentAutomation
     /// </summary>
     public class FluentTest : BaseFluentTest
     {
-        public static bool IsMultiBrowserTest = false;
-
         private static object providerInstance = null;
+
+        private FluentSession session = null;
+
+        public static bool IsMultiBrowserTest { get; set; }
 
         public static object ProviderInstance
         {
             get
             {
                 if (IsMultiBrowserTest)
+                {
                     throw new FluentException("Accessing the Provider while using multiple browsers in a single test is unsupported.");
+                }
 
                 return providerInstance;
             }
@@ -38,13 +43,14 @@ namespace FluentAutomation
             get
             {
                 if (FluentTest.ProviderInstance == null)
+                {
                     throw new FluentException("Provider is not available yet. Open a page with I.Open to create the provider.");
+                }
 
                 return FluentTest.ProviderInstance;
             }
         }
 
-        private FluentSession session = null;
         public FluentSession Session
         {
             get
@@ -59,9 +65,14 @@ namespace FluentAutomation
             }
         }
 
-        /// <summary>
-        /// Actions - Fluent's action functionality.
-        /// </summary>
+        public FluentConfig Config
+        {
+            get
+            {
+                return FluentConfig.Current;
+            }
+        }
+
         public IActionSyntaxProvider I
         {
             get
@@ -80,14 +91,6 @@ namespace FluentAutomation
             }
         }
 
-        public FluentConfig Config
-        {
-            get
-            {
-                return FluentConfig.Current;
-            }
-        }
-
         public WithSyntaxProvider With
         {
             get
@@ -97,16 +100,19 @@ namespace FluentAutomation
         }
     }
 
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Reviewed. Suppression is OK here.")]
     public class FluentTest<T> : FluentTest where T : class
     {
         public new T Provider
         {
             get
             {
-                if (FluentTest.ProviderInstance == null)
+                if (ProviderInstance == null)
+                {
                     throw new FluentException("Provider is not available yet. Open a page with I.Open to create the provider.");
+                }
 
-                return FluentTest.ProviderInstance as T;
+                return ProviderInstance as T;
             }
         }
     }

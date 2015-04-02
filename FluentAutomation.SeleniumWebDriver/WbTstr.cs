@@ -5,30 +5,51 @@ using System.Linq;
 using System.Text;
 
 using FluentAutomation.Interfaces;
+using FluentAutomation.Wrappers;
 
 namespace FluentAutomation
 {
-    public class WbTstr : IWbTstr
+    public class WbTstr : IWbTstr, IDisposable
     {
+        private static readonly object _mutex = string.Empty;
+        private static WbTstr _instance;
         private readonly Dictionary<string, object> _capabilities;
+        private readonly string _uniqueIdentifier;
         private string _browserStackUsername;
         private string _browserStackPassword;
         private bool _browserStackLocalEnabled;
         private SeleniumWebDriver.Browser _localWebDriver;
         private Uri _remoteWebDriver;
-        private string _uniqueIdentifier;
+        private bool _disposed;
 
-        private WbTstr()
+        private WbTstr(Guid guid)
         {
+            _uniqueIdentifier = string.Format("{0}", guid);
             _capabilities = new Dictionary<string, object>();
             _localWebDriver = SeleniumWebDriver.Browser.Chrome;
+        }
+
+        ~WbTstr()
+        {
+            Dispose(false);
         }
 
         /*-------------------------------------------------------------------*/
 
         public static IWbTstr Configure()
         {
-            return new WbTstr();
+            if (_instance == null)
+            {
+                lock (_mutex)
+                {
+                    if (_instance == null)
+                    {
+                        _instance = new WbTstr(Guid.NewGuid());
+                    }
+                }
+            }
+
+            return _instance;
         }
 
         public IWbTstr SetBrowserStackCredentials(string username, string password)
@@ -49,6 +70,7 @@ namespace FluentAutomation
         {
             _browserStackLocalEnabled = true;
             SetCapability("browserstack.local", "true");
+            SetCapability("browserstack.localIdentifier", _uniqueIdentifier);
             return this;
         }
 
@@ -56,6 +78,7 @@ namespace FluentAutomation
         {
             _browserStackLocalEnabled = false;
             SetCapability("browserstack.local", "false");
+            RemoveCapability("browserstack.localIdentifier");
             return this;
         }
 
@@ -71,23 +94,12 @@ namespace FluentAutomation
             return this;
         }
 
-        public IWbTstr SetUniqueIdentifier(Guid uniqueIdentifier)
-        {
-            if (uniqueIdentifier == null) throw new ArgumentNullException("uniqueIdentifier");
-
-            // We might need this later, so make local reference
-            _uniqueIdentifier = string.Format("{0}", uniqueIdentifier);
-            
-            SetCapability("browserstack.localIdentifier", _uniqueIdentifier);
-            return this;
-        }
-
         public IWbTstr SetCapability(string key, string value)
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentException("key is null or empty");
             if (string.IsNullOrEmpty(value)) throw new ArgumentException("value is null or empty");
 
-            _capabilities.Add(key, value);
+            _capabilities[key] = value;
             return this;
         }
 
@@ -138,9 +150,10 @@ namespace FluentAutomation
             {
                 if (_browserStackLocalEnabled)
                 {
-                    SeleniumWebDriver.EnableBrowserStackLocal(_browserStackPassword);                                                   
+                    BrowserStackLocal.Instance.Start(_browserStackPassword, _uniqueIdentifier);
                 }
-                SeleniumWebDriver.Bootstrap(_remoteWebDriver, _capabilities);    
+
+                SeleniumWebDriver.Bootstrap(_remoteWebDriver, _capabilities);
             }
             else
             {
@@ -148,6 +161,31 @@ namespace FluentAutomation
             }
 
             return this;
+        }
+
+        /*-------------------------------------------------------------------*/
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    // Dispose any managed objects
+                    // ...
+                }
+
+                // Now disposed of any unmanaged objects
+                BrowserStackLocal.Instance.Stop(_uniqueIdentifier);
+
+                _disposed = true;
+            }
         }
     }
 }
