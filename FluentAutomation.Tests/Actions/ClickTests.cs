@@ -45,7 +45,7 @@ namespace FluentAutomation.Tests.Actions
              .Assert.Text("Input Button Double Clicked").In(InputsPage.ButtonClickedTextSelector);
         }
 
-        [Fact]
+        [Fact, Retry]
         public void XYClicks()
         {
             var el = I.Find(InputsPage.ButtonControlSelector);

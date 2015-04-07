@@ -65,14 +65,14 @@ namespace FluentAutomation.Tests.Actions
             Assert.True(exception.InnerException.Message.Contains("NonExistentValue"));
         }
 
-        [Fact]
+        [Fact, Retry]
         public void SelectIndexFailed()
         {
             var exception = Assert.Throws<FluentException>(() => I.Select(1000).From(InputsPage.SelectControlSelector));
             Assert.True(exception.InnerException.Message.Contains("1000"));
         }
 
-        [Fact]
+        [Fact, Retry]
         public void MultiSelectValue()
         {
             I.Select(Option.Value, "QC", "MB").From(InputsPage.MultiSelectControlSelector)
