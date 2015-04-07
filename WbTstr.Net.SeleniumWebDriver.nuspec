@@ -17,6 +17,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="FluentAutomation.SeleniumWebDriver\bin\$configuration$\FluentAutomation.SeleniumWebDriver.dll" target="lib" />
+    <file src="FluentAutomation.SeleniumWebDriver\bin\$configuration$\*.*" target="lib" />
   </files>   
 </package>

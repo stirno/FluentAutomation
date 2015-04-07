@@ -14,6 +14,6 @@
     <tags>WbTstr.Net WebDriver PhantomJS Phantom WatiN Selenium Fluent Automation API</tags>
   </metadata>
   <files>
-	<file src="FluentAutomation\bin\$configuration$\FluentAutomation.Core.dll" target="lib" />
+	<file src="FluentAutomation\bin\$configuration$\*.*" target="lib" />
   </files>  
 </package>
