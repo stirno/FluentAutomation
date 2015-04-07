@@ -109,10 +109,6 @@
       <Project>{508e97d5-21ef-41dc-8fd1-a0eac0a637a4}</Project>
       <Name>FluentAutomation.SeleniumWebDriver</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FluentAutomation.WatiN\FluentAutomation.WatiN.csproj">
-      <Project>{1fa2f73a-72b7-4b4a-94e6-7d5f52425a20}</Project>
-      <Name>FluentAutomation.WatiN</Name>
-    </ProjectReference>
     <ProjectReference Include="..\FluentAutomation\FluentAutomation.Core.csproj">
       <Project>{07d8de59-3deb-4722-b093-6fcc0b0f7fff}</Project>
       <Name>FluentAutomation.Core</Name>
