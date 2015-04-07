@@ -4,7 +4,7 @@
     <id>WbTstr.Net.SeleniumWebDriver</id>
     <version>$version$</version>
     <title>WbTstr.Net.SeleniumWebDriver</title>
-    <authors>Maarten Groeneweg</authors>
+    <authors>Maarten Groeneweg, Onno Valkering</authors>
     <owners>Mirabeau B.V.</owners>
     <description>WbTstr.Net is a fork of FluentAutomation which provides a fluent syntax to write your tests.</description>
     <projectUrl>https://github.com/mirabeau-nl/WbTstr.Net</projectUrl>
@@ -17,6 +17,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="FluentAutomation.SeleniumWebDriver\bin\$configuration$\FluentAutomation.SeleniumWebDriver.dll" target="lib" />
+    <file src="FluentAutomation.SeleniumWebDriver\bin\$configuration$\*.*" target="lib" />
   </files>   
 </package>
