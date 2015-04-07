@@ -34,6 +34,7 @@ namespace FluentAutomation.Tests.Actions
 
             I.Assert.Css("color", InputsPage.HoverColor).Not.On(TextPage.Link1Selector);
             I.Hover(TextPage.Link1Selector)
+             .Wait(3)
              .Assert.Css("color", InputsPage.HoverColor).On(TextPage.Link1Selector);
         }
 
@@ -95,6 +96,7 @@ namespace FluentAutomation.Tests.Actions
         {
             var el = I.Find(InputsPage.ButtonControlSelector);
             I.Hover(el.Element.PosX + 10, el.Element.PosY + 10)
+             .Wait(3)
              .Assert.Css("color", InputsPage.HoverColor).On(InputsPage.ButtonControlSelector);
 
             I.Hover(InputsPage.InputButtonControlSelector, 10, 10)
