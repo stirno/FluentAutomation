@@ -1,10 +1,18 @@
-<Project
-    DefaultTargets="Test"
-    xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-
+<Project DefaultTargets="Test" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <UsingTask AssemblyFile="..\..\packages\xunit.1.9.2\lib\net20\xunit.runner.msbuild.dll" TaskName="Xunit.Runner.MSBuild.xunit"/>
 
   <Target Name="Test">
-    <xunit Assembly="..\..\FluentAutomation.Tests\bin\Debug\FluentAutomation.Tests.dll" />
+	<MakeDir Directories="test-reports" />
+	
+    <xunit 	Assembly="..\..\FluentAutomation.Tests\bin\Debug\FluentAutomation.Tests.dll" 
+			Xml="test-reports\WbTstr.Net.XUnit.xml" 
+			ContinueOnError="true">
+      <Output TaskParameter="ExitCode" ItemName="XUnitExitCodes"/>
+    </xunit>
+	
+	<XslTransformation XmlInputPaths="test-reports\WbTstr.Net.XUnit.xml" 
+					   XslInputPath="NUnitXml.xslt" 
+					   OutputPaths="test-reports\WbTstr.Net.NUnit.xml"/>
+	
   </Target>
 </Project>

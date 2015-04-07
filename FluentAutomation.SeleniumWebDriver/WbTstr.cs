@@ -52,6 +52,13 @@ namespace FluentAutomation
             return _instance;
         }
 
+        public IWbTstr UseBrowserStack()
+        {
+            UseRemoteWebDriver("http://hub.browserstack.com/wd/hub/");
+
+            return this;
+        }
+
         public IWbTstr SetBrowserStackCredentials(string username, string password)
         {
             if (string.IsNullOrEmpty(username)) throw new ArgumentException("username is null or empty");
