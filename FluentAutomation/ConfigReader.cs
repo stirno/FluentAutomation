@@ -18,6 +18,32 @@ namespace FluentAutomation
                 ?? GetConfigurationFileSetting(key, externalConfigFile);
         }
 
+        public static bool? GetEnvironmentVariableOrAppSettingAsBoolean(string key)
+        {
+            string strValue = GetEnvironmentVariableOrAppSetting(key);
+            bool value;
+
+            if (bool.TryParse(strValue, out value))
+            {
+                return value;
+            }
+
+            return null;
+        }
+
+        public static int? GetEnvironmentVariableOrAppSettingAsInteger(string key)
+        {
+            string strValue = GetEnvironmentVariableOrAppSetting(key);
+            int value;
+
+            if (int.TryParse(strValue, out value))
+            {
+                return value;
+            }
+
+            return null;
+        }
+
         private static string GetConfigurationFileSetting(string key, string externalConfigFile = null)
         {
             string configFile = externalConfigFile ?? ConfigurationManager.AppSettings["WbTstr:ConfigFile"];
@@ -53,32 +79,6 @@ namespace FluentAutomation
 
             }
             return nameValueColl;
-        }
-
-        public static bool? GetEnvironmentVariableOrAppSettingAsBoolean(string key)
-        {
-            string strValue = GetEnvironmentVariableOrAppSetting(key);
-            bool value;
-
-            if (bool.TryParse(strValue, out value))
-            {
-                return value;
-            }
-
-            return null;
-        }
-
-        public static int? GetEnvironmentVariableOrAppSettingAsInteger(string key)
-        {
-            string strValue = GetEnvironmentVariableOrAppSetting(key);
-            int value;
-
-            if (int.TryParse(strValue, out value))
-            {
-                return value;
-            }
-
-            return null;
         }
     }
 }
