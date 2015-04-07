@@ -7,6 +7,8 @@ namespace FluentAutomation.Interfaces
 {
     public interface IWbTstr
     {
+        IWbTstr UseBrowserStack();
+
         IWbTstr SetBrowserStackCredentials(string username, string password);
 
         IWbTstr EnableBrowserStackLocal();

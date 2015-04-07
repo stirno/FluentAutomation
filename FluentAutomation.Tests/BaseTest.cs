@@ -37,10 +37,10 @@ namespace FluentAutomation.Tests
 
             // Test browserstack local
             WbTstr.Configure()
+                .UseBrowserStack()
                 .SetBrowserStackCredentials(browserStackUsername, browserStackPassword)
                 .EnableBrowserStackLocal()
                 .EnableBrowserStackDebug()
-                .UseRemoteWebDriver("http://hub.browserstack.com/wd/hub/")
                 .PreferedBrowser().IsChrome()
                 .PreferedOperatingSystem().IsWindows()
                 .PreferedScreenResolution().IsAny()
