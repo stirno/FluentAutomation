@@ -5,14 +5,14 @@
 	<MakeDir Directories="test-reports" />
 	
     <xunit 	Assembly="..\..\FluentAutomation.Tests\bin\Debug\FluentAutomation.Tests.dll" 
-			Xml="test-reports\$(AssemblyName).xunit.xml" 
+			Xml="test-reports\WbTstr.Net.XUnit.xml" 
 			ContinueOnError="true">
       <Output TaskParameter="ExitCode" ItemName="XUnitExitCodes"/>
     </xunit>
 	
-	<XslTransformation XmlInputPaths="test-reports\$(AssemblyName).xunit.xml" 
+	<XslTransformation XmlInputPaths="test-reports\WbTstr.Net.XUnit.xml" 
 					   XslInputPath="NUnitXml.xslt" 
-					   OutputPaths="test-reports\$(AssemblyName).NUnit.xml"/>
+					   OutputPaths="test-reports\WbTstr.Net.NUnit.xml"/>
 	
   </Target>
 </Project>
