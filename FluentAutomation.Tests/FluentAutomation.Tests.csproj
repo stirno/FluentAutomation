@@ -34,8 +34,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Drawing" />
     <Reference Include="WebDriver, Version=2.44.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -89,6 +89,7 @@
     <Compile Include="Base\FluentTestTests.cs" />
     <Compile Include="Base\MultiBrowserTests.cs" />
     <Compile Include="Base\PageObjectTests.cs" />
+    <Compile Include="Base\ConfigReaderTests.cs" />
     <Compile Include="Base\WithTests.cs" />
     <Compile Include="Pages\AlertsPage.cs" />
     <Compile Include="Pages\DragPage.cs" />

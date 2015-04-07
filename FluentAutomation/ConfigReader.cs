@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
@@ -10,17 +11,17 @@ namespace FluentAutomation
 {
     public static class ConfigReader
     {
-        public static string GetEnvironmentVariableOrAppSetting(string key)
+        public static string GetEnvironmentVariableOrAppSetting(string key, string externalConfigFile = null)
         {
             return Environment.GetEnvironmentVariable(string.Format("bamboo_{0}", key))
                 ?? Environment.GetEnvironmentVariable(key)
-                ?? GetConfigurationFileSetting(key);
+                ?? GetConfigurationFileSetting(key, externalConfigFile);
         }
 
-        private static string GetConfigurationFileSetting(string key)
+        private static string GetConfigurationFileSetting(string key, string externalConfigFile = null)
         {
-            string configFile = ConfigurationManager.AppSettings["WbTstr:ConfigFile"];
-            if (!string.IsNullOrEmpty(configFile))
+            string configFile = externalConfigFile ?? ConfigurationManager.AppSettings["WbTstr:ConfigFile"];
+            if (!string.IsNullOrEmpty(configFile) && File.Exists(configFile))
             {
                 NameValueCollection settings = GetNameValueCollectionSection("settings", configFile);
                 string valueFromConfigFile = settings[key];
