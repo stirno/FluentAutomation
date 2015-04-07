@@ -1,4 +1,5 @@
-﻿using FluentAutomation.Exceptions;
+﻿using System.Runtime.Remoting.Messaging;
+using FluentAutomation.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -53,6 +54,7 @@ namespace FluentAutomation
         public void Act(CommandType commandType, Action action)
         {
             bool originalWaitOnActions = this.Settings.WaitOnAllActions;
+
             try
             {
                 if (this.WaitOnAction(commandType))

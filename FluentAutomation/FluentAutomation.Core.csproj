@@ -12,7 +12,7 @@
     <FileAlignment>512</FileAlignment>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <BuildPackage>true</BuildPackage>
+    <BuildPackage>false</BuildPackage>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
@@ -49,11 +49,20 @@
     <Compile Include="ActionSyntaxProvider.cs" />
     <Compile Include="CommandType.cs" />
     <Compile Include="ConfigReader.cs" />
+    <Compile Include="ConsoleLogger.cs" />
     <Compile Include="ElementProxy.cs" />
     <Compile Include="Exceptions\FluentElementNotFoundException.cs" />
     <Compile Include="FluentSession.cs" />
     <Compile Include="FluentConfig.cs" />
+    <Compile Include="Interfaces\IDragDropByPositionSyntaxProvider.cs" />
+    <Compile Include="Interfaces\IDragDropSyntaxProvider.cs" />
+    <Compile Include="Interfaces\ILogger.cs" />
     <Compile Include="Interfaces\ISyntaxProvider.cs" />
+    <Compile Include="Interfaces\ITextEntrySyntaxProvider.cs" />
+    <Compile Include="Interfaces\ITextAppendSyntaxProvider.cs" />
+    <Compile Include="Interfaces\ISelectSyntaxProvider.cs" />
+    <Compile Include="Interfaces\ISwitchSyntaxProvider.cs" />
+    <Compile Include="Interfaces\IWithConfig.cs" />
     <Compile Include="PageObject.cs" />
     <Compile Include="Properties\AssemblyGlobal.cs" />
     <Compile Include="BaseCommandProvider.cs" />
@@ -73,15 +82,16 @@
     <Compile Include="FluentSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Alert.cs" />
+    <Compile Include="WbTstrActionSyntaxProvider.cs" />
+    <Compile Include="WbTstrDragDropByPositionSyntaxProvider.cs" />
+    <Compile Include="WbTstrDragDropSyntaxProvider.cs" />
+    <Compile Include="WbTstrElement.cs" />
+    <Compile Include="WbTstrSelectSyntaxProvider.cs" />
+    <Compile Include="WbTstrTextAppendSyntaxProvider.cs" />
+    <Compile Include="WbTstrTextEntrySyntaxProvider.cs" />
     <Compile Include="Win32Magic.cs" />
     <Compile Include="WindowState.cs" />
     <Compile Include="WithSyntaxProvider.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="FluentAutomation.Core.nuspec" />
-    <None Include="WbTstr.Net.core.nuspec">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

@@ -36,8 +36,6 @@ namespace FluentAutomation
         {
             if (this.SyntaxProviderRegisterOptions == null)
                 this.SyntaxProviderRegisterOptions = this.Container.Register(typeof(ISyntaxProvider), typeof(T));
-
-            this.Container.Register<FluentSettings>((c, p) => FluentSettings.Current);
         }
 
         public ISyntaxProvider GetSyntaxProvider()
@@ -65,7 +63,7 @@ namespace FluentAutomation
         {
             FluentSession.Current = new FluentSession();
             if (FluentSession.Current.SyntaxProviderRegisterOptions == null)
-                FluentSession.Current.RegisterSyntaxProvider<ActionSyntaxProvider>();
+                FluentSession.Current.RegisterSyntaxProvider<WbTstrActionSyntaxProvider>();
 
             if (FluentSession.Current.HasBootstrappedTypes == false)
             {
@@ -103,3 +101,4 @@ namespace FluentAutomation
         }
     }
 }
+

@@ -115,9 +115,13 @@ namespace FluentAutomation
         {
             get
             {
-                var actionSyntaxProvider = (ActionSyntaxProvider)this.actionSyntaxProvider;
-                actionSyntaxProvider.commandProvider.WithConfig(this.inlineSettings);
-                return this.actionSyntaxProvider;
+                IWithConfig config = actionSyntaxProvider as IWithConfig;
+                if (config != null)
+                {
+                    config.WithConfig(inlineSettings);
+                }
+
+                return actionSyntaxProvider;
             }
         }
     }

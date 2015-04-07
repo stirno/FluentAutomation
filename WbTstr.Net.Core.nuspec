@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <description>$description$</description>
+    <projectUrl>https://github.com/mirabeau-nl/WbTstr.Net</projectUrl>
+    <releaseNotes>https://github.com/mirabeau-nl/WbTstr.Net</releaseNotes>
+    <copyright>$copyright$</copyright>
+    <language>en-US</language>
+    <tags>WbTstr.Net WebDriver PhantomJS Phantom WatiN Selenium Fluent Automation API</tags>
+  </metadata>
+  <files>
+    <file src="FluentAutomation\bin\Release\**\*.*" />
+  </files>  
+</package>
