@@ -66,8 +66,8 @@ namespace FluentAutomation
             // Try to get browserstack username and password from configuration
             if (_browserStackUsername == null && _browserStackPassword == null)
             {
-                string username = ConfigReader.GetSetting("WbTstr:BrowserStackUsername");
-                string password = ConfigReader.GetSetting("WbTstr:BrowserStackPassword");
+                string username = ConfigReader.GetSetting("BrowserStackUsername");
+                string password = ConfigReader.GetSetting("BrowserStackPassword");
 
                 if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
                 {

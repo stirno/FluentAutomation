@@ -18,6 +18,7 @@ namespace FluentAutomation
         {
             return Environment.GetEnvironmentVariable(string.Format("bamboo_{0}", key))
                 ?? Environment.GetEnvironmentVariable(key)
+                ?? GetConfigurationFileSetting(string.Format("WbTstr:{0}", key), externalConfigFile)
                 ?? GetConfigurationFileSetting(key, externalConfigFile);
         }
 
