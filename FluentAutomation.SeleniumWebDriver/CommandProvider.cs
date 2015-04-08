@@ -42,7 +42,7 @@ namespace FluentAutomation
 
         private IWebDriver WebDriverFactoryMethod(Func<IWebDriver> webDriverFactory)
         {
-            var policy = Policy.Handle<InvalidOperationException>().WaitAndRetry(5, i => TimeSpan.FromSeconds(3));
+            var policy = Policy.Handle<InvalidOperationException>().WaitAndRetry(10, i => TimeSpan.FromSeconds(5));
             return policy.Execute(
                 () =>
                 {
