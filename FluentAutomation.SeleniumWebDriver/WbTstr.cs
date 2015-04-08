@@ -7,12 +7,14 @@ using System.Text;
 using FluentAutomation.Interfaces;
 using FluentAutomation.Wrappers;
 
+using OpenQA.Selenium;
+
 namespace FluentAutomation
 {
     public class WbTstr : IWbTstr, IDisposable
     {
         private static readonly object _mutex = string.Empty;
-        private static WbTstr _instance;
+        private static IWbTstr _instance;
         private readonly Dictionary<string, object> _capabilities;
         private readonly string _uniqueIdentifier;
         private string _browserStackUsername;
@@ -44,7 +46,7 @@ namespace FluentAutomation
                 {
                     if (_instance == null)
                     {
-                        _instance = new WbTstr(Guid.NewGuid());
+                        _instance = CreateInstance();
                     }
                 }
             }
@@ -52,10 +54,26 @@ namespace FluentAutomation
             return _instance;
         }
 
-        public IWbTstr UseBrowserStack()
+        public static IWbTstr Bootstrap()
+        {
+            return Configure().BootstrapInstance();
+        }
+
+        public IWbTstr UseBrowserStackAsRemoteDriver()
         {
             UseRemoteWebDriver("http://hub.browserstack.com/wd/hub/");
 
+            // Try to get browserstack username and password from configuration
+            if (_browserStackUsername == null && _browserStackPassword == null)
+            {
+                string username = ConfigReader.GetSetting("WbTstr:BrowserStackUsername");
+                string password = ConfigReader.GetSetting("WbTstr:BrowserStackPassword");
+
+                if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
+                {
+                    SetBrowserStackCredentials(username, password);
+                }
+            }
             return this;
         }
 
@@ -89,15 +107,29 @@ namespace FluentAutomation
             return this;
         }
 
-        public IWbTstr EnableBrowserStackDebug()
+        public IWbTstr EnableDebug()
         {
+            FluentSettings.Current.InDebugMode = true;
             SetCapability("browserstack.debug", "true");
             return this;
         }
 
-        public IWbTstr DisableBrowserStackDebug()
+        public IWbTstr DisableDebug()
         {
+            FluentSettings.Current.InDebugMode = false;
             SetCapability("browserstack.debug", "false");
+            return this;
+        }
+
+        public IWbTstr EnableDryRun()
+        {
+            FluentSettings.Current.IsDryRun = true;
+            return this;
+        }
+
+        public IWbTstr DisableDryRun()
+        {
+            FluentSettings.Current.IsDryRun = false;
             return this;
         }
 
@@ -151,7 +183,7 @@ namespace FluentAutomation
             return new WbTstrBrowserStackBrowser(this);
         }
 
-        public IWbTstr Bootstrap()
+        public IWbTstr BootstrapInstance()
         {
             if (_remoteWebDriver != null)
             {
@@ -193,6 +225,39 @@ namespace FluentAutomation
 
                 _disposed = true;
             }
+        }
+
+        /*-------------------------------------------------------------------*/
+
+        private static IWbTstr CreateInstance()
+        {
+            WbTstr wbTstr = new WbTstr(Guid.NewGuid());
+
+            bool? enableDebug = ConfigReader.GetSettingAsBoolean("WbTstr:EnableDebug");
+            if (enableDebug.HasValue && enableDebug.Value)
+            {
+                wbTstr.EnableDebug();
+            }
+
+            bool? enableDryRun = ConfigReader.GetSettingAsBoolean("WbTstr:EnableDryRun");
+            if (enableDryRun.HasValue && enableDryRun.Value)
+            {
+                wbTstr.EnableDryRun();
+            }
+
+            bool? useBrowserStack = ConfigReader.GetSettingAsBoolean("WbTstr:UseBrowserStack");
+            if (useBrowserStack.HasValue && useBrowserStack.Value)
+            {
+                wbTstr.UseBrowserStackAsRemoteDriver();
+            }
+
+            bool? enableBrowserStackLocal = ConfigReader.GetSettingAsBoolean("WbTstr:EnableBrowserStackLocal");
+            if (enableBrowserStackLocal.HasValue && enableBrowserStackLocal.Value)
+            {
+                wbTstr.EnableBrowserStackLocal();
+            }
+
+            return wbTstr;
         }
     }
 }

@@ -142,6 +142,10 @@ namespace FluentAutomation
 
         public Action<FluentAssertFailedException, WindowState> OnAssertFailed { get; set; }
 
+        public bool InDebugMode { get; set; }
+
+        public bool IsDryRun { get; set; }
+
         public bool Disposed { get; private set; }
 
         /*-------------------------------------------------------------------*/

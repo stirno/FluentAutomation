@@ -16,7 +16,7 @@ namespace FluentAutomation.Tests.Base
             File.WriteAllText(configFilePath, ConfigFileContent);
 
             // Act
-            string setting = ConfigReader.GetEnvironmentVariableOrAppSetting("DummyKey", configFilePath);
+            string setting = ConfigReader.GetSetting("DummyKey", configFilePath);
 
             // Assert
             Assert.Equal(setting, "DummyValue");
@@ -29,7 +29,7 @@ namespace FluentAutomation.Tests.Base
             const string ConfigFilePath = @"C:\FakePath\config.xml";
 
             // Act
-            string setting = ConfigReader.GetEnvironmentVariableOrAppSetting("DummyKey", ConfigFilePath);
+            string setting = ConfigReader.GetSetting("DummyKey", ConfigFilePath);
 
             // Assert
             Assert.Null(setting);
@@ -44,7 +44,7 @@ namespace FluentAutomation.Tests.Base
             File.WriteAllText(configFilePath, ConfigFileContent);
 
             // Act
-            Assert.ThrowsDelegate action = () => ConfigReader.GetEnvironmentVariableOrAppSetting("DummyKey", configFilePath);
+            Assert.ThrowsDelegate action = () => ConfigReader.GetSetting("DummyKey", configFilePath);
 
             // Assert
             Assert.Throws<ConfigurationErrorsException>(action);
@@ -57,7 +57,7 @@ namespace FluentAutomation.Tests.Base
             const string DummySettingKey = "Dummy_StringSetting";
 
             // Act
-            string setting = ConfigReader.GetEnvironmentVariableOrAppSetting(DummySettingKey);
+            string setting = ConfigReader.GetSetting(DummySettingKey);
 
             // Assert
             Assert.NotNull(setting);
@@ -71,7 +71,7 @@ namespace FluentAutomation.Tests.Base
             const string DummySettingKey = "Dummy_MissingSetting";
 
             // Act
-            string setting = ConfigReader.GetEnvironmentVariableOrAppSetting(DummySettingKey);
+            string setting = ConfigReader.GetSetting(DummySettingKey);
 
             // Assert
             Assert.Null(setting);
@@ -84,7 +84,7 @@ namespace FluentAutomation.Tests.Base
             const string DummySettingKey = "Dummy_BooleanSetting";
 
             // Act
-            bool? setting = ConfigReader.GetEnvironmentVariableOrAppSettingAsBoolean(DummySettingKey);
+            bool? setting = ConfigReader.GetSettingAsBoolean(DummySettingKey);
 
             // Assert
             Assert.True(setting.HasValue);
@@ -98,7 +98,7 @@ namespace FluentAutomation.Tests.Base
             const string DummySettingKey = "Dummy_IntegerSetting";
             
             // Act
-            int? setting = ConfigReader.GetEnvironmentVariableOrAppSettingAsInteger(DummySettingKey);
+            int? setting = ConfigReader.GetSettingAsInteger(DummySettingKey);
 
             // Assert
             Assert.True(setting.HasValue);
@@ -112,7 +112,7 @@ namespace FluentAutomation.Tests.Base
             const string DummySettingKey = "Dummy_StringSetting";
 
             // Act
-            bool? setting = ConfigReader.GetEnvironmentVariableOrAppSettingAsBoolean(DummySettingKey);
+            bool? setting = ConfigReader.GetSettingAsBoolean(DummySettingKey);
 
             // Assert
             Assert.False(setting.HasValue);
@@ -126,7 +126,7 @@ namespace FluentAutomation.Tests.Base
             const string DummySettingKey = "Dummy_StringSetting";
 
             // Act
-            int? setting = ConfigReader.GetEnvironmentVariableOrAppSettingAsInteger(DummySettingKey);
+            int? setting = ConfigReader.GetSettingAsInteger(DummySettingKey);
 
             // Assert
             Assert.False(setting.HasValue);

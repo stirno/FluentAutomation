@@ -6,21 +6,24 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Serialization;
+using System.Xml.XPath;
 
 namespace FluentAutomation
 {
     public static class ConfigReader
     {
-        public static string GetEnvironmentVariableOrAppSetting(string key, string externalConfigFile = null)
+        public static string GetSetting(string key, string externalConfigFile = null)
         {
             return Environment.GetEnvironmentVariable(string.Format("bamboo_{0}", key))
                 ?? Environment.GetEnvironmentVariable(key)
                 ?? GetConfigurationFileSetting(key, externalConfigFile);
         }
 
-        public static bool? GetEnvironmentVariableOrAppSettingAsBoolean(string key)
+        public static bool? GetSettingAsBoolean(string key)
         {
-            string strValue = GetEnvironmentVariableOrAppSetting(key);
+            string strValue = GetSetting(key);
             bool value;
 
             if (bool.TryParse(strValue, out value))
@@ -31,9 +34,9 @@ namespace FluentAutomation
             return null;
         }
 
-        public static int? GetEnvironmentVariableOrAppSettingAsInteger(string key)
+        public static int? GetSettingAsInteger(string key)
         {
-            string strValue = GetEnvironmentVariableOrAppSetting(key);
+            string strValue = GetSetting(key);
             int value;
 
             if (int.TryParse(strValue, out value))
@@ -46,7 +49,7 @@ namespace FluentAutomation
 
         private static string GetConfigurationFileSetting(string key, string externalConfigFile = null)
         {
-            string configFile = externalConfigFile ?? ConfigurationManager.AppSettings["WbTstr:ConfigFile"];
+            string configFile = externalConfigFile ?? GetExternalConfigurationFilePath();
             if (!string.IsNullOrEmpty(configFile) && File.Exists(configFile))
             {
                 NameValueCollection settings = GetNameValueCollectionSection("settings", configFile);
@@ -78,7 +81,13 @@ namespace FluentAutomation
                 nameValueColl.Add(node.Attributes[0].Value, node.Attributes[1].Value);
 
             }
+
             return nameValueColl;
+        }
+
+        private static string GetExternalConfigurationFilePath()
+        {
+            return ConfigurationManager.AppSettings["WbTstr:ConfigFile"];
         }
     }
 }

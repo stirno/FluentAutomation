@@ -7,7 +7,7 @@ namespace FluentAutomation.Interfaces
 {
     public interface IWbTstr
     {
-        IWbTstr UseBrowserStack();
+        IWbTstr UseBrowserStackAsRemoteDriver();
 
         IWbTstr SetBrowserStackCredentials(string username, string password);
 
@@ -15,9 +15,13 @@ namespace FluentAutomation.Interfaces
 
         IWbTstr DisableBrowserStackLocal();
 
-        IWbTstr EnableBrowserStackDebug();
+        IWbTstr EnableDebug();
 
-        IWbTstr DisableBrowserStackDebug();
+        IWbTstr DisableDebug();
+
+        IWbTstr EnableDryRun();
+
+        IWbTstr DisableDryRun();
 
         IWbTstr SetCapability(string key, string value);
 
@@ -33,6 +37,6 @@ namespace FluentAutomation.Interfaces
 
         IWbTstr UseRemoteWebDriver(string remoteWebUri);
 
-        IWbTstr Bootstrap();
+        IWbTstr BootstrapInstance();
     }
 }
