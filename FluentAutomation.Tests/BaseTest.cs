@@ -33,6 +33,7 @@ namespace FluentAutomation.Tests
             // Test browserstack local
             WbTstr.Configure()
                 .EnableDebug()
+                .DisableDryRun()
                 .UseBrowserStackAsRemoteDriver()
                 .EnableBrowserStackLocal()
                 .PreferedBrowser().IsChrome()
@@ -49,7 +50,7 @@ namespace FluentAutomation.Tests
         {
             get
             {
-                return ConfigReader.GetSetting("WebsiteUnderTestBaseUrl");
+                return ConfigReader.GetSetting("WbTstr:WebsiteUnderTestBaseUrl");
             }
         }
 

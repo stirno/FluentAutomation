@@ -27,7 +27,7 @@ namespace FluentAutomation.Tests.Actions
              .Assert.Css("color", InputsPage.HoverColor).On(TextPage.TitleSelector);
         }
 
-        [Fact, Retry]
+        [Fact]
         public void HoverLink()
         {
             TextPage.Go();
@@ -91,7 +91,7 @@ namespace FluentAutomation.Tests.Actions
              .Assert.Css("color", ScrollingPage.HoverColor).On(ScrollingPage.TopLeftSelector);
         }
 
-        [Fact, Retry]
+        [Fact]
         public void HoverXY()
         {
             var el = I.Find(InputsPage.ButtonControlSelector);
@@ -106,7 +106,7 @@ namespace FluentAutomation.Tests.Actions
         /// <summary>
         /// Test that Scroll is equivalent to Hover
         /// </summary>
-        [Fact, Retry]
+        [Fact]
         public void Scroll()
         {
             // Identical to the first test in this.HoverXY()
