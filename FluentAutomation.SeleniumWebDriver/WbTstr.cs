@@ -185,7 +185,11 @@ namespace FluentAutomation
 
         public IWbTstr BootstrapInstance()
         {
-            if (_remoteWebDriver != null)
+            if (FluentSettings.Current.IsDryRun)
+            {
+                SeleniumWebDriver.DryRunBootstrap();
+            }
+            else if (_remoteWebDriver != null)
             {
                 if (_browserStackLocalEnabled)
                 {

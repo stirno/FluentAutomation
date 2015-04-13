@@ -3,22 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
-using FluentAutomation.Interfaces;
 using FluentAutomation.Exceptions;
+using FluentAutomation.Interfaces;
 
 namespace FluentAutomation
 {
-    public class AssertSyntaxProvider : BaseAssertSyntaxProvider
+    public class AssertSyntaxProvider : BaseAssertSyntaxProvider, IAssertSyntaxProvider
     {
         public AssertSyntaxProvider(ICommandProvider commandProvider, IAssertProvider assertProvider)
             : base(commandProvider, assertProvider)
         {
         }
 
+        #region Not 
+
         /// <summary>
         /// Negative assertions
         /// </summary>
-        public NotAssertSyntaxProvider Not
+        public INotAssertSyntaxProvider Not
         {
             get
             {
@@ -26,7 +28,7 @@ namespace FluentAutomation
             }
         }
 
-        public class NotAssertSyntaxProvider : BaseAssertSyntaxProvider
+        public class NotAssertSyntaxProvider : BaseAssertSyntaxProvider, INotAssertSyntaxProvider
         {
             public NotAssertSyntaxProvider(ICommandProvider commandProvider, IAssertProvider assertProvider, AssertSyntaxProvider assertSyntaxProvider)
                 : base(commandProvider, assertProvider, assertSyntaxProvider)
@@ -37,7 +39,7 @@ namespace FluentAutomation
             /// Assert the current web browser's URL not to match <paramref name="expectedUrl"/>.
             /// </summary>
             /// <param name="expectedUrl">Fully-qualified URL to use for matching..</param>
-            public AssertSyntaxProvider Url(string expectedUrl)
+            public IAssertSyntaxProvider Url(string expectedUrl)
             {
                 return this.Url(new Uri(expectedUrl, UriKind.Absolute));
             }
@@ -46,7 +48,7 @@ namespace FluentAutomation
             /// Assert the current web browser's URI shouldn't match <paramref name="expectedUri"/>.
             /// </summary>
             /// <param name="expectedUri">Absolute URI to use for matching.</param>
-            public AssertSyntaxProvider Url(Uri expectedUri)
+            public IAssertSyntaxProvider Url(Uri expectedUri)
             {
                 this.assertProvider.NotUrl(expectedUri);
                 return this.assertSyntaxProvider;
@@ -56,7 +58,7 @@ namespace FluentAutomation
             /// Assert the current web browser's URI provided to the specified <paramref name="uriExpression">URI expression</paramref> will return false;
             /// </summary>
             /// <param name="uriExpression">URI expression to use for matching.</param>
-            public AssertSyntaxProvider Url(Expression<Func<Uri, bool>> uriExpression)
+            public IAssertSyntaxProvider Url(Expression<Func<Uri, bool>> uriExpression)
             {
                 this.assertProvider.NotUrl(uriExpression);
                 return this.assertSyntaxProvider;
@@ -66,7 +68,7 @@ namespace FluentAutomation
             /// Assert that an arbitrary <paramref name="matchFunc">matching function</paramref> does not return true.
             /// </summary>
             /// <param name="matchFunc"></param>
-            public AssertSyntaxProvider True(Expression<Func<bool>> matchFunc)
+            public IAssertSyntaxProvider True(Expression<Func<bool>> matchFunc)
             {
                 this.assertProvider.False(matchFunc);
                 return this.assertSyntaxProvider;
@@ -76,7 +78,7 @@ namespace FluentAutomation
             /// Assert that an arbitrary <paramref name="matchFunc">matching function</paramref> does not return false.
             /// </summary>
             /// <param name="matchFunc"></param>
-            public AssertSyntaxProvider False(Expression<Func<bool>> matchFunc)
+            public IAssertSyntaxProvider False(Expression<Func<bool>> matchFunc)
             {
                 this.assertProvider.True(matchFunc);
                 return this.assertSyntaxProvider;
@@ -86,7 +88,7 @@ namespace FluentAutomation
             /// Assert that an arbitrary <paramref name="matchAction">action</paramref> does not throw an Exception.
             /// </summary>
             /// <param name="matchAction"></param>
-            public AssertSyntaxProvider Throws(Expression<Action> matchAction)
+            public IAssertSyntaxProvider Throws(Expression<Action> matchAction)
             {
                 this.assertProvider.NotThrows(matchAction);
                 return this.assertSyntaxProvider;
@@ -96,7 +98,7 @@ namespace FluentAutomation
             /// Assert the element specified does not exist.
             /// </summary>
             /// <param name="selector">Element selector.</param>
-            public AssertSyntaxProvider Exists(string selector)
+            public IAssertSyntaxProvider Exists(string selector)
             {
                 this.assertProvider.NotExists(selector);
                 return this.assertSyntaxProvider;
@@ -106,7 +108,7 @@ namespace FluentAutomation
             /// Assert the element specified does not exist.
             /// </summary>
             /// <param name="selector">Element reference.</param>
-            public AssertSyntaxProvider Exists(ElementProxy element)
+            public IAssertSyntaxProvider Exists(ElementProxy element)
             {
                 this.assertProvider.NotExists(element);
                 return this.assertSyntaxProvider;
@@ -116,7 +118,7 @@ namespace FluentAutomation
             /// Assert that the element matching the selector is not visible and cannot be interacted with.
             /// </summary>
             /// <param name="selector"></param>
-            public AssertSyntaxProvider Visible(string selector)
+            public IAssertSyntaxProvider Visible(string selector)
             {
                 this.assertProvider.NotVisible(selector);
                 return this.assertSyntaxProvider;
@@ -126,12 +128,14 @@ namespace FluentAutomation
             /// Assert that the element is not visible and cannot be interacted with.
             /// </summary>
             /// <param name="selector"></param>
-            public AssertSyntaxProvider Visible(ElementProxy element)
+            public IAssertSyntaxProvider Visible(ElementProxy element)
             {
                 this.assertProvider.NotVisible(element);
                 return this.assertSyntaxProvider;
             }
         }
+
+        #endregion
 
         #region Count
         /// <summary>
@@ -139,12 +143,12 @@ namespace FluentAutomation
         /// </summary>
         /// <param name="count">Number of elements found.</param>
         /// <returns><c>AssertCountSyntaxProvider</c></returns>
-        public AssertCountSyntaxProvider Count(int count)
+        public IAssertCountSyntaxProvider Count(int count)
         {
             return new AssertCountSyntaxProvider(this.commandProvider, this.assertProvider, this.assertSyntaxProvider, count);
         }
 
-        public class AssertCountSyntaxProvider : BaseAssertSyntaxProvider
+        public class AssertCountSyntaxProvider : BaseAssertSyntaxProvider, IAssertCountSyntaxProvider
         {
             private readonly int count = 0;
             private readonly bool notMode = false;
@@ -164,7 +168,7 @@ namespace FluentAutomation
             /// <summary>
             /// Assert that the Count does not match - Reverses assertions in this chain.
             /// </summary>
-            public AssertCountSyntaxProvider Not
+            public IAssertCountSyntaxProvider Not
             {
                 get
                 {
@@ -176,7 +180,7 @@ namespace FluentAutomation
             /// Elements matching <paramref name="selector"/> to be counted.
             /// </summary>
             /// <param name="selector">Sizzle selector.</param>
-            public AssertSyntaxProvider Of(string selector)
+            public IAssertSyntaxProvider Of(string selector)
             {
                 if (this.notMode)
                     this.assertProvider.NotCount(selector, this.count);
@@ -190,7 +194,7 @@ namespace FluentAutomation
             /// Specified <paramref name="elements"/> to be counted.
             /// </summary>
             /// <param name="elements">IElement collection factory function.</param>
-            public AssertSyntaxProvider Of(ElementProxy elements)
+            public IAssertSyntaxProvider Of(ElementProxy elements)
             {
                 if (this.notMode)
                     this.assertProvider.NotCount(elements, count);
@@ -208,12 +212,12 @@ namespace FluentAutomation
         /// </summary>
         /// <param name="className">CSS class name. Example: .row</param>
         /// <returns><c>AssertClassSyntaxProvider</c></returns>
-        public AssertClassSyntaxProvider Class(string className)
+        public IAssertClassSyntaxProvider Class(string className)
         {
             return new AssertClassSyntaxProvider(this.commandProvider, this.assertProvider, this.assertSyntaxProvider, className);
         }
 
-        public class AssertClassSyntaxProvider : BaseAssertSyntaxProvider
+        public class AssertClassSyntaxProvider : BaseAssertSyntaxProvider, IAssertClassSyntaxProvider
         {
             private readonly string className = null;
             private readonly bool notMode = false;
@@ -233,7 +237,7 @@ namespace FluentAutomation
             /// <summary>
             /// Assert that CSS Class does not match - Reverses assertions in this chain.
             /// </summary>
-            public AssertClassSyntaxProvider Not
+            public IAssertClassSyntaxProvider Not
             {
                 get
                 {
@@ -245,7 +249,7 @@ namespace FluentAutomation
             /// Element matching <paramref name="selector"/> that should have matching CSS class.
             /// </summary>
             /// <param name="selector">Sizzle selector.</param>
-            public AssertSyntaxProvider On(string selector)
+            public IAssertSyntaxProvider On(string selector)
             {
                 if (this.notMode)
                     this.assertProvider.NotCssClass(selector, this.className);
@@ -259,7 +263,7 @@ namespace FluentAutomation
             /// Specified <paramref name="element"/> that should have matching CSS class.
             /// </summary>
             /// <param name="element">IElement factory function.</param>
-            public AssertSyntaxProvider On(ElementProxy element)
+            public IAssertSyntaxProvider On(ElementProxy element)
             {
                 if (this.notMode)
                     this.assertProvider.NotCssClass(element, this.className);
@@ -276,7 +280,7 @@ namespace FluentAutomation
         /// Assert that a matching CSS property is found.
         /// </summary>
         /// <param name="propertyName">CSS property name. Example: color</param>
-        public AssertCssPropertySyntaxProvider Css(string propertyName)
+        public IAssertCssPropertySyntaxProvider Css(string propertyName)
         {
             return this.Css(propertyName, null);
         }
@@ -286,12 +290,12 @@ namespace FluentAutomation
         /// </summary>
         /// <param name="propertyName">CSS property name. Example: color</param>
         /// <param name="propertyValue">CSS property value. Example: red</param>
-        public AssertCssPropertySyntaxProvider Css(string propertyName, string propertyValue)
+        public IAssertCssPropertySyntaxProvider Css(string propertyName, string propertyValue)
         {
             return new AssertCssPropertySyntaxProvider(this.commandProvider, this.assertProvider, this.assertSyntaxProvider, propertyName, propertyValue);
         }
 
-        public class AssertCssPropertySyntaxProvider : BaseAssertSyntaxProvider
+        public class AssertCssPropertySyntaxProvider : BaseAssertSyntaxProvider, IAssertCssPropertySyntaxProvider
         {
             private readonly string propertyName = null;
             private readonly string propertyValue = null;
@@ -313,7 +317,7 @@ namespace FluentAutomation
             /// <summary>
             /// Assert that CSS Class does not match - Reverses assertions in this chain.
             /// </summary>
-            public AssertCssPropertySyntaxProvider Not
+            public IAssertCssPropertySyntaxProvider Not
             {
                 get
                 {
@@ -325,7 +329,7 @@ namespace FluentAutomation
             /// Element matching <paramref name="selector"/> that should have matching CSS class.
             /// </summary>
             /// <param name="selector">Sizzle selector.</param>
-            public AssertSyntaxProvider On(string selector)
+            public IAssertSyntaxProvider On(string selector)
             {
                 if (this.notMode)
                     this.assertProvider.NotCssProperty(selector, this.propertyName, this.propertyValue);
@@ -339,7 +343,7 @@ namespace FluentAutomation
             /// Specified <paramref name="element"/> that should have matching CSS class.
             /// </summary>
             /// <param name="element">IElement factory function.</param>
-            public AssertSyntaxProvider On(ElementProxy element)
+            public IAssertSyntaxProvider On(ElementProxy element)
             {
                 if (this.notMode)
                     this.assertProvider.NotCssProperty(element, this.propertyName, this.propertyValue);
@@ -356,7 +360,7 @@ namespace FluentAutomation
         /// Assert that a matching attribute is found.
         /// </summary>
         /// <param name="attributeName">Attribute name. Example: src</param>
-        public AssertAttributeSyntaxProvider Attribute(string attributeName)
+        public IAssertAttributeSyntaxProvider Attribute(string attributeName)
         {
             return this.Attribute(attributeName, null);
         }
@@ -366,12 +370,12 @@ namespace FluentAutomation
         /// </summary>
         /// <param name="attributeName">Attribute name. Example: src</param>
         /// <param name="attributeValue">Attribute value. Example: image.jpg</param>
-        public AssertAttributeSyntaxProvider Attribute(string attributeName, string propertyValue)
+        public IAssertAttributeSyntaxProvider Attribute(string attributeName, string propertyValue)
         {
             return new AssertAttributeSyntaxProvider(this.commandProvider, this.assertProvider, this.assertSyntaxProvider, attributeName, propertyValue);
         }
 
-        public class AssertAttributeSyntaxProvider : BaseAssertSyntaxProvider
+        public class AssertAttributeSyntaxProvider : BaseAssertSyntaxProvider, IAssertAttributeSyntaxProvider
         {
             private readonly string attributeName = null;
             private readonly string attributeValue = null;
@@ -393,7 +397,7 @@ namespace FluentAutomation
             /// <summary>
             /// Assert that CSS Class does not match - Reverses assertions in this chain.
             /// </summary>
-            public AssertAttributeSyntaxProvider Not
+            public IAssertAttributeSyntaxProvider Not
             {
                 get
                 {
@@ -405,7 +409,7 @@ namespace FluentAutomation
             /// Element matching <paramref name="selector"/> that should have matching CSS class.
             /// </summary>
             /// <param name="selector">Sizzle selector.</param>
-            public AssertSyntaxProvider On(string selector)
+            public IAssertSyntaxProvider On(string selector)
             {
                 if (this.notMode)
                     this.assertProvider.NotAttribute(selector, this.attributeName, this.attributeValue);
@@ -419,7 +423,7 @@ namespace FluentAutomation
             /// Specified <paramref name="element"/> that should have matching CSS class.
             /// </summary>
             /// <param name="element">IElement factory function.</param>
-            public AssertSyntaxProvider On(ElementProxy element)
+            public IAssertSyntaxProvider On(ElementProxy element)
             {
                 if (this.notMode)
                     this.assertProvider.NotAttribute(element, this.attributeName, this.attributeValue);
@@ -437,7 +441,7 @@ namespace FluentAutomation
         /// </summary>
         /// <param name="text">Text that must be exactly matched.</param>
         /// <returns><c>AssertTextSyntaxProvider</c></returns>
-        public AssertTextSyntaxProvider Text(string text)
+        public IAssertTextSyntaxProvider Text(string text)
         {
             return new AssertTextSyntaxProvider(this.commandProvider, this.assertProvider, this.assertSyntaxProvider, text);
         }
@@ -447,12 +451,12 @@ namespace FluentAutomation
         /// </summary>
         /// <param name="matchFunc">Function to evaluate if Text matches. Example: (text) => text.Contains("Hello")</param>
         /// <returns><c>AssertTextSyntaxProvider</c></returns>
-        public AssertTextSyntaxProvider Text(Expression<Func<string, bool>> matchFunc)
+        public IAssertTextSyntaxProvider Text(Expression<Func<string, bool>> matchFunc)
         {
             return new AssertTextSyntaxProvider(this.commandProvider, this.assertProvider, this.assertSyntaxProvider, matchFunc);
         }
 
-        public class AssertTextSyntaxProvider : BaseAssertSyntaxProvider
+        public class AssertTextSyntaxProvider : BaseAssertSyntaxProvider, IAssertTextSyntaxProvider
         {
             private readonly string text = null;
             private readonly Expression<Func<string, bool>> matchFunc = null;
@@ -486,7 +490,7 @@ namespace FluentAutomation
             /// <summary>
             /// Assert that Text does not match - Reverses assertions in this chain.
             /// </summary>
-            public AssertTextSyntaxProvider Not
+            public IAssertTextSyntaxProvider Not
             {
                 get
                 {
@@ -501,7 +505,7 @@ namespace FluentAutomation
             /// Element matching <paramref name="selector"/> that should match Text.
             /// </summary>
             /// <param name="selector">Sizzle selector.</param>
-            public AssertSyntaxProvider In(string selector)
+            public IAssertSyntaxProvider In(string selector)
             {
                 if (!string.IsNullOrEmpty(this.text))
                 {
@@ -525,7 +529,7 @@ namespace FluentAutomation
             /// Specified <paramref name="element"/> that should match Text.
             /// </summary>
             /// <param name="element">IElement factory function.</param>
-            public AssertSyntaxProvider In(ElementProxy element)
+            public IAssertSyntaxProvider In(ElementProxy element)
             {
                 if (!string.IsNullOrEmpty(this.text))
                 {
@@ -549,7 +553,7 @@ namespace FluentAutomation
             /// Look in the active Alert/Prompt for the specified text. If the text does not match the prompt will be cleanly exited to allow clean failure or continuation of the test.
             /// </summary>
             /// <param name="accessor"></param>
-            public AssertSyntaxProvider In(Alert accessor)
+            public IAssertSyntaxProvider In(Alert accessor)
             {
                 if (accessor != Alert.Message)
                     throw new FluentException("FluentAutomation only supports checking the message in an alerts or prompts.");
@@ -580,7 +584,7 @@ namespace FluentAutomation
         /// </summary>
         /// <param name="value">Int32 value expected.</param>
         /// <returns><c>AssertValueSyntaxProvider</c></returns>
-        public AssertValueSyntaxProvider Value(int value)
+        public IAssertValueSyntaxProvider Value(int value)
         {
             return this.Value(value.ToString());
         }
@@ -590,7 +594,7 @@ namespace FluentAutomation
         /// </summary>
         /// <param name="value">String value.</param>
         /// <returns><c>AssertValueSyntaxProvider</c></returns>
-        public AssertValueSyntaxProvider Value(string value)
+        public IAssertValueSyntaxProvider Value(string value)
         {
             return new AssertValueSyntaxProvider(this.commandProvider, this.assertProvider, this.assertSyntaxProvider, value);
         }
@@ -600,12 +604,12 @@ namespace FluentAutomation
         /// </summary>
         /// <param name="matchFunc">Function to evaluate if Value matches. Example: (value) => value != "Hello" && value != "World"</param>
         /// <returns><c>AssertValueSyntaxProvider</c></returns>
-        public AssertValueSyntaxProvider Value(Expression<Func<string, bool>> matchFunc)
+        public IAssertValueSyntaxProvider Value(Expression<Func<string, bool>> matchFunc)
         {
             return new AssertValueSyntaxProvider(this.commandProvider, this.assertProvider, this.assertSyntaxProvider, matchFunc);
         }
 
-        public class AssertValueSyntaxProvider : BaseAssertSyntaxProvider
+        public class AssertValueSyntaxProvider : BaseAssertSyntaxProvider, IAssertValueSyntaxProvider
         {
             private readonly string value = null;
             private readonly Expression<Func<string, bool>> matchFunc = null;
@@ -639,7 +643,7 @@ namespace FluentAutomation
             /// <summary>
             /// Assert that Value does not match - Reverses assertions in this chain.
             /// </summary>
-            public AssertValueSyntaxProvider Not
+            public IAssertValueSyntaxProvider Not
             {
                 get
                 {
@@ -654,7 +658,7 @@ namespace FluentAutomation
             /// Element matching <paramref name="selector"/> that should have a matching Value.
             /// </summary>
             /// <param name="selector"></param>
-            public AssertSyntaxProvider In(string selector)
+            public IAssertSyntaxProvider In(string selector)
             {
                 if (!string.IsNullOrEmpty(this.value))
                 {
@@ -678,7 +682,7 @@ namespace FluentAutomation
             /// Specified <paramref name="element"/> that should have a matching Value.
             /// </summary>
             /// <param name="element"></param>
-            public AssertSyntaxProvider In(ElementProxy element)
+            public IAssertSyntaxProvider In(ElementProxy element)
             {
                 if (!string.IsNullOrEmpty(this.value))
                 {
@@ -702,7 +706,7 @@ namespace FluentAutomation
             /// Look in the active Alert/Prompt for the specified value.
             /// </summary>
             /// <param name="accessor"></param>
-            public AssertSyntaxProvider In(Alert accessor)
+            public IAssertSyntaxProvider In(Alert accessor)
             {
                 if (accessor != Alert.Message)
                 {
@@ -735,7 +739,7 @@ namespace FluentAutomation
         /// Assert the current web browser's URL to match <paramref name="expectedUrl"/>.
         /// </summary>
         /// <param name="expectedUrl">Fully-qualified URL to use for matching..</param>
-        public AssertSyntaxProvider Url(string expectedUrl)
+        public IAssertSyntaxProvider Url(string expectedUrl)
         {
             return Url(new Uri(expectedUrl, UriKind.Absolute));
         }
@@ -744,7 +748,7 @@ namespace FluentAutomation
         /// Assert the current web browser's URI to match <paramref name="expectedUri"/>.
         /// </summary>
         /// <param name="expectedUri">Absolute URI to use for matching..</param>
-        public AssertSyntaxProvider Url(Uri expectedUri)
+        public IAssertSyntaxProvider Url(Uri expectedUri)
         {
             this.assertProvider.Url(expectedUri);
             return this.assertSyntaxProvider;
@@ -754,7 +758,7 @@ namespace FluentAutomation
         /// Assert the current web browser's URI provided to the specified <paramref name="uriExpression">URI expression</paramref> will return true;
         /// </summary>
         /// <param name="uriExpression">URI expression to use for matching..</param>
-        public AssertSyntaxProvider Url(Expression<Func<Uri, bool>> uriExpression)
+        public IAssertSyntaxProvider Url(Expression<Func<Uri, bool>> uriExpression)
         {
             this.assertProvider.Url(uriExpression);
             return this.assertSyntaxProvider;
@@ -766,7 +770,7 @@ namespace FluentAutomation
         /// Assert that an arbitrary <paramref name="matchFunc">matching function</paramref> returns true.
         /// </summary>
         /// <param name="matchFunc"></param>
-        public AssertSyntaxProvider True(Expression<Func<bool>> matchFunc)
+        public IAssertSyntaxProvider True(Expression<Func<bool>> matchFunc)
         {
             this.assertProvider.True(matchFunc);
             return this.assertSyntaxProvider;
@@ -776,7 +780,7 @@ namespace FluentAutomation
         /// Assert that an arbitrary <paramref name="matchFunc">matching function</paramref> returns false.
         /// </summary>
         /// <param name="matchFunc"></param>
-        public AssertSyntaxProvider False(Expression<Func<bool>> matchFunc)
+        public IAssertSyntaxProvider False(Expression<Func<bool>> matchFunc)
         {
             this.assertProvider.False(matchFunc);
             return this.assertSyntaxProvider;
@@ -786,7 +790,7 @@ namespace FluentAutomation
         /// Assert that an arbitrary <paramref name="matchAction">action</paramref> throws an Exception.
         /// </summary>
         /// <param name="matchAction"></param>
-        public AssertSyntaxProvider Throws(Expression<Action> matchAction)
+        public IAssertSyntaxProvider Throws(Expression<Action> matchAction)
         {
             this.assertProvider.Throws(matchAction);
             return this.assertSyntaxProvider;
@@ -797,7 +801,7 @@ namespace FluentAutomation
         /// Assert the element specified exists.
         /// </summary>
         /// <param name="selector">Element selector.</param>
-        public AssertSyntaxProvider Exists(string selector)
+        public IAssertSyntaxProvider Exists(string selector)
         {
             this.assertProvider.Exists(selector);
             return this.assertSyntaxProvider;
@@ -808,7 +812,7 @@ namespace FluentAutomation
         /// </summary>
         /// <param name="element">Reference to element</param>
         /// <returns></returns>
-        public AssertSyntaxProvider Exists(ElementProxy element)
+        public IAssertSyntaxProvider Exists(ElementProxy element)
         {
             this.assertProvider.Exists(element);
             return this.assertSyntaxProvider;
@@ -818,7 +822,7 @@ namespace FluentAutomation
         /// Assert that the element matching the selector is visible and can be interacted with.
         /// </summary>
         /// <param name="selector"></param>
-        public AssertSyntaxProvider Visible(string selector)
+        public IAssertSyntaxProvider Visible(string selector)
         {
             this.assertProvider.Visible(selector);
             return this;
@@ -828,7 +832,7 @@ namespace FluentAutomation
         /// Assert that the element is visible and can be interacted with.
         /// </summary>
         /// <param name="selector"></param>
-        public AssertSyntaxProvider Visible(ElementProxy element)
+        public IAssertSyntaxProvider Visible(ElementProxy element)
         {
             this.assertProvider.Visible(element);
             return this;
@@ -850,7 +854,7 @@ namespace FluentAutomation
         {
             this.commandProvider = commandProvider;
             this.assertProvider = assertProvider;
-            this.assertSyntaxProvider = assertSyntaxProvider == null ? (AssertSyntaxProvider)this : assertSyntaxProvider;
+            this.assertSyntaxProvider = assertSyntaxProvider ?? (AssertSyntaxProvider)this;
         }
     }
 }

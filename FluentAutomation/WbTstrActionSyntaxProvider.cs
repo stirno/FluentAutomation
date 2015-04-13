@@ -8,6 +8,8 @@ namespace FluentAutomation
     {
         private readonly ActionSyntaxProvider _actionSyntaxProvider;
         private readonly ILogger _logger;
+        private IAssertSyntaxProvider _expect;
+        private IAssertSyntaxProvider _assert;
 
         public WbTstrActionSyntaxProvider(ActionSyntaxProvider actionSyntaxProvider, ILogger logger)
         {
@@ -19,19 +21,19 @@ namespace FluentAutomation
       
         /*-------------------------------------------------------------------*/
 
-        public AssertSyntaxProvider Expect
+        public IAssertSyntaxProvider Expect
         {
             get
             {
-                return _actionSyntaxProvider.Expect;
+                return _expect ?? (_expect = new WbTstrAssertSyntaxProvider(_actionSyntaxProvider.Expect, _logger));
             }
         }
 
-        public AssertSyntaxProvider Assert
+        public IAssertSyntaxProvider Assert
         {
             get
             {
-                return _actionSyntaxProvider.Assert;
+                return _assert ?? (_assert = new WbTstrAssertSyntaxProvider(_actionSyntaxProvider.Assert, _logger));
             }
         }
 
@@ -961,8 +963,8 @@ namespace FluentAutomation
 
         public IActionSyntaxProvider WithConfig(FluentSettings settings)
         {
-            // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            // Before (Don't log this. Is called frequently, isn't interresting to know)
+            // _logger.LogMessage("Inject FluentSettings (WithConfig)"); // TODO: Elaborate logging
 
             // Execute
             ((ActionSyntaxProvider)_actionSyntaxProvider).WithConfig(settings);

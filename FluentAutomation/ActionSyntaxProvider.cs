@@ -781,7 +781,7 @@ namespace FluentAutomation
 
         #region Assert / Expect
         private AssertSyntaxProvider expect = null;
-        public AssertSyntaxProvider Expect
+        public IAssertSyntaxProvider Expect
         {
             get
             {
@@ -795,7 +795,7 @@ namespace FluentAutomation
         }
 
         private AssertSyntaxProvider assert = null;
-        public AssertSyntaxProvider Assert
+        public IAssertSyntaxProvider Assert
         {
             get
             {
