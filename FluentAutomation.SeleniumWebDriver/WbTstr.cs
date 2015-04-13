@@ -156,6 +156,9 @@ namespace FluentAutomation
 
         public IWbTstr UseWebDriver(SeleniumWebDriver.Browser browser)
         {
+            DisableBrowserStackLocal();
+
+            _remoteWebDriver = null;
             _localWebDriver = browser;
             return this;
         }
