@@ -1,4 +1,6 @@
-﻿using OpenQA.Selenium;
+﻿using FluentAutomation.Interfaces;
+
+using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +14,6 @@ namespace FluentAutomation.Tests
     /// </summary>
     public class BaseTest : FluentTest<IWebDriver>
     {
-        public string SiteUrl { get { return "http://wbtstr.net-testbed.dt-dev1.mirabeau.nl/"; } }
-        
         public BaseTest()
         {
             FluentSession.EnableStickySession();
@@ -26,24 +26,32 @@ namespace FluentAutomation.Tests
             this.TextPage = new Pages.TextPage(this);
             this.DragPage = new Pages.DragPage(this);
             this.SwitchPage = new Pages.SwitchPage(this);
-            
+
             // Default tests use chrome and load the site
             //FluentAutomation.SeleniumWebDriver.Bootstrap(SeleniumWebDriver.Browser.Chrome); //, SeleniumWebDriver.Browser.InternetExplorer, SeleniumWebDriver.Browser.Firefox);
 
-            string browserStackUsername = ConfigReader.GetEnvironmentVariableOrAppSetting("browserStackUsername");
-            string browserStackPassword = ConfigReader.GetEnvironmentVariableOrAppSetting("browserStackPassword");
-
             // Test browserstack local
             WbTstr.Configure()
-                .SetBrowserStackCredentials(browserStackUsername, browserStackPassword)
+                .EnableDebug()
+                .DisableDryRun()
+                .UseBrowserStackAsRemoteDriver()
                 .EnableBrowserStackLocal()
-                .EnableBrowserStackDebug()
-                .SetUniqueIdentifier(FluentSettings.Current.UniqueIdentitfier)
-                .UseRemoteWebDriver("http://hub.browserstack.com/wd/hub/")
-                .Bootstrap();
+                .PreferedBrowser().IsChrome()
+                .PreferedOperatingSystem().IsWindows()
+                .PreferedScreenResolution().IsAny();
+
+            WbTstr.Bootstrap();
 
             FluentSession.DisableStickySession();
             I.Open(SiteUrl);
+        }
+
+        public string SiteUrl
+        {
+            get
+            {
+                return ConfigReader.GetSetting("WbTstr:WebsiteUnderTestBaseUrl");
+            }
         }
 
         public Pages.InputsPage InputsPage = null;

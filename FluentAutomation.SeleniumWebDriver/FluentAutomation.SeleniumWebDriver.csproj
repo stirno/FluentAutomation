@@ -12,7 +12,7 @@
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <BuildPackage>true</BuildPackage>
+    <BuildPackage>false</BuildPackage>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
@@ -37,6 +37,9 @@
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.5.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Polly">
+      <HintPath>..\packages\Polly.2.2.1\lib\net40\Polly.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -63,13 +66,19 @@
     <Compile Include="CommandProvider.cs" />
     <Compile Include="Element.cs" />
     <Compile Include="CommandProviderList.cs" />
-    <Compile Include="Interfaces\IWebTstr.cs" />
+    <Compile Include="Interfaces\IWbTstr.cs" />
+    <Compile Include="Interfaces\IWbTstrBrowserStackBrowser.cs" />
+    <Compile Include="Interfaces\IWbTstrBrowserStackOperatingSystem.cs" />
+    <Compile Include="Interfaces\IWbTstrBrowserStackScreenResolution.cs" />
     <Compile Include="MultiCommandProvider.cs" />
     <Compile Include="MultiAssertProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SeleniumWebDriver.cs" />
     <Compile Include="Sizzle.cs" />
     <Compile Include="WbTstr.cs" />
+    <Compile Include="WbTstrBrowserStackBrowser.cs" />
+    <Compile Include="WbTstrBrowserStackOperatingSystem.cs" />
+    <Compile Include="WbTstrBrowserStackScreenResolution.cs" />
     <Compile Include="Wrappers\BrowserStackLocal.cs" />
     <Compile Include="Wrappers\EnhancedRemoteWebDriver.cs" />
     <Compile Include="Wrappers\IEDriver.cs" />
@@ -81,11 +90,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="FluentAutomation.SeleniumWebDriver.nuspec" />
     <None Include="packages.config" />
-    <None Include="WbTstr.Net.SeleniumWebDriver.nuspec">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="3rdPartyLib\BrowserStackLocal.exe" />

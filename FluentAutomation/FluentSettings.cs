@@ -10,6 +10,7 @@ namespace FluentAutomation
 {
     public class FluentSettings : IDisposable
     {
+        private static readonly object _mutex = string.Empty;
         private static FluentSettings _current;
 
         private FluentSettings()
@@ -61,6 +62,8 @@ namespace FluentAutomation
                 else
                     System.Diagnostics.Trace.WriteLine("[ASSERT FAIL] " + ex.Message);
             };
+
+            OnFluentSettingsCreated();
         }
 
         ~FluentSettings()
@@ -70,9 +73,13 @@ namespace FluentAutomation
 
         /*-------------------------------------------------------------------*/
 
+        public delegate void FluentSettingsCreatedEventHandler(object sender, EventArgs e);
+
         public delegate void FluentSettingsDisposedEventHandler(object sender, EventArgs e);
 
-        public event FluentSettingsDisposedEventHandler OnDisposed = delegate { };
+        public static event FluentSettingsCreatedEventHandler OnCreated = delegate { };
+
+        public static event FluentSettingsDisposedEventHandler OnDisposed = delegate { };
 
         public static FluentSettings Current
         {
@@ -80,7 +87,7 @@ namespace FluentAutomation
             {
                 if (_current == null)
                 {
-                    using (var mutex = new Mutex(true, "b14c5c10-0fd9-44f0-8a92-901fcb422bda"))
+                    lock (_mutex)
                     {
                         if (_current == null)
                         {
@@ -88,6 +95,7 @@ namespace FluentAutomation
                         }
                     }
                 }
+
                 return _current;
             }
         }
@@ -134,6 +142,10 @@ namespace FluentAutomation
 
         public Action<FluentAssertFailedException, WindowState> OnAssertFailed { get; set; }
 
+        public bool InDebugMode { get; set; }
+
+        public bool IsDryRun { get; set; }
+
         public bool Disposed { get; private set; }
 
         /*-------------------------------------------------------------------*/
@@ -160,10 +172,18 @@ namespace FluentAutomation
                 }
 
                 // Now disposed of any unmanaged objects
-                OnFluentSettingsDisposed();
+                // ...
 
                 Disposed = true;
+                OnFluentSettingsDisposed();
             }
+        }
+
+        /*-------------------------------------------------------------------*/
+
+        private void OnFluentSettingsCreated()
+        {
+            OnCreated(this, EventArgs.Empty);
         }
 
         private void OnFluentSettingsDisposed()

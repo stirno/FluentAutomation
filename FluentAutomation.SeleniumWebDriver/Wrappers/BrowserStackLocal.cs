@@ -13,9 +13,9 @@ namespace FluentAutomation.Wrappers
     public class BrowserStackLocal : IDisposable
     {
         private const string MutexName = "{e8aa150b-3b92-44c8-a9d4-aecfb6c51416}";
-
+        private static object _mutex = string.Empty;
         private static bool _disposed;
-        private static BrowserStackLocal _current;
+        private static BrowserStackLocal _instance;
         private Dictionary<string, Process> _processes;
 
         private BrowserStackLocal()
@@ -28,24 +28,22 @@ namespace FluentAutomation.Wrappers
             Dispose(false);
         }
 
-        public static BrowserStackLocal Current
+        public static BrowserStackLocal Instance
         {
             get
             {
-                if (_current != null)
+                if (_instance == null)
                 {
-                    return _current;
-                }
-
-                using (var mutex = new Mutex(false, MutexName))
-                {
-                    if (_current == null)
+                    lock (_mutex)
                     {
-                        _current = new BrowserStackLocal();
+                        if (_instance == null)
+                        {
+                            _instance = new BrowserStackLocal();
+                        }
                     }
                 }
 
-                return _current;
+                return _instance;
             }
         }
 
@@ -55,34 +53,51 @@ namespace FluentAutomation.Wrappers
         {
             using (var mutex = new Mutex(false, MutexName))
             {
-                if (IsBrowserStackLocalProcessRunning(identifier))
-                {
-                    Console.WriteLine("BrowserStackLocal ({0}) is already running!", identifier);
-                    return false;
-                }
+                mutex.WaitOne();
 
-                Console.WriteLine("Starting BrowserStackLocal ({0})!", identifier);
                 try
                 {
-                    string targetExeFilename = ConvertToBrowserStackLocalTargetFilename(identifier);
-                    string fullPathToExe = EmbeddedResources.UnpackFromAssembly("BrowserStackLocal.exe", targetExeFilename, Assembly.GetAssembly(typeof(SeleniumWebDriver)));
+                    if (IsBrowserStackLocalProcessRunning(identifier))
+                    {
+                        Console.WriteLine("BrowserStackLocal ({0}) is already running!", identifier);
+                        return false;
+                    }
 
-                    var processStartInfo = GetProcessStartInfo(fullPathToExe, browserStackKey, identifier);
-                    Process process = Process.Start(processStartInfo);
+                    Console.WriteLine("Starting BrowserStackLocal ({0})!", identifier);
+                    Process process;
+                    if (_processes.TryGetValue(identifier, out process))
+                    {
+                        // Restart stored process
+                        process.Start();
+                    }
+                    else
+                    {
+                        string targetExeFilename = ConvertToBrowserStackLocalTargetFilename(identifier);
+                        string fullPathToExe = EmbeddedResources.UnpackFromAssembly(
+                            "BrowserStackLocal.exe",
+                            targetExeFilename,
+                            Assembly.GetAssembly(typeof(SeleniumWebDriver)));
+
+                        // Start a new process
+                        var processStartInfo = GetProcessStartInfo(fullPathToExe, browserStackKey, identifier);
+                        process = Process.Start(processStartInfo);
+
+                        if (process != null)
+                        {
+                            process.EnableRaisingEvents = true;
+                            process.Exited += BrowserStackLocalProcessOnExited;
+                        }
+                    }
+
+                    // Wait 2 second to allow BrowserStackLogic to startup and catch any error-shutdowns
+                    Thread.Sleep(2000);
 
                     if (process != null)
                     {
-                        process.EnableRaisingEvents = true;
-                        process.Exited += BrowserStackLocalProcessOnExited;
-                        process.OutputDataReceived += BrowserStackLocalProcessOnOutputDataReceived;
-
-                        // Wait 1 second to allow BrowserStackLogic to startup and catch any error-shutdowns
-                        Thread.Sleep(1000);
-
                         process.Refresh();
                         if (!process.HasExited)
                         {
-                            _processes.Add(identifier, process);
+                            _processes[identifier] = process;
                             return true;
                         }
                     }
@@ -102,6 +117,10 @@ namespace FluentAutomation.Wrappers
                     Console.WriteLine("A Win32 exception occured while trying to start the BrowserStackLocal process, let's panic!");
                     throw;
                 }
+                finally
+                {
+                    mutex.ReleaseMutex();
+                }
 
                 // If we end up here the process failed to start.
                 return false;
@@ -112,11 +131,14 @@ namespace FluentAutomation.Wrappers
         {
             using (var mutex = new Mutex(false, MutexName))
             {
-                if (!IsBrowserStackLocalProcessRunning(identifier)) return false;
+                mutex.WaitOne();
 
-                Console.WriteLine("Stopping BrowserStackLocal ({0})!", identifier);
                 try
                 {
+                    if (!IsBrowserStackLocalProcessRunning(identifier)) return false;
+
+                    Console.WriteLine("Stopping BrowserStackLocal ({0})!", identifier);
+
                     Process process = _processes[identifier];
 
                     process.Kill();
@@ -130,6 +152,10 @@ namespace FluentAutomation.Wrappers
                 catch (InvalidOperationException invalidOperationException)
                 {
                     Console.WriteLine("Couldn't stop the BrowserStackLocal process, the process is probably already stoped.");
+                }
+                finally
+                {
+                    mutex.ReleaseMutex();
                 }
 
                 // If we end up here the process failed to stop properly.
@@ -179,17 +205,12 @@ namespace FluentAutomation.Wrappers
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.CreateNoWindow = false;
             startInfo.UseShellExecute = false;
-            startInfo.RedirectStandardOutput = true;
+            startInfo.RedirectStandardOutput = false;
             startInfo.FileName = fullPathToExe;
             startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            startInfo.Arguments = string.Format("-localIdentifier {0} {1} localhost,3000,0", identifier, browserStackKey);
+            startInfo.Arguments = string.Format("-localIdentifier {0} {1}", identifier, browserStackKey);
 
             return startInfo;
-        }
-
-        private void BrowserStackLocalProcessOnOutputDataReceived(object sender, DataReceivedEventArgs dataReceivedEventArgs)
-        {
-            Console.WriteLine(dataReceivedEventArgs.Data ?? string.Empty);
         }
 
         private void BrowserStackLocalProcessOnExited(object sender, EventArgs eventArgs)

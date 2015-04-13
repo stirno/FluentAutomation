@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>WbTstr.Net.SeleniumWebDriver</id>
+    <version>$version$</version>
+    <title>WbTstr.Net.SeleniumWebDriver</title>
+    <authors>Maarten Groeneweg, Onno Valkering</authors>
+    <owners>Mirabeau B.V.</owners>
+    <description>WbTstr.Net is a fork of FluentAutomation which provides a fluent syntax to write your tests.</description>
+    <projectUrl>https://github.com/mirabeau-nl/WbTstr.Net</projectUrl>
+    <releaseNotes>https://github.com/mirabeau-nl/WbTstr.Net</releaseNotes>
+    <copyright>Mirabeau 2015</copyright>
+    <language>en-US</language>
+    <tags>PhantomJS Phantom WatiN Selenium Fluent Automation API</tags>
+    <dependencies>
+        <dependency id="WbTstr.Net.core" version="$version$" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="FluentAutomation.SeleniumWebDriver\bin\$configuration$\*.*" target="lib" />
+  </files>   
+</package>

@@ -2,25 +2,56 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Serialization;
+using System.Xml.XPath;
 
 namespace FluentAutomation
 {
     public static class ConfigReader
     {
-        public static string GetEnvironmentVariableOrAppSetting(string key)
+        public static string GetSetting(string key, string externalConfigFile = null)
         {
             return Environment.GetEnvironmentVariable(string.Format("bamboo_{0}", key))
                 ?? Environment.GetEnvironmentVariable(key)
-                ?? GetConfigurationFileSetting(key);
+                ?? GetConfigurationFileSetting(string.Format("WbTstr:{0}", key), externalConfigFile)
+                ?? GetConfigurationFileSetting(key, externalConfigFile);
         }
 
-        private static string GetConfigurationFileSetting(string key)
+        public static bool? GetSettingAsBoolean(string key)
         {
-            string configFile = ConfigurationManager.AppSettings["WbTstr:ConfigFile"];
-            if (!string.IsNullOrEmpty(configFile))
+            string strValue = GetSetting(key);
+            bool value;
+
+            if (bool.TryParse(strValue, out value))
+            {
+                return value;
+            }
+
+            return null;
+        }
+
+        public static int? GetSettingAsInteger(string key)
+        {
+            string strValue = GetSetting(key);
+            int value;
+
+            if (int.TryParse(strValue, out value))
+            {
+                return value;
+            }
+
+            return null;
+        }
+
+        private static string GetConfigurationFileSetting(string key, string externalConfigFile = null)
+        {
+            string configFile = externalConfigFile ?? GetExternalConfigurationFilePath();
+            if (!string.IsNullOrEmpty(configFile) && File.Exists(configFile))
             {
                 NameValueCollection settings = GetNameValueCollectionSection("settings", configFile);
                 string valueFromConfigFile = settings[key];
@@ -51,33 +82,13 @@ namespace FluentAutomation
                 nameValueColl.Add(node.Attributes[0].Value, node.Attributes[1].Value);
 
             }
+
             return nameValueColl;
         }
 
-        public static bool? GetEnvironmentVariableOrAppSettingAsBoolean(string key)
+        private static string GetExternalConfigurationFilePath()
         {
-            string strValue = GetEnvironmentVariableOrAppSetting(key);
-            bool value;
-
-            if (bool.TryParse(strValue, out value))
-            {
-                return value;
-            }
-
-            return null;
-        }
-
-        public static int? GetEnvironmentVariableOrAppSettingAsInteger(string key)
-        {
-            string strValue = GetEnvironmentVariableOrAppSetting(key);
-            int value;
-
-            if (int.TryParse(strValue, out value))
-            {
-                return value;
-            }
-
-            return null;
+            return ConfigurationManager.AppSettings["WbTstr:ConfigFile"];
         }
     }
 }

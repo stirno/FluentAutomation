@@ -42,7 +42,7 @@ namespace FluentAutomation.Tests.Actions
                     .WaitUntil(() => this.ThrowUntilSecondCall(ref controlInt));
 
             controlInt = 0;
-            I.WaitUntil(() => this.ReturnBoolAndThrowUntilSecondCall(ref controlInt, null), TimeSpan.FromMilliseconds(210));
+            I.WaitUntil(() => this.ReturnBoolAndThrowUntilSecondCall(ref controlInt, null), TimeSpan.FromMilliseconds(500));
 
             controlInt = 0;
 

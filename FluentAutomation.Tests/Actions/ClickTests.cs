@@ -50,6 +50,7 @@ namespace FluentAutomation.Tests.Actions
         {
             var el = I.Find(InputsPage.ButtonControlSelector);
             I.Click(el.Element.PosX + 10, el.Element.PosY + 10)
+             .Wait(3)
              .Assert.Text("Button Clicked").In(InputsPage.ButtonClickedTextSelector);
 
             I.DoubleClick(el.Element.PosX + 10, el.Element.PosY + 10)

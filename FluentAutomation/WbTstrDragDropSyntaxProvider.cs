@@ -26,9 +26,7 @@ namespace FluentAutomation
         {
             get
             {
-                bool? isInDryRunMode = ConfigReader.GetEnvironmentVariableOrAppSettingAsBoolean("WbTstr:DryRunMode");
-
-                return isInDryRunMode.HasValue && isInDryRunMode.Value;
+                return FluentSettings.Current.IsDryRun;
             }
         }
 
