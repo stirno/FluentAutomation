@@ -76,6 +76,11 @@ namespace FluentAutomation
 
         private static TimeSpan DefaultCommandTimeout = TimeSpan.FromSeconds(60);
 
+        public static void DryRunBootstrap()
+        {
+            FluentSettings.Current.ContainerRegistration = SetupContainer;
+        }
+
         /// <summary>
         /// Bootstrap Selenium provider and utilize Firefox.
         /// </summary>
@@ -316,7 +321,7 @@ namespace FluentAutomation
             const int NumberOfRetries = 10;
             try
             {
-                var policy = Policy.Handle<Exception>().WaitAndRetry(10, i => TimeSpan.FromSeconds(5));
+                var policy = Policy.Handle<Exception>().WaitAndRetry(10, i => TimeSpan.FromSeconds(6));
                 return policy.Execute(() => new EnhancedRemoteWebDriver(driverUri, browserCapabilities, commandTimeout));
             }
             catch (Exception)

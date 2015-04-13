@@ -203,7 +203,7 @@ namespace FluentAutomation.Wrappers
 
             // Compose process start info instance
             ProcessStartInfo startInfo = new ProcessStartInfo();
-            startInfo.CreateNoWindow = false;
+            startInfo.CreateNoWindow = !FluentSettings.Current.InDebugMode;
             startInfo.UseShellExecute = false;
             startInfo.RedirectStandardOutput = false;
             startInfo.FileName = fullPathToExe;

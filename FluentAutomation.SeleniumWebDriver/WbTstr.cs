@@ -156,6 +156,9 @@ namespace FluentAutomation
 
         public IWbTstr UseWebDriver(SeleniumWebDriver.Browser browser)
         {
+            DisableBrowserStackLocal();
+
+            _remoteWebDriver = null;
             _localWebDriver = browser;
             return this;
         }
@@ -185,7 +188,11 @@ namespace FluentAutomation
 
         public IWbTstr BootstrapInstance()
         {
-            if (_remoteWebDriver != null)
+            if (FluentSettings.Current.IsDryRun)
+            {
+                SeleniumWebDriver.DryRunBootstrap();
+            }
+            else if (_remoteWebDriver != null)
             {
                 if (_browserStackLocalEnabled)
                 {

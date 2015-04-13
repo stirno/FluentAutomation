@@ -13,7 +13,7 @@ namespace FluentAutomation
         private readonly ITextAppendSyntaxProvider _textAppendSyntaxProvider;
         private readonly ILogger _logger;
 
-        public WbTstrTextAppendSyntaxProvider(WbTstrActionSyntaxProvider actionSyntaxProvider, ITextAppendSyntaxProvider textAppendSyntaxProvider, ILogger logger)
+        internal WbTstrTextAppendSyntaxProvider(WbTstrActionSyntaxProvider actionSyntaxProvider, ITextAppendSyntaxProvider textAppendSyntaxProvider, ILogger logger)
         {
             _actionSyntaxProvider = actionSyntaxProvider;
             _textAppendSyntaxProvider = textAppendSyntaxProvider;

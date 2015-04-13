@@ -45,7 +45,7 @@ namespace FluentAutomation
             const int NumberOfRetries = 10;
             try
             {
-                var policy = Policy.Handle<InvalidOperationException>().WaitAndRetry(NumberOfRetries, i => TimeSpan.FromSeconds(5));
+                var policy = Policy.Handle<InvalidOperationException>().WaitAndRetry(NumberOfRetries, i => TimeSpan.FromSeconds(6));
                 return policy.Execute(
                     () =>
                     {
@@ -91,7 +91,7 @@ namespace FluentAutomation
                         return webDriver;
                     });
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException exception)
             {
                 Console.WriteLine("Failed to create a new webdriver. Retried {0} times.", NumberOfRetries);
                 throw;
