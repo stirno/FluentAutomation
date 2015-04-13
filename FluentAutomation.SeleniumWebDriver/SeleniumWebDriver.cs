@@ -313,8 +313,17 @@ namespace FluentAutomation
 
         private static EnhancedRemoteWebDriver CreateEnhancedRemoteWebDriver(Uri driverUri, DesiredCapabilities browserCapabilities, TimeSpan commandTimeout)
         {
-            var policy = Policy.Handle<Exception>().WaitAndRetry(10, i => TimeSpan.FromSeconds(5));
-            return policy.Execute(() => new EnhancedRemoteWebDriver(driverUri, browserCapabilities, commandTimeout));
+            const int NumberOfRetries = 10;
+            try
+            {
+                var policy = Policy.Handle<Exception>().WaitAndRetry(10, i => TimeSpan.FromSeconds(5));
+                return policy.Execute(() => new EnhancedRemoteWebDriver(driverUri, browserCapabilities, commandTimeout));
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Failed to create a enhanced RemoteWebDriver. Retried {0} times.", NumberOfRetries);           
+                throw;
+            }
         }
     }
 }
