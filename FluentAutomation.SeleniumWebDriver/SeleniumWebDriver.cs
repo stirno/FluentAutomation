@@ -76,6 +76,11 @@ namespace FluentAutomation
 
         private static TimeSpan DefaultCommandTimeout = TimeSpan.FromSeconds(60);
 
+        public static void DryRunBootstrap()
+        {
+            FluentSettings.Current.ContainerRegistration = SetupContainer;
+        }
+
         /// <summary>
         /// Bootstrap Selenium provider and utilize Firefox.
         /// </summary>

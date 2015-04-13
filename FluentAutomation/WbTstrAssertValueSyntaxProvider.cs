@@ -7,20 +7,28 @@ using FluentAutomation.Interfaces;
 
 namespace FluentAutomation
 {
-    public class WbTstrTextEntrySyntaxProvider : ITextEntrySyntaxProvider
+    public class WbTstrAssertValueSyntaxProvider : IAssertValueSyntaxProvider
     {
-        private readonly IActionSyntaxProvider _actionSyntaxProvider;
-        private readonly ITextEntrySyntaxProvider _textEntrySyntaxProvider;
+        private readonly WbTstrAssertSyntaxProvider _assertSyntaxProvider;
+        private readonly IAssertValueSyntaxProvider _assertValueSyntaxProvider;
         private readonly ILogger _logger;
 
-        internal WbTstrTextEntrySyntaxProvider(WbTstrActionSyntaxProvider actionSyntaxProvider, ITextEntrySyntaxProvider textEntrySyntaxProvider, ILogger logger)
+        internal WbTstrAssertValueSyntaxProvider(WbTstrAssertSyntaxProvider assertSyntaxProvider, IAssertValueSyntaxProvider assertValueSyntaxProvider, ILogger logger)
         {
-            _actionSyntaxProvider = actionSyntaxProvider;
-            _textEntrySyntaxProvider = textEntrySyntaxProvider;
+            _assertSyntaxProvider = assertSyntaxProvider;
+            _assertValueSyntaxProvider = assertValueSyntaxProvider;
             _logger = logger;
         }
 
         /*-------------------------------------------------------------------*/
+
+        public IAssertValueSyntaxProvider Not
+        {
+            get
+            {
+                return new WbTstrAssertValueSyntaxProvider(_assertSyntaxProvider, _assertValueSyntaxProvider.Not, _logger);
+            }
+        }
 
         public bool IsInDryRunMode
         {
@@ -32,7 +40,7 @@ namespace FluentAutomation
 
         /*-------------------------------------------------------------------*/
 
-        public ITextEntrySyntaxProvider WithoutEvents()
+        public IAssertSyntaxProvider In(string selector)
         {
             // Before
             _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
@@ -40,19 +48,14 @@ namespace FluentAutomation
             // Execute
             if (!IsInDryRunMode)
             {
-                _textEntrySyntaxProvider.WithoutEvents();
+                _assertValueSyntaxProvider.In(selector);
             }
 
             // After
-            return this;
+            return _assertSyntaxProvider;
         }
 
-        public IActionSyntaxProvider In(string selector)
-        {
-            return In(_actionSyntaxProvider.Find(selector));
-        }
-
-        public IActionSyntaxProvider In(ElementProxy element)
+        public IAssertSyntaxProvider In(ElementProxy element)
         {
             // Before
             _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
@@ -60,14 +63,14 @@ namespace FluentAutomation
             // Execute
             if (!IsInDryRunMode)
             {
-                _textEntrySyntaxProvider.In(element);
+                _assertValueSyntaxProvider.In(element);
             }
 
             // After
-            return _actionSyntaxProvider;
+            return _assertSyntaxProvider;
         }
 
-        public IActionSyntaxProvider In(Alert accessor)
+        public IAssertSyntaxProvider In(Alert accessor)
         {
             // Before
             _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
@@ -75,11 +78,11 @@ namespace FluentAutomation
             // Execute
             if (!IsInDryRunMode)
             {
-                _textEntrySyntaxProvider.In(accessor);
+                _assertValueSyntaxProvider.In(accessor);
             }
 
             // After
-            return _actionSyntaxProvider;
+            return _assertSyntaxProvider;
         }
     }
 }
