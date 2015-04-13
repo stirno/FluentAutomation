@@ -45,7 +45,7 @@ namespace FluentAutomation
             const int NumberOfRetries = 10;
             try
             {
-                var policy = Policy.Handle<InvalidOperationException>().WaitAndRetry(NumberOfRetries, i => TimeSpan.FromSeconds(5));
+                var policy = Policy.Handle<InvalidOperationException>().WaitAndRetry(NumberOfRetries, i => TimeSpan.FromSeconds(18));
                 return policy.Execute(
                     () =>
                     {
