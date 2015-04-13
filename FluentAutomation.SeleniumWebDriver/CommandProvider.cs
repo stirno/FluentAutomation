@@ -42,51 +42,60 @@ namespace FluentAutomation
 
         private IWebDriver WebDriverFactoryMethod(Func<IWebDriver> webDriverFactory)
         {
-            var policy = Policy.Handle<InvalidOperationException>().WaitAndRetry(5, i => TimeSpan.FromSeconds(3));
-            return policy.Execute(
-                () =>
-                {
-                    var webDriver = webDriverFactory();
-                    if (!FluentTest.IsMultiBrowserTest && FluentTest.ProviderInstance == null)
+            const int NumberOfRetries = 10;
+            try
+            {
+                var policy = Policy.Handle<InvalidOperationException>().WaitAndRetry(NumberOfRetries, i => TimeSpan.FromSeconds(5));
+                return policy.Execute(
+                    () =>
                     {
-                        FluentTest.ProviderInstance = webDriver;
-                    }
-
-                    webDriver.Manage().Cookies.DeleteAllCookies();
-                    webDriver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(10));
-
-                    // If an alert is open, the world ends if we touch the size property. Ignore this and let it get set by the next command chain
-                    try
-                    {
-                        if (this.Settings.WindowMaximized)
+                        var webDriver = webDriverFactory();
+                        if (!FluentTest.IsMultiBrowserTest && FluentTest.ProviderInstance == null)
                         {
-                            // store window size back before maximizing so we can 'undo' this action if necessary
-                            var windowSize = webDriver.Manage().Window.Size;
-                            if (!this.Settings.WindowWidth.HasValue) this.Settings.WindowWidth = windowSize.Width;
-
-                            if (!this.Settings.WindowHeight.HasValue) this.Settings.WindowHeight = windowSize.Height;
-
-                            webDriver.Manage().Window.Maximize();
+                            FluentTest.ProviderInstance = webDriver;
                         }
-                        else if (this.Settings.WindowHeight.HasValue && this.Settings.WindowWidth.HasValue)
+
+                        webDriver.Manage().Cookies.DeleteAllCookies();
+                        webDriver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(10));
+
+                        // If an alert is open, the world ends if we touch the size property. Ignore this and let it get set by the next command chain
+                        try
                         {
-                            webDriver.Manage().Window.Size = new Size(this.Settings.WindowWidth.Value, this.Settings.WindowHeight.Value);
+                            if (this.Settings.WindowMaximized)
+                            {
+                                // store window size back before maximizing so we can 'undo' this action if necessary
+                                var windowSize = webDriver.Manage().Window.Size;
+                                if (!this.Settings.WindowWidth.HasValue) this.Settings.WindowWidth = windowSize.Width;
+
+                                if (!this.Settings.WindowHeight.HasValue) this.Settings.WindowHeight = windowSize.Height;
+
+                                webDriver.Manage().Window.Maximize();
+                            }
+                            else if (this.Settings.WindowHeight.HasValue && this.Settings.WindowWidth.HasValue)
+                            {
+                                webDriver.Manage().Window.Size = new Size(this.Settings.WindowWidth.Value, this.Settings.WindowHeight.Value);
+                            }
+                            else
+                            {
+                                var windowSize = webDriver.Manage().Window.Size;
+                                this.Settings.WindowHeight = windowSize.Height;
+                                this.Settings.WindowWidth = windowSize.Width;
+                            }
                         }
-                        else
+                        catch (UnhandledAlertException)
                         {
-                            var windowSize = webDriver.Manage().Window.Size;
-                            this.Settings.WindowHeight = windowSize.Height;
-                            this.Settings.WindowWidth = windowSize.Width;
+
                         }
-                    }
-                    catch (UnhandledAlertException)
-                    {
 
-                    }
-
-                    this.mainWindowHandle = webDriver.CurrentWindowHandle;
-                    return webDriver;
-                });
+                        this.mainWindowHandle = webDriver.CurrentWindowHandle;
+                        return webDriver;
+                    });
+            }
+            catch (InvalidOperationException)
+            {
+                Console.WriteLine("Failed to create a new webdriver. Retried {0} times.", NumberOfRetries);
+                throw;
+            }
         }
 
         public ICommandProvider WithConfig(FluentSettings settings)

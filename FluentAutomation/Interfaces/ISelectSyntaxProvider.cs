@@ -17,3 +17,4 @@ namespace FluentAutomation
         IActionSyntaxProvider From(ElementProxy element);
     }
 }
+

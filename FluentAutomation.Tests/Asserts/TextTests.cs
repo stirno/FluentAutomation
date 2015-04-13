@@ -142,8 +142,7 @@ namespace FluentAutomation.Tests.Asserts
             Assert.Throws<FluentExpectFailedException>(() => I.Expect.Text(x => x == "Manitoba").Not.In(I.Find(InputsPage.MultiSelectControlSelector)));
         }
 
-        [Fact, Retry
-        ]
+        [Fact]
         public void TextInAlerts()
         {
             AlertsPage.Go();

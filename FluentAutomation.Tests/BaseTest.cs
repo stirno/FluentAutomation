@@ -14,8 +14,6 @@ namespace FluentAutomation.Tests
     /// </summary>
     public class BaseTest : FluentTest<IWebDriver>
     {
-        public string SiteUrl { get { return "http://wbtstr.net-testbed.dt-dev1.mirabeau.nl/"; } }
-
         public BaseTest()
         {
             FluentSession.EnableStickySession();
@@ -32,22 +30,28 @@ namespace FluentAutomation.Tests
             // Default tests use chrome and load the site
             //FluentAutomation.SeleniumWebDriver.Bootstrap(SeleniumWebDriver.Browser.Chrome); //, SeleniumWebDriver.Browser.InternetExplorer, SeleniumWebDriver.Browser.Firefox);
 
-            string browserStackUsername = ConfigReader.GetEnvironmentVariableOrAppSetting("browserStackUsername");
-            string browserStackPassword = ConfigReader.GetEnvironmentVariableOrAppSetting("browserStackPassword");
-
             // Test browserstack local
             WbTstr.Configure()
-                .UseBrowserStack()
-                .SetBrowserStackCredentials(browserStackUsername, browserStackPassword)
+                .EnableDebug()
+                .DisableDryRun()
+                .UseBrowserStackAsRemoteDriver()
                 .EnableBrowserStackLocal()
-                .EnableBrowserStackDebug()
                 .PreferedBrowser().IsChrome()
                 .PreferedOperatingSystem().IsWindows()
-                .PreferedScreenResolution().IsAny()
-                .Bootstrap();
+                .PreferedScreenResolution().IsAny();
+
+            WbTstr.Bootstrap();
 
             FluentSession.DisableStickySession();
             I.Open(SiteUrl);
+        }
+
+        public string SiteUrl
+        {
+            get
+            {
+                return ConfigReader.GetSetting("WbTstr:WebsiteUnderTestBaseUrl");
+            }
         }
 
         public Pages.InputsPage InputsPage = null;

@@ -6,6 +6,8 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
+using Microsoft.SqlServer.Server;
+
 namespace FluentAutomation.Exceptions
 {
     public class FluentException : System.Exception, ISerializable
@@ -22,7 +24,7 @@ namespace FluentAutomation.Exceptions
         }
 
         public FluentException(string message, Exception innerException, params object[] formatParams)
-            : base(string.Format(message, formatParams), innerException)
+            : base(formatParams != null && formatParams.Length > 0 ? string.Format(message, formatParams) : message, innerException)
         {
             PreserveStackTrace(this);
         }
