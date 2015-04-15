@@ -209,6 +209,16 @@ namespace FluentAutomation
             return this;
         }
 
+        internal Dictionary<string, object> GetCapabilities()
+        {
+            return _capabilities;
+        }
+
+        internal Uri GetRemoteDriverUri()
+        {
+            return _remoteWebDriver;
+        }
+
         /*-------------------------------------------------------------------*/
 
         public void Dispose()

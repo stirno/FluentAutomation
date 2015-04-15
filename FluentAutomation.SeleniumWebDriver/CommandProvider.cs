@@ -9,8 +9,11 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentAutomation.Exceptions;
 using FluentAutomation.Interfaces;
+using FluentAutomation.Wrappers;
+
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
+using OpenQA.Selenium.Remote;
 using OpenQA.Selenium.Support.UI;
 
 using Polly;
@@ -20,12 +23,12 @@ namespace FluentAutomation
     public class CommandProvider : BaseCommandProvider, ICommandProvider, IDisposable
     {
         private readonly IFileStoreProvider fileStoreProvider = null;
-        private readonly Lazy<IWebDriver> lazyWebDriver = null;
+        private readonly IWebDriver lazyWebDriver = null;
         private IWebDriver webDriver
         {
             get
             {
-                return lazyWebDriver.Value;
+                return lazyWebDriver;
             }
         }
 
@@ -35,21 +38,21 @@ namespace FluentAutomation
         {
             FluentTest.ProviderInstance = null;
 
-            lazyWebDriver = new Lazy<IWebDriver>(() => WebDriverFactoryMethod(webDriverFactory));
+            lazyWebDriver = WebDriverFactoryMethod(webDriverFactory);
 
             this.fileStoreProvider = fileStoreProvider;
         }
 
-        private IWebDriver WebDriverFactoryMethod(Func<IWebDriver> webDriverFactory)
+        private IWebDriver WebDriverFactoryMethod(Func<IWebDriver> webDriverFactory, IWebDriver reCreatedWebDriver = null)
         {
-            const int NumberOfRetries = 10;
+            const int NumberOfRetries = 2;
             try
             {
-                var policy = Policy.Handle<InvalidOperationException>().WaitAndRetry(NumberOfRetries, i => TimeSpan.FromSeconds(6));
+                var policy = Policy.Handle<InvalidOperationException>().WaitAndRetry(NumberOfRetries, i => TimeSpan.FromSeconds(2));
                 return policy.Execute(
                     () =>
                     {
-                        var webDriver = webDriverFactory();
+                        var webDriver = reCreatedWebDriver ?? webDriverFactory();
                         if (!FluentTest.IsMultiBrowserTest && FluentTest.ProviderInstance == null)
                         {
                             FluentTest.ProviderInstance = webDriver;
@@ -82,9 +85,9 @@ namespace FluentAutomation
                                 this.Settings.WindowWidth = windowSize.Width;
                             }
                         }
-                        catch (UnhandledAlertException)
+                        catch (UnhandledAlertException e)
                         {
-
+                
                         }
 
                         this.mainWindowHandle = webDriver.CurrentWindowHandle;
@@ -93,8 +96,30 @@ namespace FluentAutomation
             }
             catch (InvalidOperationException exception)
             {
-                Console.WriteLine("Failed to create a new webdriver. Retried {0} times.", NumberOfRetries);
-                throw;
+                Console.WriteLine("Failed properly setup webdriver session. Retried {0} times.", NumberOfRetries);
+
+                if (reCreatedWebDriver != null)
+                {
+                    throw;
+                }
+
+                Dispose();
+                var capabilities = ((WbTstr)WbTstr.Configure()).GetCapabilities();
+                Uri remoteDriverUri = ((WbTstr)WbTstr.Configure()).GetRemoteDriverUri();
+
+                IWebDriver recreated = null;
+                try
+                {
+                    var policy = Policy.Handle<Exception>().WaitAndRetry(10, i => TimeSpan.FromSeconds(6));
+                    recreated = policy.Execute(() => new EnhancedRemoteWebDriver(remoteDriverUri, new DesiredCapabilities(capabilities), TimeSpan.FromSeconds(60)));
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Failed to create a enhanced RemoteWebDriver. Retried {0} times.", NumberOfRetries);
+                    throw;
+                }
+
+                return WebDriverFactoryMethod(webDriverFactory, recreated);
             }
         }
 
