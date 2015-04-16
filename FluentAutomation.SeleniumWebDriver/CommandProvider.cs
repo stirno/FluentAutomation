@@ -22,37 +22,33 @@ namespace FluentAutomation
 {
     public class CommandProvider : BaseCommandProvider, ICommandProvider, IDisposable
     {
-        private readonly IFileStoreProvider fileStoreProvider = null;
-        private readonly IWebDriver lazyWebDriver = null;
-        private IWebDriver webDriver
-        {
-            get
-            {
-                return lazyWebDriver;
-            }
-        }
-
-        private string mainWindowHandle = null;
+        private readonly IFileStoreProvider _fileStoreProvider;
+        private readonly IWebDriver _webDriver;
+        private string _mainWindowHandle;
 
         public CommandProvider(Func<IWebDriver> webDriverFactory, IFileStoreProvider fileStoreProvider)
         {
             FluentTest.ProviderInstance = null;
 
-            lazyWebDriver = WebDriverFactoryMethod(webDriverFactory);
+            _webDriver = InitializeWebDriver(webDriverFactory);
+            _fileStoreProvider = fileStoreProvider;
+        }
 
-            this.fileStoreProvider = fileStoreProvider;
+        private IWebDriver InitializeWebDriver(Func<IWebDriver> webDriverFactory)
+        {
+            var policy = Policy.Handle<InvalidOperationException>().WaitAndRetry(5, i => TimeSpan.FromSeconds(5));
+            return policy.Execute(() => WebDriverFactoryMethod(webDriverFactory));
         }
 
         private IWebDriver WebDriverFactoryMethod(Func<IWebDriver> webDriverFactory, IWebDriver reCreatedWebDriver = null)
         {
-            const int NumberOfRetries = 2;
             try
             {
-                var policy = Policy.Handle<InvalidOperationException>().WaitAndRetry(NumberOfRetries, i => TimeSpan.FromSeconds(2));
+                var policy = Policy.Handle<InvalidOperationException>().WaitAndRetry(5, i => TimeSpan.FromSeconds(5));
                 return policy.Execute(
                     () =>
                     {
-                        var webDriver = reCreatedWebDriver ?? webDriverFactory();
+                        var webDriver = webDriverFactory();
                         if (!FluentTest.IsMultiBrowserTest && FluentTest.ProviderInstance == null)
                         {
                             FluentTest.ProviderInstance = webDriver;
@@ -87,35 +83,43 @@ namespace FluentAutomation
                         }
                         catch (UnhandledAlertException e)
                         {
-                
+                            // TODO: handle error
                         }
 
-                        this.mainWindowHandle = webDriver.CurrentWindowHandle;
+                        _mainWindowHandle = webDriver.CurrentWindowHandle;
                         return webDriver;
                     });
             }
-            catch (InvalidOperationException exception)
+            catch (InvalidOperationException e)
             {
-                Console.WriteLine("Failed properly setup webdriver session. Retried {0} times.", NumberOfRetries);
-
                 if (reCreatedWebDriver != null)
                 {
+                    Console.WriteLine("Created a new remote WebDriver, but it still doens't seems to work.");
                     throw;
                 }
 
+                // Oke, we're going to create a new remote WebDriver (including a new session)
+                // But first we try to terminate the current one. 
                 Dispose();
-                var capabilities = ((WbTstr)WbTstr.Configure()).GetCapabilities();
-                Uri remoteDriverUri = ((WbTstr)WbTstr.Configure()).GetRemoteDriverUri();
 
                 IWebDriver recreated = null;
                 try
                 {
-                    var policy = Policy.Handle<Exception>().WaitAndRetry(10, i => TimeSpan.FromSeconds(6));
-                    recreated = policy.Execute(() => new EnhancedRemoteWebDriver(remoteDriverUri, new DesiredCapabilities(capabilities), TimeSpan.FromSeconds(60)));
+                    // Get the remote WebDriver configuration
+                    WbTstr wbTstr = WbTstr.Configure() as WbTstr;
+                    if (wbTstr != null)
+                    {
+                        var capabilities = new DesiredCapabilities(wbTstr.GetCapabilities());
+                        var remoteDriverUri = wbTstr.GetRemoteDriverUri();
+
+                        // Create a new remote WebDriver
+                        var policy = Policy.Handle<Exception>().WaitAndRetry(5, i => TimeSpan.FromSeconds(5));
+                        recreated = policy.Execute(() => new EnhancedRemoteWebDriver(remoteDriverUri, capabilities, TimeSpan.FromSeconds(60)));
+                    }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Failed to create a enhanced RemoteWebDriver. Retried {0} times.", NumberOfRetries);
+                    Console.WriteLine("Failed to create new remote WebDriver instance.");
                     throw;
                 }
 
@@ -134,19 +138,19 @@ namespace FluentAutomation
                     // this code intentionally touches this.Settings before its been replaced with the local
                     // configuration code, so that when the With.___.Then block is completed, the outer settings
                     // object has the correct window size to work with.
-                    var windowSize = webDriver.Manage().Window.Size;
+                    var windowSize = _webDriver.Manage().Window.Size;
                     if (!this.Settings.WindowWidth.HasValue)
                         this.Settings.WindowWidth = windowSize.Width;
 
                     if (!this.Settings.WindowHeight.HasValue)
                         this.Settings.WindowHeight = windowSize.Height;
 
-                    this.webDriver.Manage().Window.Maximize();
+                    this._webDriver.Manage().Window.Maximize();
                 }
                 // If the browser size has changed since the last config change, update it
                 else if (settings.WindowWidth.HasValue && settings.WindowHeight.HasValue)
                 {
-                    this.webDriver.Manage().Window.Size = new Size(settings.WindowWidth.Value, settings.WindowHeight.Value);
+                    this._webDriver.Manage().Window.Size = new Size(settings.WindowWidth.Value, settings.WindowHeight.Value);
                 }
             }
             catch (UnhandledAlertException) { }
@@ -160,7 +164,7 @@ namespace FluentAutomation
         {
             get
             {
-                return new Uri(this.webDriver.Url, UriKind.Absolute);
+                return new Uri(this._webDriver.Url, UriKind.Absolute);
             }
         }
 
@@ -168,7 +172,7 @@ namespace FluentAutomation
         {
             get
             {
-                return this.webDriver.PageSource;
+                return this._webDriver.PageSource;
             }
         }
 
@@ -176,7 +180,7 @@ namespace FluentAutomation
         {
             this.Act(CommandType.Action, () =>
             {
-                var currentUrl = new Uri(this.webDriver.Url);
+                var currentUrl = new Uri(this._webDriver.Url);
                 var baseUrl = currentUrl.GetLeftPart(System.UriPartial.Authority);
 
                 if (!url.IsAbsoluteUri)
@@ -184,7 +188,7 @@ namespace FluentAutomation
                     url = new Uri(new Uri(baseUrl), url.ToString());
                 }
 
-                this.webDriver.Navigate().GoToUrl(url);
+                this._webDriver.Navigate().GoToUrl(url);
             });
         }
 
@@ -194,7 +198,7 @@ namespace FluentAutomation
             {
                 try
                 {
-                    var webElement = this.webDriver.FindElement(Sizzle.Find(selector));
+                    var webElement = this._webDriver.FindElement(Sizzle.Find(selector));
                     return new Element(webElement, selector);
                 }
                 catch (NoSuchElementException)
@@ -211,7 +215,7 @@ namespace FluentAutomation
             finalResult.Children.Add(new Func<ElementProxy>(() =>
             {
                 var result = new ElementProxy();
-                var webElements = this.webDriver.FindElements(Sizzle.Find(selector));
+                var webElements = this._webDriver.FindElements(Sizzle.Find(selector));
                 if (webElements.Count == 0)
                     throw new FluentElementNotFoundException("Unable to find element with selector [{0}].", selector);
 
@@ -232,7 +236,7 @@ namespace FluentAutomation
             this.Act(CommandType.Action, () =>
             {
                 var rootElement = this.Find("html").Element as Element;
-                new Actions(this.webDriver)
+                new Actions(this._webDriver)
                     .MoveToElement(rootElement.WebElement, x, y)
                     .Click()
                     .Perform();
@@ -244,7 +248,7 @@ namespace FluentAutomation
             this.Act(CommandType.Action, () =>
             {
                 var containerElement = element.Element as Element;
-                new Actions(this.webDriver)
+                new Actions(this._webDriver)
                     .MoveToElement(containerElement.WebElement, x, y)
                     .Click()
                     .Perform();
@@ -256,7 +260,7 @@ namespace FluentAutomation
             this.Act(CommandType.Action, () =>
             {
                 var containerElement = element.Element as Element;
-                new Actions(this.webDriver)
+                new Actions(this._webDriver)
                     .Click(containerElement.WebElement)
                     .Perform();
             });
@@ -267,7 +271,7 @@ namespace FluentAutomation
             this.Act(CommandType.Action, () =>
             {
                 var rootElement = this.Find("html").Element as Element;
-                new Actions(this.webDriver)
+                new Actions(this._webDriver)
                     .MoveToElement(rootElement.WebElement, x, y)
                     .DoubleClick()
                     .Perform();
@@ -279,7 +283,7 @@ namespace FluentAutomation
             this.Act(CommandType.Action, () =>
             {
                 var containerElement = element.Element as Element;
-                new Actions(this.webDriver)
+                new Actions(this._webDriver)
                     .MoveToElement(containerElement.WebElement, x, y)
                     .DoubleClick()
                     .Perform();
@@ -291,7 +295,7 @@ namespace FluentAutomation
             this.Act(CommandType.Action, () =>
             {
                 var containerElement = element.Element as Element;
-                new Actions(this.webDriver)
+                new Actions(this._webDriver)
                     .DoubleClick(containerElement.WebElement)
                     .Perform();
             });
@@ -302,7 +306,7 @@ namespace FluentAutomation
             this.Act(CommandType.Action, () =>
             {
                 var rootElement = this.Find("html").Element as Element;
-                new Actions(this.webDriver)
+                new Actions(this._webDriver)
                     .MoveToElement(rootElement.WebElement, x, y)
                     .ContextClick()
                     .Perform();
@@ -314,7 +318,7 @@ namespace FluentAutomation
             this.Act(CommandType.Action, () =>
             {
                 var containerElement = element.Element as Element;
-                new Actions(this.webDriver)
+                new Actions(this._webDriver)
                     .MoveToElement(containerElement.WebElement, x, y)
                     .ContextClick()
                     .Perform();
@@ -326,7 +330,7 @@ namespace FluentAutomation
             this.Act(CommandType.Action, () =>
             {
                 var containerElement = element.Element as Element;
-                new Actions(this.webDriver)
+                new Actions(this._webDriver)
                     .ContextClick(containerElement.WebElement)
                     .Perform();
             });
@@ -337,7 +341,7 @@ namespace FluentAutomation
             this.Act(CommandType.Action, () =>
             {
                 var rootElement = this.Find("html").Element as Element;
-                new Actions(this.webDriver)
+                new Actions(this._webDriver)
                     .MoveToElement(rootElement.WebElement, x, y)
                     .Perform();
             });
@@ -348,7 +352,7 @@ namespace FluentAutomation
             this.Act(CommandType.Action, () =>
             {
                 var containerElement = element.Element as Element;
-                new Actions(this.webDriver)
+                new Actions(this._webDriver)
                     .MoveToElement(containerElement.WebElement, x, y)
                     .Perform();
             });
@@ -359,7 +363,7 @@ namespace FluentAutomation
             this.Act(CommandType.Action, () =>
             {
                 var unwrappedElement = element.Element as Element;
-                new Actions(this.webDriver)
+                new Actions(this._webDriver)
                     .MoveToElement(unwrappedElement.WebElement)
                     .Perform();
             });
@@ -379,7 +383,7 @@ namespace FluentAutomation
                     case "a":
                     case "iframe":
                     case "button":
-                        var executor = (IJavaScriptExecutor)this.webDriver;
+                        var executor = (IJavaScriptExecutor)this._webDriver;
                         executor.ExecuteScript("arguments[0].focus();", unwrappedElement.WebElement);
                         break;
                 }
@@ -391,7 +395,7 @@ namespace FluentAutomation
             this.Act(CommandType.Action, () =>
             {
                 var rootElement = this.Find("html").Element as Element;
-                new Actions(this.webDriver)
+                new Actions(this._webDriver)
                     .MoveToElement(rootElement.WebElement, sourceX, sourceY)
                     .ClickAndHold()
                     .MoveToElement(rootElement.WebElement, destinationX, destinationY)
@@ -406,7 +410,7 @@ namespace FluentAutomation
             {
                 var element = source.Element as Element;
                 var targetElement = target.Element as Element;
-                new Actions(this.webDriver)
+                new Actions(this._webDriver)
                     .MoveToElement(element.WebElement, sourceOffsetX, sourceOffsetY)
                     .ClickAndHold()
                     .MoveToElement(targetElement.WebElement, targetOffsetX, targetOffsetY)
@@ -422,7 +426,7 @@ namespace FluentAutomation
                 var unwrappedSource = source.Element as Element;
                 var unwrappedTarget = target.Element as Element;
 
-                new Actions(this.webDriver)
+                new Actions(this._webDriver)
                     .DragAndDrop(unwrappedSource.WebElement, unwrappedTarget.WebElement)
                     .Perform();
             });
@@ -445,7 +449,7 @@ namespace FluentAutomation
             {
                 var unwrappedElement = element.Element as Element;
 
-                ((IJavaScriptExecutor)this.webDriver).ExecuteScript(string.Format("if (typeof fluentjQuery != 'undefined') {{ fluentjQuery(\"{0}\").val(\"{1}\").trigger('change'); }}", unwrappedElement.Selector.Replace("\"", ""), text.Replace("\"", "")));
+                ((IJavaScriptExecutor)this._webDriver).ExecuteScript(string.Format("if (typeof fluentjQuery != 'undefined') {{ fluentjQuery(\"{0}\").val(\"{1}\").trigger('change'); }}", unwrappedElement.Selector.Replace("\"", ""), text.Replace("\"", "")));
             });
         }
 
@@ -463,7 +467,7 @@ namespace FluentAutomation
             this.Act(CommandType.Action, () =>
             {
                 var unwrappedElement = element.Element as Element;
-                ((IJavaScriptExecutor)this.webDriver).ExecuteScript(string.Format("if (typeof fluentjQuery != 'undefined') {{ fluentjQuery(\"{0}\").val(fluentjQuery(\"{0}\").val() + \"{1}\").trigger('change'); }}", unwrappedElement.Selector.Replace("\"", ""), text.Replace("\"", "")));
+                ((IJavaScriptExecutor)this._webDriver).ExecuteScript(string.Format("if (typeof fluentjQuery != 'undefined') {{ fluentjQuery(\"{0}\").val(fluentjQuery(\"{0}\").val() + \"{1}\").trigger('change'); }}", unwrappedElement.Selector.Replace("\"", ""), text.Replace("\"", "")));
             });
         }
 
@@ -556,12 +560,12 @@ namespace FluentAutomation
             this.Act(CommandType.Action, () =>
             {
                 // get raw screenshot
-                var screenshotDriver = (ITakesScreenshot)this.webDriver;
+                var screenshotDriver = (ITakesScreenshot)this._webDriver;
                 var tmpImagePath = Path.Combine(this.Settings.UserTempDirectory, screenshotName);
                 screenshotDriver.GetScreenshot().SaveAsFile(tmpImagePath, ImageFormat.Png);
 
                 // save to file store
-                this.fileStoreProvider.SaveScreenshot(this.Settings, File.ReadAllBytes(tmpImagePath), screenshotName);
+                this._fileStoreProvider.SaveScreenshot(this.Settings, File.ReadAllBytes(tmpImagePath), screenshotName);
                 File.Delete(tmpImagePath);
             });
         }
@@ -614,16 +618,16 @@ namespace FluentAutomation
             {
                 if (windowName == string.Empty)
                 {
-                    this.webDriver.SwitchTo().Window(this.mainWindowHandle);
+                    this._webDriver.SwitchTo().Window(this._mainWindowHandle);
                     return;
                 }
 
                 var matchFound = false;
-                foreach (var windowHandle in this.webDriver.WindowHandles)
+                foreach (var windowHandle in this._webDriver.WindowHandles)
                 {
-                    this.webDriver.SwitchTo().Window(windowHandle);
+                    this._webDriver.SwitchTo().Window(windowHandle);
 
-                    if (this.webDriver.Title == windowName || this.webDriver.Url.EndsWith(windowName))
+                    if (this._webDriver.Title == windowName || this._webDriver.Url.EndsWith(windowName))
                     {
                         matchFound = true;
                         break;
@@ -643,7 +647,7 @@ namespace FluentAutomation
             {
                 if (frameNameOrSelector == string.Empty)
                 {
-                    this.webDriver.SwitchTo().DefaultContent();
+                    this._webDriver.SwitchTo().DefaultContent();
                     return;
                 }
 
@@ -652,16 +656,16 @@ namespace FluentAutomation
                 IWebElement frameBySelector = null;
                 try
                 {
-                    frameBySelector = this.webDriver.FindElement(Sizzle.Find(frameNameOrSelector));
+                    frameBySelector = this._webDriver.FindElement(Sizzle.Find(frameNameOrSelector));
                 }
                 catch (NoSuchElementException)
                 {
                 }
 
                 if (frameBySelector == null)
-                    this.webDriver.SwitchTo().Frame(frameNameOrSelector);
+                    this._webDriver.SwitchTo().Frame(frameNameOrSelector);
                 else
-                    this.webDriver.SwitchTo().Frame(frameBySelector);
+                    this._webDriver.SwitchTo().Frame(frameBySelector);
             });
         }
 
@@ -669,7 +673,7 @@ namespace FluentAutomation
         {
             this.Act(CommandType.Action, () =>
             {
-                this.webDriver.SwitchTo().Frame((frameElement.Element as Element).WebElement);
+                this._webDriver.SwitchTo().Frame((frameElement.Element as Element).WebElement);
             });
         }
 
@@ -682,7 +686,7 @@ namespace FluentAutomation
                 {
                     try
                     {
-                        ActiveAlert = this.webDriver.SwitchTo().Alert();
+                        ActiveAlert = this._webDriver.SwitchTo().Alert();
                     }
                     catch (Exception ex)
                     {
@@ -753,7 +757,7 @@ namespace FluentAutomation
         {
             this.Act(CommandType.Action, () =>
             {
-                var propertyValue = ((IJavaScriptExecutor)this.webDriver).ExecuteScript(string.Format("return fluentjQuery(\"{0}\").css(\"{1}\")", element.Element.Selector, propertyName));
+                var propertyValue = ((IJavaScriptExecutor)this._webDriver).ExecuteScript(string.Format("return fluentjQuery(\"{0}\").css(\"{1}\")", element.Element.Selector, propertyName));
                 if (propertyValue == null)
                     action(false, string.Empty);
                 else
@@ -765,9 +769,9 @@ namespace FluentAutomation
         {
             try
             {
-                this.webDriver.Manage().Cookies.DeleteAllCookies();
-                this.webDriver.Quit();
-                this.webDriver.Dispose();
+                this._webDriver.Manage().Cookies.DeleteAllCookies();
+                this._webDriver.Quit();
+                this._webDriver.Dispose();
             }
             catch (Exception) { }
         }
