@@ -53,6 +53,7 @@
     <Compile Include="DataReader.cs" />
     <Compile Include="ElementProxy.cs" />
     <Compile Include="Exceptions\FluentElementNotFoundException.cs" />
+    <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="FluentSession.cs" />
     <Compile Include="FluentConfig.cs" />
     <Compile Include="IAssertValueSyntaxProvider.cs" />
