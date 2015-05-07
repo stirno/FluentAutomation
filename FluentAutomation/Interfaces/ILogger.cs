@@ -9,6 +9,8 @@ namespace FluentAutomation.Interfaces
     {
         void LogMessage(string message, params object[] args);
 
+        void LogPartialMessage(string message, bool endLine = false, params object[] args);
+
         void LogException(Exception exception, string message, params object[] args);
     }
 }

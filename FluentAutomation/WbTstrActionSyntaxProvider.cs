@@ -82,8 +82,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider Click(ElementProxy element)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
-
+            _logger.LogMessage("Click element with selector: " + element.Element.Selector); 
             // Execute
             if (!IsInDryRunMode)
             {
@@ -97,7 +96,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider Click(ElementProxy element, int x, int y)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Click element with selector: " + element.Element.Selector + " postion x: " + x + " position y: " + y);
 
             // Execute
             if (!IsInDryRunMode)
@@ -112,7 +111,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider Click(Alert accessor)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging 
+            _logger.LogMessage("Click: " + accessor.Field);
 
             // Execute
             if (!IsInDryRunMode)
@@ -127,7 +126,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider Click(int x, int y)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging 
+            _logger.LogMessage("Click on postion x: " + x + " y: " + y);
 
             // Execute
             if (!IsInDryRunMode)
@@ -142,7 +141,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider Click(string selector)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging 
+            _logger.LogMessage("Click element with selector: " + selector); 
 
             // Execute
             if (!IsInDryRunMode)
@@ -157,7 +156,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider Click(string selector, int x, int y)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging 
+            _logger.LogMessage("Click element with selector: " + selector + " postion x: " + x + " position y: " + y); 
 
             // Execute
             if (!IsInDryRunMode)
@@ -172,7 +171,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider DoubleClick(ElementProxy element)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Double click element with selector: " + element.Element.Selector); 
 
             // Execute
             if (!IsInDryRunMode)
@@ -187,7 +186,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider DoubleClick(int x, int y)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Double click on postion x: " + x + " y: " + y); 
 
             // Execute
             if (!IsInDryRunMode)
@@ -202,7 +201,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider DoubleClick(ElementProxy element, int x, int y)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Double click element with selector: " + element.Element.Selector + " postion x: " + x + " position y: " + y); 
 
             // Execute
             if (!IsInDryRunMode)
@@ -217,7 +216,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider DoubleClick(string selector)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Double click element with selector: " + selector);
 
             // Execute
             if (!IsInDryRunMode)
@@ -232,7 +231,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider DoubleClick(string selector, int x, int y)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Double click element with selector: " + selector + " postion x: " + x + " position y: " + y);
 
             // Execute
             if (!IsInDryRunMode)
@@ -247,7 +246,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider RightClick(ElementProxy element)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Rightclick element with selector: " + element.Element.Selector); 
 
             // Execute
             if (!IsInDryRunMode)
@@ -262,7 +261,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider RightClick(int x, int y)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Right click on postion x: " + x + " y: " + y);
 
             // Execute
             if (!IsInDryRunMode)
@@ -277,7 +276,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider RightClick(string selector)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Rightclick element with selector: " + selector); 
 
             // Execute
             if (!IsInDryRunMode)
@@ -292,7 +291,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider RightClick(string selector, int x, int y)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Right click element with selector: " + selector + " postion x: " + x + " position y: " + y); 
 
             // Execute
             if (!IsInDryRunMode)
@@ -309,7 +308,7 @@ namespace FluentAutomation
         public IDragDropSyntaxProvider Drag(string selector)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage("Drag: " + selector); 
 
             // Execute
             IDragDropSyntaxProvider dragDropSyntaxProvider = Drag(Find(selector));
@@ -321,7 +320,7 @@ namespace FluentAutomation
         public IDragDropSyntaxProvider Drag(ElementProxy element)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage("Drag: " + element.Element.Selector); 
 
             // Execute
             IDragDropSyntaxProvider dragDropSyntaxProvider = _actionSyntaxProvider.Drag(element);
@@ -333,7 +332,7 @@ namespace FluentAutomation
         public IDragDropSyntaxProvider Drag(string selector, int offsetX, int offsetY)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Drag element with selector: " + selector + " offset x: " + offsetX + " offset y: " + offsetY); 
 
             // Execute
             IDragDropSyntaxProvider dragDropSyntaxProvider = Drag(Find(selector), offsetX, offsetY);
@@ -345,7 +344,7 @@ namespace FluentAutomation
         public IDragDropSyntaxProvider Drag(ElementProxy element, int offsetX, int offsetY)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Drag element with selector: " + element.Element.Selector + " offset x: " + offsetX + " offset y: " + offsetY); 
 
             // Execute
             IDragDropSyntaxProvider dragDropSyntaxProvider = _actionSyntaxProvider.Drag(element, offsetX, offsetY);
@@ -357,7 +356,7 @@ namespace FluentAutomation
         public IDragDropByPositionSyntaxProvider Drag(int sourceX, int sourceY)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Drag postion from position x: " + sourceX + " y: " + sourceY); 
 
             // Execute
             IDragDropByPositionSyntaxProvider dragDropByPositionSyntaxProvider = _actionSyntaxProvider.Drag(sourceX, sourceY);
@@ -371,7 +370,7 @@ namespace FluentAutomation
         public ElementProxy Find(string selector)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Find element with selector: " + selector); 
 
             // Execute
             ElementProxy elementProxy;
@@ -391,7 +390,7 @@ namespace FluentAutomation
         public ElementProxy FindMultiple(string selector)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Find multiple elements with selector: " + selector); 
 
             // Execute
             ElementProxy elementProxy;
@@ -413,7 +412,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider Focus(ElementProxy element)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Focus on element with selector: " + element.Element.Selector); 
 
             // Execute
             if (!IsInDryRunMode)
@@ -428,7 +427,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider Focus(string selector)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Focus on element with selector: " + selector);
 
             // Execute
             if (!IsInDryRunMode)
@@ -443,7 +442,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider Hover(ElementProxy element)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Hover over element with selector: " + element.Element.Selector); 
 
             // Execute
             if (!IsInDryRunMode)
@@ -458,7 +457,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider Hover(int x, int y)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Hover over position x: " + x + "y: " + y);
 
             // Execute
             if (!IsInDryRunMode)
@@ -473,7 +472,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider Hover(ElementProxy element, int x, int y)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Hover over element with selector: " + element.Element.Selector + " position x: " + x + "y: " + y); 
 
             // Execute
             if (!IsInDryRunMode)
@@ -488,7 +487,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider Hover(string selector)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Hover over element with selector: " + selector);
 
             // Execute
             if (!IsInDryRunMode)
@@ -503,7 +502,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider Hover(string selector, int x, int y)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Hover over element with selector: " + selector + " position x: " + x + "y: " + y);
 
             // Execute
             if (!IsInDryRunMode)
@@ -520,7 +519,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider Upload(string selector, string fileName)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Upload file :" + fileName + " into element with selector: " + selector);
 
             // Execute
             if (!IsInDryRunMode)
@@ -535,7 +534,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider Upload(ElementProxy element, string fileName)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Upload file :" + fileName + " into element with selector: " + element.Element.Selector);
 
             // Execute
             if (!IsInDryRunMode)
@@ -550,7 +549,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider Upload(ElementProxy element, int x, int y, string fileName)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Upload file :" + fileName + " into element with selector: " + element.Element.Selector + " position x: " + x + "y: " + y); 
 
             // Execute
             if (!IsInDryRunMode)
@@ -565,7 +564,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider Upload(string selector, int x, int y, string fileName)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Upload file :" + fileName + " into element with position x: " + x + "y: " + y); 
 
             // Execute
             if (!IsInDryRunMode)
@@ -582,7 +581,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider Wait()
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Wait for default time"); 
 
             // Execute
             if (!IsInDryRunMode)
@@ -597,7 +596,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider Wait(int seconds)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Wait for " + seconds + " seconds");
 
             // Execute
             if (!IsInDryRunMode)
@@ -612,7 +611,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider Wait(TimeSpan timeSpan)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Wait for " + timeSpan); 
 
             // Execute
             if (!IsInDryRunMode)
@@ -627,7 +626,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider WaitUntil(Expression<Action> conditionAction)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Wait until condition is met");
 
             // Execute
             if (!IsInDryRunMode)
@@ -642,7 +641,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider WaitUntil(Expression<Action> conditionAction, TimeSpan timeout)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Wait until condition is met, with timeout " + timeout); 
 
             // Execute
             if (!IsInDryRunMode)
@@ -657,7 +656,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider WaitUntil(Expression<Action> conditionAction, int seconds)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Wait until condition is met, with timeout " + seconds + " seconds");
 
             // Execute
             if (!IsInDryRunMode)
@@ -672,7 +671,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider WaitUntil(Expression<Func<bool>> conditionFunc)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Wait until condition is met");
 
             // Execute
             if (!IsInDryRunMode)
@@ -687,7 +686,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider WaitUntil(Expression<Func<bool>> conditionFunc, int seconds)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Wait until condition is met, with timeout " + seconds + " seconds"); 
 
             // Execute
             if (!IsInDryRunMode)
@@ -702,7 +701,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider WaitUntil(Expression<Func<bool>> conditionFunc, TimeSpan timeout)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Wait until condition is met, with timeout " + timeout); 
 
             // Execute
             if (!IsInDryRunMode)
@@ -719,7 +718,7 @@ namespace FluentAutomation
         public ITextEntrySyntaxProvider Enter(dynamic nonString)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Enter text: " + nonString);
 
             // Execute
             ITextEntrySyntaxProvider textEntrySyntaxProvider = _actionSyntaxProvider.Enter(nonString);
@@ -731,7 +730,7 @@ namespace FluentAutomation
         public ITextEntrySyntaxProvider Enter(string text)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Enter text: " + text);
 
             // Execute
             ITextEntrySyntaxProvider textEntrySyntaxProvider = _actionSyntaxProvider.Enter(text);
@@ -743,7 +742,7 @@ namespace FluentAutomation
         public ITextAppendSyntaxProvider Append(dynamic nonString)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Append text: " + nonString ); 
 
             // Execute
             ITextAppendSyntaxProvider textAppendSyntaxProvider = _actionSyntaxProvider.Append(nonString);
@@ -755,7 +754,7 @@ namespace FluentAutomation
         public ITextAppendSyntaxProvider Append(string text)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Append text: " + text); 
 
             // Execute
             ITextAppendSyntaxProvider textAppendSyntaxProvider = _actionSyntaxProvider.Append(text);
@@ -767,7 +766,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider Press(string keys)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Press keys: " + keys );
 
             // Execute
             if (!IsInDryRunMode)
@@ -782,7 +781,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider Type(string text)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Type text: " + text); 
 
             // Execute
             if (!IsInDryRunMode)
@@ -799,7 +798,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider Scroll(int x, int y)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Scroll to postion x: " + x + " y: " + y );
 
             // Execute
             if (!IsInDryRunMode)
@@ -814,7 +813,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider Scroll(string selector)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Scroll to element with selector: " + selector); 
 
             // Execute
             if (!IsInDryRunMode)
@@ -829,7 +828,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider Scroll(ElementProxy element)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Scroll to element with selector: " + element.Element.Selector); 
 
             // Execute
             if (!IsInDryRunMode)
@@ -844,7 +843,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider Open(string url)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Open url: " + url); 
 
             // Execute
             if (!IsInDryRunMode)
@@ -859,7 +858,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider Open(Uri uri)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Open url: " + uri); 
 
             // Execute
             if (!IsInDryRunMode)
@@ -876,7 +875,7 @@ namespace FluentAutomation
         public ISelectSyntaxProvider Select(Option mode, string value)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Select value : " + value); 
 
             // Execute
             ISelectSyntaxProvider selectSyntaxProvider = _actionSyntaxProvider.Select(mode, value);
@@ -888,7 +887,7 @@ namespace FluentAutomation
         public ISelectSyntaxProvider Select(Option mode, params string[] values)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Select values : " + values); 
 
             // Execute
             ISelectSyntaxProvider selectSyntaxProvider = _actionSyntaxProvider.Select(mode, values);
@@ -900,7 +899,7 @@ namespace FluentAutomation
         public ISelectSyntaxProvider Select(params int[] indices)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Select indices " + indices); 
 
             // Execute
             ISelectSyntaxProvider selectSyntaxProvider = _actionSyntaxProvider.Select(indices);
@@ -912,7 +911,7 @@ namespace FluentAutomation
         public ISelectSyntaxProvider Select(params string[] text)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Select parameters: " + text);
 
             // Execute
             ISelectSyntaxProvider selectSyntaxProvider = _actionSyntaxProvider.Select(text);
@@ -924,7 +923,7 @@ namespace FluentAutomation
         public ISelectSyntaxProvider Select(int index)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Select index :" + index);
 
             // Execute
             ISelectSyntaxProvider selectSyntaxProvider = _actionSyntaxProvider.Select(index);
@@ -936,7 +935,7 @@ namespace FluentAutomation
         public ISelectSyntaxProvider Select(string text)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Select text: " + text);
 
             // Execute
             ISelectSyntaxProvider selectSyntaxProvider = _actionSyntaxProvider.Select(text);
@@ -950,7 +949,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider TakeScreenshot(string screenshotName)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogMessage("Take a screenshot and save as: " + screenshotName); 
 
             // Execute
             _actionSyntaxProvider.TakeScreenshot(screenshotName);
@@ -963,10 +962,7 @@ namespace FluentAutomation
 
         public IActionSyntaxProvider WithConfig(FluentSettings settings)
         {
-            // Before (Don't log this. Is called frequently, isn't interresting to know)
-            // _logger.LogMessage("Inject FluentSettings (WithConfig)"); // TODO: Elaborate logging
-
-            // Execute
+           // Execute
             ((ActionSyntaxProvider)_actionSyntaxProvider).WithConfig(settings);
 
             // After
