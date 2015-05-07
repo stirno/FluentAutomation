@@ -11,7 +11,7 @@
     <releaseNotes>https://github.com/mirabeau-nl/WbTstr.Net</releaseNotes>
     <copyright>Mirabeau 2015</copyright>
     <language>en-US</language>
-    <tags>PhantomJS Phantom WatiN Selenium Fluent Automation API</tags>
+    <tags>WbTstr Net Selenium Fluent Automation API</tags>
     <dependencies>
         <dependency id="WbTstr.Net.core" version="$version$" />
     </dependencies>

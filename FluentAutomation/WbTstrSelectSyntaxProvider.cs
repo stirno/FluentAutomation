@@ -13,7 +13,7 @@ namespace FluentAutomation
         private readonly ISelectSyntaxProvider _selectSyntaxProvider;
         private readonly ILogger _logger;
 
-        public WbTstrSelectSyntaxProvider(WbTstrActionSyntaxProvider actionSyntaxProvider, ISelectSyntaxProvider selectSyntaxProvider, ILogger logger)
+        internal WbTstrSelectSyntaxProvider(WbTstrActionSyntaxProvider actionSyntaxProvider, ISelectSyntaxProvider selectSyntaxProvider, ILogger logger)
         {
             _actionSyntaxProvider = actionSyntaxProvider;
             _selectSyntaxProvider = selectSyntaxProvider;

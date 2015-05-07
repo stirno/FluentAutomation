@@ -33,7 +33,6 @@ namespace FluentAutomation.Tests
             // Test browserstack local
             WbTstr.Configure()
                 .EnableDebug()
-                .DisableDryRun()
                 .UseBrowserStackAsRemoteDriver()
                 .EnableBrowserStackLocal()
                 .PreferedBrowser().IsChrome()
