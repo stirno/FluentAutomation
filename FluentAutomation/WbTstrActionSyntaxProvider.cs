@@ -25,6 +25,7 @@ namespace FluentAutomation
         {
             get
             {
+                _logger.LogPartialMessage("I expect "); 
                 return _expect ?? (_expect = new WbTstrAssertSyntaxProvider(_actionSyntaxProvider.Expect, _logger));
             }
         }
@@ -33,6 +34,7 @@ namespace FluentAutomation
         {
             get
             {
+                _logger.LogPartialMessage("I assert "); 
                 return _assert ?? (_assert = new WbTstrAssertSyntaxProvider(_actionSyntaxProvider.Assert, _logger));
             }
         }
@@ -41,6 +43,7 @@ namespace FluentAutomation
         {
             get
             {
+                _logger.LogPartialMessage("I switch "); 
                 return _actionSyntaxProvider.Switch;
             }
         }

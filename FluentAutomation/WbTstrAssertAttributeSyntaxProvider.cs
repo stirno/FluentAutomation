@@ -26,6 +26,7 @@ namespace FluentAutomation
         {
             get
             {
+                _logger.LogPartialMessage("this to be false: "); 
                 return new WbTstrAssertAttributeSyntaxProvider(_assertSyntaxProvider, _assertAttributeSyntaxProvider.Not, _logger);
             }
         }
@@ -43,7 +44,7 @@ namespace FluentAutomation
         public IAssertSyntaxProvider On(string selector)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage(" on element with selector: " + selector, true); 
 
             // Execute
             if (!IsInDryRunMode)
@@ -58,7 +59,7 @@ namespace FluentAutomation
         public IAssertSyntaxProvider On(ElementProxy elements)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage(" on element with selector: " + elements.Element.Selector, true); 
 
             // Execute
             if (!IsInDryRunMode)

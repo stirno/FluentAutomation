@@ -44,7 +44,7 @@ namespace FluentAutomation
         public IAssertSyntaxProvider Of(string selector)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage(" of element with selector: " + selector, true); 
 
             // Execute
             if (!IsInDryRunMode)
@@ -59,7 +59,7 @@ namespace FluentAutomation
         public IAssertSyntaxProvider Of(ElementProxy elements)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage(" of element with selector: " + elements.Element.Selector, true); 
 
             // Execute
             if (!IsInDryRunMode)

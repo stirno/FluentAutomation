@@ -35,7 +35,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider To(int destinationX, int destinationY)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage(" to position x: " + destinationX + " and y: " + destinationY);
 
             // Execute
             if (!IsInDryRunMode)
@@ -55,7 +55,7 @@ namespace FluentAutomation
         public void To(ElementProxy targetElement)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage(" to element with selector" + targetElement.Element.Selector);
 
             // Execute
             _dragDropByPositionSyntax.To(targetElement);
@@ -72,7 +72,7 @@ namespace FluentAutomation
         public void To(ElementProxy targetElement, int targetOffsetX, int targetOffsetY)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage(" to element with selector" + targetElement.Element.Selector + " with offset x: " + targetOffsetX + " y: " + targetOffsetY);
 
             // Execute
             _dragDropByPositionSyntax.To(targetElement, targetOffsetX, targetOffsetY);
