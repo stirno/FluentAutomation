@@ -44,11 +44,11 @@ namespace FluentAutomation
         {
             try
             {
-                var policy = Policy.Handle<InvalidOperationException>().WaitAndRetry(5, i => TimeSpan.FromSeconds(5));
+                var policy = Policy.Handle<InvalidOperationException>().WaitAndRetry(4, i => TimeSpan.FromSeconds(30));
                 return policy.Execute(
                     () =>
                     {
-                        var webDriver = webDriverFactory();
+                        var webDriver = reCreatedWebDriver ?? webDriverFactory();
                         if (!FluentTest.IsMultiBrowserTest && FluentTest.ProviderInstance == null)
                         {
                             FluentTest.ProviderInstance = webDriver;
@@ -113,7 +113,7 @@ namespace FluentAutomation
                         var remoteDriverUri = wbTstr.GetRemoteDriverUri();
 
                         // Create a new remote WebDriver
-                        var policy = Policy.Handle<Exception>().WaitAndRetry(5, i => TimeSpan.FromSeconds(5));
+                        var policy = Policy.Handle<Exception>().WaitAndRetry(4, i => TimeSpan.FromSeconds(30));
                         recreated = policy.Execute(() => new EnhancedRemoteWebDriver(remoteDriverUri, capabilities, TimeSpan.FromSeconds(60)));
                     }
                 }
