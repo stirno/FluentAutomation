@@ -107,6 +107,27 @@ namespace FluentAutomation
             return this;
         }
 
+        public IWbTstr EnableBrowserStackProjectGrouping(string projectName)
+        {
+            SetCapability("project", projectName);
+
+            return this;
+        }
+
+        public IWbTstr DisableBrowserStackProjectGrouping()
+        {
+            RemoveCapability("project");
+
+            return this;
+        }
+
+        public IWbTstr SetBrowserStackBuildIdentifier(string buildName)
+        {
+            SetCapability("build", buildName);
+
+            return this;
+        }
+
         public IWbTstr EnableDebug()
         {
             FluentSettings.Current.InDebugMode = true;
@@ -272,6 +293,12 @@ namespace FluentAutomation
             if (enableBrowserStackLocal.HasValue && enableBrowserStackLocal.Value)
             {
                 wbTstr.EnableBrowserStackLocal();
+            }
+
+            string browserStackProject = ConfigReader.GetSetting("WbTstr:BrowserStackProject");
+            if (!string.IsNullOrEmpty(browserStackProject))
+            {
+                wbTstr.EnableBrowserStackProjectGrouping(browserStackProject);
             }
 
             return wbTstr;
