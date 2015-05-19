@@ -40,7 +40,8 @@ namespace FluentAutomation
         public IActionSyntaxProvider From(ElementProxy element)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            string selector = (element != null && element.Element != null) ? element.Element.Selector ?? "?" : "?";
+            _logger.LogMessage("Perform selection in element with selector: {0}", selector); 
 
             // Execute
             if (!IsInDryRunMode)

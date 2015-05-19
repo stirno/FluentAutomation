@@ -43,7 +43,7 @@ namespace FluentAutomation
         public IAssertSyntaxProvider In(string selector)
         {
             // Before
-            _logger.LogPartialMessage("in element with selector: "+ selector, true); 
+            _logger.LogPartialMessage("in element with selector: " + selector, true); 
 
             // Execute
             if (!IsInDryRunMode)
