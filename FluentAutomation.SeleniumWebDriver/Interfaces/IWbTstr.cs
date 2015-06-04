@@ -15,6 +15,12 @@ namespace FluentAutomation.Interfaces
 
         IWbTstr DisableBrowserStackLocal();
 
+        IWbTstr EnableBrowserStackProjectGrouping(string projectName);
+
+        IWbTstr DisableBrowserStackProjectGrouping();
+
+        IWbTstr SetBrowserStackBuildIdentifier(string buildName);
+
         IWbTstr EnableDebug();
 
         IWbTstr DisableDebug();

@@ -316,7 +316,7 @@ namespace FluentAutomation
             container.Register<IFileStoreProvider, LocalFileStoreProvider>();            
         }
 
-        private static EnhancedRemoteWebDriver CreateEnhancedRemoteWebDriver(Uri driverUri, DesiredCapabilities browserCapabilities, TimeSpan commandTimeout)
+        internal static EnhancedRemoteWebDriver CreateEnhancedRemoteWebDriver(Uri driverUri, DesiredCapabilities browserCapabilities, TimeSpan commandTimeout)
         {
             const int NumberOfRetries = 10;
             try
@@ -324,7 +324,7 @@ namespace FluentAutomation
                 var policy = Policy.Handle<Exception>().WaitAndRetry(10, i => TimeSpan.FromSeconds(6));
                 return policy.Execute(() => new EnhancedRemoteWebDriver(driverUri, browserCapabilities, commandTimeout));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 Console.WriteLine("Failed to create a enhanced RemoteWebDriver. Retried {0} times.", NumberOfRetries);           
                 throw;
