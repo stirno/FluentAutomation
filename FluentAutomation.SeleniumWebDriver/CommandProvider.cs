@@ -235,9 +235,8 @@ namespace FluentAutomation
 
             this.Act(CommandType.Action, () =>
             {
-                var rootElement = this.Find("html").Element as Element;
                 new Actions(this._webDriver)
-                    .MoveToElement(rootElement.WebElement, x, y)
+                    .MoveByOffset(x, y)
                     .Click()
                     .Perform();
             });
@@ -270,9 +269,8 @@ namespace FluentAutomation
         {
             this.Act(CommandType.Action, () =>
             {
-                var rootElement = this.Find("html").Element as Element;
                 new Actions(this._webDriver)
-                    .MoveToElement(rootElement.WebElement, x, y)
+                    .MoveByOffset(x, y)
                     .DoubleClick()
                     .Perform();
             });
@@ -305,9 +303,8 @@ namespace FluentAutomation
         {
             this.Act(CommandType.Action, () =>
             {
-                var rootElement = this.Find("html").Element as Element;
                 new Actions(this._webDriver)
-                    .MoveToElement(rootElement.WebElement, x, y)
+                    .MoveByOffset(x, y)
                     .ContextClick()
                     .Perform();
             });
@@ -340,9 +337,8 @@ namespace FluentAutomation
         {
             this.Act(CommandType.Action, () =>
             {
-                var rootElement = this.Find("html").Element as Element;
                 new Actions(this._webDriver)
-                    .MoveToElement(rootElement.WebElement, x, y)
+                    .MoveByOffset(x, y)
                     .Perform();
             });
         }
@@ -394,11 +390,10 @@ namespace FluentAutomation
         {
             this.Act(CommandType.Action, () =>
             {
-                var rootElement = this.Find("html").Element as Element;
                 new Actions(this._webDriver)
-                    .MoveToElement(rootElement.WebElement, sourceX, sourceY)
+                    .MoveByOffset(sourceX, sourceY)
                     .ClickAndHold()
-                    .MoveToElement(rootElement.WebElement, destinationX, destinationY)
+                    .MoveByOffset(destinationX, destinationY)
                     .Release()
                     .Perform();
             });
