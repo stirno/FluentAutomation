@@ -109,8 +109,8 @@ namespace FluentAutomation
                     WbTstr wbTstr = WbTstr.Configure() as WbTstr;
                     if (wbTstr != null)
                     {
-                        var capabilities = new DesiredCapabilities(wbTstr.GetCapabilities());
-                        var remoteDriverUri = wbTstr.GetRemoteDriverUri();
+                        var capabilities = new DesiredCapabilities(wbTstr.Capabilities);
+                        var remoteDriverUri = wbTstr.RemoteDriverUri;
 
                         // Create a new remote WebDriver
                         var policy = Policy.Handle<Exception>().WaitAndRetry(4, i => TimeSpan.FromSeconds(30));

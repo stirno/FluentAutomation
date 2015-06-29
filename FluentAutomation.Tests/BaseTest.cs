@@ -32,14 +32,14 @@ namespace FluentAutomation.Tests
 
             string buildResultKey = ConfigReader.GetSetting("buildResultKey") ?? "untitled build";
             // Test browserstack local
-            WbTstr.Configure()
-                .EnableDebug()
-                .UseBrowserStackAsRemoteDriver()
-                .SetBrowserStackBuildIdentifier(buildResultKey)
-                .EnableBrowserStackLocal()
-                .PreferedBrowser().IsChrome()
-                .PreferedOperatingSystem().IsWindows()
-                .PreferedScreenResolution().IsAny();
+            //WbTstr.Configure()
+            //    .EnableDebug()
+            //    .UseBrowserStackAsRemoteDriver()
+            //    .SetBrowserStackBuildIdentifier(buildResultKey)
+            //    .EnableBrowserStackLocal()
+            //    .PreferedBrowser().IsChrome()
+            //    .PreferedOperatingSystem().IsWindows()
+            //    .PreferedScreenResolution().IsAny();
 
             WbTstr.Bootstrap();
 
