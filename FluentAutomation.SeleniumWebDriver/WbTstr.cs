@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,19 +16,19 @@ namespace FluentAutomation
     {
         private static readonly object _mutex = string.Empty;
         private static IWbTstr _instance;
-        private readonly Dictionary<string, object> _capabilities;
+        private readonly ConcurrentDictionary<string, object> _capabilities;
         private readonly string _uniqueIdentifier;
         private string _browserStackUsername;
         private string _browserStackPassword;
         private bool _browserStackLocalEnabled;
         private SeleniumWebDriver.Browser _localWebDriver;
-        private Uri _remoteWebDriver;
+
         private bool _disposed;
 
         private WbTstr(Guid guid)
         {
             _uniqueIdentifier = string.Format("{0}", guid);
-            _capabilities = new Dictionary<string, object>();
+            _capabilities = new ConcurrentDictionary<string, object>();
             _localWebDriver = SeleniumWebDriver.Browser.Chrome;
         }
 
@@ -35,6 +36,18 @@ namespace FluentAutomation
         {
             Dispose(false);
         }
+
+        /*-------------------------------------------------------------------*/
+
+        internal Dictionary<string, object> Capabilities
+        {
+            get
+            {
+                return _capabilities.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            }
+        }
+
+        internal Uri RemoteDriverUri { get; private set; }
 
         /*-------------------------------------------------------------------*/
 
@@ -169,7 +182,8 @@ namespace FluentAutomation
 
             if (_capabilities.ContainsKey(key))
             {
-                _capabilities.Remove(key);
+                object removed = null;
+                _capabilities.TryRemove(key, out removed);
             }
 
             return this;
@@ -179,7 +193,7 @@ namespace FluentAutomation
         {
             DisableBrowserStackLocal();
 
-            _remoteWebDriver = null;
+            RemoteDriverUri = null;
             _localWebDriver = browser;
             return this;
         }
@@ -188,7 +202,7 @@ namespace FluentAutomation
         {
             if (remoteWebDriver == null) throw new ArgumentException("remoteWebDriver");
 
-            _remoteWebDriver = new Uri(remoteWebDriver);
+            RemoteDriverUri = new Uri(remoteWebDriver);
             return this;
         }
 
@@ -213,14 +227,14 @@ namespace FluentAutomation
             {
                 SeleniumWebDriver.DryRunBootstrap();
             }
-            else if (_remoteWebDriver != null)
+            else if (RemoteDriverUri != null)
             {
                 if (_browserStackLocalEnabled)
                 {
                     BrowserStackLocal.Instance.Start(_browserStackPassword, _uniqueIdentifier);
                 }
 
-                SeleniumWebDriver.Bootstrap(_remoteWebDriver, _capabilities);
+                SeleniumWebDriver.Bootstrap(RemoteDriverUri, Capabilities);
             }
             else
             {
@@ -228,16 +242,6 @@ namespace FluentAutomation
             }
 
             return this;
-        }
-
-        internal Dictionary<string, object> GetCapabilities()
-        {
-            return _capabilities;
-        }
-
-        internal Uri GetRemoteDriverUri()
-        {
-            return _remoteWebDriver;
         }
 
         /*-------------------------------------------------------------------*/
@@ -271,31 +275,47 @@ namespace FluentAutomation
         {
             WbTstr wbTstr = new WbTstr(Guid.NewGuid());
 
-            bool? enableDebug = ConfigReader.GetSettingAsBoolean("WbTstr:EnableDebug");
+            bool? enableDebug = ConfigReader.GetSettingAsBoolean("EnableDebug");
             if (enableDebug.HasValue && enableDebug.Value)
             {
                 wbTstr.EnableDebug();
             }
 
-            bool? enableDryRun = ConfigReader.GetSettingAsBoolean("WbTstr:EnableDryRun");
+            bool? enableDryRun = ConfigReader.GetSettingAsBoolean("EnableDryRun");
             if (enableDryRun.HasValue && enableDryRun.Value)
             {
                 wbTstr.EnableDryRun();
             }
 
-            bool? useBrowserStack = ConfigReader.GetSettingAsBoolean("WbTstr:UseBrowserStack");
+            string useWebDriver = ConfigReader.GetSetting("UseWebDriver");
+            if (!String.IsNullOrWhiteSpace(useWebDriver))
+            {
+                SeleniumWebDriver.Browser browser;
+                if (Enum.TryParse(useWebDriver, true, out browser))
+                {
+                    wbTstr.UseWebDriver(browser);
+                }
+            }
+
+            string buildKey = ConfigReader.GetSetting("BuildKey");
+            if (!String.IsNullOrWhiteSpace(buildKey))
+            {
+                wbTstr.SetBrowserStackBuildIdentifier(buildKey);
+            }
+
+            bool? useBrowserStack = ConfigReader.GetSettingAsBoolean("UseBrowserStack");
             if (useBrowserStack.HasValue && useBrowserStack.Value)
             {
                 wbTstr.UseBrowserStackAsRemoteDriver();
             }
 
-            bool? enableBrowserStackLocal = ConfigReader.GetSettingAsBoolean("WbTstr:EnableBrowserStackLocal");
+            bool? enableBrowserStackLocal = ConfigReader.GetSettingAsBoolean("EnableBrowserStackLocal");
             if (enableBrowserStackLocal.HasValue && enableBrowserStackLocal.Value)
             {
                 wbTstr.EnableBrowserStackLocal();
             }
 
-            string browserStackProject = ConfigReader.GetSetting("WbTstr:BrowserStackProject");
+            string browserStackProject = ConfigReader.GetSetting("BrowserStackProject");
             if (!string.IsNullOrEmpty(browserStackProject))
             {
                 wbTstr.EnableBrowserStackProjectGrouping(browserStackProject);

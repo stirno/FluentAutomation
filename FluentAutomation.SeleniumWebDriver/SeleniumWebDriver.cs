@@ -248,7 +248,7 @@ namespace FluentAutomation
                     });
                 case Browser.Chrome:
                     //Providing an unique name for the chromedriver makes it possible to run multiple instances
-                    var uniqueName = string.Format("chromedriver{0}.exe", Guid.NewGuid());
+                    var uniqueName = string.Format("chromedriver_{0}.exe", Guid.NewGuid());
                     driverPath = EmbeddedResources.UnpackFromAssembly("chromedriver.exe", uniqueName , Assembly.GetAssembly(typeof(SeleniumWebDriver)));
                     var chromeService = ChromeDriverService.CreateDefaultService(Path.GetDirectoryName(driverPath),
                         uniqueName);
@@ -258,7 +258,8 @@ namespace FluentAutomation
 
                     return new Func<IWebDriver>(() => new OpenQA.Selenium.Chrome.ChromeDriver(chromeService, chromeOptions, commandTimeout));
                 case Browser.PhantomJs:
-                    driverPath = EmbeddedResources.UnpackFromAssembly("phantomjs.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
+                    var uniquePhantomJsName = string.Format("phantomjs_{0}.exe", Guid.NewGuid());
+                    driverPath = EmbeddedResources.UnpackFromAssembly(uniquePhantomJsName, Assembly.GetAssembly(typeof(SeleniumWebDriver)));
 
                     var phantomOptions = new OpenQA.Selenium.PhantomJS.PhantomJSOptions();
                     return new Func<IWebDriver>(() => new OpenQA.Selenium.PhantomJS.PhantomJSDriver(Path.GetDirectoryName(driverPath), phantomOptions, commandTimeout));
