@@ -769,7 +769,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider Press(string keys)
         {
             // Before
-            _logger.LogMessage("Press keys: " + keys );
+            _logger.LogMessage("Press keys: {0}", keys);
 
             // Execute
             if (!IsInDryRunMode)
