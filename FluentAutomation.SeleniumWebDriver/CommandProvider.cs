@@ -232,11 +232,15 @@ namespace FluentAutomation
 
         public void Click(int x, int y)
         {
-
             this.Act(CommandType.Action, () =>
             {
+                var bodyElement = this.Find("body").Element as Element;
+
+                var xDiff = x - bodyElement.PosX;
+                var yDiff = y - bodyElement.PosY; 
+
                 new Actions(this._webDriver)
-                    .MoveByOffset(x, y)
+                    .MoveToElement(bodyElement.WebElement, xDiff, yDiff)
                     .Click()
                     .Perform();
             });
@@ -248,7 +252,7 @@ namespace FluentAutomation
             {
                 var containerElement = element.Element as Element;
                 new Actions(this._webDriver)
-                    .MoveToElement(containerElement.WebElement, x, y)
+                    .MoveByOffset(x, y)
                     .Click()
                     .Perform();
             });
@@ -267,10 +271,14 @@ namespace FluentAutomation
 
         public void DoubleClick(int x, int y)
         {
+            var bodyElement = this.Find("body").Element as Element;
+
+            var xDiff = x - bodyElement.PosX;
+            var yDiff = y - bodyElement.PosY; 
             this.Act(CommandType.Action, () =>
             {
                 new Actions(this._webDriver)
-                    .MoveByOffset(x, y)
+                    .MoveToElement(bodyElement.WebElement, xDiff, yDiff)
                     .DoubleClick()
                     .Perform();
             });
@@ -301,10 +309,14 @@ namespace FluentAutomation
 
         public void RightClick(int x, int y)
         {
+            var bodyElement = this.Find("body").Element as Element;
+
+            var xDiff = x - bodyElement.PosX;
+            var yDiff = y - bodyElement.PosY;
             this.Act(CommandType.Action, () =>
             {
                 new Actions(this._webDriver)
-                    .MoveByOffset(x, y)
+                    .MoveToElement(bodyElement.WebElement, xDiff, yDiff)
                     .ContextClick()
                     .Perform();
             });
@@ -335,10 +347,14 @@ namespace FluentAutomation
 
         public void Hover(int x, int y)
         {
+            var bodyElement = this.Find("body").Element as Element;
+
+            var xDiff = x - bodyElement.PosX;
+            var yDiff = y - bodyElement.PosY;
             this.Act(CommandType.Action, () =>
             {
                 new Actions(this._webDriver)
-                    .MoveByOffset(x, y)
+                    .MoveToElement(bodyElement.WebElement, xDiff, yDiff)
                     .Perform();
             });
         }
@@ -385,15 +401,23 @@ namespace FluentAutomation
                 }
             });
         }
-
+        
         public void DragAndDrop(int sourceX, int sourceY, int destinationX, int destinationY)
         {
+            var bodyElement = this.Find("body").Element as Element;
+
+            var xSourceDiff = sourceX - bodyElement.PosX;
+            var ySourceDiff = sourceY - bodyElement.PosY;
+
+            var xdestinationDiff = destinationX - bodyElement.PosX;
+            var ydestinationDiff = destinationY - bodyElement.PosY;
+
             this.Act(CommandType.Action, () =>
             {
                 new Actions(this._webDriver)
-                    .MoveByOffset(sourceX, sourceY)
+                    .MoveToElement(bodyElement.WebElement, xSourceDiff, ySourceDiff)
                     .ClickAndHold()
-                    .MoveByOffset(destinationX, destinationY)
+                    .MoveToElement(bodyElement.WebElement, xdestinationDiff, ydestinationDiff)
                     .Release()
                     .Perform();
             });
