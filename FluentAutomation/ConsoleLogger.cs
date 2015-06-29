@@ -10,10 +10,22 @@ namespace FluentAutomation
 {
     public class ConsoleLogger : ILogger
     {
+       
+
         public void LogMessage(string message, params object[] args)
         {
             Console.WriteLine(message, args);
         }
+
+        public void LogPartialMessage(string message, bool endLine = false, params object[] args)
+        {
+            if (endLine)
+            {
+                message += Environment.NewLine;
+            }
+            Console.Write(message, args);
+        }
+
 
         public void LogException(Exception exception, string message, params object[] args)
         {

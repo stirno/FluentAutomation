@@ -40,7 +40,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider To(ElementProxy targetElement)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage(" to: " + targetElement.Element.Selector, true);
 
             // Execute
             if (!IsInDryRunMode)
@@ -60,7 +60,7 @@ namespace FluentAutomation
         public IActionSyntaxProvider To(ElementProxy targetElement, int targetOffsetX, int targetOffsetY)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage(" to: " + targetElement.Element.Selector + " with offset x: " + targetOffsetX + " y: " + targetOffsetY , true);
 
             // Execute
             if (!IsInDryRunMode)

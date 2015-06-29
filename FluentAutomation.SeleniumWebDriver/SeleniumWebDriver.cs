@@ -248,8 +248,8 @@ namespace FluentAutomation
                     });
                 case Browser.Chrome:
                     //Providing an unique name for the chromedriver makes it possible to run multiple instances
-                    var uniqueName = string.Format("chromedriver{0}.exe", Guid.NewGuid());
-                    driverPath = EmbeddedResources.UnpackFromAssembly("chromedriver.exe", uniqueName , Assembly.GetAssembly(typeof(SeleniumWebDriver)));
+                    var uniqueName = string.Format("chromedriver_{0}.exe", Guid.NewGuid());
+                    driverPath = EmbeddedResources.UnpackFromAssembly("chromedriver.exe", uniqueName, Assembly.GetAssembly(typeof(SeleniumWebDriver)));
                     var chromeService = ChromeDriverService.CreateDefaultService(Path.GetDirectoryName(driverPath),
                         uniqueName);
                     chromeService.SuppressInitialDiagnosticInformation = true;
@@ -258,7 +258,8 @@ namespace FluentAutomation
 
                     return new Func<IWebDriver>(() => new OpenQA.Selenium.Chrome.ChromeDriver(chromeService, chromeOptions, commandTimeout));
                 case Browser.PhantomJs:
-                    driverPath = EmbeddedResources.UnpackFromAssembly("phantomjs.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
+                    var uniquePhantomJsName = string.Format("phantomjs_{0}.exe", Guid.NewGuid());
+                    driverPath = EmbeddedResources.UnpackFromAssembly("phantomjs.exe", uniquePhantomJsName, Assembly.GetAssembly(typeof(SeleniumWebDriver)));
 
                     var phantomOptions = new OpenQA.Selenium.PhantomJS.PhantomJSOptions();
                     return new Func<IWebDriver>(() => new OpenQA.Selenium.PhantomJS.PhantomJSDriver(Path.GetDirectoryName(driverPath), phantomOptions, commandTimeout));
@@ -316,7 +317,7 @@ namespace FluentAutomation
             container.Register<IFileStoreProvider, LocalFileStoreProvider>();            
         }
 
-        private static EnhancedRemoteWebDriver CreateEnhancedRemoteWebDriver(Uri driverUri, DesiredCapabilities browserCapabilities, TimeSpan commandTimeout)
+        internal static EnhancedRemoteWebDriver CreateEnhancedRemoteWebDriver(Uri driverUri, DesiredCapabilities browserCapabilities, TimeSpan commandTimeout)
         {
             const int NumberOfRetries = 10;
             try
@@ -324,7 +325,7 @@ namespace FluentAutomation
                 var policy = Policy.Handle<Exception>().WaitAndRetry(10, i => TimeSpan.FromSeconds(6));
                 return policy.Execute(() => new EnhancedRemoteWebDriver(driverUri, browserCapabilities, commandTimeout));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 Console.WriteLine("Failed to create a enhanced RemoteWebDriver. Retried {0} times.", NumberOfRetries);           
                 throw;

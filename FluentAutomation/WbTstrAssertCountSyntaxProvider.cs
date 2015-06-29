@@ -44,7 +44,7 @@ namespace FluentAutomation
         public IAssertSyntaxProvider Of(string selector)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage(" of element with selector: " + selector, true); 
 
             // Execute
             if (!IsInDryRunMode)
@@ -58,8 +58,11 @@ namespace FluentAutomation
 
         public IAssertSyntaxProvider Of(ElementProxy elements)
         {
-            // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            /* When element is not found, 'elements.Element' will throw an exception. 
+             * We don't want a log message to throw an exception in this case, therefore this additional safety check. 
+             */
+            string selector = elements.Elements.Count > 1 ? elements.Element.Selector : String.Empty;
+            _logger.LogPartialMessage(" of element with selector: {0}", true, selector); 
 
             // Execute
             if (!IsInDryRunMode)

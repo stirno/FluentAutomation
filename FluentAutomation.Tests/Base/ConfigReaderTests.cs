@@ -44,10 +44,10 @@ namespace FluentAutomation.Tests.Base
             File.WriteAllText(configFilePath, ConfigFileContent);
 
             // Act
-            Assert.ThrowsDelegate action = () => ConfigReader.GetSetting("DummyKey", configFilePath);
+            Action action = () => ConfigReader.GetSetting("DummyKey", configFilePath);
 
             // Assert
-            Assert.Throws<ConfigurationErrorsException>(action);
+            Assert.Throws<ConfigurationErrorsException>(() => action());
         }
 
         [Fact]

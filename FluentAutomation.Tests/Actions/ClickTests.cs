@@ -25,6 +25,7 @@ namespace FluentAutomation.Tests.Actions
              .Assert.Text("Input Button Clicked").In(InputsPage.ButtonClickedTextSelector);
         }
 
+
         [Fact]
         public void RightClick()
         {
@@ -84,8 +85,8 @@ namespace FluentAutomation.Tests.Actions
             // Alert box:
             // Alerts don't have OK/Cancel but both work, so we test as if Cancel was clicked
             I.Click(AlertsPage.TriggerAlertSelector)
-             .Click(Alert.OK)
-             .Assert.Text("Clicked Alert Cancel").In(AlertsPage.ResultSelector);
+              .Click(Alert.OK)  
+              .Assert.Text("Clicked Alert Cancel").In(AlertsPage.ResultSelector);
 
             I.Click(AlertsPage.TriggerAlertSelector)
              .Click(Alert.Cancel)

@@ -25,6 +25,7 @@ namespace FluentAutomation
         {
             get
             {
+                _logger.LogPartialMessage("this to be false: ");
                 return _assertSyntaxProvider.Not;
             }
         }
@@ -42,7 +43,7 @@ namespace FluentAutomation
         public IAssertCountSyntaxProvider Count(int count)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage("count to be " + count + " ", true); 
 
             // Execute
             IAssertCountSyntaxProvider assertCountSyntaxProvider = _assertSyntaxProvider.Count(count);
@@ -54,7 +55,7 @@ namespace FluentAutomation
         public IAssertClassSyntaxProvider Class(string className)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage("class to be " + className + " ", true); 
 
             // Execute
             IAssertClassSyntaxProvider assertClassSyntaxProvider = _assertSyntaxProvider.Class(className);
@@ -66,7 +67,7 @@ namespace FluentAutomation
         public IAssertCssPropertySyntaxProvider Css(string propertyName)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage("CSS property to be " + propertyName + " ", true);
 
             // Execute
             IAssertCssPropertySyntaxProvider assertClassSyntaxProvider = _assertSyntaxProvider.Css(propertyName);
@@ -78,7 +79,7 @@ namespace FluentAutomation
         public IAssertCssPropertySyntaxProvider Css(string propertyName, string propertyValue)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage("CSS property to be " + propertyName + " and value " + propertyValue + " ", true);
 
             // Execute
             IAssertCssPropertySyntaxProvider assertClassSyntaxProvider = _assertSyntaxProvider.Css(propertyName, propertyValue);
@@ -90,7 +91,7 @@ namespace FluentAutomation
         public IAssertAttributeSyntaxProvider Attribute(string attributeName)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage("attribute to be " + attributeName + " ", true);
 
             // Execute
             IAssertAttributeSyntaxProvider assertAttributeSyntaxProvider = _assertSyntaxProvider.Attribute(attributeName);
@@ -102,7 +103,7 @@ namespace FluentAutomation
         public IAssertAttributeSyntaxProvider Attribute(string attributeName, string propertyValue)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage("tttribute to be " + attributeName + " with value" + " ", true);
 
             // Execute
             IAssertAttributeSyntaxProvider assertAttributeSyntaxProvider = _assertSyntaxProvider.Attribute(attributeName, propertyValue);
@@ -114,7 +115,7 @@ namespace FluentAutomation
         public IAssertTextSyntaxProvider Text(string text)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage("text to be " + text + " ", true);
 
             // Execute
             IAssertTextSyntaxProvider assertTextSyntaxProvider = _assertSyntaxProvider.Text(text);
@@ -126,7 +127,7 @@ namespace FluentAutomation
         public IAssertTextSyntaxProvider Text(Expression<Func<string, bool>> matchFunc)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage("text to match " + matchFunc + " ", true);
 
             // Execute
             IAssertTextSyntaxProvider assertTextSyntaxProvider = _assertSyntaxProvider.Text(matchFunc);
@@ -138,7 +139,7 @@ namespace FluentAutomation
         public IAssertValueSyntaxProvider Value(int value)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage("value to equal " + value + " ", true);
 
             // Execute
             IAssertValueSyntaxProvider assertValueSyntaxProvider = _assertSyntaxProvider.Value(value);
@@ -150,7 +151,7 @@ namespace FluentAutomation
         public IAssertValueSyntaxProvider Value(string value)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage("value to equal" + value + " ", true);
 
             // Execute
             IAssertValueSyntaxProvider assertValueSyntaxProvider = _assertSyntaxProvider.Value(value);
@@ -162,7 +163,7 @@ namespace FluentAutomation
         public IAssertValueSyntaxProvider Value(Expression<Func<string, bool>> matchFunc)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage("value to match" + matchFunc + " ", true);
 
             // Execute
             IAssertValueSyntaxProvider assertValueSyntaxProvider = _assertSyntaxProvider.Value(matchFunc);
@@ -174,7 +175,7 @@ namespace FluentAutomation
         public IAssertSyntaxProvider Url(string expectedUrl)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage("url to equal" + expectedUrl + " ", true);
 
             // Execute
             if (!IsInDryRunMode)
@@ -189,7 +190,7 @@ namespace FluentAutomation
         public IAssertSyntaxProvider Url(Uri expectedUri)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage("url to equal" + expectedUri + " ", true);
 
             // Execute
             if (!IsInDryRunMode)
@@ -204,7 +205,7 @@ namespace FluentAutomation
         public IAssertSyntaxProvider Url(Expression<Func<Uri, bool>> uriExpression)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage("url to match" + uriExpression + " ", true);
 
             // Execute
             if (!IsInDryRunMode)
@@ -219,7 +220,7 @@ namespace FluentAutomation
         public IAssertSyntaxProvider True(Expression<Func<bool>> matchFunc)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage("to be true" + matchFunc + " ", true);
 
             // Execute
             if (!IsInDryRunMode)
@@ -234,7 +235,7 @@ namespace FluentAutomation
         public IAssertSyntaxProvider False(Expression<Func<bool>> matchFunc)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage("to be false" + matchFunc + " ", true);
 
             // Execute
             if (!IsInDryRunMode)
@@ -249,7 +250,7 @@ namespace FluentAutomation
         public IAssertSyntaxProvider Throws(Expression<Action> matchAction)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage("to throw expection " + matchAction + " ", true);
 
             // Execute
             if (!IsInDryRunMode)
@@ -264,7 +265,7 @@ namespace FluentAutomation
         public IAssertSyntaxProvider Exists(string selector)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage("element with selector: " + selector + " exists", true);
 
             // Execute
             if (!IsInDryRunMode)
@@ -279,7 +280,7 @@ namespace FluentAutomation
         public IAssertSyntaxProvider Exists(ElementProxy element)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage("element with selector: " + element.Element.Selector + " exists", true);
 
             // Execute
             if (!IsInDryRunMode)
@@ -294,7 +295,7 @@ namespace FluentAutomation
         public IAssertSyntaxProvider Visible(string selector)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage("element with selector: " + selector + " to be v _logger.LogPartialMessageisible", true);
 
             // Execute
             if (!IsInDryRunMode)
@@ -309,7 +310,7 @@ namespace FluentAutomation
         public IAssertSyntaxProvider Visible(ElementProxy element)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage("element with selector: " + element.Element.Selector + " to be visible", true);
 
             // Execute
             if (!IsInDryRunMode)

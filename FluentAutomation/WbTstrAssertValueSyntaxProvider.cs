@@ -43,7 +43,7 @@ namespace FluentAutomation
         public IAssertSyntaxProvider In(string selector)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage("in element with selector: " + selector, true); 
 
             // Execute
             if (!IsInDryRunMode)
@@ -58,7 +58,7 @@ namespace FluentAutomation
         public IAssertSyntaxProvider In(ElementProxy element)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage("in element with selector: " + element.Element.Selector, true); 
 
             // Execute
             if (!IsInDryRunMode)
@@ -73,7 +73,7 @@ namespace FluentAutomation
         public IAssertSyntaxProvider In(Alert accessor)
         {
             // Before
-            _logger.LogMessage("blablablabla"); // TODO: Elaborate logging
+            _logger.LogPartialMessage("in : " + accessor, true); 
 
             // Execute
             if (!IsInDryRunMode)
