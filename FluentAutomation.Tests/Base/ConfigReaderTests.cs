@@ -47,7 +47,7 @@ namespace FluentAutomation.Tests.Base
             Action action = () => ConfigReader.GetSetting("DummyKey", configFilePath);
 
             // Assert
-            Assert.Throws<ConfigurationErrorsException>(action);
+            Assert.Throws<ConfigurationErrorsException>(() => action());
         }
 
         [Fact]

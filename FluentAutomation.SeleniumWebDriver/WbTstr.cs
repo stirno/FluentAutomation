@@ -290,8 +290,11 @@ namespace FluentAutomation
             string useWebDriver = ConfigReader.GetSetting("UseWebDriver");
             if (!String.IsNullOrWhiteSpace(useWebDriver))
             {
-                SeleniumWebDriver.Browser browser = (SeleniumWebDriver.Browser)Enum.Parse(typeof(SeleniumWebDriver.Browser), useWebDriver);
-                wbTstr.UseWebDriver(browser);
+                SeleniumWebDriver.Browser browser;
+                if (SeleniumWebDriver.Browser.TryParse(useWebDriver, true, out browser))
+                {
+                    wbTstr.UseWebDriver(browser);
+                }
             }
 
             bool? useBrowserStack = ConfigReader.GetSettingAsBoolean("UseBrowserStack");
