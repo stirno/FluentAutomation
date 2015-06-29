@@ -30,7 +30,6 @@ namespace FluentAutomation.Tests
             // Default tests use chrome and load the site
             //FluentAutomation.SeleniumWebDriver.Bootstrap(SeleniumWebDriver.Browser.Chrome); //, SeleniumWebDriver.Browser.InternetExplorer, SeleniumWebDriver.Browser.Firefox);
 
-            string buildResultKey = ConfigReader.GetSetting("buildResultKey") ?? "untitled build";
             // Test browserstack local
             //WbTstr.Configure()
             //    .EnableDebug()
@@ -51,7 +50,7 @@ namespace FluentAutomation.Tests
         {
             get
             {
-                return ConfigReader.GetSetting("WbTstr:WebsiteUnderTestBaseUrl");
+                return ConfigReader.GetSetting("WebsiteUnderTestBaseUrl");
             }
         }
 

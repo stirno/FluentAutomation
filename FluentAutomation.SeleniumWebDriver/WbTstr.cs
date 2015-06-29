@@ -291,10 +291,16 @@ namespace FluentAutomation
             if (!String.IsNullOrWhiteSpace(useWebDriver))
             {
                 SeleniumWebDriver.Browser browser;
-                if (SeleniumWebDriver.Browser.TryParse(useWebDriver, true, out browser))
+                if (Enum.TryParse(useWebDriver, true, out browser))
                 {
                     wbTstr.UseWebDriver(browser);
                 }
+            }
+
+            string buildKey = ConfigReader.GetSetting("BuildKey");
+            if (!String.IsNullOrWhiteSpace(buildKey))
+            {
+                wbTstr.SetBrowserStackBuildIdentifier(buildKey);
             }
 
             bool? useBrowserStack = ConfigReader.GetSettingAsBoolean("UseBrowserStack");
