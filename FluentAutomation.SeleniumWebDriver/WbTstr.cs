@@ -297,7 +297,7 @@ namespace FluentAutomation
                 }
             }
 
-            string buildKey = ConfigReader.GetSetting("BuildKey");
+            string buildKey = ConfigReader.GetSetting("BuildResultKey");
             if (!String.IsNullOrWhiteSpace(buildKey))
             {
                 wbTstr.SetBrowserStackBuildIdentifier(buildKey);
