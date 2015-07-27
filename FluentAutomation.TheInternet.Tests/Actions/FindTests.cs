@@ -12,9 +12,29 @@ namespace FluentAutomation.Tests.Actions
 		}
 
 		[Fact]
+		public void FindElement()
+		{
+			var element = I.Find(CheckboxesPage.Checkbox1Selector).Element;
+			Assert.Equal("checkbox", element.Attributes.Get("type"));
+		}
+
+		[Fact]
 		public void TestFindElementThrowsIfElementNotFound()
 		{
 			Assert.Throws<FluentElementNotFoundException>(() => I.Find("doesntexist").Element);
+		}
+
+		[Fact]
+		public void FindMultipleElements()
+		{
+			var elements = I.FindMultiple(CheckboxesPage.AllCheckboxesSelector);
+			Assert.True(elements.Elements.Count > 1);
+
+			// How to access the multiple elements? I would expect this syntax to work:
+			// elements.Elements.ForEach(element =>
+			// {
+			// 	Assert.Equal("checkbox", element.Attributes.Get("type"));
+			// });
 		}
 
 		[Fact]
