@@ -258,8 +258,7 @@ namespace FluentAutomation
 
                     return new Func<IWebDriver>(() => new OpenQA.Selenium.Chrome.ChromeDriver(chromeService, chromeOptions, commandTimeout));
                 case Browser.PhantomJs:
-                    var uniquePhantomJsName = string.Format("phantomjs_{0}.exe", Guid.NewGuid());
-                    driverPath = EmbeddedResources.UnpackFromAssembly("phantomjs.exe", uniquePhantomJsName, Assembly.GetAssembly(typeof(SeleniumWebDriver)));
+                    driverPath = EmbeddedResources.UnpackFromAssembly("phantomjs.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
 
                     var phantomOptions = new OpenQA.Selenium.PhantomJS.PhantomJSOptions();
                     return new Func<IWebDriver>(() => new OpenQA.Selenium.PhantomJS.PhantomJSDriver(Path.GetDirectoryName(driverPath), phantomOptions, commandTimeout));
