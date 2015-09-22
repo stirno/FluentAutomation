@@ -64,7 +64,7 @@ namespace FluentAutomation.Wrappers
 
             if (!string.IsNullOrWhiteSpace(browserStackKey))
             {
-                arguments += "-" + browserStackKey;
+                arguments += browserStackKey;
             }
             else
             {
