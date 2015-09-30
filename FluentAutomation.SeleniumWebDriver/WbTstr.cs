@@ -21,6 +21,14 @@ namespace FluentAutomation
         private string _browserStackUsername;
         private string _browserStackPassword;
         private bool _browserStackLocalEnabled;
+        private bool _browserStackUseProxy;
+        private string _browserStackLocalFolder;
+        private bool _browserStackOnlyAutomate;
+        private bool _browserStackForceLocal;
+        private string _browserStackProxyHost;
+        private int? _browserStackProxyPort;
+        private string _browserStackProxyUser;
+        private string _browserStackProxyPassword;
         private SeleniumWebDriver.Browser _localWebDriver;
 
         private bool _disposed;
@@ -206,70 +214,6 @@ namespace FluentAutomation
             return this;
         }
 
-        public IWbTstrBrowserStackOperatingSystem PreferedOperatingSystem()
-        {
-            return new WbTstrBrowserStackOperatingSystem(this);
-        }
-
-        public IWbTstrBrowserStackScreenResolution PreferedScreenResolution()
-        {
-            return new WbTstrBrowserStackScreenResolution(this);
-        }
-
-        public IWbTstrBrowserStackBrowser PreferedBrowser()
-        {
-            return new WbTstrBrowserStackBrowser(this);
-        }
-
-        public IWbTstr BootstrapInstance()
-        {
-            if (FluentSettings.Current.IsDryRun)
-            {
-                SeleniumWebDriver.DryRunBootstrap();
-            }
-            else if (RemoteDriverUri != null)
-            {
-                if (_browserStackLocalEnabled)
-                {
-                    BrowserStackLocal.Instance.Start(_browserStackPassword, _uniqueIdentifier);
-                }
-
-                SeleniumWebDriver.Bootstrap(RemoteDriverUri, Capabilities);
-            }
-            else
-            {
-                SeleniumWebDriver.Bootstrap(_localWebDriver);
-            }
-
-            return this;
-        }
-
-        /*-------------------------------------------------------------------*/
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!_disposed)
-            {
-                if (disposing)
-                {
-                    // Dispose any managed objects
-                    // ...
-                }
-
-                // Now disposed of any unmanaged objects
-                BrowserStackLocal.Instance.Stop(_uniqueIdentifier);
-
-                _disposed = true;
-            }
-        }
-
-        /*-------------------------------------------------------------------*/
 
         private static IWbTstr CreateInstance()
         {
@@ -323,5 +267,151 @@ namespace FluentAutomation
 
             return wbTstr;
         }
+
+        public IWbTstr SetBrowserStackLocalFolder(string path)
+        {
+            _browserStackLocalFolder = path;
+            return this;
+        }
+
+        public IWbTstr DisableBrowserStackLocalFolder()
+        {
+            _browserStackLocalFolder = null;
+            return this;
+        }
+
+        public IWbTstr EnableBrowserStackOnlyAutomate()
+        {
+            _browserStackOnlyAutomate = true;
+            return this;
+        }
+
+        public IWbTstr DisableBrowserStackOnlyAutomate()
+        {
+            _browserStackOnlyAutomate = false;
+            return this;
+        }
+
+        public IWbTstr EnableBrowserStackForceLocal()
+        {
+            _browserStackForceLocal = true;
+            return this;
+        }
+
+        public IWbTstr DisableBrowserStackForceLocal()
+        {
+            _browserStackForceLocal = false;
+            return this;
+        }
+
+        public IWbTstr SetBrowserStackProxyHost(string host)
+        {
+            _browserStackUseProxy = true;
+            _browserStackProxyHost = host;
+            return this;
+        }
+
+        public IWbTstr SetBrowserStackProxyPort(int port)
+        {
+            _browserStackUseProxy = true;
+            _browserStackProxyPort = port;
+            return this;
+        }
+
+        public IWbTstr SetBrowserStackProxyUser(string user)
+        {
+            _browserStackUseProxy = true;
+            _browserStackProxyUser = user;
+            return this;
+        }
+
+        public IWbTstr SetBrowserStackProxyPassword(string password)
+        {
+            _browserStackUseProxy = true;
+            _browserStackProxyPassword = password;
+            return this;
+        }
+
+        public IWbTstr DisableBrowserStackProxy()
+        {
+            _browserStackUseProxy = false;
+            return this;
+        }
+
+
+        public IWbTstrBrowserStackOperatingSystem PreferedBrowserStackOperatingSystem()
+        {
+            return new WbTstrBrowserStackOperatingSystem(this);
+        }
+
+        public IWbTstrBrowserStackScreenResolution PreferedBrowserStackScreenResolution()
+        {
+            return new WbTstrBrowserStackScreenResolution(this);
+        }
+
+        public IWbTstrBrowserStackBrowser PreferedBrowserStackBrowser()
+        {
+            return new WbTstrBrowserStackBrowser(this);
+        }
+
+        public IWbTstr BootstrapInstance()
+        {
+            if (FluentSettings.Current.IsDryRun)
+            {
+                SeleniumWebDriver.DryRunBootstrap();
+            }
+            else if (RemoteDriverUri != null)
+            {
+                if (_browserStackLocalEnabled)
+                {
+                    string arguments = BrowserStackLocal.Instance.BuildArguments(_browserStackPassword,
+                        _browserStackLocalFolder,
+                        _browserStackOnlyAutomate,
+                        _browserStackForceLocal,
+                        _browserStackUseProxy,
+                        _browserStackProxyHost,
+                        _browserStackProxyPort,
+                        _browserStackProxyUser,
+                        _browserStackProxyPassword);
+
+                    BrowserStackLocal.Instance.Start(_uniqueIdentifier, arguments);
+                }
+
+                SeleniumWebDriver.Bootstrap(RemoteDriverUri, Capabilities);
+            }
+            else
+            {
+                SeleniumWebDriver.Bootstrap(_localWebDriver);
+            }
+
+            return this;
+        }
+
+        /*-------------------------------------------------------------------*/
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    // Dispose any managed objects
+                    // ...
+                }
+
+                // Now disposed of any unmanaged objects
+                BrowserStackLocal.Instance.Stop(_uniqueIdentifier);
+
+                _disposed = true;
+            }
+        }
+
+        /*-------------------------------------------------------------------*/
     }
 }
