@@ -21,10 +21,10 @@ namespace FluentAutomation
         private string _browserStackUsername;
         private string _browserStackPassword;
         private bool _browserStackLocalEnabled;
-        private bool _browserStackUseProxy = false;
+        private bool _browserStackUseProxy;
         private string _browserStackLocalFolder;
-        private bool _browserStackOnlyAutomate = false;
-        private bool _browserStackForceLocal = false;
+        private bool _browserStackOnlyAutomate;
+        private bool _browserStackForceLocal;
         private string _browserStackProxyHost;
         private int? _browserStackProxyPort;
         private string _browserStackProxyUser;
@@ -268,7 +268,6 @@ namespace FluentAutomation
             return wbTstr;
         }
 
-        
         public IWbTstr SetBrowserStackLocalFolder(string path)
         {
             _browserStackLocalFolder = path;
@@ -301,7 +300,6 @@ namespace FluentAutomation
 
         public IWbTstr DisableBrowserStackForceLocal()
         {
-            _browserStackUseProxy = true;
             _browserStackForceLocal = false;
             return this;
         }
@@ -341,17 +339,17 @@ namespace FluentAutomation
         }
 
 
-        public IWbTstrBrowserStackOperatingSystem PreferedOperatingSystem()
+        public IWbTstrBrowserStackOperatingSystem PreferedBrowserStackOperatingSystem()
         {
             return new WbTstrBrowserStackOperatingSystem(this);
         }
 
-        public IWbTstrBrowserStackScreenResolution PreferedScreenResolution()
+        public IWbTstrBrowserStackScreenResolution PreferedBrowserStackScreenResolution()
         {
             return new WbTstrBrowserStackScreenResolution(this);
         }
 
-        public IWbTstrBrowserStackBrowser PreferedBrowser()
+        public IWbTstrBrowserStackBrowser PreferedBrowserStackBrowser()
         {
             return new WbTstrBrowserStackBrowser(this);
         }

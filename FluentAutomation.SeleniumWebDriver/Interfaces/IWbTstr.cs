@@ -175,19 +175,19 @@ namespace FluentAutomation.Interfaces
         /// Specifies the prefered operating system (BrowserStack).
         /// </summary>
         /// <returns>Current WbTstr instance</returns>
-        IWbTstrBrowserStackOperatingSystem PreferedOperatingSystem();
+        IWbTstrBrowserStackOperatingSystem PreferedBrowserStackOperatingSystem();
 
         /// <summary>
         /// Specifies the prefered screen resolution (BrowserStack). 
         /// </summary>
         /// <returns>Current WbTstr instance</returns>
-        IWbTstrBrowserStackScreenResolution PreferedScreenResolution();
+        IWbTstrBrowserStackScreenResolution PreferedBrowserStackScreenResolution();
 
         /// <summary>
         /// Specifies the prefered browser (BrowserStack).
         /// </summary>
         /// <returns>Current WbTstr instance</returns>
-        IWbTstrBrowserStackBrowser PreferedBrowser();
+        IWbTstrBrowserStackBrowser PreferedBrowserStackBrowser();
 
         /// <summary>
         /// Sets a custom remote webdriver uri

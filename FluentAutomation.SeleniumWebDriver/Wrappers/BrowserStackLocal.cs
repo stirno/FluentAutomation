@@ -49,18 +49,17 @@ namespace FluentAutomation.Wrappers
 
         /*-------------------------------------------------------------------*/
 
-        public string BuildArguments(
-        string browserStackKey,
-        string browserStackLocalFolder,
-        bool browserStackOnlyAutomate,
-        bool browserStackForceLocal,
-        bool browserStackUseProxy,
-        string browserStackProxyHost,
-        int? browserStackProxyPort,
-        string browserStackProxyUser,
-        string browserStackProxyPassword)
+        public string BuildArguments(string browserStackKey, 
+                                     string browserStackLocalFolder, 
+                                     bool browserStackOnlyAutomate, 
+                                     bool browserStackForceLocal, 
+                                     bool browserStackUseProxy,
+                                     string browserStackProxyHost, 
+                                     int? browserStackProxyPort, 
+                                     string browserStackProxyUser, 
+                                     string browserStackProxyPassword)
         {
-            string arguments = "";
+            string arguments = string.Empty;
 
             if (!string.IsNullOrWhiteSpace(browserStackKey))
             {
@@ -73,7 +72,7 @@ namespace FluentAutomation.Wrappers
             
             if (!string.IsNullOrWhiteSpace(browserStackLocalFolder))
             {
-                arguments += " -f " + browserStackLocalFolder;
+                arguments += string.Format(" -f {0}", browserStackLocalFolder);
             }
 
             if (browserStackOnlyAutomate)
@@ -86,28 +85,29 @@ namespace FluentAutomation.Wrappers
                 arguments += " -forcelocal";
             }
 
-            if (browserStackUseProxy)
+            if (!browserStackUseProxy)
             {
-                if (string.IsNullOrWhiteSpace(browserStackProxyHost))
-                {
-                    arguments += " -proxyHost " + browserStackProxyHost; 
-                }
+                return arguments;
+            }
 
-                if (browserStackProxyPort != null )
-                {
-                    arguments += " -proxyPort " + browserStackProxyPort;
-                }
+            if (string.IsNullOrWhiteSpace(browserStackProxyHost))
+            {
+                arguments += string.Format(" -proxyHost {0}", browserStackProxyHost); 
+            }
+
+            if (browserStackProxyPort != null )
+            {
+                arguments += string.Format(" -proxyPort {0}", browserStackProxyPort);
+            }
                
-                if (!string.IsNullOrWhiteSpace(browserStackProxyUser))
-                {
-                    arguments += " -proxyUser " + browserStackProxyUser;
-                }
+            if (!string.IsNullOrWhiteSpace(browserStackProxyUser))
+            {
+                arguments += string.Format(" -proxyUser {0}", browserStackProxyUser);
+            }
 
-                if (!string.IsNullOrWhiteSpace(browserStackProxyPassword))
-                {
-                    arguments += " -proxyPass " + browserStackProxyPassword; 
-                }
-
+            if (!string.IsNullOrWhiteSpace(browserStackProxyPassword))
+            {
+                arguments += string.Format(" -proxyPass {0}", browserStackProxyPassword); 
             }
 
             return arguments;
