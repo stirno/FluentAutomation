@@ -51,3 +51,8 @@ _ReSharper*/
 *~
 pvc-packages
 *.nupkg
+
+# docs
+node_modules
+Docs/node_modules
+*-wrapped.html

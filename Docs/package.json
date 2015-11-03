@@ -1,0 +1,27 @@
+{
+  "name": "FluentAutomation-Documentation",
+  "url": "http://fluent.stirno.com/docs/",
+  "email": "stirno@gmail.com",
+  "license": "MIT",
+  "maintainers": [
+    "Brandon Stirnaman <stirno@gmail.com>"
+  ],
+  "repository": "https://github.com/stirno/FluentAutomation.git",
+  "scripts": {
+    "build": "node build.js",
+    "start": "node build.js --watch"
+  },
+  "devDependencies": {
+    "open": "~0.0.5",
+    "livereload": "~0.4.0",
+    "connect": "~3.4.0",
+    "async": "~0.4.0",
+    "github-flavored-markdown": "~1.0.1",
+    "handlebars": "~4.0.4",
+    "front-matter": "~2.0.0",
+    "minimist": "~1.2.0",
+    "serve-static": "~1.10.0",
+    "connect-livereload": "~0.5.3",
+    "node-watch": "~0.3.4"
+  }
+}
