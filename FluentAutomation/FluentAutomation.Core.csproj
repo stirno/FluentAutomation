@@ -62,6 +62,7 @@
     <Compile Include="Interfaces\IAssertCssPropertySyntaxProvider.cs" />
     <Compile Include="Interfaces\IAssertClassSyntaxProvider.cs" />
     <Compile Include="Interfaces\IAssertCountSyntaxProvider.cs" />
+    <Compile Include="Interfaces\ICheckSyntaxProvider.cs" />
     <Compile Include="Interfaces\INotAssertSyntaxProvider.cs" />
     <Compile Include="Interfaces\IAssertSyntaxProvider.cs" />
     <Compile Include="Interfaces\IDragDropByPositionSyntaxProvider.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="WbTstrAssertSyntaxProvider.cs" />
     <Compile Include="WbTstrAssertTextSyntaxProvider.cs" />
     <Compile Include="WbTstrAssertValueSyntaxProvider.cs" />
+    <Compile Include="WbTstrCheckSyntaxProvider.cs" />
     <Compile Include="WbTstrDragDropByPositionSyntaxProvider.cs" />
     <Compile Include="WbTstrDragDropSyntaxProvider.cs" />
     <Compile Include="WbTstrElement.cs" />

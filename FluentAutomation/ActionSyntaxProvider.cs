@@ -779,7 +779,7 @@ namespace FluentAutomation
         }
         #endregion
 
-        #region Assert / Expect
+        #region Assert / Expect / Check
         private AssertSyntaxProvider expect = null;
         public IAssertSyntaxProvider Expect
         {
@@ -808,6 +808,14 @@ namespace FluentAutomation
             }
         }
         #endregion
+
+        public ICheckSyntaxProvider Check
+        {
+            get
+            {
+                throw new NotImplementedException("Use WbTstrActionSyntaxProvider for Check functionality.");
+            }
+        }
 
         private bool isDisposed = false;
         public bool IsDisposed()

@@ -10,6 +10,7 @@ namespace FluentAutomation
         private readonly ILogger _logger;
         private IAssertSyntaxProvider _expect;
         private IAssertSyntaxProvider _assert;
+        private ICheckSyntaxProvider _check;
 
         public WbTstrActionSyntaxProvider(ActionSyntaxProvider actionSyntaxProvider, ILogger logger)
         {
@@ -20,6 +21,15 @@ namespace FluentAutomation
         }
       
         /*-------------------------------------------------------------------*/
+
+        public ICheckSyntaxProvider Check
+        {
+            get
+            {
+                _logger.LogPartialMessage("I check ");
+                return _check ?? (_check = new WbTstrCheckSyntaxProvider(_actionSyntaxProvider.Assert, _logger));
+            }
+        }
 
         public IAssertSyntaxProvider Expect
         {
