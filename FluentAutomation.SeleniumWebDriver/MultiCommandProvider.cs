@@ -89,6 +89,11 @@ namespace FluentAutomation
         {
             this.RepackExceptions(() => Parallel.ForEach(element.Elements, e => e.Item1.DoubleClick(new ElementProxy(e.Item1, e.Item2))));
         }
+        
+        public void ExecuteJavaScript(string script)
+        {
+            this.RepackExceptions(() => Parallel.ForEach(this.commandProviders, xx => xx.ExecuteJavaScript(script)));
+        }
 
         public void RightClick(int x, int y)
         {

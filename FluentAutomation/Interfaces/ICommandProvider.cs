@@ -73,7 +73,7 @@ namespace FluentAutomation.Interfaces
         void AlertText(Action<string> matchFunc);
         void AlertEnterText(string text);
         void Visible(ElementProxy element, Action<bool> action);
-
+        void ExecuteJavaScript(string script);
         void CssPropertyValue(ElementProxy element, string propertyName, Action<bool, string> action);
 
         void Act(CommandType commandType, Action action);
