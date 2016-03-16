@@ -229,6 +229,13 @@ namespace FluentAutomation.Interfaces
         IActionSyntaxProvider DoubleClick(string selector, int x, int y);
 
         /// <summary>
+        /// Executes a script.
+        /// </summary>
+        /// <param name="script">The script.</param>
+        /// <returns></returns>
+        IActionSyntaxProvider ExecuteJavaScript(string script);
+
+        /// <summary>
         /// RightClick at the specified coordinates.
         /// </summary>
         /// <param name="x">X-coordinate specified.</param>

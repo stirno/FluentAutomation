@@ -251,6 +251,15 @@ namespace FluentAutomation
             });
         }
 
+        public void ExecuteJavaScript(string script)
+        {
+            this.Act(CommandType.Action, false, () =>
+            {
+                var jsExec = this.webDriver as IJavaScriptExecutor;
+                jsExec.ExecuteScript(script);
+            });
+        }
+
         public void RightClick(int x, int y)
         {
             this.Act(CommandType.Action, () =>

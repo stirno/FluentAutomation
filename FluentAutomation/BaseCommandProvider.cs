@@ -52,10 +52,15 @@ namespace FluentAutomation
 
         public void Act(CommandType commandType, Action action)
         {
+            this.Act(commandType, this.WaitOnAction(commandType), action);
+        }
+
+        protected void Act(CommandType commandType, bool waitOnAction, Action action)
+        {
             bool originalWaitOnActions = this.Settings.WaitOnAllActions;
             try
             {
-                if (this.WaitOnAction(commandType))
+                if (waitOnAction)
                 {
                     this.WaitUntil(() => action(), this.Settings.WaitUntilTimeout);
                 }

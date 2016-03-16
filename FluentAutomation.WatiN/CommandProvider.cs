@@ -233,6 +233,14 @@ namespace FluentAutomation
                 this.ActiveDomContainer.Eval(string.Format("if (typeof jQuery != 'undefined') {{ jQuery({0}).dblclick(); }}", el.AutomationElement.GetJavascriptElementReference()));
             });
         }
+        
+        public void ExecuteJavaScript(string script)
+        {
+            this.Act(CommandType.Action, false, () =>
+            {
+                this.browser.Eval(script);
+            });
+        }
 
         public void RightClick(int x, int y)
         {

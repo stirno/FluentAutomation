@@ -94,6 +94,12 @@ namespace FluentAutomation
             return this;
         }
 
+        public IActionSyntaxProvider ExecuteJavaScript(string script)
+        {
+            this.commandProvider.ExecuteJavaScript(script);
+            return this;
+        }
+
         public IActionSyntaxProvider Scroll(int x, int y)
         {
             this.commandProvider.Hover(x, y);
