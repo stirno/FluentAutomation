@@ -1186,7 +1186,7 @@ FluentSession.SetStickySession(this.Session);
         : base(test)
     {
         Url = "<a href='http://bing.com/'>http://bing.com/</a>";
-        At = () =>; I.Expect.Exists(SearchInput);
+        At = () => I.Expect.Exists(SearchInput);
     }
 &nbsp;
     public BingSearchResultsPage Search(string searchText)
