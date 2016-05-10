@@ -15,10 +15,10 @@ Often this function is used to break through the abstraction and get direct acce
 var element = I.Find("#searchBox");
 
 // Get reference to underlying IWebElement (Selenium)
-var webElement = element() as OpenQA.Selenium.IWebElement;
+var webElement = (element.Element as Element)?.WebElement as OpenQA.Selenium.IWebElement;
 
 // Get reference to underlying WatiN.Core.Element (WatiN)
-var webElement = element() as WatiN.Core.Element;
+var webElement = (element.Element as Element)?.WebElement as WatiN.Core.Element;
 
 // Find a collection of elements matching selector
 var listItems = I.FindMultiple("li");
