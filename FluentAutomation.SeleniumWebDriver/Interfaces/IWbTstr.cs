@@ -119,6 +119,24 @@ namespace FluentAutomation.Interfaces
         IWbTstr SetBrowserStackProxyPassword(string password);
 
         /// <summary>
+        /// Set the proxy host for PhantomJs (e.g. address or address:port)
+        /// </summary>
+        /// <param name="host">address of the proxy (optionally with port)</param>
+        /// <returns></returns>
+        IWbTstr SetPhantomProxyHost(string host);
+
+        string GetPhantomProxyHost();
+
+        /// <summary>
+        /// Set the proxy authentication for PhantomJs (e.g. username:password)
+        /// </summary>
+        /// <param name="authentication">Username and password for proxy</param>
+        /// <returns></returns>
+        IWbTstr SetPhantomProxyAuthentication(string authentication);
+
+        string GetPhantomProxyAuthentication();
+
+        /// <summary>
         /// Disable BrowserStack local testing proxy
         /// </summary>
         /// <returns>Current WbTstr instance</returns>

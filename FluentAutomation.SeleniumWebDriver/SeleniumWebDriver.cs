@@ -15,6 +15,7 @@ using System.Reflection;
 using Polly;
 
 using TinyIoC;
+using OpenQA.Selenium.PhantomJS;
 
 namespace FluentAutomation
 {
@@ -258,10 +259,25 @@ namespace FluentAutomation
 
                     return new Func<IWebDriver>(() => new OpenQA.Selenium.Chrome.ChromeDriver(chromeService, chromeOptions, commandTimeout));
                 case Browser.PhantomJs:
-                    driverPath = EmbeddedResources.UnpackFromAssembly("phantomjs.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
+                    var uniqueNamePhantom = string.Format("phantomjs_{0}.exe", Guid.NewGuid());
+                    driverPath = EmbeddedResources.UnpackFromAssembly("phantomjs.exe", uniqueNamePhantom, Assembly.GetAssembly(typeof(SeleniumWebDriver)));
+                    var phantomService = PhantomJSDriverService.CreateDefaultService(Path.GetDirectoryName(driverPath), uniqueNamePhantom);
 
-                    var phantomOptions = new OpenQA.Selenium.PhantomJS.PhantomJSOptions();
-                    return new Func<IWebDriver>(() => new OpenQA.Selenium.PhantomJS.PhantomJSDriver(Path.GetDirectoryName(driverPath), phantomOptions, commandTimeout));
+                    IWbTstr config = WbTstr.Configure();
+                    string proxyHost = config.GetPhantomProxyHost();
+                    if (!string.IsNullOrWhiteSpace(proxyHost))
+                    {
+                        phantomService.Proxy = proxyHost;
+                        phantomService.ProxyType = "http";
+
+                        string proxyAuthentication = config.GetPhantomProxyAuthentication();
+                        if (!string.IsNullOrWhiteSpace(proxyAuthentication))
+                        {
+                            phantomService.ProxyAuthentication = proxyAuthentication;
+                        }
+                    }
+
+                    return new Func<IWebDriver>(() => new PhantomJSDriver(phantomService, new PhantomJSOptions(), commandTimeout));
             }
 
             throw new NotImplementedException("Selected browser " + browser.ToString() + " is not supported yet.");

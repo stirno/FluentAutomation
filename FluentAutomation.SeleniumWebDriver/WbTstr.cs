@@ -30,6 +30,8 @@ namespace FluentAutomation
         private string _browserStackProxyUser;
         private string _browserStackProxyPassword;
         private SeleniumWebDriver.Browser _localWebDriver;
+        private string _phantomProxyHost;
+        private string _phantomProxyAuthentication;
 
         private bool _disposed;
 
@@ -302,6 +304,28 @@ namespace FluentAutomation
         {
             _browserStackForceLocal = false;
             return this;
+        }
+
+        public IWbTstr SetPhantomProxyHost(string host)
+        {
+            _phantomProxyHost = host;
+            return this;
+        }
+
+        public string GetPhantomProxyHost()
+        {
+            return _phantomProxyHost;
+        }
+
+        public IWbTstr SetPhantomProxyAuthentication(string authentication)
+        {
+            _phantomProxyAuthentication = authentication;
+            return this;
+        }
+
+        public string GetPhantomProxyAuthentication()
+        {
+            return _phantomProxyAuthentication;
         }
 
         public IWbTstr SetBrowserStackProxyHost(string host)
