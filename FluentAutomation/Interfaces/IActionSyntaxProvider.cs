@@ -438,5 +438,7 @@ namespace FluentAutomation.Interfaces
         /// Switch to another window or frame.
         /// </summary>
         ISwitchSyntaxProvider Switch { get; }
+
+        ICheckSyntaxProvider Check { get; }
     }
 }

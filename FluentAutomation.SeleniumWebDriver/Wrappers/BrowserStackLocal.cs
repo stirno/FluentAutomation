@@ -49,7 +49,71 @@ namespace FluentAutomation.Wrappers
 
         /*-------------------------------------------------------------------*/
 
-        public bool Start(string browserStackKey, string identifier)
+        public string BuildArguments(string browserStackKey, 
+                                     string browserStackLocalFolder, 
+                                     bool browserStackOnlyAutomate, 
+                                     bool browserStackForceLocal, 
+                                     bool browserStackUseProxy,
+                                     string browserStackProxyHost, 
+                                     int? browserStackProxyPort, 
+                                     string browserStackProxyUser, 
+                                     string browserStackProxyPassword)
+        {
+            string arguments = string.Empty;
+
+            if (!string.IsNullOrWhiteSpace(browserStackKey))
+            {
+                arguments += browserStackKey;
+            }
+            else
+            {
+               throw new ArgumentNullException("browserStackKey");
+            }
+            
+            if (!string.IsNullOrWhiteSpace(browserStackLocalFolder))
+            {
+                arguments += string.Format(" -f {0}", browserStackLocalFolder);
+            }
+
+            if (browserStackOnlyAutomate)
+            {
+                arguments += " -onlyAutomate";
+            }
+
+            if (browserStackForceLocal)
+            {
+                arguments += " -forcelocal";
+            }
+
+            if (!browserStackUseProxy)
+            {
+                return arguments;
+            }
+
+            if (string.IsNullOrWhiteSpace(browserStackProxyHost))
+            {
+                arguments += string.Format(" -proxyHost {0}", browserStackProxyHost); 
+            }
+
+            if (browserStackProxyPort != null )
+            {
+                arguments += string.Format(" -proxyPort {0}", browserStackProxyPort);
+            }
+               
+            if (!string.IsNullOrWhiteSpace(browserStackProxyUser))
+            {
+                arguments += string.Format(" -proxyUser {0}", browserStackProxyUser);
+            }
+
+            if (!string.IsNullOrWhiteSpace(browserStackProxyPassword))
+            {
+                arguments += string.Format(" -proxyPass {0}", browserStackProxyPassword); 
+            }
+
+            return arguments;
+        }
+
+        public bool Start(string identifier, string arguments)
         {
             using (var mutex = new Mutex(false, MutexName))
             {
@@ -79,7 +143,7 @@ namespace FluentAutomation.Wrappers
                             Assembly.GetAssembly(typeof(SeleniumWebDriver)));
 
                         // Start a new process
-                        var processStartInfo = GetProcessStartInfo(fullPathToExe, browserStackKey, identifier);
+                        var processStartInfo = GetProcessStartInfo(fullPathToExe, identifier, arguments);
                         process = Process.Start(processStartInfo);
 
                         if (process != null)
@@ -196,11 +260,10 @@ namespace FluentAutomation.Wrappers
             }
         }
 
-        private ProcessStartInfo GetProcessStartInfo(string fullPathToExe, string browserStackKey, string identifier)
+        private ProcessStartInfo GetProcessStartInfo(string fullPathToExe, string identifier, string arguments)
         {
             if (fullPathToExe == null) throw new ArgumentNullException("fullPathToExe");
-            if (browserStackKey == null) throw new ArgumentNullException("browserStackKey");
-
+            
             // Compose process start info instance
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.CreateNoWindow = !FluentSettings.Current.InDebugMode;
@@ -208,7 +271,7 @@ namespace FluentAutomation.Wrappers
             startInfo.RedirectStandardOutput = false;
             startInfo.FileName = fullPathToExe;
             startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            startInfo.Arguments = string.Format("-localIdentifier {0} {1}", identifier, browserStackKey);
+            startInfo.Arguments = arguments + " -localIdentifier " + identifier;
 
             return startInfo;
         }

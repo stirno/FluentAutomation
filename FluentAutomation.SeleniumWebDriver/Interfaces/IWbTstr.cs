@@ -54,6 +54,96 @@ namespace FluentAutomation.Interfaces
         IWbTstr SetBrowserStackBuildIdentifier(string buildName);
 
         /// <summary>
+        /// Allow BrowserStack to access a local folder
+        /// </summary>
+        /// <param name="path">Path to local folder</param>
+        /// <returns>Current WbTstr instance</returns>
+        IWbTstr SetBrowserStackLocalFolder(string path);
+
+        /// <summary>
+        /// Disable BrowserStack access a local folder
+        /// </summary>
+        /// <returns>Current WbTstr instance</returns>
+        IWbTstr DisableBrowserStackLocalFolder();
+
+        /// <summary>
+        /// Set BrowserStack local testing connection to only automate
+        /// </summary>
+        /// <returns>Current WbTstr instance</returns>
+        IWbTstr EnableBrowserStackOnlyAutomate();
+
+        /// <summary>
+        /// Disable BrowserStack local connection for only automate
+        /// </summary>
+        /// <returns>Current WbTstr instance</returns>
+        IWbTstr DisableBrowserStackOnlyAutomate();
+
+        /// <summary>
+        /// Set BrowserStack local testing to force local
+        /// </summary>
+        /// <returns>Current WbTstr instance</returns>
+        IWbTstr EnableBrowserStackForceLocal();
+
+        /// <summary>
+        /// Disable BrowserStack local connection to be forced local
+        /// </summary>
+        /// <returns>Current WbTstr instance</returns>
+        IWbTstr DisableBrowserStackForceLocal();
+
+        /// <summary>
+        /// Set BrowserStack local testing proxy host
+        /// </summary>
+        /// <param name="host">proxy hostname</param>
+        /// <returns>Current WbTstr instance</returns>
+        IWbTstr SetBrowserStackProxyHost(string host);
+
+        /// <summary>
+        /// Set BrowserStack local testing proxy port
+        /// </summary>
+        /// <param name="port">proxy port</param>
+        /// <returns></returns>
+        IWbTstr SetBrowserStackProxyPort(int port);
+
+        /// <summary>
+        /// Set BrowserStack local testing proxy user
+        /// </summary>
+        /// <param name="user">proxy username</param>
+        /// <returns>Current WbTstr instance</returns>
+        IWbTstr SetBrowserStackProxyUser(string user);
+
+        /// <summary>
+        /// Set BrowserStack local testing proxy password
+        /// </summary>
+        /// <param name="password">proxy password</param>
+        /// <returns>Current WbTstr instance</returns>
+        IWbTstr SetBrowserStackProxyPassword(string password);
+
+        /// <summary>
+        /// Set the proxy host for PhantomJs (e.g. address or address:port)
+        /// </summary>
+        /// <param name="host">address of the proxy (optionally with port)</param>
+        /// <returns></returns>
+        IWbTstr SetPhantomProxyHost(string host);
+
+        string GetPhantomProxyHost();
+
+        /// <summary>
+        /// Set the proxy authentication for PhantomJs (e.g. username:password)
+        /// </summary>
+        /// <param name="authentication">Username and password for proxy</param>
+        /// <returns></returns>
+        IWbTstr SetPhantomProxyAuthentication(string authentication);
+
+        string GetPhantomProxyAuthentication();
+
+        /// <summary>
+        /// Disable BrowserStack local testing proxy
+        /// </summary>
+        /// <returns>Current WbTstr instance</returns>
+        IWbTstr DisableBrowserStackProxy();
+ 
+
+        /// <summary>
         /// Enable debug, including BrowserStack debug.
         /// </summary>
         /// <returns>Current WbTstr instance</returns>
@@ -103,19 +193,19 @@ namespace FluentAutomation.Interfaces
         /// Specifies the prefered operating system (BrowserStack).
         /// </summary>
         /// <returns>Current WbTstr instance</returns>
-        IWbTstrBrowserStackOperatingSystem PreferedOperatingSystem();
+        IWbTstrBrowserStackOperatingSystem PreferedBrowserStackOperatingSystem();
 
         /// <summary>
         /// Specifies the prefered screen resolution (BrowserStack). 
         /// </summary>
         /// <returns>Current WbTstr instance</returns>
-        IWbTstrBrowserStackScreenResolution PreferedScreenResolution();
+        IWbTstrBrowserStackScreenResolution PreferedBrowserStackScreenResolution();
 
         /// <summary>
         /// Specifies the prefered browser (BrowserStack).
         /// </summary>
         /// <returns>Current WbTstr instance</returns>
-        IWbTstrBrowserStackBrowser PreferedBrowser();
+        IWbTstrBrowserStackBrowser PreferedBrowserStackBrowser();
 
         /// <summary>
         /// Sets a custom remote webdriver uri
