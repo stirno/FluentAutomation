@@ -65,8 +65,13 @@ namespace FluentAutomation
             if (filePath != string.Empty && new FileInfo(filePath).Length == resourceStream.Length)
                 return filePath;
 
-            var resourceBytes = new byte[(int)resourceStream.Length];
             var tmpPath = Path.Combine(Path.GetTempPath(), outputFileName);
+            var tmpFileInfo = new FileInfo(tmpPath);
+
+            if (tmpFileInfo.Exists && tmpFileInfo.Length == resourceStream.Length)
+                return tmpPath;
+
+            var resourceBytes = new byte[(int)resourceStream.Length];
             resourceStream.Read(resourceBytes, 0, resourceBytes.Length);
             File.WriteAllBytes(tmpPath, resourceBytes);
 
