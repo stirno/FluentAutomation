@@ -16,7 +16,8 @@
     <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <NuGetPackageImportStamp>f8877a84</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,14 +40,17 @@
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
-    <Reference Include="WebDriver">
+    <Reference Include="WebDriver, Version=2.41.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Selenium.WebDriver.2.41.0\lib\net40\WebDriver.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="WebDriver.Support">
+    <Reference Include="WebDriver.Support, Version=2.41.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Selenium.Support.2.41.0\lib\net40\WebDriver.Support.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="xunit">
+    <Reference Include="xunit, Version=1.9.0.1566, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <HintPath>..\packages\xunit.1.9.0.1566\lib\xunit.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <Choose>
@@ -122,7 +126,7 @@
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\xunit.runner.visualstudio.2.0.0\build\net20\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.runner.visualstudio.2.0.0\build\net20\xunit.runner.visualstudio.props'))" />
   </Target>
