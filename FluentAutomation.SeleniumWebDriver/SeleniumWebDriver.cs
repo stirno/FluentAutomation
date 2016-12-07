@@ -245,6 +245,7 @@ namespace FluentAutomation
                     driverPath = EmbeddedResources.UnpackFromAssembly("chromedriver.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
 
                     var chromeService = ChromeDriverService.CreateDefaultService(Path.GetDirectoryName(driverPath));
+                    chromeService.HideCommandPromptWindow = true;
                     chromeService.SuppressInitialDiagnosticInformation = true;
 
                     var chromeOptions = new ChromeOptions();
@@ -253,9 +254,10 @@ namespace FluentAutomation
                     return new Func<IWebDriver>(() => new OpenQA.Selenium.Chrome.ChromeDriver(chromeService, chromeOptions, commandTimeout));
                 case Browser.PhantomJs:
                     driverPath = EmbeddedResources.UnpackFromAssembly("phantomjs.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
-
+                    var phantomService = OpenQA.Selenium.PhantomJS.PhantomJSDriverService.CreateDefaultService(Path.GetDirectoryName(driverPath));
+                    phantomService.HideCommandPromptWindow = true;
                     var phantomOptions = new OpenQA.Selenium.PhantomJS.PhantomJSOptions();
-                    return new Func<IWebDriver>(() => new OpenQA.Selenium.PhantomJS.PhantomJSDriver(Path.GetDirectoryName(driverPath), phantomOptions, commandTimeout));
+                    return new Func<IWebDriver>(() => new OpenQA.Selenium.PhantomJS.PhantomJSDriver(phantomService, phantomOptions, commandTimeout));
             }
 
             throw new NotImplementedException("Selected browser " + browser.ToString() + " is not supported yet.");
