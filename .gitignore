@@ -51,3 +51,4 @@ _ReSharper*/
 *~
 pvc-packages
 *.nupkg
+/.vs

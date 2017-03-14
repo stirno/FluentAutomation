@@ -18,7 +18,9 @@ namespace FluentAutomation
     public class CommandProvider : BaseCommandProvider, ICommandProvider, IDisposable
     {
         private readonly IFileStoreProvider fileStoreProvider = null;
-        private readonly Lazy<IWebDriver> lazyWebDriver = null;
+        private readonly Func<IWebDriver> webDriverFactory = null;
+
+        private Lazy<IWebDriver> lazyWebDriver = null;
         private IWebDriver webDriver
         {
             get
@@ -33,6 +35,14 @@ namespace FluentAutomation
         {
             FluentTest.ProviderInstance = null;
 
+            this.webDriverFactory = webDriverFactory;
+            this.fileStoreProvider = fileStoreProvider;
+
+            ReconfigureWebDriver();
+        }
+
+        protected void ReconfigureWebDriver()
+        {
             this.lazyWebDriver = new Lazy<IWebDriver>(() =>
             {
                 var webDriver = webDriverFactory();
@@ -41,7 +51,7 @@ namespace FluentAutomation
 
                 webDriver.Manage().Cookies.DeleteAllCookies();
                 webDriver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(10));
-                
+
                 // If an alert is open, the world ends if we touch the size property. Ignore this and let it get set by the next command chain
                 try
                 {
@@ -74,8 +84,6 @@ namespace FluentAutomation
 
                 return webDriver;
             });
-
-            this.fileStoreProvider = fileStoreProvider;
         }
 
         public ICommandProvider WithConfig(FluentSettings settings)
@@ -628,6 +636,7 @@ namespace FluentAutomation
         }
 
         public static IAlert ActiveAlert = null;
+
         private void SetActiveAlert()
         {
             if (ActiveAlert == null)
