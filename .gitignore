@@ -33,6 +33,7 @@ obj/
 Ankh.NoLoad
 *.svclog
 packages/
+.vs/
 
 #Tooling
 _ReSharper*/
@@ -51,4 +52,8 @@ _ReSharper*/
 *~
 pvc-packages
 *.nupkg
-/.vs
+
+# docs
+node_modules
+Docs/node_modules
+*-wrapped.html

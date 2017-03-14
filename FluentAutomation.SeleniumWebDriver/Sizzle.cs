@@ -43,7 +43,14 @@ a){var b=F.exec(a);b&&(b[1]=(b[1]||"""").toLowerCase(),b[3]=b[3]&&new RegExp(""(
             {
                 if ((bool)executor.ExecuteScript("return typeof fluentjQuery == 'undefined'"))
                 {
-                    executor.ExecuteScript(sizzleScriptInjection);
+                    if ((bool)executor.ExecuteScript("return typeof window.jQuery == 'undefined'"))
+                    {
+                        executor.ExecuteScript(sizzleScriptInjection);
+                    }
+                    else
+                    {
+                        executor.ExecuteScript("window.fluentjQuery = window.jQuery");
+                    }
                 }
             }
             catch { }

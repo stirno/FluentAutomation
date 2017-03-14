@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!--
+	This file exists solely for developing the documentation - It is not used on the fluent.stirno.com website. That is
+	controlled by a template within our CMS that can't easily be used without it.
+	-->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>FluentAutomation - Documentation</title>
+    <meta name="description" content="" />
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="MobileOptimized" content="320" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css?v=06390f394c" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/stirno.css?v=06390f394c" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/docs.css?v=06390f394c" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto+Slab:300,700|Open+Sans:700,400|Ubuntu+Mono:400|Inconsolata:400" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/tomorrow.min.css?v=06390f394c">
+<link rel="alternate" type="application/rss+xml" title="FluentAutomation" href="/rss/">
+<link rel="canonical" href="http://10.0.1.20:2368/docs/" />  
+</head>
+<body class="post-template page">
+    <h1 class="wat">FluentAutomation</h1>
+    <section id="author_box">
+        <div class="gravatar">
+            <a href="/">
+            <img src="//www.gravatar.com/avatar/f0911b8dd77a34c0354968639b4545f4.jpg?s=64">
+            
+            <br />
+            <span class="name">Brandon Stirnaman</a>
+            </a>
+            <br />
+            <a target="_blank" href="//twitter.com/stirno" alt="Follow me on Twitter" title="Follow me on Twitter">
+                <i class="fa fa-twitter"></i>
+            </a>
+            <a target="_blank" href="//github.com/stirno" alt="Follow me on GitHub" title="Follow me on GitHub">
+                <i class="fa fa-github"></i>
+            </a>
+            <a target="_blank" href="//linkedin.com/in/brandonstirnaman/" alt="View my resume on LinkedIn" title="View my resume on LinkedIn">
+                <i class="fa fa-linkedin-square"></i>
+            </a>
+            <a target="_blank" href="//gittip.com/stirno" alt="Tips Welcome!" title="Tips Welcome!">
+                <i class="fa fa-gittip"></i>
+            </a>
+        </div>
+
+        <div class="fa-oss">
+            <span class="title"><a href="//github.com/stirno/FluentAutomation">FluentAutomation</a> <span class="role">Creator</span></span>
+            <br />
+            <span class="desc">
+            Simple, fluent automated testing for web applications.
+            </span>
+            <span class="icons">
+            <a target="_blank" href="//github.com/stirno/FluentAutomation" alt="Check out FluentAutomation on GitHub" title="Check out FluentAutomation on GitHub">
+                <i class="fa fa-github"></i>
+            </a>
+            <a target="_blank" href="//nuget.org/profiles/stirno" alt="Download FluentAutomation from nuget.org" title="Download FluentAutomation from nuget.org">
+                <i class="fa fa-download"></i>
+            </a>
+            <a target="_blank" href="//nuget.org/profiles/stirno" alt="Vote, suggest features on UserVoice" title="Vote, suggest features on UserVoice">
+                <i class="fa fa-bullhorn"></i>
+            </a>
+            </span>
+            <br />
+            <ul class="links">
+                <li><a href="/docs/#getting-started-wat">Getting Started</a></li>
+                <li><a href="/docs/">Documentation</a></li>
+            </ul>
+            <br style="clear: both"/>
+            <br />
+            <div class="nuget-badge">
+                <code>
+PM&gt; <a title="FluentAutomation.SeleniumWebDriver on NuGet" href="//nuget.org/packages/FluentAutomation.SeleniumWebDriver">Install-Package FluentAutomation.SeleniumWebDriver</a><br><br>
+PM&gt; <a title="FluentAutomation.WatiN on NuGet" href="//nuget.org/packages/FluentAutomation.WatiN">Install-Package FluentAutomation.WatiN</a>
+                </code>
+                <div class="bottom">
+
+            Available on NuGet
+                </div>
+            </div>
+
+        </div>
+        <br />
+        <div class="f14n">
+            <span class="title"><a href="//f14n.com">F14N</a> <span class="role">Founder</span></span>
+            <br />
+            <span class="desc">
+            Fast, easy automation test creation, execution and management.
+            </span>
+        </div>
+        <div class="author_box_bg"></div>
+    </section>
+
+	<main class="content" role="main">
+	    <article class="post page docs">
+
+{{> docsTemplate}}
+
+	    </article>
+	</main>
+
+	<script type="text/javascript">
+	setTimeout(function () {
+	    $(function () {
+	        var height = $(window).innerHeight();
+	        $(".doc_page").css({
+	            minHeight: height
+	        });
+
+	        $(window).on("resize", function () {
+	            var height = $(window).innerHeight();
+	            $(".doc_page").css({
+	                minHeight: height
+	            });
+	        });
+
+	        if (window.location.hash != null) {
+	            setTimeout(function () {
+
+	                if (window.location.hash != null) {
+	                    var hashObject = $(window.location.hash);
+
+	                    if (hashObject.length != 0)
+	                        $(document).scrollTop(hashObject.offset().top);
+	                }
+	            }, 400);
+	        }
+
+	        $("body").css({ backgroundColor: '#F7FAFB' });
+	        setTimeout(function () {
+	            $("section.doc_content").animate({ opacity: 1 }, 500);
+	        }, 500);
+
+	        $("#author_box, ul.menu").addClass("animate-left");
+
+	        //$("#author_box, ul.menu").animate({ left: "-=320" }, 500);
+
+	        $("#author_box").on("mouseenter", function () {
+	            $("#author_box").removeClass("animate-left");
+	            //$("#author_box").animate({ left: "+=320" }, 200);
+	        });
+
+	        $("#author_box").on("mouseleave", function () {
+	            $("#author_box").addClass("animate-left");
+	            //$("#author_box").animate({ left: "-=320" }, 200);
+	        });
+
+	        $('ul.menu a, .doc_page a').not('[target="_blank"]').click(function() {
+	            var elementClicked = $(this).attr("href");
+	            var destination = $(elementClicked).offset().top;
+	            $("html:not(:animated),body:not(:animated)").animate({ scrollTop: destination}, 500 );
+
+	            if (history != null)
+	                history.replaceState(null, '', elementClicked);
+
+	            return false;
+	        });
+	    });
+	}, 0)
+	</script>
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js?v=06390f394c"></script>
+    <script type="text/javascript" src="/assets/js/highlight.min.js?v=06390f394c"></script>
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js?v=06390f394c"></script>
+    <script type="text/javascript" src="/assets/js/index.js?v=06390f394c"></script>
+    <script type="text/javascript" src="/assets/js/scrollspy.js?v=06390f394c"></script>
+</body>
+</html>

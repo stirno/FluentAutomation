@@ -1,0 +1,199 @@
+#author_box, #author_box_bg {
+	width: 300px;
+	background-color: #000;
+    -webkit-transition: background 0.5s linear;
+    -moz-transition: background 0.5s linear;
+    -ms-transition: background 0.5s linear;
+    -o-transition: background 0.5s linear;
+    transition: background 0.5s linear;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	bottom: 0px;
+	z-index: 1;
+	padding: 20px;
+	display: table-cell;
+	vertical-align: middle;
+	color: #fff;
+	-webkit-transition: left 500ms;
+	transition: left 500ms;
+}
+
+#author_box .author_box_bg {
+	background: url(../pageobject.png);
+	background-position: left -170px top -100px;
+	opacity: 0.1;
+	z-index: -1;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+#author_box a {
+	text-decoration: none;
+	color: #fff;
+	cursor: pointer;
+}
+
+#author_box .gravatar {
+	margin: 30px;
+	text-align: center;
+}
+
+#author_box img {
+	border: 3px solid #333;
+	background-color: #fff;
+	border-radius: 50%;
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+	margin: 0 auto;
+	text-align: center;
+}
+
+#author_box .role {
+	font-size: 12px;
+	color: #ccc;
+	line-height: 20px;
+	text-shadow: #000 1px 1px 1px;
+}
+
+main.content {
+	margin-left: 340px;
+	max-width: none;
+	position: relative;
+}
+
+main.content  .post {
+	max-width: none;
+	width: 90%;
+}
+
+.home-template .post:nth-child(1) {
+	margin-top: 20px;
+}
+
+.post-template main.content {
+	padding-top: 20px;
+}
+
+#author_box .title {
+	font-style: italic;
+	font-weight: 300;
+	text-shadow: #000 1px 1px 1px;
+}
+
+#author_box .name {
+	font-size: 24px;
+	text-shadow: #000 1px 1px 1px;
+}
+
+#author_box .desc {
+	font-size: 16px;
+	line-height: 16px;
+}
+
+.fa {
+	text-shadow: #000 0px 1px 1px;
+}
+
+.nuget-badge {
+	font-size: 14px;
+	font-family: 'Open Sans';
+}
+
+.nuget-badge code {
+	border-radius: 5px;
+	border-bottom-left-radius: 0px;
+	border-bottom-right-radius: 0px;
+	background-color: #202020;
+	color: #E2E2E2;
+	display: block;
+	font: 10px 'andale mono', 'lucida console', monospace;
+	line-height: 10px;
+	overflow: auto;
+	padding: 4px 6px;
+	border: none;
+	margin: 0;
+	white-space: pre-wrap;
+}
+
+.nuget-badge .bottom {
+	border-radius: 5px;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
+	background-color: #444;
+	text-align: center;
+	text-transform: uppercase;
+}
+
+h1.wat {
+	position: absolute;
+	width: 0;
+	height: 0;
+	opacity: 0;
+}
+
+span.icons {
+	margin-left: 10px;
+}
+
+ul.links {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	margin-top: 8px;
+}
+
+ul.links li {
+	font-size: 14px;
+	background-color: #eee;
+	padding: 4px;
+	width: 45%;
+	float: left;
+	margin-bottom: 5px;
+	text-align: center;
+	font-family: 'Open Sans', sans-serif;
+	border: 1px solid #ddd;
+	cursor: pointer;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	color: #333;
+	border-radius: 5px;
+}
+
+ul.links li:nth-child(1) {
+	margin-right: 10px;
+}
+
+ul.links li:hover {
+	background-color: #fff;
+}
+
+ul.links li a {
+	color: #333 !important;
+}
+
+nav.pagination {
+	padding-bottom: 20px;
+}
+
+body {
+	background-color: #fff;
+	font-family: 'Roboto Slab';
+	font-weight: 300;
+}
+
+.post-title {
+	letter-spacing: -3px;
+	font-family: 'Open Sans';
+}
+
+code.hljs {
+	font-family: 'Ubuntu Mono';
+	font-size: 14px;
+	line-height: 1.2;
+	background-color: #F7FAFB;
+}

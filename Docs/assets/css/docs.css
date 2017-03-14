@@ -1,0 +1,102 @@
+article.page.docs {
+	position: absolute;
+	top: -32px;
+	bottom: 0px;
+	left: -124px;
+}
+
+article.docs ul {
+	list-style: none;
+	margin: 0;
+	margin-left: 20px;
+	padding: 0;
+}
+
+article.docs > ul > li > ul {
+	margin-left: 0px;
+}
+
+ul.menu {
+	position: fixed;
+	top: 0px;
+	left: 320px;
+	bottom: 0px;
+	padding-top: 15px !important;
+	padding-right: 20px !important;
+	border-right: 1px solid #ddd;
+	background-color: #fff;
+	padding-left: 20px !important;
+	width: 154px;
+	-webkit-transition: left 500ms;
+	transition: left 500ms;
+}
+
+ul.menu.animate-left {
+	left: 0px;
+}
+
+#author_box.animate-left {
+	left: -320px;
+}
+
+ul.menu li {
+	font-size: 14px;
+	line-height: 1.2;
+	margin-bottom: 0.5px;
+}
+
+ul.menu li a {
+	text-decoration: none;
+	font-family: 'Open Sans';
+	font-size: 13px;
+}
+
+ul.menu li.active {
+	font-weight: bold;
+}
+
+ul.menu li.heading {
+	font-size: 18px;
+	line-height: 24px;
+	font-weight: bold;
+}
+
+ul.menu li.heading a {
+	color: #000;
+}
+
+section.doc_content {
+	border-right: 1px solid #ddd;
+	opacity: 0;
+	width: 55%;
+	font-size: 1.5rem;
+	line-height: 1.2;
+	background-color: #fff;
+}
+
+.doc_page {
+	position: relative;
+	padding: 20px;
+	padding-top: 15px;
+}
+
+.doc_page h4 {
+	margin-bottom: 0px;
+}
+
+.doc_page p {
+	margin-top: 18px;
+	margin-bottom: 18px;
+}
+
+.doc_page pre {
+	position: absolute;
+	top: 0;
+	left: 100%;
+	width: 135%;
+	margin: 0;
+	padding: 0;
+	padding-top: 10px;
+	margin-left: 14px;
+	border: none;
+}
