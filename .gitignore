@@ -33,6 +33,7 @@ obj/
 Ankh.NoLoad
 *.svclog
 packages/
+.vs/
 
 #Tooling
 _ReSharper*/
