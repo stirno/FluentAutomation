@@ -32,8 +32,8 @@
         <!-- Commands -->
         <ForcePackageVersion></ForcePackageVersion>
         <RestoreCommand>$(NuGetCommand) install "$(PackagesConfig)" -source $(PackageSources) -o "$(PackagesDir)"</RestoreCommand>
-        <BuildCommand Condition="$(ForcePackageVersion) == ''">$(NuGetCommand) pack "$(ProjectPath)" -p Configuration=$(Configuration) -o "$(PackageOutputDir)" -symbols</BuildCommand>
-        <BuildCommand Condition="$(ForcePackageVersion) != ''">$(NuGetCommand) pack "$(ProjectPath)" -p Configuration=$(Configuration) -o "$(PackageOutputDir)" -symbols -Version "$(ForcePackageVersion)"</BuildCommand>
+        <BuildCommand Condition="$(ForcePackageVersion) == ''">$(NuGetCommand) pack "$(ProjectPath)" -p Configuration=$(Configuration) -OutputDirectory "$(PackageOutputDir)" -symbols</BuildCommand>
+        <BuildCommand Condition="$(ForcePackageVersion) != ''">$(NuGetCommand) pack "$(ProjectPath)" -p Configuration=$(Configuration) -OutputDirectory "$(PackageOutputDir)" -symbols -Version "$(ForcePackageVersion)"</BuildCommand>
 
         <!-- Make the build depend on restore packages -->
         <BuildDependsOn Condition="$(RestorePackages) == 'true'">

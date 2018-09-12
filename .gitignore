@@ -56,3 +56,4 @@ pvc-packages
 node_modules
 Docs/node_modules
 *-wrapped.html
+.vs/
