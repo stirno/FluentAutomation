@@ -12,7 +12,7 @@
     "start": "node build.js --watch"
   },
   "devDependencies": {
-    "open": "~0.0.5",
+    "open": "~6.4.0",
     "livereload": "~0.4.0",
     "connect": "~3.4.0",
     "async": "~0.4.0",
